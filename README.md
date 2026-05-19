@@ -26,7 +26,7 @@ Projet d'intégration 2026, Ingénierie des Médias - problématique de la colle
 ### Recuperer le projet
 
 ```bash
-git clone <url-du-repo>
+git clone <https://github.com/enyaschaerrer/hug-enyka>
 cd hug-enyka
 ```
 
