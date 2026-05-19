@@ -15,6 +15,7 @@
 /.vagrant
 /.vscode
 /.zed
+/md_files/
 /auth.json
 /node_modules
 /public/build
