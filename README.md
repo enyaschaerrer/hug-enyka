@@ -18,7 +18,7 @@ Projet d'intégration 2026, Ingénierie des Médias - problématique de la colle
 
 ### Prerequis
 
-- PHP 8.3 ou superieur
+- PHP 8.4 ou superieur
 - Composer
 - Node.js et npm
 - MAMP avec MySQL demarre
