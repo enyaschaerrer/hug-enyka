@@ -21,11 +21,18 @@
 /public/fonts-manifest.dev.json
 /public/hot
 /public/storage
+/bootstrap/cache/*
+!/bootstrap/cache/.gitkeep
 /storage/framework/cache/*
+!/storage/framework/cache/.gitkeep
 /storage/framework/sessions/*
+!/storage/framework/sessions/.gitkeep
 /storage/framework/testing/*
+!/storage/framework/testing/.gitkeep
 /storage/framework/views/*
+!/storage/framework/views/.gitkeep
 /storage/logs/*
+!/storage/logs/.gitkeep
 /storage/*.key
 /storage/pail
 /vendor
@@ -36,7 +43,6 @@
 _ide_helper.php
 Homestead.json
 Homestead.yaml
-/md_files/
 npm-debug.log
 pnpm-debug.log
 public_html/hot
