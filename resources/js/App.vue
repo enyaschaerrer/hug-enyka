@@ -1,8 +1,8 @@
-<script setup>
+<script setup lang="ts">
 import { onMounted, ref } from 'vue';
 import { gsap } from 'gsap';
 
-const title = ref(null);
+const title = ref<HTMLElement | null>(null);
 
 onMounted(() => {
     gsap.from(title.value, {
