@@ -79,20 +79,26 @@ php artisan db:seed
 
 ### Lancer le projet
 
-Dans un terminal :
+Activer le serveur local avec MAMP, puis ouvrir l'URL locale du projet.
+
+Si le projet n'est pas servi par MAMP, utiliser le serveur Laravel integre :
 
 ```bash
 php artisan serve
 ```
 
-Dans un autre terminal :
+Dans ce cas, le site est accessible sur l'URL affichee par Laravel, generalement :
+
+```text
+http://127.0.0.1:8000
+```
+
+### Developpement frontend
+
+Si vous modifiez les fichiers CSS, JavaScript ou Vue, lancer Vite dans un autre terminal :
 
 ```bash
 npm run dev
 ```
 
-Le site est ensuite accessible sur l'URL affichee par Laravel, generalement :
-
-```text
-http://127.0.0.1:8000
-```
+Sinon, cette commande n'est pas necessaire pour simplement ouvrir le projet en local.
