@@ -77,6 +77,14 @@ Quand les seeders du projet seront disponibles, lancer aussi :
 php artisan db:seed
 ```
 
+Compte de test pour le back-office :
+
+```text
+Email: superadmin@example.com
+Mot de passe: password
+Role: superadmin
+```
+
 ### Lancer le projet
 
 Activer le serveur local avec MAMP, puis ouvrir l'URL locale du projet.
