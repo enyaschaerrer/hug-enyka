@@ -1,9 +1,8 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { FlashCards } from 'vue3-flashcards';
-import PublicLayout from '../components/layouts/PublicLayout.vue';
-import TinderActions from '../components/tinder-cards/TinderActions.vue';
-import TinderCard from '../components/tinder-cards/TinderCard.vue';
+import TinderActions from '../../components/tinder-cards/TinderActions.vue';
+import TinderCard from '../../components/tinder-cards/TinderCard.vue';
 
 type SwipeDirection = 'left' | 'right' | 'top';
 
@@ -51,7 +50,16 @@ function handleSwipe(item: Card, direction: SwipeDirection) {
 </script>
 
 <template>
-    <PublicLayout>
+    <main class="min-h-screen bg-base-200 px-4 py-8">
+        <nav class="mx-auto mb-8 flex w-full max-w-4xl flex-wrap gap-2">
+            <a class="btn btn-sm" href="/">Home</a>
+            <a class="btn btn-sm" href="/collecte">Collecte</a>
+            <a class="btn btn-sm" href="/trophee">Trophee</a>
+            <a class="btn btn-sm" href="/label">Label</a>
+            <a class="btn btn-sm" href="/contact">Contact</a>
+            <a class="btn btn-sm btn-outline" href="/admin">Admin</a>
+        </nav>
+
         <section class="mx-auto w-full max-w-[400px]">
             <FlashCards
                 :items="items"
@@ -141,5 +149,5 @@ function handleSwipe(item: Card, direction: SwipeDirection) {
                 </template>
             </FlashCards>
         </section>
-    </PublicLayout>
+    </main>
 </template>
