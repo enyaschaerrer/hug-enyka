@@ -71,6 +71,36 @@ Pour une route reservee au niveau maximum :
 
 Important : ne pas considerer qu'un utilisateur connecte a automatiquement acces a l'admin. L'authentification et l'autorisation sont deux etapes separees.
 
+## Routes actuelles
+
+Routes deja mises en place :
+
+```text
+/                Accueil public du site Trophee, affiche via Vue.
+/admin/login     Formulaire login admin minimal.
+/admin           Dashboard admin minimal, protege par auth + role:superadmin,admin.
+/admin/logout    Deconnexion admin.
+```
+
+L'accueil public affiche encore le prototype Tinder existant. Il est maintenant isole dans une page Vue dediee pour pouvoir le remplacer ou l'adapter quand l'UI finale sera disponible.
+
+Le formulaire admin est volontairement minimal :
+
+- champ email ;
+- champ password ;
+- soumission vers Laravel ;
+- erreurs serveur affichees simplement.
+
+Le login admin utilise `Auth::attempt()` avec l'authentification Laravel classique par session/cookie. Apres connexion, seuls les roles `superadmin` et `admin` peuvent acceder a `/admin`.
+
+Route non mise en place pour le moment :
+
+```text
+/collecte/{companySlug}/{token}
+```
+
+Elle sera ajoutee quand les tables liees aux entreprises et campagnes/collectes seront validees.
+
 ## Middleware de roles
 
 Le middleware `role` est generique et extensible.
@@ -168,12 +198,13 @@ Mis en place :
 - alias middleware `role` ;
 - seeder superadmin ;
 - tests backend du role, du middleware et du seeder.
+- routes `/`, `/admin/login`, `/admin`, `/admin/logout` ;
+- controllers publics/admin minimaux ;
+- pages Vue temporaires pour l'accueil, le login admin et le dashboard admin ;
+- tests backend du login admin, de la protection admin et du logout.
 
 Non mis en place pour le moment :
 
-- route `/admin` ;
-- formulaire de connexion ;
-- template admin ;
 - pages co-brandees ;
 - magic links email ;
 - gestion avancee des permissions.

@@ -69,11 +69,6 @@ L'interclassement et l'encodage () peuvent rester sur la valeur par defaut propo
 
 ```bash
 php artisan migrate
-```
-
-Quand les seeders du projet seront disponibles, lancer aussi :
-
-```bash
 php artisan db:seed
 ```
 
