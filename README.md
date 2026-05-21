@@ -46,10 +46,23 @@ php artisan key:generate
 
 La configuration MySQL locale attendue est celle de MAMP :
 
+## Mac
+
 ```env
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
 DB_PORT=8889
+DB_DATABASE=hug_enyka_local
+DB_USERNAME=root
+DB_PASSWORD=root
+```
+
+## Windows
+
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
 DB_DATABASE=hug_enyka_local
 DB_USERNAME=root
 DB_PASSWORD=root
