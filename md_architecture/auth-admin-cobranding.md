@@ -77,12 +77,20 @@ Routes deja mises en place :
 
 ```text
 /                Accueil public du site Trophee, affiche via Vue.
+/collecte        Page publique Collecte, placeholder.
+/trophee         Page publique Trophee, placeholder.
+/label           Page publique Label, placeholder.
+/contact         Page publique Contact, placeholder.
 /admin/login     Formulaire login admin minimal.
 /admin           Dashboard admin minimal, protege par auth + role:superadmin,admin.
 /admin/logout    Deconnexion admin.
 ```
 
+Les routes publiques servent toutes l'application Vue via Laravel. Elles ne dependent pas encore de la base de donnees.
+
 L'accueil public affiche encore le prototype Tinder existant. Il est maintenant isole dans une page Vue dediee pour pouvoir le remplacer ou l'adapter quand l'UI finale sera disponible.
+
+Toute route inconnue redirige vers `/` via `Route::fallback()`.
 
 Le formulaire admin est volontairement minimal :
 
@@ -99,7 +107,7 @@ Route non mise en place pour le moment :
 /collecte/{companySlug}/{token}
 ```
 
-Elle sera ajoutee quand les tables liees aux entreprises et campagnes/collectes seront validees.
+Cette future route tokenisee est differente de la page publique `/collecte`. Elle sera ajoutee quand les tables liees aux entreprises et campagnes/collectes seront validees.
 
 ## Middleware de roles
 

@@ -18,3 +18,5 @@ Route::middleware(['auth', 'role:superadmin,admin'])->group(function () {
     Route::get('/admin', [DashboardController::class, 'index'])->name('admin.dashboard');
     Route::post('/admin/logout', [AuthController::class, 'destroy'])->name('admin.logout');
 });
+
+Route::fallback(fn () => redirect('/'));
