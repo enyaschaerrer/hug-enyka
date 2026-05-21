@@ -1,16 +1,24 @@
 <script setup lang="ts">
 import { computed } from 'vue';
-import PublicHome from './pages/PublicHome.vue';
-import AdminDashboard from './pages/admin/AdminDashboard.vue';
-import AdminLogin from './pages/admin/AdminLogin.vue';
+import DashboardPage from './pages/admin/DashboardPage.vue';
+import LoginPage from './pages/admin/LoginPage.vue';
+import CollectePage from './pages/public/CollectePage.vue';
+import ContactPage from './pages/public/ContactPage.vue';
+import HomePage from './pages/public/HomePage.vue';
+import LabelPage from './pages/public/LabelPage.vue';
+import TrophyPage from './pages/public/TrophyPage.vue';
 
 const pages = {
-    '/': PublicHome,
-    '/admin': AdminDashboard,
-    '/admin/login': AdminLogin,
+    '/': HomePage,
+    '/collecte': CollectePage,
+    '/trophee': TrophyPage,
+    '/label': LabelPage,
+    '/contact': ContactPage,
+    '/admin': DashboardPage,
+    '/admin/login': LoginPage,
 };
 
-const currentPage = computed(() => pages[window.location.pathname as keyof typeof pages] ?? PublicHome);
+const currentPage = computed(() => pages[window.location.pathname as keyof typeof pages] ?? HomePage);
 </script>
 
 <template>

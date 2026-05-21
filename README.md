@@ -105,3 +105,65 @@ npm run dev
 ```
 
 Sinon, cette commande n'est pas necessaire pour simplement ouvrir le projet en local.
+
+## Structure actuelle
+
+```text
+app/
+  Enums/
+    UserRole.php                 Roles utilisateur actuels.
+  Http/
+    Controllers/
+      Admin/                     Controllers du back-office.
+      PublicSiteController.php   Point d'entree des pages publiques.
+    Middleware/
+      EnsureUserHasRole.php      Protection des routes par role.
+    Requests/
+      Admin/                     Validation des formulaires admin.
+  Models/
+    User.php                     Modele utilisateur Laravel.
+
+bootstrap/
+  app.php                        Configuration Laravel, dont alias middleware.
+
+database/
+  factories/                     Factories de test.
+  migrations/                    Schema de base de donnees.
+  seeders/                       Donnees de test, dont superadmin.
+
+md_architecture/
+  auth-admin-cobranding.md       Decisions d'architecture auth/admin/co-branding.
+
+resources/
+  css/
+    app.css                      CSS global Tailwind/DaisyUI.
+  js/
+    App.vue                      Selectionne la page Vue selon l'URL.
+    app.ts                       Point d'entree Vue.
+    components/
+      tinder-cards/              Prototype swipe actuel.
+    pages/
+      public/                    Pages publiques: home, collecte, trophee, label, contact.
+      admin/                     Pages admin: login, dashboard.
+  views/
+    app.blade.php                Vue Blade qui monte l'application Vue.
+
+routes/
+  web.php                        Routes publiques et admin.
+
+tests/
+  Feature/                       Tests fonctionnels Laravel.
+  Unit/                          Tests unitaires.
+```
+
+Routes utiles actuellement :
+
+```text
+/              Accueil public.
+/collecte      Page publique Collecte.
+/trophee       Page publique Trophee.
+/label         Page publique Label.
+/contact       Page publique Contact.
+/admin/login   Connexion admin.
+/admin         Dashboard admin protege.
+```

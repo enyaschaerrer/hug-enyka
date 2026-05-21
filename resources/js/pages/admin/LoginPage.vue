@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import AdminLayout from '../../components/layouts/AdminLayout.vue';
-
 type AppState = {
     csrfToken: string;
     errors: Record<string, string[]>;
@@ -14,7 +12,7 @@ const emailErrors = appState?.errors.email ?? [];
 </script>
 
 <template>
-    <AdminLayout>
+    <main class="min-h-screen bg-base-200 px-4 py-8 text-base-content">
         <div class="mx-auto w-full max-w-sm rounded bg-base-100 p-6 shadow">
             <h1 class="mb-6 text-2xl font-semibold">Admin</h1>
 
@@ -51,5 +49,5 @@ const emailErrors = appState?.errors.email ?? [];
                 <button type="submit" class="btn btn-primary w-full">Login</button>
             </form>
         </div>
-    </AdminLayout>
+    </main>
 </template>

@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import AdminLayout from '../../components/layouts/AdminLayout.vue';
-
 type AppState = {
     auth: {
         user: {
@@ -16,7 +14,7 @@ const appState = (window as unknown as { __APP__?: AppState }).__APP__;
 </script>
 
 <template>
-    <AdminLayout>
+    <main class="min-h-screen bg-base-200 px-4 py-8 text-base-content">
         <div class="flex items-center justify-between gap-4 rounded bg-base-100 p-6 shadow">
             <div>
                 <p class="text-sm text-base-content/70">Admin dashboard</p>
@@ -29,5 +27,5 @@ const appState = (window as unknown as { __APP__?: AppState }).__APP__;
                 <button type="submit" class="btn btn-outline">Logout</button>
             </form>
         </div>
-    </AdminLayout>
+    </main>
 </template>
