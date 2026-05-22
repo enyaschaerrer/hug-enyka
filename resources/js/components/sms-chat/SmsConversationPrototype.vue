@@ -125,8 +125,8 @@ pushBotNode(scenario.start);
                         </div>
                     </div>
 
-                    <div v-if="message.speaker === 'bot'" class="chat-header text-red-950/70">Sanguy</div>
-                    <div v-else class="chat-header text-red-950/70">Moi</div>
+                    <div v-if="message.speaker === 'bot'" class="chat-header chat-label-start text-red-950/70">Sanguy</div>
+                    <div v-else class="chat-header chat-label-end text-red-950/70">Moi</div>
 
                     <div
                         class="chat-bubble message-bubble max-w-[78vw] text-base leading-relaxed md:max-w-[620px]"
@@ -158,7 +158,7 @@ pushBotNode(scenario.start);
                             </Transition>
                         </div>
                     </div>
-                    <div class="chat-header text-red-950/70">Sanguy</div>
+                    <div class="chat-header chat-label-start text-red-950/70">Sanguy</div>
                     <div class="chat-bubble bg-red-800 text-white">
                         <span class="loading loading-dots loading-sm"></span>
                     </div>
@@ -170,7 +170,7 @@ pushBotNode(scenario.start);
                             <span class="text-xs font-bold">LB</span>
                         </div>
                     </div>
-                    <div class="chat-header text-red-950/70">Moi</div>
+                    <div class="chat-header chat-label-end text-red-950/70">Moi</div>
                     <div class="flex max-w-[78vw] flex-col items-end gap-2 md:max-w-[620px]">
                         <button
                             v-for="answer in currentAnswers"
@@ -217,6 +217,14 @@ pushBotNode(scenario.start);
 
 .chat-end .message-bubble {
     border-end-end-radius: 0;
+}
+
+.chat-label-start {
+    padding-left: 1rem;
+}
+
+.chat-label-end {
+    padding-right: 1rem;
 }
 
 @keyframes chat-active-in {
