@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { geoNaturalEarth1, geoPath, type GeoPermissibleObjects } from 'd3-geo';
 import { feature } from 'topojson-client';
 import type { Topology } from 'topojson-specification';
@@ -24,11 +24,15 @@ const mapFeatures = (feature(topo, topo.objects.countries as any) as any)
     .features.filter((f: any) => Number(f.id) !== 10) as Array<{ id?: string | number }>;
 
 // Etat
+const svgRef = ref<SVGSVGElement | null>(null);
+const sectionRef = ref<HTMLElement | null>(null);
 const selected = ref<Country | null>(null);
+const tooltipPos = ref<{ x: number; y: number } | null>(null);
 const hoveredId = ref<number | null>(null);
 const searchQuery = ref('');
 const suggestions = ref<Country[]>([]);
 const showSuggestions = ref(false);
+const searchFocused = ref(false);
 
 function getCountry(id?: string | number): Country | null {
     if (id === undefined || id === null) return null;
@@ -36,7 +40,6 @@ function getCountry(id?: string | number): Country | null {
 }
 
 // Heatmap : riskScore 0 = blanc, 100 = rouge saturé
-// Le paramètre darken assombrit la couleur pour le hover et la sélection
 function riskColor(score: number, darken = 0): string {
     const base = 255 - darken;
     const v = Math.round(base * (1 - score / 100));
@@ -47,7 +50,6 @@ function getFill(f: { id?: string | number }): string {
     const country = getCountry(f.id);
     if (!country) return '#d1d5db';
 
-    // On utilise le riskScore uniquement si le pays a un délai d'attente.
     // Un pays safe (waitTime null) est toujours blanc sur la heatmap.
     const score = country.waitTime === null ? 0 : country.riskScore;
 
@@ -67,15 +69,47 @@ function getPath(f: unknown): string {
     return pathGen(f as GeoPermissibleObjects) ?? '';
 }
 
-function handleClick(f: { id?: string | number }) {
-    const country = getCountry(f.id);
-    if (country) selected.value = country;
+// Convertit les coordonnées SVG (viewBox) en coordonnées relatives à la section
+function computeTooltipPos(f: unknown) {
+    const [cx, cy] = pathGen.centroid(f as GeoPermissibleObjects);
+    if (isNaN(cx) || isNaN(cy) || !svgRef.value || !sectionRef.value) return;
+
+    const svgRect = svgRef.value.getBoundingClientRect();
+    const sectionRect = sectionRef.value.getBoundingClientRect();
+    const scale = Math.min(svgRect.width / width, svgRect.height / height);
+    const offsetX = (svgRect.width - width * scale) / 2;
+    const offsetY = (svgRect.height - height * scale) / 2;
+
+    tooltipPos.value = {
+        x: (svgRect.left - sectionRect.left) + offsetX + cx * scale,
+        y: (svgRect.top - sectionRect.top) + offsetY + cy * scale,
+    };
 }
 
-// Couleur de la bordure de la carte info : gris si safe, rouge sinon
-function cardBorderColor(score: number): string {
-    return score < 5 ? '#d1d5db' : riskColor(score);
+function handleClick(f: { id?: string | number }) {
+    const country = getCountry(f.id);
+    if (!country) return;
+    selected.value = country;
+    computeTooltipPos(f);
 }
+
+// Style positionnel : position absolute dans la section, s'adapte au quadrant
+const tooltipStyle = computed(() => {
+    if (!tooltipPos.value || !sectionRef.value) return { display: 'none' };
+    const { x, y } = tooltipPos.value;
+    const w = sectionRef.value.offsetWidth;
+    const h = sectionRef.value.offsetHeight;
+    const toRight = x < w * 0.6;
+    const toBottom = y < h * 0.55;
+    return {
+        position: 'absolute' as const,
+        left: toRight ? `${x + 12}px` : 'auto',
+        right: toRight ? 'auto' : `${w - x + 12}px`,
+        top: toBottom ? `${y + 12}px` : 'auto',
+        bottom: toBottom ? 'auto' : `${h - y + 12}px`,
+        zIndex: 20,
+    };
+});
 
 // Recherche avec normalisation des accents
 function normalize(s: string): string {
@@ -104,13 +138,13 @@ function selectFromSearch(c: Country) {
     selected.value = c;
     searchQuery.value = '';
     showSuggestions.value = false;
+    // Retrouve la feature pour calculer la position
+    const f = mapFeatures.find(f => Number(f.id) === c.numericId);
+    if (f) computeTooltipPos(f);
 }
-
-const searchFocused = ref(false);
 
 function onBlur() {
     searchFocused.value = false;
-    // Délai pour laisser le clic sur une suggestion se déclencher avant la fermeture
     setTimeout(() => {
         showSuggestions.value = false;
     }, 150);
@@ -118,7 +152,7 @@ function onBlur() {
 </script>
 
 <template>
-    <section class="relative w-screen h-svh bg-gray-50 flex flex-col overflow-hidden">
+    <section ref="sectionRef" class="relative w-screen h-svh bg-gray-50 flex flex-col overflow-hidden">
         <!-- Recherche -->
         <div class="flex justify-center px-4 pt-5 pb-2 z-10">
             <div class="relative w-full max-w-sm">
@@ -163,6 +197,7 @@ function onBlur() {
         <!-- Carte SVG -->
         <div class="flex-1 overflow-hidden">
             <svg
+                ref="svgRef"
                 :viewBox="`0 0 ${width} ${height}`"
                 preserveAspectRatio="xMidYMid meet"
                 class="w-full h-full"
@@ -182,40 +217,34 @@ function onBlur() {
             </svg>
         </div>
 
-        <!-- Carte info du pays sélectionné -->
+        <!-- Tooltip pays sélectionné, positionnée près du centroïde -->
         <transition name="fade">
-            <div
-                v-if="selected"
-                class="card bg-base-100 shadow-xl absolute bottom-12 right-4 p-4 min-w-48 max-w-60 z-10"
-                :style="{ borderLeft: `4px solid ${cardBorderColor(selected.riskScore)}` }"
-            >
-                <div class="flex items-center gap-2 mb-1">
-                    <span :class="`fi fi-${selected.iso2.toLowerCase()} text-xl`"></span>
-                    <span class="font-semibold text-sm">{{ selected.name }}</span>
+            <div v-if="selected && tooltipPos" :key="selected.iso2" :style="tooltipStyle" class="w-52 rounded-2xl border border-gray-100 bg-white p-4 shadow-xl">
+                <div class="flex items-center gap-2 mb-2">
+                    <span
+                        :class="`fi fi-${selected.iso2.toLowerCase()} rounded overflow-hidden`"
+                        style="width: 1.5em; height: 1.1em;"
+                    ></span>
+                    <span class="font-semibold text-sm text-gray-800">{{ selected.name }}</span>
                 </div>
-                <div v-if="selected.waitTime" class="text-sm font-medium text-error">
+                <div v-if="selected.waitTime" class="text-sm font-medium text-red-500">
                     Attendre {{ selected.waitTime }}
                 </div>
-                <div v-else class="text-sm font-medium text-success">Safe</div>
-                <p v-if="selected.description" class="text-xs text-base-content/60 mt-1">
+                <div v-else class="text-sm font-medium text-emerald-500">Safe</div>
+                <p v-if="selected.description" class="mt-1.5 text-xs text-gray-400 leading-snug">
                     {{ selected.description }}
                 </p>
             </div>
         </transition>
 
         <!-- Légende heatmap -->
-        <div
-            class="absolute bottom-4 right-4 flex items-center gap-2 text-xs bg-white/90 px-2 py-1 rounded shadow"
-        >
-            <span class="text-base-content/50">0 contrainte</span>
+        <div class="absolute bottom-4 right-4 flex items-center gap-2 text-xs bg-white/90 px-2 py-1 rounded shadow">
+            <span class="text-gray-500">0 contrainte</span>
             <div
                 class="w-16 h-2 rounded"
-                style="
-                    background: linear-gradient(to right, rgb(255, 255, 255), rgb(255, 0, 0));
-                    border: 1px solid #e5e7eb;
-                "
+                style="background: linear-gradient(to right, rgb(255,255,255), rgb(255,0,0)); border: 1px solid #e5e7eb;"
             ></div>
-            <span class="text-base-content/50">contrainte forte</span>
+            <span class="text-gray-500">contrainte forte</span>
         </div>
     </section>
 </template>
@@ -223,10 +252,11 @@ function onBlur() {
 <style scoped>
 .fade-enter-active,
 .fade-leave-active {
-    transition: opacity 0.2s ease;
+    transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
 }
 .fade-enter-from,
 .fade-leave-to {
     opacity: 0;
+    transform: scale(0.95);
 }
 </style>
