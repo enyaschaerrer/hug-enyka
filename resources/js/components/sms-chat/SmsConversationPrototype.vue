@@ -86,6 +86,7 @@ async function answerQuestion(answer: SmsAnswer) {
     window.setTimeout(async () => {
         await pushBotNode(answer.next);
         isTyping.value = false;
+        await scrollToLastMessage();
     }, 650);
 }
 
@@ -93,7 +94,7 @@ pushBotNode(scenario.start);
 </script>
 
 <template>
-    <section class="flex min-h-[100svh] w-screen flex-col overflow-hidden bg-rose-50 text-stone-950">
+    <section class="flex h-[100svh] max-h-[100svh] w-screen flex-col overflow-hidden bg-rose-50 text-stone-950">
         <div ref="messagesContainer" class="min-h-0 flex-1 overflow-y-auto px-4 py-6">
             <div class="mx-auto flex w-full max-w-5xl flex-col gap-2">
                 <div
@@ -128,7 +129,7 @@ pushBotNode(scenario.start);
                     <div v-else class="chat-header text-red-950/70">Moi</div>
 
                     <div
-                        class="chat-bubble max-w-[78vw] text-base leading-relaxed md:max-w-[620px]"
+                        class="chat-bubble message-bubble max-w-[78vw] text-base leading-relaxed md:max-w-[620px]"
                         :class="
                             message.speaker === 'bot'
                                 ? message.nodeType === 'appointment'
@@ -204,6 +205,18 @@ pushBotNode(scenario.start);
 .chat-active .chat-bubble,
 .chat-active .answer-option {
     animation: chat-active-in 220ms ease both;
+}
+
+.message-bubble {
+    border-radius: 1.125rem;
+}
+
+.chat-start .message-bubble {
+    border-end-start-radius: 0;
+}
+
+.chat-end .message-bubble {
+    border-end-end-radius: 0;
 }
 
 @keyframes chat-active-in {
