@@ -47,12 +47,16 @@ function getFill(f: { id?: string | number }): string {
     const country = getCountry(f.id);
     if (!country) return '#d1d5db';
 
+    // On utilise le riskScore uniquement si le pays a un délai d'attente.
+    // Un pays safe (waitTime null) est toujours blanc sur la heatmap.
+    const score = country.waitTime === null ? 0 : country.riskScore;
+
     const isSelected = selected.value?.numericId === country.numericId;
     const isHovered = !isSelected && hoveredId.value === country.numericId;
 
-    if (isSelected) return riskColor(country.riskScore, 50);
-    if (isHovered) return riskColor(country.riskScore, 20);
-    return riskColor(country.riskScore);
+    if (isSelected) return riskColor(score, 50);
+    if (isHovered) return riskColor(score, 20);
+    return riskColor(score);
 }
 
 function getStrokeWidth(f: { id?: string | number }): number {
@@ -102,7 +106,10 @@ function selectFromSearch(c: Country) {
     showSuggestions.value = false;
 }
 
+const searchFocused = ref(false);
+
 function onBlur() {
+    searchFocused.value = false;
     // Délai pour laisser le clic sur une suggestion se déclencher avant la fermeture
     setTimeout(() => {
         showSuggestions.value = false;
@@ -111,35 +118,46 @@ function onBlur() {
 </script>
 
 <template>
-    <section class="relative w-screen h-svh bg-white flex flex-col overflow-hidden">
+    <section class="relative w-screen h-svh bg-gray-50 flex flex-col overflow-hidden">
         <!-- Recherche -->
-        <div class="relative px-4 pt-4 pb-2 z-10 w-full max-w-sm">
-            <input
-                v-model="searchQuery"
-                type="text"
-                placeholder="Rechercher un pays..."
-                class="input input-bordered input-sm w-full"
-                @input="onInput"
-                @focus="onInput"
-                @blur="onBlur"
-            />
-            <ul
-                v-if="showSuggestions"
-                class="absolute left-4 mt-1 bg-base-100 rounded-box shadow-lg z-20 w-[calc(100%-2rem)]"
-            >
-                <li v-if="suggestions.length === 0" class="px-4 py-2 text-sm text-base-content/50">
-                    0 résultat
-                </li>
-                <li
-                    v-for="c in suggestions"
-                    :key="c.iso2"
-                    class="flex items-center justify-between px-4 py-2 hover:bg-base-200 cursor-pointer text-sm"
-                    @mousedown.prevent="selectFromSearch(c)"
+        <div class="flex justify-center px-4 pt-5 pb-2 z-10">
+            <div class="relative w-full max-w-sm">
+                <span
+                    class="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none transition-colors"
+                    :class="searchFocused ? 'text-gray-600' : 'text-gray-300'"
                 >
-                    <span>{{ c.name }}</span>
-                    <span :class="`fi fi-${c.iso2.toLowerCase()}`"></span>
-                </li>
-            </ul>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="7" />
+                        <line x1="16.5" y1="16.5" x2="22" y2="22" stroke-linecap="round" />
+                    </svg>
+                </span>
+                <input
+                    v-model="searchQuery"
+                    type="text"
+                    placeholder="Rechercher un pays..."
+                    class="w-full rounded-xl border border-gray-200 bg-white py-2.5 pl-9 pr-4 text-sm text-gray-900 placeholder-gray-400 shadow-md outline-none transition focus:border-gray-400 focus:shadow-lg"
+                    @input="onInput"
+                    @focus="searchFocused = true; onInput()"
+                    @blur="onBlur"
+                />
+                <ul
+                    v-if="showSuggestions"
+                    class="absolute left-0 top-full mt-1 w-full overflow-hidden rounded-xl border border-gray-100 bg-white shadow-lg z-20"
+                >
+                    <li v-if="suggestions.length === 0" class="px-4 py-2.5 text-sm text-gray-400">
+                        0 résultat
+                    </li>
+                    <li
+                        v-for="c in suggestions"
+                        :key="c.iso2"
+                        class="flex items-center justify-between px-4 py-2.5 hover:bg-gray-50 cursor-pointer text-sm text-gray-900"
+                        @mousedown.prevent="selectFromSearch(c)"
+                    >
+                        <span>{{ c.name }}</span>
+                        <span :class="`fi fi-${c.iso2.toLowerCase()} rounded overflow-hidden`" style="width: 1.4em; height: 1.05em;"></span>
+                    </li>
+                </ul>
+            </div>
         </div>
 
         <!-- Carte SVG -->
