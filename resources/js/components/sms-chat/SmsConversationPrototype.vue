@@ -124,7 +124,7 @@ pushBotNode(scenario.start);
                         </div>
                     </div>
 
-                    <div v-if="message.speaker === 'bot'" class="chat-header text-red-950/70">HUG</div>
+                    <div v-if="message.speaker === 'bot'" class="chat-header text-red-950/70">Sanguy</div>
                     <div v-else class="chat-header text-red-950/70">Moi</div>
 
                     <div
@@ -157,7 +157,7 @@ pushBotNode(scenario.start);
                             </Transition>
                         </div>
                     </div>
-                    <div class="chat-header text-red-950/70">HUG</div>
+                    <div class="chat-header text-red-950/70">Sanguy</div>
                     <div class="chat-bubble bg-red-800 text-white">
                         <span class="loading loading-dots loading-sm"></span>
                     </div>
