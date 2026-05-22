@@ -2,6 +2,7 @@
 import { ref } from 'vue';
 import { FlashCards } from 'vue3-flashcards';
 import SmsConversationPrototype from '../../components/sms-chat/SmsConversationPrototype.vue';
+import InteractiveWorldMap from '../../components/interactive-map/InteractiveWorldMap.vue';
 import TinderActions from '../../components/tinder-cards/TinderActions.vue';
 import TinderCard from '../../components/tinder-cards/TinderCard.vue';
 
@@ -152,5 +153,7 @@ function handleSwipe(item: Card, direction: SwipeDirection) {
         </section>
 
         <SmsConversationPrototype />
+
+        <InteractiveWorldMap />
     </main>
 </template>
