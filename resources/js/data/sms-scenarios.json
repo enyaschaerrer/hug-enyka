@@ -1,0 +1,148 @@
+{
+    "start": "welcome",
+    "nodes": {
+        "welcome": {
+            "id": "welcome",
+            "type": "question",
+            "speaker": "bot",
+            "text": "On te pose quelques questions rapides pour voir comment te guider vers le don du sang.",
+            "answers": [
+                {
+                    "id": "start",
+                    "label": "C'est parti",
+                    "next": "already_donated"
+                }
+            ]
+        },
+        "already_donated": {
+            "id": "already_donated",
+            "type": "question",
+            "speaker": "bot",
+            "text": "Tu as deja donne ton sang ?",
+            "answers": [
+                {
+                    "id": "yes",
+                    "label": "Oui, deja",
+                    "next": "last_donation"
+                },
+                {
+                    "id": "no",
+                    "label": "Non, jamais",
+                    "next": "first_time"
+                },
+                {
+                    "id": "not_sure",
+                    "label": "Je ne sais plus",
+                    "next": "first_time"
+                }
+            ]
+        },
+        "last_donation": {
+            "id": "last_donation",
+            "type": "question",
+            "speaker": "bot",
+            "text": "Ton dernier don date d'environ quand ?",
+            "answers": [
+                {
+                    "id": "recent",
+                    "label": "Moins de 3 mois",
+                    "next": "too_recent"
+                },
+                {
+                    "id": "ready",
+                    "label": "Plus de 3 mois",
+                    "next": "motivation"
+                },
+                {
+                    "id": "long_time",
+                    "label": "Ca fait longtemps",
+                    "next": "motivation"
+                }
+            ]
+        },
+        "first_time": {
+            "id": "first_time",
+            "type": "question",
+            "speaker": "bot",
+            "text": "Qu'est-ce qui te freine le plus pour un premier don ?",
+            "answers": [
+                {
+                    "id": "fear",
+                    "label": "J'ai un peu peur",
+                    "next": "reassurance"
+                },
+                {
+                    "id": "time",
+                    "label": "Je manque de temps",
+                    "next": "appointment"
+                },
+                {
+                    "id": "questions",
+                    "label": "J'ai des questions",
+                    "next": "reassurance"
+                }
+            ]
+        },
+        "motivation": {
+            "id": "motivation",
+            "type": "question",
+            "speaker": "bot",
+            "text": "Pour toi, le plus motivant serait quoi ?",
+            "answers": [
+                {
+                    "id": "help",
+                    "label": "Aider directement",
+                    "next": "appointment"
+                },
+                {
+                    "id": "team",
+                    "label": "Y aller avec des collegues",
+                    "next": "appointment"
+                },
+                {
+                    "id": "simple",
+                    "label": "Que ce soit simple",
+                    "next": "appointment"
+                }
+            ]
+        },
+        "reassurance": {
+            "id": "reassurance",
+            "type": "question",
+            "speaker": "bot",
+            "text": "C'est normal. Le personnel est la pour expliquer chaque etape et tu peux poser tes questions sur place.",
+            "answers": [
+                {
+                    "id": "ok",
+                    "label": "Ok, je veux voir",
+                    "next": "appointment"
+                },
+                {
+                    "id": "later",
+                    "label": "Je prefere reflechir",
+                    "next": "appointment"
+                }
+            ]
+        },
+        "too_recent": {
+            "id": "too_recent",
+            "type": "appointment",
+            "speaker": "bot",
+            "text": "Ton dernier don est peut-etre trop recent. Tu peux quand meme consulter les disponibilites et verifier le bon moment.",
+            "cta": {
+                "label": "Prendre RDV",
+                "href": "#"
+            }
+        },
+        "appointment": {
+            "id": "appointment",
+            "type": "appointment",
+            "speaker": "bot",
+            "text": "Tu sembles pret pour passer a l'etape suivante. Le plus simple est de choisir un moment qui te convient.",
+            "cta": {
+                "label": "Prendre RDV",
+                "href": "#"
+            }
+        }
+    }
+}
