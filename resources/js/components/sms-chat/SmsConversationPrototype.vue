@@ -83,7 +83,7 @@ pushBotNode(scenario.start);
                     class="chat"
                     :class="message.speaker === 'bot' ? 'chat-start' : 'chat-end'"
                 >
-                    <div class="chat-image avatar avatar-placeholder" :class="message.speaker === 'bot' ? 'avatar-online' : ''">
+                    <div class="chat-image avatar avatar-placeholder" :class="message.speaker === 'user' ? 'avatar-online' : ''">
                         <div
                             class="w-10 rounded-full"
                             :class="message.speaker === 'bot' ? 'bg-red-950 text-white' : 'bg-red-500 text-white'"
@@ -118,7 +118,7 @@ pushBotNode(scenario.start);
                 </div>
 
                 <div v-if="isTyping" class="chat chat-start">
-                    <div class="chat-image avatar avatar-online avatar-placeholder">
+                    <div class="chat-image avatar avatar-placeholder">
                         <div class="w-10 rounded-full bg-red-950 text-white">
                             <span class="text-xs font-bold">HUG</span>
                         </div>
@@ -130,7 +130,7 @@ pushBotNode(scenario.start);
                 </div>
 
                 <div v-if="currentAnswers.length > 0" class="chat chat-end">
-                    <div class="chat-image avatar avatar-placeholder">
+                    <div class="chat-image avatar avatar-online avatar-placeholder">
                         <div class="w-10 rounded-full bg-red-500 text-white">
                             <span class="text-xs font-bold">LB</span>
                         </div>
