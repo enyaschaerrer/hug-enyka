@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { FlashCards } from 'vue3-flashcards';
+import SmsConversationPrototype from '../../components/sms-chat/SmsConversationPrototype.vue';
 import TinderActions from '../../components/tinder-cards/TinderActions.vue';
 import TinderCard from '../../components/tinder-cards/TinderCard.vue';
 
@@ -50,8 +51,8 @@ function handleSwipe(item: Card, direction: SwipeDirection) {
 </script>
 
 <template>
-    <main class="min-h-screen bg-base-200 px-4 py-8">
-        <nav class="mx-auto mb-8 flex w-full max-w-4xl flex-wrap gap-2">
+    <main class="min-h-screen bg-base-200">
+        <nav class="mx-auto mb-8 flex w-full max-w-4xl flex-wrap gap-2 px-4 pt-8">
             <a class="btn btn-sm" href="/">Home</a>
             <a class="btn btn-sm" href="/collecte">Collecte</a>
             <a class="btn btn-sm" href="/trophee">Trophee</a>
@@ -60,7 +61,7 @@ function handleSwipe(item: Card, direction: SwipeDirection) {
             <a class="btn btn-sm btn-outline" href="/admin">Admin</a>
         </nav>
 
-        <section class="mx-auto w-full max-w-[400px]">
+        <section class="mx-auto mb-12 w-full max-w-[400px] px-4">
             <FlashCards
                 :items="items"
                 :swipe-direction="['left', 'right', 'top']"
@@ -149,5 +150,7 @@ function handleSwipe(item: Card, direction: SwipeDirection) {
                 </template>
             </FlashCards>
         </section>
+
+        <SmsConversationPrototype />
     </main>
 </template>

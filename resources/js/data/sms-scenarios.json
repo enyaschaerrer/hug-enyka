@@ -1,0 +1,455 @@
+{
+    "start": "welcome",
+    "nodes": {
+        "welcome": {
+            "id": "welcome",
+            "type": "question",
+            "speaker": "bot",
+            "text": "Je vais te poser quelques questions rapides pour voir comment te guider vers le don du sang.",
+            "answers": [
+                {
+                    "id": "start",
+                    "label": "C'est parti",
+                    "next": "already_donated",
+                    "sanguyEmotion": "happy"
+                }
+            ]
+        },
+        "already_donated": {
+            "id": "already_donated",
+            "type": "question",
+            "speaker": "bot",
+            "text": "Tu as deja donne ton sang ?",
+            "answers": [
+                {
+                    "id": "yes",
+                    "label": "Oui, deja",
+                    "next": "last_donation",
+                    "sanguyEmotion": "happy"
+                },
+                {
+                    "id": "no",
+                    "label": "Non, jamais",
+                    "next": "first_time_feeling",
+                    "sanguyEmotion": "alt-happy"
+                },
+                {
+                    "id": "not_sure",
+                    "label": "Je ne sais plus",
+                    "next": "first_time_feeling",
+                    "sanguyEmotion": "alt-happy"
+                }
+            ]
+        },
+        "last_donation": {
+            "id": "last_donation",
+            "type": "question",
+            "speaker": "bot",
+            "text": "Ton dernier don date d'environ quand ?",
+            "answers": [
+                {
+                    "id": "recent",
+                    "label": "Moins de 3 mois",
+                    "next": "too_recent_context",
+                    "sanguyEmotion": "angry"
+                },
+                {
+                    "id": "ready",
+                    "label": "Plus de 3 mois",
+                    "next": "donor_experience",
+                    "sanguyEmotion": "happy"
+                },
+                {
+                    "id": "long_time",
+                    "label": "Ca fait longtemps",
+                    "next": "return_blocker",
+                    "sanguyEmotion": "alt-happy"
+                }
+            ]
+        },
+        "donor_experience": {
+            "id": "donor_experience",
+            "type": "question",
+            "speaker": "bot",
+            "text": "La derniere fois, tu l'as plutot vecu comment ?",
+            "answers": [
+                {
+                    "id": "good",
+                    "label": "Plutot bien",
+                    "next": "motivation",
+                    "sanguyEmotion": "happy"
+                },
+                {
+                    "id": "tiring",
+                    "label": "Un peu fatigant",
+                    "next": "comfort_tips",
+                    "sanguyEmotion": "alt-happy"
+                },
+                {
+                    "id": "stressful",
+                    "label": "Un peu stressant",
+                    "next": "reassurance",
+                    "sanguyEmotion": "alt-angry"
+                }
+            ]
+        },
+        "return_blocker": {
+            "id": "return_blocker",
+            "type": "question",
+            "speaker": "bot",
+            "text": "Qu'est-ce qui t'a surtout empeche d'y retourner ?",
+            "answers": [
+                {
+                    "id": "forgot",
+                    "label": "J'ai oublie",
+                    "next": "reminder_preference",
+                    "sanguyEmotion": "alt-happy"
+                },
+                {
+                    "id": "schedule",
+                    "label": "Pas le bon moment",
+                    "next": "availability",
+                    "sanguyEmotion": "happy"
+                },
+                {
+                    "id": "bad_memory",
+                    "label": "Mauvais souvenir",
+                    "next": "reassurance",
+                    "sanguyEmotion": "alt-angry"
+                }
+            ]
+        },
+        "first_time_feeling": {
+            "id": "first_time_feeling",
+            "type": "question",
+            "speaker": "bot",
+            "text": "Pour un premier don, tu te sens comment ?",
+            "answers": [
+                {
+                    "id": "curious",
+                    "label": "Curieux",
+                    "next": "first_time_blocker",
+                    "sanguyEmotion": "happy"
+                },
+                {
+                    "id": "hesitant",
+                    "label": "Un peu hesitant",
+                    "next": "first_time_blocker",
+                    "sanguyEmotion": "alt-happy"
+                },
+                {
+                    "id": "worried",
+                    "label": "Franchement pas rassure",
+                    "next": "reassurance",
+                    "sanguyEmotion": "alt-angry"
+                }
+            ]
+        },
+        "first_time_blocker": {
+            "id": "first_time_blocker",
+            "type": "question",
+            "speaker": "bot",
+            "text": "Qu'est-ce qui te freine le plus ?",
+            "answers": [
+                {
+                    "id": "fear",
+                    "label": "La peur des aiguilles",
+                    "next": "needle_reassurance",
+                    "sanguyEmotion": "alt-angry"
+                },
+                {
+                    "id": "time",
+                    "label": "Je manque de temps",
+                    "next": "availability",
+                    "sanguyEmotion": "happy"
+                },
+                {
+                    "id": "eligibility",
+                    "label": "Je ne sais pas si je peux",
+                    "next": "eligibility_intro",
+                    "sanguyEmotion": "alt-happy"
+                },
+                {
+                    "id": "alone",
+                    "label": "Je n'ai pas envie d'y aller seul",
+                    "next": "team_context",
+                    "sanguyEmotion": "happy"
+                }
+            ]
+        },
+        "needle_reassurance": {
+            "id": "needle_reassurance",
+            "type": "question",
+            "speaker": "bot",
+            "text": "C'est une crainte tres courante. Sur place, l'equipe explique chaque etape et tu peux demander a etre accompagne.",
+            "answers": [
+                {
+                    "id": "better",
+                    "label": "Ca me rassure",
+                    "next": "motivation",
+                    "sanguyEmotion": "happy"
+                },
+                {
+                    "id": "still_worried",
+                    "label": "J'ai encore des doutes",
+                    "next": "reassurance",
+                    "sanguyEmotion": "alt-happy"
+                }
+            ]
+        },
+        "eligibility_intro": {
+            "id": "eligibility_intro",
+            "type": "question",
+            "speaker": "bot",
+            "text": "Il y a un questionnaire medical avant le don. Pour ce prototype, on reste sur l'orientation generale.",
+            "answers": [
+                {
+                    "id": "ok",
+                    "label": "Ok, je veux continuer",
+                    "next": "availability",
+                    "sanguyEmotion": "happy"
+                },
+                {
+                    "id": "need_info",
+                    "label": "Je veux d'abord verifier",
+                    "next": "soft_end",
+                    "sanguyEmotion": "alt-happy"
+                }
+            ]
+        },
+        "comfort_tips": {
+            "id": "comfort_tips",
+            "type": "question",
+            "speaker": "bot",
+            "text": "Boire, manger avant, et prevoir un moment calme apres aide beaucoup pour mieux vivre l'experience.",
+            "answers": [
+                {
+                    "id": "useful",
+                    "label": "Bon a savoir",
+                    "next": "availability",
+                    "sanguyEmotion": "happy"
+                },
+                {
+                    "id": "still_not_sure",
+                    "label": "Je suis encore indecis",
+                    "next": "motivation",
+                    "sanguyEmotion": "alt-happy"
+                }
+            ]
+        },
+        "reassurance": {
+            "id": "reassurance",
+            "type": "question",
+            "speaker": "bot",
+            "text": "Tu peux prendre le temps. L'objectif n'est pas de forcer, mais de rendre le parcours plus clair et plus simple.",
+            "answers": [
+                {
+                    "id": "continue",
+                    "label": "Je continue",
+                    "next": "motivation",
+                    "sanguyEmotion": "happy"
+                },
+                {
+                    "id": "maybe_later",
+                    "label": "Peut-etre plus tard",
+                    "next": "soft_end",
+                    "sanguyEmotion": "alt-happy"
+                }
+            ]
+        },
+        "motivation": {
+            "id": "motivation",
+            "type": "question",
+            "speaker": "bot",
+            "text": "Pour toi, le plus motivant serait quoi ?",
+            "answers": [
+                {
+                    "id": "help",
+                    "label": "Aider directement",
+                    "next": "impact",
+                    "sanguyEmotion": "happy"
+                },
+                {
+                    "id": "team",
+                    "label": "Y aller avec des collegues",
+                    "next": "team_context",
+                    "sanguyEmotion": "alt-happy"
+                },
+                {
+                    "id": "simple",
+                    "label": "Que ce soit simple",
+                    "next": "availability",
+                    "sanguyEmotion": "happy"
+                }
+            ]
+        },
+        "impact": {
+            "id": "impact",
+            "type": "question",
+            "speaker": "bot",
+            "text": "Le don sert a des patients qui en ont besoin rapidement. C'est concret, local, et utile.",
+            "answers": [
+                {
+                    "id": "strong",
+                    "label": "C'est ce qui me motive",
+                    "next": "availability",
+                    "sanguyEmotion": "happy"
+                },
+                {
+                    "id": "need_group",
+                    "label": "Je prefere venir en groupe",
+                    "next": "team_context",
+                    "sanguyEmotion": "alt-happy"
+                }
+            ]
+        },
+        "team_context": {
+            "id": "team_context",
+            "type": "question",
+            "speaker": "bot",
+            "text": "Venir avec des collegues peut rendre le moment plus simple et plus motivant.",
+            "answers": [
+                {
+                    "id": "team_yes",
+                    "label": "Oui, bonne idee",
+                    "next": "availability",
+                    "sanguyEmotion": "happy"
+                },
+                {
+                    "id": "team_no",
+                    "label": "Je prefere seul",
+                    "next": "availability",
+                    "sanguyEmotion": "alt-happy"
+                }
+            ]
+        },
+        "availability": {
+            "id": "availability",
+            "type": "question",
+            "speaker": "bot",
+            "text": "Tu prefererais quel type de moment pour donner ?",
+            "answers": [
+                {
+                    "id": "morning",
+                    "label": "Le matin",
+                    "next": "workplace",
+                    "sanguyEmotion": "happy"
+                },
+                {
+                    "id": "noon",
+                    "label": "Pause de midi",
+                    "next": "workplace",
+                    "sanguyEmotion": "alt-happy"
+                },
+                {
+                    "id": "afternoon",
+                    "label": "L'apres-midi",
+                    "next": "workplace",
+                    "sanguyEmotion": "happy"
+                },
+                {
+                    "id": "dont_know",
+                    "label": "Je ne sais pas encore",
+                    "next": "workplace",
+                    "sanguyEmotion": "alt-happy"
+                }
+            ]
+        },
+        "workplace": {
+            "id": "workplace",
+            "type": "question",
+            "speaker": "bot",
+            "text": "Si ton entreprise organise une collecte, tu serais plus partant ?",
+            "answers": [
+                {
+                    "id": "yes_company",
+                    "label": "Oui, clairement",
+                    "next": "appointment",
+                    "sanguyEmotion": "happy"
+                },
+                {
+                    "id": "maybe_company",
+                    "label": "Peut-etre",
+                    "next": "appointment",
+                    "sanguyEmotion": "alt-happy"
+                },
+                {
+                    "id": "not_needed",
+                    "label": "Pas forcement",
+                    "next": "appointment",
+                    "sanguyEmotion": "happy"
+                }
+            ]
+        },
+        "reminder_preference": {
+            "id": "reminder_preference",
+            "type": "question",
+            "speaker": "bot",
+            "text": "Un rappel simple t'aiderait a ne pas laisser passer le bon moment ?",
+            "answers": [
+                {
+                    "id": "yes_reminder",
+                    "label": "Oui",
+                    "next": "availability",
+                    "sanguyEmotion": "happy"
+                },
+                {
+                    "id": "no_reminder",
+                    "label": "Pas besoin",
+                    "next": "motivation",
+                    "sanguyEmotion": "alt-happy"
+                }
+            ]
+        },
+        "too_recent_context": {
+            "id": "too_recent_context",
+            "type": "question",
+            "speaker": "bot",
+            "text": "Si le don est trop recent, il faut attendre le bon delai avant de recommencer.",
+            "answers": [
+                {
+                    "id": "check_dates",
+                    "label": "Je veux verifier une date",
+                    "next": "too_recent",
+                    "sanguyEmotion": "alt-happy"
+                },
+                {
+                    "id": "come_back",
+                    "label": "Je reviendrai plus tard",
+                    "next": "soft_end",
+                    "sanguyEmotion": "happy"
+                }
+            ]
+        },
+        "soft_end": {
+            "id": "soft_end",
+            "type": "appointment",
+            "speaker": "bot",
+            "text": "Pas de souci. Tu peux garder le lien sous la main et revenir quand tu veux avancer.",
+            "cta": {
+                "label": "Prendre RDV",
+                "href": "#"
+            }
+        },
+        "too_recent": {
+            "id": "too_recent",
+            "type": "appointment",
+            "speaker": "bot",
+            "text": "Ton dernier don est peut-etre trop recent. Tu peux quand meme consulter les disponibilites et verifier le bon moment.",
+            "cta": {
+                "label": "Prendre RDV",
+                "href": "#"
+            }
+        },
+        "appointment": {
+            "id": "appointment",
+            "type": "appointment",
+            "speaker": "bot",
+            "text": "Tu as un profil interessant pour passer a l'etape suivante. Le plus simple est de choisir un moment qui te convient.",
+            "cta": {
+                "label": "Prendre RDV",
+                "href": "#"
+            }
+        }
+    }
+}
