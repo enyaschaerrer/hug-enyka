@@ -189,5 +189,8 @@
     {"name": "Saint-Marin", "iso2": "SM", "iso3": "SMR", "numericId": 674, "aliases": ["San Marino"], "riskScore": 0, "waitTime": null, "description": null},
     {"name": "Vatican", "iso2": "VA", "iso3": "VAT", "numericId": 336, "aliases": ["Vatican"], "riskScore": 0, "waitTime": null, "description": null},
     {"name": "Samoa", "iso2": "WS", "iso3": "WSM", "numericId": 882, "aliases": ["Samoa"], "riskScore": 25, "waitTime": "1 mois", "description": "Dengue présente."},
-    {"name": "Micronésie", "iso2": "FM", "iso3": "FSM", "numericId": 583, "aliases": ["Micronesia"], "riskScore": 35, "waitTime": "1 mois", "description": "Dengue présente."}
+    {"name": "Micronésie", "iso2": "FM", "iso3": "FSM", "numericId": 583, "aliases": ["Micronesia"], "riskScore": 35, "waitTime": "1 mois", "description": "Dengue présente."},
+    {"name": "Koweït", "iso2": "KW", "iso3": "KWT", "numericId": 414, "aliases": ["Kuwait"], "riskScore": 5, "waitTime": null, "description": null},
+    {"name": "Porto Rico", "iso2": "PR", "iso3": "PRI", "numericId": 630, "aliases": ["Puerto Rico"], "riskScore": 30, "waitTime": "1 mois", "description": "Dengue présente."},
+    {"name": "Terres australes françaises", "iso2": "TF", "iso3": "ATF", "numericId": 260, "aliases": ["French Southern Territories", "TAAF"], "riskScore": 0, "waitTime": null, "description": null}
 ]

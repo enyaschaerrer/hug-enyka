@@ -20,8 +20,12 @@ const pathGen = geoPath(projection);
 
 // Extraction des features depuis le world atlas, sans l'Antarctique (id 10)
 const topo = worldData as unknown as Topology;
-const mapFeatures = (feature(topo, topo.objects.countries as any) as any)
-    .features.filter((f: any) => Number(f.id) !== 10) as Array<{ id?: string | number }>;
+const allFeatures = (feature(topo, topo.objects.countries as any) as any)
+    .features.filter((f: any) => f.id !== undefined && Number(f.id) !== 10) as Array<{ id?: string | number }>;
+
+// Séparation : pays connus (dans le JSON) vs territoires sans données
+const mapFeatures = allFeatures.filter(f => getCountry(f.id) !== null);
+const unknownFeatures = allFeatures.filter(f => getCountry(f.id) === null);
 
 // Etat
 const svgRef = ref<SVGSVGElement | null>(null);
@@ -48,7 +52,7 @@ function riskColor(score: number, darken = 0): string {
 
 function getFill(f: { id?: string | number }): string {
     const country = getCountry(f.id);
-    if (!country) return '#d1d5db';
+    if (!country) return '#e5e7eb';
 
     // Un pays safe (waitTime null) est toujours blanc sur la heatmap.
     const score = country.waitTime === null ? 0 : country.riskScore;
@@ -160,9 +164,18 @@ function selectFromSearch(c: Country) {
     selected.value = c;
     searchQuery.value = '';
     showSuggestions.value = false;
-    // Retrouve la feature pour calculer la position
     const f = mapFeatures.find(f => Number(f.id) === c.numericId);
-    if (f) computeTooltipPos(f);
+    if (f) {
+        computeTooltipPos(f);
+    } else {
+        // Pays trop petit pour apparaître sur la carte : tooltip au centre de la section
+        if (sectionRef.value) {
+            tooltipPos.value = {
+                x: sectionRef.value.offsetWidth / 2,
+                y: sectionRef.value.offsetHeight / 2,
+            };
+        }
+    }
 }
 
 function onBlur() {
@@ -225,6 +238,15 @@ function onBlur() {
                 class="w-full h-full"
                 @click="deselect"
             >
+                <!-- Territoires sans données : fond neutre, pas de bordure ni d'interaction -->
+                <path
+                    v-for="f in unknownFeatures"
+                    :key="`u-${String(f.id)}`"
+                    :d="getPath(f)"
+                    fill="#e5e7eb"
+                    stroke="none"
+                />
+                <!-- Pays connus : interactifs et colorés -->
                 <path
                     v-for="f in mapFeatures"
                     :key="String(f.id)"
