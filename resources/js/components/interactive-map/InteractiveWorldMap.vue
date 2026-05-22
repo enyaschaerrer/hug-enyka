@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted, onUnmounted } from 'vue';
 import { geoNaturalEarth1, geoPath, type GeoPermissibleObjects } from 'd3-geo';
 import { feature } from 'topojson-client';
 import type { Topology } from 'topojson-specification';
@@ -92,6 +92,28 @@ function handleClick(f: { id?: string | number }) {
     selected.value = country;
     computeTooltipPos(f);
 }
+
+function deselect() {
+    selected.value = null;
+    tooltipPos.value = null;
+}
+
+let observer: IntersectionObserver | null = null;
+
+onMounted(() => {
+    if (!sectionRef.value) return;
+    observer = new IntersectionObserver(
+        ([entry]) => {
+            if (!entry.isIntersecting) deselect();
+        },
+        { threshold: 0.3 },
+    );
+    observer.observe(sectionRef.value);
+});
+
+onUnmounted(() => {
+    observer?.disconnect();
+});
 
 // Style positionnel : position absolute dans la section, s'adapte au quadrant
 const tooltipStyle = computed(() => {
@@ -201,6 +223,7 @@ function onBlur() {
                 :viewBox="`0 0 ${width} ${height}`"
                 preserveAspectRatio="xMidYMid meet"
                 class="w-full h-full"
+                @click="deselect"
             >
                 <path
                     v-for="f in mapFeatures"
@@ -210,7 +233,7 @@ function onBlur() {
                     :stroke-width="getStrokeWidth(f)"
                     stroke="#444"
                     class="cursor-pointer"
-                    @click="handleClick(f)"
+                    @click.stop="handleClick(f)"
                     @mouseenter="hoveredId = f.id !== undefined ? Number(f.id) : null"
                     @mouseleave="hoveredId = null"
                 />
@@ -230,7 +253,7 @@ function onBlur() {
                 <div v-if="selected.waitTime" class="text-sm font-medium text-red-500">
                     Attendre {{ selected.waitTime }}
                 </div>
-                <div v-else class="text-sm font-medium text-emerald-500">Safe</div>
+                <div v-else class="text-sm font-medium text-emerald-500">Aucun délai</div>
                 <p v-if="selected.description" class="mt-1.5 text-xs text-gray-400 leading-snug">
                     {{ selected.description }}
                 </p>
@@ -239,12 +262,12 @@ function onBlur() {
 
         <!-- Légende heatmap -->
         <div class="absolute bottom-4 right-4 flex items-center gap-2 text-xs bg-white/90 px-2 py-1 rounded shadow">
-            <span class="text-gray-500">0 contrainte</span>
+            <span class="text-gray-500">Aucun délai</span>
             <div
                 class="w-16 h-2 rounded"
                 style="background: linear-gradient(to right, rgb(255,255,255), rgb(255,0,0)); border: 1px solid #e5e7eb;"
             ></div>
-            <span class="text-gray-500">contrainte forte</span>
+            <span class="text-gray-500">12 mois</span>
         </div>
     </section>
 </template>
