@@ -50,7 +50,7 @@ async function scrollToLastMessage() {
     });
 }
 
-async function pushBotNode(nodeId: string) {
+async function pushBotNode(nodeId: string, nextEmotion?: SanguyEmotion) {
     const node = scenario.nodes[nodeId];
 
     if (!node) {
@@ -66,6 +66,10 @@ async function pushBotNode(nodeId: string) {
         cta: node.type === 'appointment' ? node.cta : undefined,
     });
 
+    if (nextEmotion) {
+        sanguyEmotion.value = nextEmotion;
+    }
+
     await scrollToLastMessage();
 }
 
@@ -76,15 +80,11 @@ async function answerQuestion(answer: SmsAnswer) {
         text: answer.label,
     });
 
-    if (answer.sanguyEmotion) {
-        sanguyEmotion.value = answer.sanguyEmotion;
-    }
-
     isTyping.value = true;
     await scrollToLastMessage();
 
     window.setTimeout(async () => {
-        await pushBotNode(answer.next);
+        await pushBotNode(answer.next, answer.sanguyEmotion);
         isTyping.value = false;
         await scrollToLastMessage();
     }, 650);
@@ -103,13 +103,13 @@ pushBotNode(scenario.start);
                     class="chat"
                     :class="[
                         message.speaker === 'bot' ? 'chat-start' : 'chat-end',
-                        (message.speaker === 'bot' && message.id === activeBotMessageId && !isTyping) ||
+                        (message.speaker === 'bot' && message.id === activeBotMessageId) ||
                         (message.speaker === 'user' && message.id === activeUserMessageId && isTyping)
                             ? 'chat-active'
                             : '',
                     ]"
                 >
-                    <div v-if="message.speaker === 'bot' && message.id === activeBotMessageId && !isTyping" class="chat-image avatar">
+                    <div v-if="message.speaker === 'bot' && message.id === activeBotMessageId" class="chat-image avatar active-sanguy">
                         <div class="flex w-16 items-center justify-center">
                             <Transition name="sanguy-face" mode="out-in">
                                 <img class="w-full object-contain" :key="sanguyEmotion" :src="currentSanguyImage" alt="Sanguy" />
@@ -118,7 +118,7 @@ pushBotNode(scenario.start);
                     </div>
                     <div
                         v-if="message.speaker === 'user' && message.id === activeUserMessageId && isTyping"
-                        class="chat-image avatar avatar-online avatar-placeholder"
+                        class="chat-image avatar avatar-placeholder"
                     >
                         <div class="w-10 rounded-full bg-red-500 text-white">
                             <span class="text-xs font-bold">LB</span>
@@ -151,13 +151,6 @@ pushBotNode(scenario.start);
                 </div>
 
                 <div v-if="isTyping" class="chat chat-start chat-active">
-                    <div class="chat-image avatar">
-                        <div class="flex w-16 items-center justify-center">
-                            <Transition name="sanguy-face" mode="out-in">
-                                <img class="w-full object-contain" :key="sanguyEmotion" :src="currentSanguyImage" alt="Sanguy" />
-                            </Transition>
-                        </div>
-                    </div>
                     <div class="chat-header chat-label-start text-red-950/70">Sanguy</div>
                     <div class="chat-bubble bg-red-800 text-white">
                         <span class="loading loading-dots loading-sm"></span>
@@ -165,7 +158,7 @@ pushBotNode(scenario.start);
                 </div>
 
                 <div v-if="currentAnswers.length > 0" class="chat chat-end chat-active">
-                    <div class="chat-image avatar avatar-online avatar-placeholder">
+                    <div class="chat-image avatar avatar-placeholder">
                         <div class="w-10 rounded-full bg-red-500 text-white">
                             <span class="text-xs font-bold">LB</span>
                         </div>
@@ -192,19 +185,23 @@ pushBotNode(scenario.start);
 .sanguy-face-enter-active,
 .sanguy-face-leave-active {
     transition:
-        opacity 240ms ease,
-        transform 240ms ease;
+        opacity 200ms ease-in-out,
+        transform 200ms ease-in-out;
 }
 
 .sanguy-face-enter-from,
 .sanguy-face-leave-to {
     opacity: 0;
-    transform: scale(0.96) translateY(4px);
+    transform: scale(0.96) translateY(5px);
+}
+
+.active-sanguy {
+    animation: active-sanguy-in 200ms ease-out both;
 }
 
 .chat-active .chat-bubble,
 .chat-active .answer-option {
-    animation: chat-active-in 220ms ease both;
+    animation: chat-active-in 200ms ease-out both;
 }
 
 .message-bubble {
@@ -230,12 +227,24 @@ pushBotNode(scenario.start);
 @keyframes chat-active-in {
     from {
         opacity: 0;
-        transform: translateY(6px);
+        transform: translateY(8px);
     }
 
     to {
         opacity: 1;
         transform: translateY(0);
+    }
+}
+
+@keyframes active-sanguy-in {
+    from {
+        opacity: 0;
+        transform: translateY(8px) scale(0.96);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
     }
 }
 </style>
