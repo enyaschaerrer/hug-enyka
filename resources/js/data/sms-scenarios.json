@@ -10,7 +10,8 @@
                 {
                     "id": "start",
                     "label": "C'est parti",
-                    "next": "already_donated"
+                    "next": "already_donated",
+                    "sanguyEmotion": "happy"
                 }
             ]
         },
@@ -23,17 +24,20 @@
                 {
                     "id": "yes",
                     "label": "Oui, deja",
-                    "next": "last_donation"
+                    "next": "last_donation",
+                    "sanguyEmotion": "happy"
                 },
                 {
                     "id": "no",
                     "label": "Non, jamais",
-                    "next": "first_time"
+                    "next": "first_time",
+                    "sanguyEmotion": "alt-happy"
                 },
                 {
                     "id": "not_sure",
                     "label": "Je ne sais plus",
-                    "next": "first_time"
+                    "next": "first_time",
+                    "sanguyEmotion": "alt-happy"
                 }
             ]
         },
@@ -46,17 +50,20 @@
                 {
                     "id": "recent",
                     "label": "Moins de 3 mois",
-                    "next": "too_recent"
+                    "next": "too_recent",
+                    "sanguyEmotion": "angry"
                 },
                 {
                     "id": "ready",
                     "label": "Plus de 3 mois",
-                    "next": "motivation"
+                    "next": "motivation",
+                    "sanguyEmotion": "happy"
                 },
                 {
                     "id": "long_time",
                     "label": "Ca fait longtemps",
-                    "next": "motivation"
+                    "next": "motivation",
+                    "sanguyEmotion": "alt-happy"
                 }
             ]
         },
@@ -69,17 +76,20 @@
                 {
                     "id": "fear",
                     "label": "J'ai un peu peur",
-                    "next": "reassurance"
+                    "next": "reassurance",
+                    "sanguyEmotion": "alt-angry"
                 },
                 {
                     "id": "time",
                     "label": "Je manque de temps",
-                    "next": "appointment"
+                    "next": "appointment",
+                    "sanguyEmotion": "happy"
                 },
                 {
                     "id": "questions",
                     "label": "J'ai des questions",
-                    "next": "reassurance"
+                    "next": "reassurance",
+                    "sanguyEmotion": "alt-happy"
                 }
             ]
         },
@@ -92,17 +102,20 @@
                 {
                     "id": "help",
                     "label": "Aider directement",
-                    "next": "appointment"
+                    "next": "appointment",
+                    "sanguyEmotion": "happy"
                 },
                 {
                     "id": "team",
                     "label": "Y aller avec des collegues",
-                    "next": "appointment"
+                    "next": "appointment",
+                    "sanguyEmotion": "alt-happy"
                 },
                 {
                     "id": "simple",
                     "label": "Que ce soit simple",
-                    "next": "appointment"
+                    "next": "appointment",
+                    "sanguyEmotion": "happy"
                 }
             ]
         },
@@ -115,12 +128,14 @@
                 {
                     "id": "ok",
                     "label": "Ok, je veux voir",
-                    "next": "appointment"
+                    "next": "appointment",
+                    "sanguyEmotion": "happy"
                 },
                 {
                     "id": "later",
                     "label": "Je prefere reflechir",
-                    "next": "appointment"
+                    "next": "appointment",
+                    "sanguyEmotion": "alt-happy"
                 }
             ]
         },

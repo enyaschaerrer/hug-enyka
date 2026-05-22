@@ -4,10 +4,13 @@ export type SmsNodeType = 'question' | 'appointment';
 
 export type SmsSpeaker = 'bot' | 'user';
 
+export type SanguyEmotion = 'happy' | 'angry' | 'alt-happy' | 'alt-angry';
+
 export type SmsAnswer = {
     id: string;
     label: string;
     next: SmsNodeId;
+    sanguyEmotion?: SanguyEmotion;
 };
 
 export type SmsCta = {
