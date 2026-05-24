@@ -9,7 +9,7 @@ defineProps<{
 </script>
 
 <template>
-    <div class="relative mt-7 flex -translate-x-3 items-center justify-center">
+    <div class="relative mt-7 flex -translate-x-[10px] items-center justify-center">
         <button
             class="btn btn-ghost absolute left-1/2 top-1 h-8 w-8 -translate-x-[8.6rem] rounded-xl border-0 bg-transparent p-0 text-red-950/45 shadow-none transition hover:-translate-y-0.5 hover:bg-transparent hover:text-red-950/70 disabled:translate-y-0 disabled:opacity-20"
             type="button"
