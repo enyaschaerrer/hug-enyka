@@ -122,6 +122,20 @@ const items = ref<Card[]>([
     },
 ]);
 
+const navItems = [
+    { label: 'Home', href: '/' },
+    { label: 'Collecte', href: '/collecte' },
+    { label: 'Trophee', href: '/trophee' },
+    { label: 'Label', href: '/label' },
+    { label: 'Contact', href: '/contact' },
+];
+
+const currentPath = window.location.pathname;
+
+function isActivePath(href: string) {
+    return currentPath === href;
+}
+
 function handleSwipe(item: Card, direction: SwipeDirection) {
     if (direction === 'top') {
         return;
@@ -136,22 +150,24 @@ function handleSwipe(item: Card, direction: SwipeDirection) {
         <header class="sticky top-0 z-40 border-b border-red-100 bg-white/90 px-4 py-3 shadow-sm backdrop-blur">
             <nav class="navbar mx-auto min-h-0 w-full max-w-6xl p-0">
                 <div class="navbar-start">
-                    <a class="btn btn-ghost h-auto min-h-0 gap-2 px-2 py-1 text-red-950" href="/">
-                        <span class="flex h-9 w-9 items-center justify-center rounded-full bg-red-600 text-sm font-black text-white">H</span>
-                        <span class="leading-tight">
-                            <span class="block text-base font-black">HUG</span>
-                            <span class="block text-xs font-semibold text-stone-500">Don du sang</span>
-                        </span>
+                    <a class="inline-flex items-center gap-3" href="/" aria-label="Accueil">
+                        <img class="h-9 w-auto object-contain" :src="'/img/logo_HUG.png'" alt="HUG" />
+                        <span class="text-sm font-black uppercase text-stone-400">X</span>
+                        <img class="h-11 w-auto object-contain" :src="'/img/logo_heig-vd.png'" alt="HEIG-VD" />
                     </a>
                 </div>
 
                 <div class="navbar-center hidden lg:flex">
                     <ul class="menu menu-horizontal gap-1 rounded-full border border-red-100 bg-rose-50 px-2 py-1">
-                        <li><a class="rounded-full text-sm font-semibold text-red-950 hover:bg-white" href="/">Home</a></li>
-                        <li><a class="rounded-full text-sm font-semibold text-red-950 hover:bg-white" href="/collecte">Collecte</a></li>
-                        <li><a class="rounded-full text-sm font-semibold text-red-950 hover:bg-white" href="/trophee">Trophee</a></li>
-                        <li><a class="rounded-full text-sm font-semibold text-red-950 hover:bg-white" href="/label">Label</a></li>
-                        <li><a class="rounded-full text-sm font-semibold text-red-950 hover:bg-white" href="/contact">Contact</a></li>
+                        <li v-for="item in navItems" :key="item.href">
+                            <a
+                                class="rounded-full text-sm font-semibold text-red-950 hover:bg-white"
+                                :class="isActivePath(item.href) ? 'bg-white shadow-sm' : ''"
+                                :href="item.href"
+                            >
+                                {{ item.label }}
+                            </a>
+                        </li>
                     </ul>
                 </div>
 
@@ -163,15 +179,28 @@ function handleSwipe(item: Card, direction: SwipeDirection) {
                             </svg>
                         </button>
                         <ul class="menu dropdown-content z-50 mt-3 w-52 rounded-2xl border border-red-100 bg-white p-2 shadow-xl" tabindex="0">
-                            <li><a href="/">Home</a></li>
-                            <li><a href="/collecte">Collecte</a></li>
-                            <li><a href="/trophee">Trophee</a></li>
-                            <li><a href="/label">Label</a></li>
-                            <li><a href="/contact">Contact</a></li>
+                            <li v-for="item in navItems" :key="item.href">
+                                <a :class="isActivePath(item.href) ? 'bg-rose-50 font-bold text-red-700' : ''" :href="item.href">
+                                    {{ item.label }}
+                                </a>
+                            </li>
                         </ul>
                     </div>
 
                     <a class="btn btn-sm rounded-full border-red-200 bg-white text-red-700 hover:border-red-300 hover:bg-red-50" href="/admin">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="lucide lucide-user-round-cog-icon lucide-user-round-cog h-4 w-4" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="m14.305 19.53.923-.382"/>
+                            <path d="m15.228 16.852-.923-.383"/>
+                            <path d="m16.852 15.228-.383-.923"/>
+                            <path d="m16.852 20.772-.383.924"/>
+                            <path d="m19.148 15.228.383-.923"/>
+                            <path d="m19.53 21.696-.382-.924"/>
+                            <path d="M2 21a8 8 0 0 1 10.434-7.62"/>
+                            <path d="m20.772 16.852.924-.383"/>
+                            <path d="m20.772 19.148.924.383"/>
+                            <circle cx="10" cy="8" r="5"/>
+                            <circle cx="18" cy="18" r="3"/>
+                        </svg>
                         Admin
                     </a>
                 </div>
