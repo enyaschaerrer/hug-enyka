@@ -1,66 +1,47 @@
 <script setup lang="ts">
 defineProps<{
-    top: () => void;
     left: () => void;
     right: () => void;
-    bottom: () => void;
     restore: () => void;
     isEnd: boolean;
-    isStart: boolean;
     canRestore: boolean;
 }>();
 </script>
 
 <template>
-    <div class="mt-6 grid grid-cols-5 items-center gap-2 rounded-3xl border border-red-100 bg-white p-2 shadow-lg">
+    <div class="relative mt-7 flex -translate-x-[10px] items-center justify-center">
         <button
-            class="btn btn-circle border-stone-200 bg-white text-xs font-bold text-stone-600 hover:border-stone-300 hover:bg-stone-50"
+            class="btn btn-ghost absolute left-1/2 top-1 h-8 w-8 -translate-x-[8.6rem] rounded-xl border-0 bg-transparent p-0 text-red-950/45 shadow-none transition hover:-translate-y-0.5 hover:bg-transparent hover:text-red-950/70 disabled:translate-y-0 disabled:text-red-950/30 disabled:opacity-100"
             type="button"
             :disabled="!canRestore"
-            aria-label="Restore previous card"
+            aria-label="Revenir a la carte precedente"
             @click="restore"
         >
-            Back
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.25">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 14 4 9m0 0 5-5M4 9h10.5A5.5 5.5 0 0 1 20 14.5v0A5.5 5.5 0 0 1 14.5 20H11" />
+            </svg>
         </button>
 
-        <button
-            class="btn btn-circle border-red-200 bg-red-50 text-xs font-bold text-red-700 hover:border-red-300 hover:bg-red-100"
-            type="button"
-            :disabled="isEnd"
-            aria-label="Swipe left"
-            @click="left"
-        >
-            Non
-        </button>
+        <div class="flex items-center justify-center gap-3">
+            <button
+                class="group inline-flex h-20 w-20 items-center justify-center rounded-3xl border-2 border-red-200 bg-white p-3 shadow-xl shadow-red-100 transition-transform transition-colors hover:translate-y-1 hover:rotate-[-2deg] hover:border-red-300 hover:bg-red-50 disabled:translate-y-0 disabled:rotate-0 disabled:opacity-35"
+                type="button"
+                :disabled="isEnd"
+                aria-label="Refuser la carte"
+                @click="left"
+            >
+                <img class="pointer-events-none h-full w-full select-none object-contain transition-transform group-hover:scale-110" :src="'/img/neg-button.png'" alt="" draggable="false" />
+            </button>
 
-        <button
-            class="btn btn-circle border-red-500 bg-red-600 text-xs font-black text-white shadow-md shadow-red-200 hover:border-red-600 hover:bg-red-700"
-            type="button"
-            :disabled="isEnd"
-            aria-label="Swipe top"
-            @click="top"
-        >
-            Hero
-        </button>
-
-        <button
-            class="btn btn-circle border-emerald-200 bg-emerald-50 text-xs font-bold text-emerald-700 hover:border-emerald-300 hover:bg-emerald-100"
-            type="button"
-            :disabled="isEnd"
-            aria-label="Swipe right"
-            @click="right"
-        >
-            Oui
-        </button>
-
-        <button
-            class="btn btn-circle border-stone-200 bg-white text-xs font-bold text-stone-600 hover:border-stone-300 hover:bg-stone-50"
-            type="button"
-            :disabled="isStart || isEnd"
-            aria-label="Swipe bottom"
-            @click="bottom"
-        >
-            Passer
-        </button>
+            <button
+                class="group inline-flex h-20 w-20 items-center justify-center rounded-3xl border-2 border-emerald-200 bg-white p-3 shadow-xl shadow-emerald-100 transition-transform transition-colors hover:-translate-y-1 hover:rotate-2 hover:border-emerald-300 hover:bg-emerald-50 disabled:translate-y-0 disabled:rotate-0 disabled:opacity-35"
+                type="button"
+                :disabled="isEnd"
+                aria-label="Valider la carte"
+                @click="right"
+            >
+                <img class="pointer-events-none h-full w-full select-none object-contain transition-transform group-hover:scale-110" :src="'/img/pos-button.png'" alt="" draggable="false" />
+            </button>
+        </div>
     </div>
 </template>

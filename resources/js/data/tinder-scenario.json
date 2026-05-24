@@ -1,0 +1,149 @@
+{
+    "title": "Pre-tri don du sang",
+    "cards": [
+        {
+            "id": 1,
+            "theme": "Etat du jour",
+            "title": "Forme generale",
+            "question": "Aujourd'hui, tu te sens en forme et disponible pour donner ?",
+            "bio": "Premier check rapide avant de lancer le parcours.",
+            "hint": "Fatigue, fievre ou infection recente demandent souvent un controle avant de continuer.",
+            "image": "/img/sanguy/sanguy_happy.png",
+            "tone": "red",
+            "leftOutcome": {
+                "status": "blocker",
+                "label": "A verifier avant de continuer"
+            },
+            "rightOutcome": {
+                "status": "clear",
+                "label": "Base OK"
+            }
+        },
+        {
+            "id": 2,
+            "theme": "Voyage",
+            "title": "Retour de voyage",
+            "question": "Tu as voyage hors Suisse ou dans une zone a risque recemment ?",
+            "bio": "Sanguy aime les vacances, mais il check les delais.",
+            "hint": "Certains pays peuvent imposer une attente. La carte monde aide a preciser.",
+            "image": "/img/sanguy/sanguy-alt-angry.png",
+            "tone": "blue",
+            "leftOutcome": {
+                "status": "clear",
+                "label": "Pas de voyage signale"
+            },
+            "rightOutcome": {
+                "status": "warning",
+                "label": "A confirmer avec la carte"
+            }
+        },
+        {
+            "id": 3,
+            "theme": "Medicaments",
+            "title": "Traitement en cours",
+            "question": "Tu prends un traitement important, des antibiotiques ou un medicament a signaler ?",
+            "bio": "Pas de jugement, juste un checkpoint pour orienter la suite.",
+            "hint": "Le SMS pourra demander le type de traitement avant toute decision.",
+            "image": "/img/sanguy/sanguy-angry.png",
+            "tone": "violet",
+            "leftOutcome": {
+                "status": "clear",
+                "label": "Rien a signaler"
+            },
+            "rightOutcome": {
+                "status": "warning",
+                "label": "Question SMS necessaire"
+            }
+        },
+        {
+            "id": 4,
+            "theme": "Sante recente",
+            "title": "Symptomes",
+            "question": "Tu as eu fievre, infection ou gros rhume ces derniers jours ?",
+            "bio": "Le don doit rester safe pour toi et pour les receveurs.",
+            "hint": "En cas de symptomes recents, mieux vaut temporiser.",
+            "image": "/img/sanguy/sanguy-alt-angry.png",
+            "tone": "green",
+            "leftOutcome": {
+                "status": "clear",
+                "label": "Pas de symptome"
+            },
+            "rightOutcome": {
+                "status": "blocker",
+                "label": "A reporter"
+            }
+        },
+        {
+            "id": 5,
+            "theme": "Delais",
+            "title": "Tatouage ou piercing",
+            "question": "Tu as fait un tatouage, piercing ou acte similaire recemment ?",
+            "bio": "Une petite carte pour eviter les mauvaises surprises au rendez-vous.",
+            "hint": "Ces situations peuvent demander un delai selon le contexte.",
+            "image": "/img/sanguy/sanguy-alt-happy.png",
+            "tone": "pink",
+            "leftOutcome": {
+                "status": "clear",
+                "label": "Aucun delai apparent"
+            },
+            "rightOutcome": {
+                "status": "warning",
+                "label": "Delai possible"
+            }
+        },
+        {
+            "id": 6,
+            "theme": "Recuperation",
+            "title": "Soin ou operation",
+            "question": "Tu as eu une operation, un soin dentaire lourd ou un examen medical recent ?",
+            "bio": "Sanguy met un marque-page si une precision est utile.",
+            "hint": "Certaines interventions demandent un controle avant le don.",
+            "image": "/img/sanguy/sanguy-angry.png",
+            "tone": "orange",
+            "leftOutcome": {
+                "status": "clear",
+                "label": "Rien de recent"
+            },
+            "rightOutcome": {
+                "status": "warning",
+                "label": "A preciser"
+            }
+        },
+        {
+            "id": 7,
+            "theme": "Profil",
+            "title": "Conditions de base",
+            "question": "Tu penses remplir les conditions generales de don indiquees par l'organisation ?",
+            "bio": "Ce prototype ne remplace pas le controle officiel, il oriente juste le parcours.",
+            "hint": "Si tu n'es pas sur, Sanguy te bascule vers les questions fermees.",
+            "image": "/img/sanguy/sanguy_happy.png",
+            "tone": "turquoise",
+            "leftOutcome": {
+                "status": "warning",
+                "label": "A verifier"
+            },
+            "rightOutcome": {
+                "status": "clear",
+                "label": "Profil de base OK"
+            }
+        },
+        {
+            "id": 8,
+            "theme": "Motivation",
+            "title": "Suite du parcours",
+            "question": "Tu veux continuer avec Sanguy en mode SMS pour affiner le tri ?",
+            "bio": "Derniere carte : si tout semble jouable, le chat prend le relais.",
+            "hint": "Le SMS reste un prototype et ne donne pas de validation medicale officielle.",
+            "image": "/img/sanguy/sanguy-alt-happy.png",
+            "tone": "emerald",
+            "leftOutcome": {
+                "status": "blocker",
+                "label": "Parcours stoppe"
+            },
+            "rightOutcome": {
+                "status": "clear",
+                "label": "Pret pour le SMS"
+            }
+        }
+    ]
+}
