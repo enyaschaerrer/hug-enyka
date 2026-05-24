@@ -110,7 +110,7 @@ pushBotNode(scenario.start);
                     ]"
                 >
                     <div v-if="message.speaker === 'bot' && message.id === activeBotMessageId" class="chat-image avatar active-sanguy">
-                        <div class="flex w-16 items-center justify-center">
+                        <div class="flex w-24 items-center justify-center md:w-28">
                             <Transition name="sanguy-face" mode="out-in">
                                 <img class="w-full object-contain" :key="sanguyEmotion" :src="currentSanguyImage" alt="Sanguy" />
                             </Transition>
