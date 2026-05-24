@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { ref, watch } from 'vue';
+
 type TinderItem = {
     id: number;
     text: string;
@@ -10,9 +12,22 @@ type TinderItem = {
     tone: 'calm' | 'boost' | 'alert' | 'win';
 };
 
-defineProps<{
+const props = defineProps<{
     item: TinderItem;
+    active: boolean;
 }>();
+
+const emoteAnimationKey = ref(0);
+
+watch(
+    () => props.active,
+    (active) => {
+        if (active) {
+            emoteAnimationKey.value += 1;
+        }
+    },
+    { immediate: true },
+);
 
 const toneClasses: Record<TinderItem['tone'], string> = {
     calm: 'from-white via-red-50 to-white',
@@ -45,13 +60,14 @@ const badgeClasses: Record<TinderItem['tone'], string> = {
 
         <div class="relative mt-5 flex min-h-0 flex-1 items-center justify-center">
             <div class="absolute inset-x-5 bottom-10 h-24 rounded-full bg-red-200/60 blur-2xl"></div>
-            <img
-                :key="item.id"
-                class="sanguy-card-emote pointer-events-none relative max-h-[300px] w-full select-none object-contain drop-shadow-2xl"
-                :src="item.image"
-                :alt="item.text"
-                draggable="false"
-            />
+            <div :key="`${item.id}-${emoteAnimationKey}`" class="sanguy-card-emote relative flex w-full items-center justify-center">
+                <img
+                    class="pointer-events-none max-h-[300px] w-full select-none object-contain drop-shadow-2xl"
+                    :src="item.image"
+                    :alt="item.text"
+                    draggable="false"
+                />
+            </div>
         </div>
 
         <div class="rounded-3xl border border-red-100 bg-white/88 p-5 shadow-[0_12px_36px_rgba(127,29,29,0.08)] backdrop-blur">
@@ -73,17 +89,16 @@ const badgeClasses: Record<TinderItem['tone'], string> = {
 <style scoped>
 .sanguy-card-emote {
     animation: sanguy-card-emote-in 360ms ease-out both;
+    will-change: transform;
 }
 
 @keyframes sanguy-card-emote-in {
-    from {
-        opacity: 0;
-        transform: translateY(18px) scale(0.96);
+    0% {
+        transform: translateY(24px);
     }
 
-    to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
+    100% {
+        transform: translateY(0);
     }
 }
 </style>

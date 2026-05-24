@@ -216,8 +216,8 @@ function handleSwipe(item: Card, direction: SwipeDirection) {
                 @swipe-left="(item) => handleSwipe(item, 'left')"
                 @swipe-right="(item) => handleSwipe(item, 'right')"
             >
-                <template #default="{ item }">
-                    <TinderCard :item="item" />
+                <template #default="{ item, activeItemKey }">
+                    <TinderCard :item="item" :active="item.id === activeItemKey" />
                 </template>
 
                 <template #left="{ delta }">
