@@ -1,126 +1,53 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import { FlashCards } from 'vue3-flashcards';
+import tinderScenarioData from '../../data/tinder-scenario.json';
 import SmsConversationPrototype from '../../components/sms-chat/SmsConversationPrototype.vue';
 import InteractiveWorldMap from '../../components/interactive-map/InteractiveWorldMap.vue';
 import TinderActions from '../../components/tinder-cards/TinderActions.vue';
 import TinderCard from '../../components/tinder-cards/TinderCard.vue';
 
 type SwipeDirection = 'left' | 'right';
+type TriageStatus = 'clear' | 'warning' | 'blocker';
 
 type Card = Record<string, unknown> & {
     id: number;
-    text: string;
-    description: string;
-    prompt: string;
+    theme: string;
+    title: string;
+    question: string;
+    bio: string;
+    hint: string;
     image: string;
-    tag: string;
-    points: number;
-    tone: 'calm' | 'boost' | 'alert' | 'win';
+    tone: 'red' | 'green' | 'blue' | 'violet' | 'orange' | 'turquoise' | 'pink' | 'emerald';
+    leftOutcome: {
+        status: TriageStatus;
+        label: string;
+    };
+    rightOutcome: {
+        status: TriageStatus;
+        label: string;
+    };
 };
 
-const items = ref<Card[]>([
-    {
-        id: 1,
-        text: 'Premier don',
-        description: 'Tu n as jamais donne, mais tu veux aider une premiere fois.',
-        prompt: 'Match si tu veux recevoir un parcours simple et rassurant.',
-        image: '/img/sanguy/sanguy_happy.png',
-        tag: 'Starter',
-        points: 120,
-        tone: 'boost',
-    },
-    {
-        id: 2,
-        text: 'Pause midi',
-        description: 'Une collecte proche du travail, entre deux reunions.',
-        prompt: 'Swipe oui si un creneau court te motive.',
-        image: '/img/sanguy/sanguy-alt-happy.png',
-        tag: 'Rapide',
-        points: 90,
-        tone: 'calm',
-    },
-    {
-        id: 3,
-        text: 'Voyage recent',
-        description: 'Tu rentres d un pays qui peut demander un delai.',
-        prompt: 'Swipe oui pour verifier avec la carte monde apres.',
-        image: '/img/sanguy/sanguy-alt-angry.png',
-        tag: 'Check',
-        points: 60,
-        tone: 'alert',
-    },
-    {
-        id: 4,
-        text: 'Equipe solidaire',
-        description: 'Tu aimerais venir avec des collegues pour te lancer.',
-        prompt: 'Match si le mode groupe te donne envie.',
-        image: '/img/sanguy/sanguy_happy.png',
-        tag: 'Team',
-        points: 150,
-        tone: 'win',
-    },
-    {
-        id: 5,
-        text: 'Petit doute',
-        description: 'Tu ne sais pas si tu es eligible aujourd hui.',
-        prompt: 'Swipe oui pour passer au mini-chat Sanguy.',
-        image: '/img/sanguy/sanguy-angry.png',
-        tag: 'Question',
-        points: 80,
-        tone: 'alert',
-    },
-    {
-        id: 6,
-        text: 'Retour au don',
-        description: 'Tu as deja donne et tu veux reprendre sans pression.',
-        prompt: 'Match si un rappel clair peut t aider.',
-        image: '/img/sanguy/sanguy-alt-happy.png',
-        tag: 'Comeback',
-        points: 110,
-        tone: 'boost',
-    },
-    {
-        id: 7,
-        text: 'Objectif HUG',
-        description: 'Chaque poche compte pour les patientes et patients.',
-        prompt: 'Swipe oui si tu veux viser le badge Hero du jour.',
-        image: '/img/sanguy/sanguy_happy.png',
-        tag: 'Impact',
-        points: 200,
-        tone: 'win',
-    },
-    {
-        id: 8,
-        text: 'Pas dispo',
-        description: 'Aujourd hui c est complique, mais plus tard oui.',
-        prompt: 'Passe la carte pour garder le parcours fluide.',
-        image: '/img/sanguy/sanguy-alt-angry.png',
-        tag: 'Timing',
-        points: 40,
-        tone: 'calm',
-    },
-    {
-        id: 9,
-        text: 'Collecte entreprise',
-        description: 'Ton entreprise pourrait accueillir une action de don.',
-        prompt: 'Match si tu veux imaginer une page co-brandee.',
-        image: '/img/sanguy/sanguy-alt-happy.png',
-        tag: 'Campus',
-        points: 170,
-        tone: 'boost',
-    },
-    {
-        id: 10,
-        text: 'Boss final',
-        description: 'Tu es pret a continuer vers le chat et la carte.',
-        prompt: 'Swipe oui pour enchainer le parcours complet.',
-        image: '/img/sanguy/sanguy_happy.png',
-        tag: 'Combo',
-        points: 250,
-        tone: 'win',
-    },
-]);
+type TinderScenario = {
+    title: string;
+    cards: Card[];
+};
+
+type TriageAnswer = {
+    cardId: number;
+    direction: SwipeDirection;
+    status: TriageStatus;
+    label: string;
+};
+
+const tinderScenario = tinderScenarioData as TinderScenario;
+const items = ref<Card[]>(tinderScenario.cards);
+const answers = ref<TriageAnswer[]>([]);
+const totalCards = computed(() => items.value.length);
+const blockerCount = computed(() => answers.value.filter((answer) => answer.status === 'blocker').length);
+const warningCount = computed(() => answers.value.filter((answer) => answer.status === 'warning').length);
+const hasMatch = computed(() => blockerCount.value === 0);
 
 const navItems = [
     { label: 'Home', href: '/' },
@@ -137,9 +64,25 @@ function isActivePath(href: string) {
 }
 
 function handleSwipe(item: Card, direction: SwipeDirection) {
-    console.info(`${direction}: ${item.text}`);
+    const outcome = direction === 'right' ? item.rightOutcome : item.leftOutcome;
+    answers.value = [
+        ...answers.value.filter((answer) => answer.cardId !== item.id),
+        {
+            cardId: item.id,
+            direction,
+            status: outcome.status,
+            label: outcome.label,
+        },
+    ];
 }
 
+function handleRestore(item: Card) {
+    answers.value = answers.value.filter((answer) => answer.cardId !== item.id);
+}
+
+function getCardPosition(item: Card) {
+    return Math.max(1, items.value.findIndex((card) => card.id === item.id) + 1);
+}
 </script>
 
 <template>
@@ -215,9 +158,15 @@ function handleSwipe(item: Card, direction: SwipeDirection) {
                 :stack-scale="0.03"
                 @swipe-left="(item) => handleSwipe(item, 'left')"
                 @swipe-right="(item) => handleSwipe(item, 'right')"
+                @restore="handleRestore"
             >
                 <template #default="{ item, activeItemKey }">
-                    <TinderCard :item="item" :active="item.id === activeItemKey" />
+                    <TinderCard
+                        :item="item"
+                        :active="item.id === activeItemKey"
+                        :current="getCardPosition(item)"
+                        :total="totalCards"
+                    />
                 </template>
 
                 <template #left="{ delta }">
@@ -247,9 +196,29 @@ function handleSwipe(item: Card, direction: SwipeDirection) {
                 </template>
 
                 <template #empty>
-                    <div class="rounded-[1.75rem] border border-red-100 bg-white p-10 text-center text-xl font-semibold text-red-950 shadow-xl">
-                        Parcours termine
-                        <p class="mt-2 text-sm font-normal text-stone-500">Sanguy t attend dans le chat pour continuer.</p>
+                    <div class="rounded-[1.75rem] border border-red-100 bg-white p-8 text-center text-red-950 shadow-[0_20px_60px_rgba(127,29,29,0.12)]">
+                        <div
+                            class="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl"
+                            :class="hasMatch ? 'bg-emerald-50 text-emerald-600' : 'bg-red-50 text-red-600'"
+                        >
+                            <span class="text-3xl font-black">{{ hasMatch ? 'OK' : '!' }}</span>
+                        </div>
+                        <h2 class="text-2xl font-black">
+                            {{ hasMatch ? 'Match pour continuer' : 'Pas de match pour le moment' }}
+                        </h2>
+                        <p class="mt-3 text-sm leading-relaxed text-stone-600">
+                            {{
+                                hasMatch
+                                    ? warningCount > 0
+                                        ? 'Sanguy a repere quelques points a clarifier. Le SMS peut prendre le relais.'
+                                        : 'Aucun point bloquant dans ce premier tri. Tu peux passer au SMS.'
+                                    : 'Un ou plusieurs points demandent de reporter ou de verifier avant de poursuivre.'
+                            }}
+                        </p>
+                        <div class="mt-5 flex justify-center gap-2">
+                            <span class="badge badge-error badge-outline">{{ blockerCount }} blocage</span>
+                            <span class="badge badge-warning badge-outline">{{ warningCount }} a verifier</span>
+                        </div>
                     </div>
                 </template>
 

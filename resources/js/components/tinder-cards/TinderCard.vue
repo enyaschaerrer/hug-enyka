@@ -3,18 +3,20 @@ import { ref, watch } from 'vue';
 
 type TinderItem = {
     id: number;
-    text: string;
-    description: string;
-    prompt: string;
+    theme: string;
+    title: string;
+    question: string;
+    bio: string;
+    hint: string;
     image: string;
-    tag: string;
-    points: number;
-    tone: 'calm' | 'boost' | 'alert' | 'win';
+    tone: 'red' | 'green' | 'blue' | 'violet' | 'orange' | 'turquoise' | 'pink' | 'emerald';
 };
 
 const props = defineProps<{
     item: TinderItem;
     active: boolean;
+    current: number;
+    total: number;
 }>();
 
 const emoteAnimationKey = ref(0);
@@ -30,17 +32,47 @@ watch(
 );
 
 const toneClasses: Record<TinderItem['tone'], string> = {
-    calm: 'from-white via-red-50 to-white',
-    boost: 'from-red-50 via-white to-rose-100',
-    alert: 'from-white via-orange-50 to-red-100',
-    win: 'from-red-100 via-white to-emerald-50',
+    red: 'from-red-50 via-white to-rose-100',
+    green: 'from-green-50 via-white to-emerald-50',
+    blue: 'from-blue-50 via-white to-sky-50',
+    violet: 'from-violet-50 via-white to-purple-50',
+    orange: 'from-orange-50 via-white to-amber-50',
+    turquoise: 'from-cyan-50 via-white to-teal-50',
+    pink: 'from-pink-50 via-white to-rose-50',
+    emerald: 'from-emerald-50 via-white to-green-50',
 };
 
-const badgeClasses: Record<TinderItem['tone'], string> = {
-    calm: 'border-stone-200 bg-white text-stone-700',
-    boost: 'border-red-200 bg-red-50 text-red-700',
-    alert: 'border-orange-200 bg-orange-50 text-orange-700',
-    win: 'border-emerald-200 bg-emerald-50 text-emerald-700',
+const themeClasses: Record<TinderItem['tone'], string> = {
+    red: 'border-red-200 bg-red-50 text-red-700',
+    green: 'border-green-200 bg-green-50 text-green-700',
+    blue: 'border-blue-200 bg-blue-50 text-blue-700',
+    violet: 'border-violet-200 bg-violet-50 text-violet-700',
+    orange: 'border-orange-200 bg-orange-50 text-orange-700',
+    turquoise: 'border-cyan-200 bg-cyan-50 text-cyan-700',
+    pink: 'border-pink-200 bg-pink-50 text-pink-700',
+    emerald: 'border-emerald-200 bg-emerald-50 text-emerald-700',
+};
+
+const counterClasses: Record<TinderItem['tone'], string> = {
+    red: 'border-red-600 bg-red-600 text-white',
+    green: 'border-green-600 bg-green-600 text-white',
+    blue: 'border-blue-600 bg-blue-600 text-white',
+    violet: 'border-violet-600 bg-violet-600 text-white',
+    orange: 'border-orange-500 bg-orange-500 text-white',
+    turquoise: 'border-cyan-600 bg-cyan-600 text-white',
+    pink: 'border-pink-600 bg-pink-600 text-white',
+    emerald: 'border-emerald-600 bg-emerald-600 text-white',
+};
+
+const glowClasses: Record<TinderItem['tone'], string> = {
+    red: 'bg-red-300/55',
+    green: 'bg-green-300/55',
+    blue: 'bg-blue-300/55',
+    violet: 'bg-violet-300/55',
+    orange: 'bg-orange-300/55',
+    turquoise: 'bg-cyan-300/55',
+    pink: 'bg-pink-300/55',
+    emerald: 'bg-emerald-300/55',
 };
 </script>
 
@@ -50,36 +82,31 @@ const badgeClasses: Record<TinderItem['tone'], string> = {
         :class="toneClasses[item.tone]"
     >
         <div class="flex items-center justify-between gap-3">
-            <span class="rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-wide" :class="badgeClasses[item.tone]">
-                {{ item.tag }}
+            <span class="rounded-full border-2 px-3 py-1 text-xs font-bold uppercase tracking-wide" :class="themeClasses[item.tone]">
+                {{ item.theme }}
             </span>
-            <span class="rounded-full bg-red-950 px-3 py-1 text-sm font-black text-white">
-                +{{ item.points }}
+            <span class="rounded-full border-2 px-3 py-1 text-sm font-black tabular-nums" :class="counterClasses[item.tone]">
+                {{ current }}/{{ total }}
             </span>
         </div>
 
         <div class="relative mt-5 flex min-h-0 flex-1 items-center justify-center">
-            <div class="absolute inset-x-5 bottom-10 h-24 rounded-full bg-red-200/60 blur-2xl"></div>
+            <div class="absolute inset-x-5 bottom-10 h-24 rounded-full blur-2xl" :class="glowClasses[item.tone]"></div>
             <div :key="`${item.id}-${emoteAnimationKey}`" class="sanguy-card-emote relative flex w-full items-center justify-center">
                 <img
                     class="pointer-events-none max-h-[300px] w-full select-none object-contain drop-shadow-2xl"
                     :src="item.image"
-                    :alt="item.text"
+                    :alt="item.title"
                     draggable="false"
                 />
             </div>
         </div>
 
         <div class="rounded-3xl border border-red-100 bg-white/88 p-5 shadow-[0_12px_36px_rgba(127,29,29,0.08)] backdrop-blur">
-            <h2 class="text-3xl font-black leading-tight text-red-950">
-                {{ item.text }}
+            <h2 class="text-2xl font-black leading-tight text-red-950">
+                {{ item.question }}
             </h2>
-            <p class="mt-2 text-base leading-relaxed text-stone-600">
-                {{ item.description }}
-            </p>
-            <div class="mt-4 rounded-2xl bg-red-50 px-4 py-3 text-sm font-semibold leading-relaxed text-red-900">
-                {{ item.prompt }}
-            </div>
+            <p class="mt-3 text-base font-normal leading-relaxed text-stone-500">{{ item.bio }}</p>
         </div>
 
         <div class="pointer-events-none absolute inset-0 rounded-[1.75rem] border border-white/80" />

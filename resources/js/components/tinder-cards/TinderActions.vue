@@ -11,7 +11,7 @@ defineProps<{
 <template>
     <div class="relative mt-7 flex -translate-x-[10px] items-center justify-center">
         <button
-            class="btn btn-ghost absolute left-1/2 top-1 h-8 w-8 -translate-x-[8.6rem] rounded-xl border-0 bg-transparent p-0 text-red-950/45 shadow-none transition hover:-translate-y-0.5 hover:bg-transparent hover:text-red-950/70 disabled:translate-y-0 disabled:opacity-20"
+            class="btn btn-ghost absolute left-1/2 top-1 h-8 w-8 -translate-x-[8.6rem] rounded-xl border-0 bg-transparent p-0 text-red-950/45 shadow-none transition hover:-translate-y-0.5 hover:bg-transparent hover:text-red-950/70 disabled:translate-y-0 disabled:text-red-950/30 disabled:opacity-100"
             type="button"
             :disabled="!canRestore"
             aria-label="Revenir a la carte precedente"
