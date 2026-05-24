@@ -204,7 +204,7 @@ function handleSwipe(item: Card, direction: SwipeDirection) {
             </nav>
         </header>
 
-        <section class="mx-auto flex min-h-[100svh] w-full max-w-5xl items-center bg-rose-50 px-4 py-8">
+        <section class="mx-auto flex min-h-[100svh] w-full max-w-5xl items-center bg-rose-50 px-4 pb-12 pt-0">
             <div class="relative mx-auto w-full max-w-[430px]">
             <FlashCards
                 :items="items"

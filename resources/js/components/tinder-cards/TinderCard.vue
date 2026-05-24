@@ -46,7 +46,8 @@ const badgeClasses: Record<TinderItem['tone'], string> = {
         <div class="relative mt-5 flex min-h-0 flex-1 items-center justify-center">
             <div class="absolute inset-x-5 bottom-10 h-24 rounded-full bg-red-200/60 blur-2xl"></div>
             <img
-                class="pointer-events-none relative max-h-[300px] w-full select-none object-contain drop-shadow-2xl"
+                :key="item.id"
+                class="sanguy-card-emote pointer-events-none relative max-h-[300px] w-full select-none object-contain drop-shadow-2xl"
                 :src="item.image"
                 :alt="item.text"
                 draggable="false"
@@ -68,3 +69,21 @@ const badgeClasses: Record<TinderItem['tone'], string> = {
         <div class="pointer-events-none absolute inset-0 rounded-[1.75rem] border border-white/80" />
     </article>
 </template>
+
+<style scoped>
+.sanguy-card-emote {
+    animation: sanguy-card-emote-in 360ms ease-out both;
+}
+
+@keyframes sanguy-card-emote-in {
+    from {
+        opacity: 0;
+        transform: translateY(18px) scale(0.96);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+</style>
