@@ -31,7 +31,7 @@ const badgeClasses: Record<TinderItem['tone'], string> = {
 
 <template>
     <article
-        class="relative z-10 flex h-[540px] w-full flex-col overflow-hidden rounded-[1.75rem] border border-red-100 bg-gradient-to-br p-5 text-red-950 shadow-2xl"
+        class="relative z-10 flex h-[540px] w-full flex-col overflow-hidden rounded-[1.75rem] border border-red-100 bg-gradient-to-br p-5 text-red-950 shadow-[0_20px_60px_rgba(127,29,29,0.12)]"
         :class="toneClasses[item.tone]"
     >
         <div class="flex items-center justify-between gap-3">
@@ -54,7 +54,7 @@ const badgeClasses: Record<TinderItem['tone'], string> = {
             />
         </div>
 
-        <div class="rounded-3xl border border-red-100 bg-white/88 p-5 shadow-lg backdrop-blur">
+        <div class="rounded-3xl border border-red-100 bg-white/88 p-5 shadow-[0_12px_36px_rgba(127,29,29,0.08)] backdrop-blur">
             <h2 class="text-3xl font-black leading-tight text-red-950">
                 {{ item.text }}
             </h2>
