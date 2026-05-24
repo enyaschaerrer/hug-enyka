@@ -178,15 +178,7 @@ function handleSwipe(item: Card, direction: SwipeDirection) {
             </nav>
         </header>
 
-        <section class="mx-auto mb-12 mt-8 w-full max-w-5xl bg-rose-50 px-4">
-            <div class="mx-auto mb-6 max-w-2xl text-center">
-                <p class="text-sm font-semibold uppercase tracking-[0.18em] text-red-500">Mini-jeu HUG</p>
-                <h1 class="mt-2 text-3xl font-bold text-red-950 md:text-4xl">Swipe ton parcours avec Sanguy</h1>
-                <p class="mt-3 text-base leading-relaxed text-stone-600">
-                    Choisis les situations qui te ressemblent, gagne des points symboliques et prepare la suite du parcours don du sang.
-                </p>
-            </div>
-
+        <section class="mx-auto flex min-h-[100svh] w-full max-w-5xl items-center bg-rose-50 px-4 py-8">
             <div class="mx-auto w-full max-w-[430px]">
             <FlashCards
                 :items="items"
