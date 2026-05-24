@@ -12,19 +12,19 @@ defineProps<{
 </script>
 
 <template>
-    <div class="mt-6 flex items-center justify-center gap-3">
+    <div class="mt-6 grid grid-cols-5 items-center gap-2 rounded-3xl border border-red-100 bg-white p-2 shadow-lg">
         <button
-            class="btn btn-circle btn-outline"
+            class="btn btn-circle border-stone-200 bg-white text-xs font-bold text-stone-600 hover:border-stone-300 hover:bg-stone-50"
             type="button"
             :disabled="!canRestore"
             aria-label="Restore previous card"
             @click="restore"
         >
-            Retour
+            Back
         </button>
 
         <button
-            class="btn btn-circle btn-error text-error-content"
+            class="btn btn-circle border-red-200 bg-red-50 text-xs font-bold text-red-700 hover:border-red-300 hover:bg-red-100"
             type="button"
             :disabled="isEnd"
             aria-label="Swipe left"
@@ -34,17 +34,17 @@ defineProps<{
         </button>
 
         <button
-            class="btn btn-circle btn-info text-info-content"
+            class="btn btn-circle border-red-500 bg-red-600 text-xs font-black text-white shadow-md shadow-red-200 hover:border-red-600 hover:bg-red-700"
             type="button"
             :disabled="isEnd"
             aria-label="Swipe top"
             @click="top"
         >
-            Top
+            Hero
         </button>
 
         <button
-            class="btn btn-circle btn-success text-success-content"
+            class="btn btn-circle border-emerald-200 bg-emerald-50 text-xs font-bold text-emerald-700 hover:border-emerald-300 hover:bg-emerald-100"
             type="button"
             :disabled="isEnd"
             aria-label="Swipe right"
@@ -54,7 +54,7 @@ defineProps<{
         </button>
 
         <button
-            class="btn btn-circle btn-outline"
+            class="btn btn-circle border-stone-200 bg-white text-xs font-bold text-stone-600 hover:border-stone-300 hover:bg-stone-50"
             type="button"
             :disabled="isStart || isEnd"
             aria-label="Swipe bottom"
