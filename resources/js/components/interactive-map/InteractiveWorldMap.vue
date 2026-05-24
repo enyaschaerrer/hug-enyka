@@ -15,7 +15,7 @@ const countryById = new Map(countries.map(c => [c.numericId, c]));
 const width = 960;
 const height = 500;
 
-const projection = geoNaturalEarth1().scale(153).translate([width / 2, height / 2]);
+const projection = geoNaturalEarth1().scale(185).translate([width / 2, height / 2]);
 const pathGen = geoPath(projection);
 
 // Extraction des features depuis le world atlas, sans l'Antarctique (id 10)
@@ -188,8 +188,15 @@ function onBlur() {
 
 <template>
     <section ref="sectionRef" class="relative w-screen h-svh bg-gray-50 flex flex-col overflow-hidden">
+        <div class="mx-auto w-full max-w-3xl px-4 pt-5 text-center z-10">
+            <h2 class="text-2xl font-semibold text-gray-950">Delais de don dans le monde</h2>
+            <p class="mt-1 text-sm text-gray-500">
+                Recherchez un pays ou explorez la carte pour connaitre les delais avant de pouvoir donner son sang.
+            </p>
+        </div>
+
         <!-- Recherche -->
-        <div class="flex justify-center px-4 pt-5 pb-2 z-10">
+        <div class="flex justify-center px-4 pt-4 pb-2 z-10">
             <div class="relative w-full max-w-sm">
                 <span
                     class="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none transition-colors"
@@ -235,7 +242,7 @@ function onBlur() {
                 ref="svgRef"
                 :viewBox="`0 0 ${width} ${height}`"
                 preserveAspectRatio="xMidYMid meet"
-                class="w-full h-full"
+                class="mx-auto block h-full w-[98%]"
                 @click="deselect"
             >
                 <!-- Territoires sans données : fond neutre, pas de bordure ni d'interaction -->
