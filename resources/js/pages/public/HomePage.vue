@@ -6,7 +6,7 @@ import InteractiveWorldMap from '../../components/interactive-map/InteractiveWor
 import TinderActions from '../../components/tinder-cards/TinderActions.vue';
 import TinderCard from '../../components/tinder-cards/TinderCard.vue';
 
-type SwipeDirection = 'left' | 'right' | 'top';
+type SwipeDirection = 'left' | 'right';
 
 type Card = Record<string, unknown> & {
     id: number;
@@ -44,7 +44,7 @@ const items = ref<Card[]>([
         id: 3,
         text: 'Voyage recent',
         description: 'Tu rentres d un pays qui peut demander un delai.',
-        prompt: 'Super like pour verifier avec la carte monde apres.',
+        prompt: 'Swipe oui pour verifier avec la carte monde apres.',
         image: '/img/sanguy/sanguy-alt-angry.png',
         tag: 'Check',
         points: 60,
@@ -84,7 +84,7 @@ const items = ref<Card[]>([
         id: 7,
         text: 'Objectif HUG',
         description: 'Chaque poche compte pour les patientes et patients.',
-        prompt: 'Super like si tu veux viser le badge Hero du jour.',
+        prompt: 'Swipe oui si tu veux viser le badge Hero du jour.',
         image: '/img/sanguy/sanguy_happy.png',
         tag: 'Impact',
         points: 200,
@@ -114,7 +114,7 @@ const items = ref<Card[]>([
         id: 10,
         text: 'Boss final',
         description: 'Tu es pret a continuer vers le chat et la carte.',
-        prompt: 'Super like pour enchainer le parcours complet.',
+        prompt: 'Swipe oui pour enchainer le parcours complet.',
         image: '/img/sanguy/sanguy_happy.png',
         tag: 'Combo',
         points: 250,
@@ -137,12 +137,9 @@ function isActivePath(href: string) {
 }
 
 function handleSwipe(item: Card, direction: SwipeDirection) {
-    if (direction === 'top') {
-        return;
-    }
-
     console.info(`${direction}: ${item.text}`);
 }
+
 </script>
 
 <template>
@@ -208,17 +205,16 @@ function handleSwipe(item: Card, direction: SwipeDirection) {
         </header>
 
         <section class="mx-auto flex min-h-[100svh] w-full max-w-5xl items-center bg-rose-50 px-4 py-8">
-            <div class="mx-auto w-full max-w-[430px]">
+            <div class="relative mx-auto w-full max-w-[430px]">
             <FlashCards
                 :items="items"
-                :swipe-direction="['left', 'right', 'top']"
+                :swipe-direction="['left', 'right']"
                 :swipe-threshold="140"
                 :stack="3"
                 :stack-offset="10"
                 :stack-scale="0.03"
                 @swipe-left="(item) => handleSwipe(item, 'left')"
                 @swipe-right="(item) => handleSwipe(item, 'right')"
-                @swipe-top="(item) => handleSwipe(item, 'top')"
             >
                 <template #default="{ item }">
                     <TinderCard :item="item" />
@@ -232,7 +228,7 @@ function handleSwipe(item: Card, direction: SwipeDirection) {
                         <div
                             class="-rotate-12 rounded-2xl border-4 border-red-500 bg-white px-6 py-3 text-4xl font-black uppercase text-red-600 shadow-lg"
                         >
-                            Plus tard
+                            C'est faux
                         </div>
                     </div>
                 </template>
@@ -245,20 +241,7 @@ function handleSwipe(item: Card, direction: SwipeDirection) {
                         <div
                             class="rotate-12 rounded-2xl border-4 border-emerald-500 bg-white px-6 py-3 text-4xl font-black uppercase text-emerald-600 shadow-lg"
                         >
-                            Match
-                        </div>
-                    </div>
-                </template>
-
-                <template #top="{ delta }">
-                    <div
-                        class="pointer-events-none absolute inset-0 z-10 flex items-center justify-center rounded-[1.75rem] bg-red-100/85 backdrop-blur-[2px]"
-                        :style="{ opacity: Math.min(Math.abs(delta), 0.92) }"
-                    >
-                        <div
-                            class="rounded-2xl border-4 border-red-600 bg-white px-5 py-3 text-3xl font-black uppercase text-red-700 shadow-lg"
-                        >
-                            Hero boost
+                            Je valide
                         </div>
                     </div>
                 </template>
@@ -273,23 +256,17 @@ function handleSwipe(item: Card, direction: SwipeDirection) {
                 <template
                     #actions="{
                         restore,
-                        swipeTop,
                         swipeLeft,
                         swipeRight,
-                        swipeBottom,
                         isEnd,
-                        isStart,
                         canRestore,
                     }"
                 >
                     <TinderActions
-                        :top="swipeTop"
                         :left="swipeLeft"
                         :right="swipeRight"
-                        :bottom="swipeBottom"
                         :restore="restore"
                         :is-end="isEnd"
-                        :is-start="isStart"
                         :can-restore="canRestore"
                     />
                 </template>
