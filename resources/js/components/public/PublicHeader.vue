@@ -21,7 +21,7 @@ function isActivePath(href: string) {
                 <a class="inline-flex items-center gap-3" href="/" aria-label="Accueil">
                     <img class="h-9 w-auto object-contain" :src="'/img/logo_HUG.png'" alt="HUG" />
                     <span class="text-xs font-semibold leading-tight uppercase text-stone-400">
-                        <span class="inline-block translate-y-[2px]">X</span>
+                        <span class="cooper-baseline">X</span>
                     </span>
                     <img class="h-11 w-auto object-contain" :src="'/img/logo_heig-vd.png'" alt="HEIG-VD" />
                 </a>
@@ -35,7 +35,7 @@ function isActivePath(href: string) {
                             :class="isActivePath(item.href) ? 'bg-white shadow-sm' : ''"
                             :href="item.href"
                         >
-                            <span class="inline-block translate-y-[2px]">{{ item.label }}</span>
+                            <span class="cooper-baseline">{{ item.label }}</span>
                         </a>
                     </li>
                 </ul>
@@ -51,7 +51,7 @@ function isActivePath(href: string) {
                     <ul class="menu dropdown-content z-50 mt-3 w-52 rounded-2xl border border-red-100 bg-white p-2 shadow-xl" tabindex="0">
                         <li v-for="item in navItems" :key="item.href">
                             <a class="leading-tight" :class="isActivePath(item.href) ? 'bg-rose-50 font-bold text-red-700' : ''" :href="item.href">
-                                <span class="inline-block translate-y-[2px]">{{ item.label }}</span>
+                                <span class="cooper-baseline">{{ item.label }}</span>
                             </a>
                         </li>
                     </ul>
@@ -71,7 +71,7 @@ function isActivePath(href: string) {
                         <circle cx="10" cy="8" r="5"/>
                         <circle cx="18" cy="18" r="3"/>
                     </svg>
-                    <span class="inline-block translate-y-[2px]">Admin</span>
+                    <span class="cooper-baseline">Admin</span>
                 </a>
             </div>
         </nav>

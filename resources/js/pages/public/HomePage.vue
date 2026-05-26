@@ -76,7 +76,7 @@ function getCardPosition(item: Card) {
     <main class="min-h-screen bg-rose-50 text-stone-950">
         <PublicHeader />
 
-        <section class="mx-auto flex min-h-[100svh] w-full max-w-5xl items-center bg-rose-50 px-4 pb-12 pt-0">
+        <section class="font-cooper mx-auto flex min-h-[100svh] w-full max-w-5xl items-center bg-rose-50 px-4 pb-12 pt-0">
             <div class="relative mx-auto w-full max-w-[430px]">
             <FlashCards
                 :items="items"
@@ -104,7 +104,7 @@ function getCardPosition(item: Card) {
                         :style="{ opacity: Math.min(Math.abs(delta), 0.92) }"
                     >
                         <div
-                            class="-rotate-12 rounded-2xl border-4 border-red-500 bg-white px-6 py-3 text-4xl font-black uppercase text-red-600 shadow-lg"
+                            class="cooper-baseline -rotate-12 rounded-2xl border-4 border-red-500 bg-white px-6 py-3 text-4xl font-bold uppercase text-red-600 shadow-lg"
                         >
                             C'est faux
                         </div>
@@ -117,7 +117,7 @@ function getCardPosition(item: Card) {
                         :style="{ opacity: Math.min(Math.abs(delta), 0.92) }"
                     >
                         <div
-                            class="rotate-12 rounded-2xl border-4 border-emerald-500 bg-white px-6 py-3 text-4xl font-black uppercase text-emerald-600 shadow-lg"
+                            class="cooper-baseline rotate-12 rounded-2xl border-4 border-emerald-500 bg-white px-6 py-3 text-4xl font-bold uppercase text-emerald-600 shadow-lg"
                         >
                             Je valide
                         </div>
@@ -130,12 +130,12 @@ function getCardPosition(item: Card) {
                             class="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl"
                             :class="hasMatch ? 'bg-emerald-50 text-emerald-600' : 'bg-red-50 text-red-600'"
                         >
-                            <span class="text-3xl font-black">{{ hasMatch ? 'OK' : '!' }}</span>
+                            <span class="cooper-baseline text-3xl font-bold">{{ hasMatch ? 'OK' : '!' }}</span>
                         </div>
-                        <h2 class="text-2xl font-black">
+                        <h2 class="text-2xl font-bold leading-tight">
                             {{ hasMatch ? 'Match pour continuer' : 'Pas de match pour le moment' }}
                         </h2>
-                        <p class="mt-3 text-sm leading-relaxed text-stone-600">
+                        <p class="mt-3 text-sm font-normal leading-relaxed text-stone-600">
                             {{
                                 hasMatch
                                     ? warningCount > 0
@@ -145,8 +145,8 @@ function getCardPosition(item: Card) {
                             }}
                         </p>
                         <div class="mt-5 flex justify-center gap-2">
-                            <span class="badge badge-error badge-outline">{{ blockerCount }} blocage</span>
-                            <span class="badge badge-warning badge-outline">{{ warningCount }} a verifier</span>
+                            <span class="badge badge-error badge-outline font-medium">{{ blockerCount }} blocage</span>
+                            <span class="badge badge-warning badge-outline font-medium">{{ warningCount }} a verifier</span>
                         </div>
                     </div>
                 </template>
