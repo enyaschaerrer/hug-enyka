@@ -17,12 +17,16 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        $this->call(CoBrandedCollecteSeeder::class);
+
         // User::factory(10)->create();
 
         User::updateOrCreate([
             'email' => 'superadmin@example.com',
         ], [
             'name' => 'Super Admin',
+            'professional_email' => 'superadmin@example.com',
+            'email_validated' => true,
             'password' => Hash::make('password'),
             'role' => UserRole::SuperAdmin,
         ]);

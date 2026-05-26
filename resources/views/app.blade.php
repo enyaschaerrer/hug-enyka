@@ -19,6 +19,7 @@
                 old: {
                     email: @json(old('email')),
                 },
+                coBrandedCollecte: @json($coBrandedCollecte ?? null),
             };
         </script>
     </head>
