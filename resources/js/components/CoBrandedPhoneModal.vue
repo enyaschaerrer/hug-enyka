@@ -33,15 +33,15 @@ async function renderQrCode() {
             errorCorrectionLevel: 'M',
         },
         dotsOptions: {
-            type: 'rounded',
+            type: 'square',
             color: '#111111',
         },
         cornersSquareOptions: {
-            type: 'extra-rounded',
+            type: 'rounded',
             color: '#111111',
         },
         cornersDotOptions: {
-            type: 'dot',
+            type: 'rounded',
             color: '#111111',
         },
         backgroundOptions: {
@@ -65,10 +65,10 @@ watch(
 
 <template>
     <Transition
-        enter-active-class="transition duration-300 ease-out"
+        enter-active-class="transition duration-200 ease-out"
         enter-from-class="opacity-0"
         enter-to-class="opacity-100"
-        leave-active-class="transition duration-300 ease-in"
+        leave-active-class="transition duration-200 ease-in"
         leave-from-class="opacity-100"
         leave-to-class="opacity-0"
     >
@@ -79,12 +79,12 @@ watch(
             aria-modal="true"
             data-theme="light"
         >
-            <button class="absolute inset-0 cursor-default bg-black/50" type="button" aria-label="Fermer" @click="$emit('close')"></button>
+            <button class="absolute inset-0 cursor-default bg-black/70" type="button" aria-label="Fermer" @click="$emit('close')"></button>
 
-            <div class="modal-box relative max-w-sm scale-100 bg-white text-stone-950 opacity-100 translate-0">
-                <h2 class="text-lg font-semibold text-base-content">Accès mobile</h2>
+            <div class="modal-box relative max-w-sm scale-100 rounded-3xl bg-white text-stone-950 opacity-100 translate-0">
+                <h2 class="text-lg font-semibold text-base-content">Continuer sur mobile ?</h2>
                 <p class="mt-2 text-sm text-base-content/70">
-                    Scanne ce QR code avec ton smartphone pour continuer l'expérience sur mobile.
+                    Pour une expérience plus fluide et interactive, scannez ce QR code avec votre smartphone.
                 </p>
 
                 <div class="mt-6 flex justify-center">
@@ -101,7 +101,7 @@ watch(
 
                 <div class="modal-action">
                     <button
-                        class="btn w-full border-none text-white"
+                        class="btn w-full rounded-2xl border-none text-white"
                         type="button"
                         :style="{ backgroundColor: primaryColor ?? '#111111' }"
                         @click="$emit('close')"
