@@ -94,7 +94,7 @@ onBeforeUnmount(() => {
         >
             <button
                 v-if="isDesktop && !showPhoneModal"
-                class="btn fixed right-6 bottom-6 z-[900] h-[72px] w-[72px] rounded-full border-none bg-white p-0 shadow-lg transition-transform duration-200 ease-out hover:scale-110"
+                class="btn fixed right-8 bottom-8 z-[900] h-[60px] w-[60px] rounded-full border-none bg-white !p-0 shadow-lg transition-transform duration-200 ease-out hover:scale-110"
                 type="button"
                 title="Afficher le QR code mobile"
                 aria-label="Afficher le QR code mobile"
@@ -103,7 +103,7 @@ onBeforeUnmount(() => {
             >
                 <svg
                     id="Mobile_Qr_Code_24"
-                    class="h-[52px] w-[52px]"
+                    class="h-[45px] w-[45px]"
                     width="24"
                     height="24"
                     viewBox="0 0 24 24"

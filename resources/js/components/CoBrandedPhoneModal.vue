@@ -74,20 +74,20 @@ watch(
     >
         <div
             v-if="open"
-            class="fixed inset-0 z-[999] grid place-items-end justify-items-end bg-transparent p-4 sm:p-6"
+            class="fixed inset-0 z-[999] grid place-items-end justify-items-end bg-transparent p-6 sm:p-8"
             role="dialog"
             aria-modal="true"
             data-theme="light"
         >
             <button class="absolute inset-0 cursor-default bg-black/70" type="button" aria-label="Fermer" @click="$emit('close')"></button>
 
-            <div class="modal-box relative max-w-sm scale-100 rounded-3xl bg-white text-stone-950 opacity-100 translate-0">
-                <h2 class="text-lg font-semibold text-base-content">Continuer sur mobile ?</h2>
-                <p class="mt-2 text-sm text-base-content/70">
+            <div class="modal-box relative max-w-sm scale-100 rounded-3xl bg-white p-4 text-stone-950 opacity-100 translate-0">
+                <h2 class="mt-[15px] text-center font-cooper text-[1.65rem] font-semibold text-base-content">Continuer sur mobile ?</h2>
+                <p class="mt-2 text-center font-cooper text-sm font-semibold text-base-content/70">
                     Pour une expérience plus fluide et interactive, scannez ce QR code avec votre smartphone.
                 </p>
 
-                <div class="mt-6 flex justify-center">
+                <div class="mt-6 flex justify-center py-[20px]">
                     <div
                         ref="qrCodeContainer"
                         class="h-56 w-56 overflow-hidden rounded-xl bg-white p-2 [&_svg]:h-full [&_svg]:w-full"
@@ -101,12 +101,12 @@ watch(
 
                 <div class="modal-action">
                     <button
-                        class="btn w-full rounded-2xl border-none text-white"
+                        class="btn relative w-full overflow-hidden rounded-2xl border-none px-6 h-[48px] text-[0.95rem] text-white transition duration-200 ease-out before:absolute before:inset-0 before:bg-black/0 before:transition before:duration-200 before:ease-out hover:before:bg-black/15"
                         type="button"
                         :style="{ backgroundColor: primaryColor ?? '#111111' }"
                         @click="$emit('close')"
                     >
-                        Continuer sur cet appareil
+                        <span class="relative z-10">Continuer sur cet appareil</span>
                     </button>
                 </div>
             </div>
