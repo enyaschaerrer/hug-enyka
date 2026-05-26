@@ -20,10 +20,6 @@ function isActivePath(href: string) {
             <div class="navbar-start">
                 <a class="inline-flex items-center gap-3" href="/" aria-label="Accueil">
                     <img class="h-9 w-auto object-contain" :src="'/img/logo_HUG.png'" alt="HUG" />
-                    <span class="text-xs font-semibold leading-tight uppercase text-stone-400">
-                        <span class="cooper-baseline">X</span>
-                    </span>
-                    <img class="h-11 w-auto object-contain" :src="'/img/logo_heig-vd.png'" alt="HEIG-VD" />
                 </a>
             </div>
 
