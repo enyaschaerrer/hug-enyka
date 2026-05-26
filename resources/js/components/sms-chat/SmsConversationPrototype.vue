@@ -94,7 +94,7 @@ pushBotNode(scenario.start);
 </script>
 
 <template>
-    <section class="flex h-[100svh] max-h-[100svh] w-screen flex-col overflow-hidden bg-rose-50 text-stone-950">
+    <section class="font-cooper flex h-[100svh] max-h-[100svh] w-screen flex-col overflow-hidden bg-rose-50 text-stone-950">
         <div ref="messagesContainer" class="min-h-0 flex-1 overflow-y-auto px-4 py-6">
             <div class="mx-auto flex w-full max-w-5xl flex-col gap-2">
                 <div
@@ -121,15 +121,19 @@ pushBotNode(scenario.start);
                         class="chat-image avatar avatar-placeholder"
                     >
                         <div class="w-10 rounded-full bg-red-500 text-white">
-                            <span class="text-xs font-bold">LB</span>
+                            <span class="cooper-baseline text-xs font-semibold">LB</span>
                         </div>
                     </div>
 
-                    <div v-if="message.speaker === 'bot'" class="chat-header chat-label-start text-red-950/70">Sanguy</div>
-                    <div v-else class="chat-header chat-label-end text-red-950/70">Moi</div>
+                    <div v-if="message.speaker === 'bot'" class="chat-header chat-label-start font-medium text-red-950/70">
+                        <span class="cooper-baseline">Sanguy</span>
+                    </div>
+                    <div v-else class="chat-header chat-label-end font-medium text-red-950/70">
+                        <span class="cooper-baseline">Moi</span>
+                    </div>
 
                     <div
-                        class="chat-bubble message-bubble max-w-[78vw] text-base leading-relaxed md:max-w-[620px]"
+                        class="chat-bubble message-bubble max-w-[78vw] text-base font-medium leading-relaxed md:max-w-[620px]"
                         :class="
                             message.speaker === 'bot'
                                 ? message.nodeType === 'appointment'
@@ -138,20 +142,22 @@ pushBotNode(scenario.start);
                                 : 'bg-red-500 text-white'
                         "
                     >
-                        <p>{{ message.text }}</p>
+                        <p class="cooper-text-baseline">{{ message.text }}</p>
 
                         <a
                             v-if="message.cta"
-                            class="btn mt-4 border-red-200 bg-white text-red-950 hover:border-white hover:bg-red-100"
+                            class="btn mt-4 border-red-200 bg-white font-semibold text-red-950 hover:border-white hover:bg-red-100"
                             :href="message.cta.href"
                         >
-                            {{ message.cta.label }}
+                            <span class="cooper-baseline">{{ message.cta.label }}</span>
                         </a>
                     </div>
                 </div>
 
                 <div v-if="isTyping" class="chat chat-start chat-active">
-                    <div class="chat-header chat-label-start text-red-950/70">Sanguy</div>
+                    <div class="chat-header chat-label-start font-medium text-red-950/70">
+                        <span class="cooper-baseline">Sanguy</span>
+                    </div>
                     <div class="chat-bubble bg-red-800 text-white">
                         <span class="loading loading-dots loading-sm"></span>
                     </div>
@@ -160,19 +166,21 @@ pushBotNode(scenario.start);
                 <div v-if="currentAnswers.length > 0" class="chat chat-end chat-active">
                     <div class="chat-image avatar avatar-placeholder">
                         <div class="w-10 rounded-full bg-red-500 text-white">
-                            <span class="text-xs font-bold">LB</span>
+                            <span class="cooper-baseline text-xs font-semibold">LB</span>
                         </div>
                     </div>
-                    <div class="chat-header chat-label-end text-red-950/70">Moi</div>
+                    <div class="chat-header chat-label-end font-medium text-red-950/70">
+                        <span class="cooper-baseline">Moi</span>
+                    </div>
                     <div class="flex max-w-[78vw] flex-col items-end gap-2 md:max-w-[620px]">
                         <button
                             v-for="answer in currentAnswers"
                             :key="answer.id"
-                            class="answer-option w-fit max-w-full cursor-pointer rounded-2xl bg-red-50 px-4 py-2 text-left text-base leading-relaxed text-red-950 shadow-sm hover:bg-red-100"
+                            class="answer-option w-fit max-w-full cursor-pointer rounded-2xl bg-red-50 px-4 py-2 text-left text-base font-medium leading-relaxed text-red-950 shadow-sm hover:bg-red-100"
                             type="button"
                             @click="answerQuestion(answer)"
                         >
-                            {{ answer.label }}
+                            <span class="cooper-text-baseline block">{{ answer.label }}</span>
                         </button>
                     </div>
                 </div>
@@ -196,6 +204,7 @@ pushBotNode(scenario.start);
 }
 
 .active-sanguy {
+    grid-row: 2;
     animation: active-sanguy-in 200ms ease-out both;
 }
 

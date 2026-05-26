@@ -78,15 +78,15 @@ const glowClasses: Record<TinderItem['tone'], string> = {
 
 <template>
     <article
-        class="relative z-10 flex h-[540px] w-full flex-col overflow-hidden rounded-[1.75rem] border border-red-100 bg-gradient-to-br p-5 text-red-950 shadow-[0_20px_60px_rgba(127,29,29,0.12)]"
+        class="font-cooper relative z-10 flex h-[540px] w-full flex-col overflow-hidden rounded-[1.75rem] border border-red-100 bg-gradient-to-br p-5 text-red-950 shadow-[0_20px_60px_rgba(127,29,29,0.12)]"
         :class="toneClasses[item.tone]"
     >
         <div class="flex items-center justify-between gap-3">
-            <span class="rounded-full border-2 px-3 py-1 text-xs font-bold uppercase tracking-wide" :class="themeClasses[item.tone]">
-                {{ item.theme }}
+            <span class="rounded-full border-2 px-3 py-1 text-xs font-semibold uppercase tracking-wide" :class="themeClasses[item.tone]">
+                <span class="cooper-baseline">{{ item.theme }}</span>
             </span>
-            <span class="rounded-full border-2 px-3 py-1 text-sm font-black tabular-nums" :class="counterClasses[item.tone]">
-                {{ current }}/{{ total }}
+            <span class="rounded-full border-2 px-3 py-1 text-sm font-bold tabular-nums" :class="counterClasses[item.tone]">
+                <span class="cooper-baseline">{{ current }}/{{ total }}</span>
             </span>
         </div>
 
@@ -103,7 +103,7 @@ const glowClasses: Record<TinderItem['tone'], string> = {
         </div>
 
         <div class="rounded-3xl border border-red-100 bg-white/88 p-5 shadow-[0_12px_36px_rgba(127,29,29,0.08)] backdrop-blur">
-            <h2 class="text-2xl font-black leading-tight text-red-950">
+            <h2 class="cooper-text-baseline text-2xl font-bold leading-tight text-red-950">
                 {{ item.question }}
             </h2>
             <p class="mt-3 text-base font-normal leading-relaxed text-stone-500">{{ item.bio }}</p>
