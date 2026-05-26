@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue';
+import CompanyCreatePage from './pages/admin/CompanyCreatePage.vue';
 import DashboardPage from './pages/admin/DashboardPage.vue';
 import LoginPage from './pages/admin/LoginPage.vue';
 import CoBrandedCollectePage from './pages/public/CoBrandedCollectePage.vue';
@@ -17,6 +18,7 @@ const pages = {
     '/contact': ContactPage,
     '/admin': DashboardPage,
     '/admin/login': LoginPage,
+    '/admin/companies/create': CompanyCreatePage,
 };
 
 const isCoBrandedCollecte = /^\/collecte\/[^/]+\/[^/]+$/.test(window.location.pathname);

@@ -22,10 +22,13 @@ const appState = (window as unknown as { __APP__?: AppState }).__APP__;
                 <p class="text-sm text-base-content/70">{{ appState?.auth.user?.email }}</p>
             </div>
 
-            <form method="post" action="/admin/logout">
-                <input type="hidden" name="_token" :value="appState?.csrfToken" />
-                <button type="submit" class="btn btn-outline">Logout</button>
-            </form>
+            <div class="flex items-center gap-2">
+                <a href="/admin/companies/create" class="btn btn-primary">Créer une entreprise</a>
+                <form method="post" action="/admin/logout">
+                    <input type="hidden" name="_token" :value="appState?.csrfToken" />
+                    <button type="submit" class="btn btn-outline">Logout</button>
+                </form>
+            </div>
         </div>
     </main>
 </template>

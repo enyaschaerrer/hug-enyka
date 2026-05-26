@@ -16,9 +16,7 @@
                 },
                 csrfToken: @json(csrf_token()),
                 errors: @json($errors->toArray()),
-                old: {
-                    email: @json(old('email')),
-                },
+                old: @json((object) old()),
                 coBrandedCollecte: @json($coBrandedCollecte ?? null),
             };
         </script>
