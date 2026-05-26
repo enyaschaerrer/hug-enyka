@@ -16,21 +16,21 @@ Projet d'intégration 2026, Ingénierie des Médias - problématique de la colle
 
 ## Installation locale
 
-### Prerequis
+### Prérequis
 
-- PHP 8.4 ou superieur
+- PHP 8.4 ou supérieur
 - Composer
 - Node.js et npm
-- MAMP avec MySQL demarre
+- MAMP avec MySQL démarré ou Docker
 
-### Recuperer le projet
+### Récupérer le projet
 
 ```bash
 git clone <https://github.com/enyaschaerrer/hug-enyka>
 cd hug-enyka
 ```
 
-### Installer les dependances
+### Installer les dépendances
 
 ```bash
 composer install
@@ -46,7 +46,7 @@ php artisan key:generate
 
 La configuration MySQL locale attendue est celle de MAMP :
 
-## Mac
+#### Mac
 
 ```env
 DB_CONNECTION=mysql
@@ -57,7 +57,7 @@ DB_USERNAME=root
 DB_PASSWORD=root
 ```
 
-## Windows
+#### Windows
 
 ```env
 DB_CONNECTION=mysql
@@ -68,9 +68,9 @@ DB_USERNAME=root
 DB_PASSWORD=root
 ```
 
-### Creer la base de donnees
+### Créer la base de donnees
 
-Dans phpMyAdmin, creer une base de donnees nommee :
+Dans phpMyAdmin, créer une base de données nommée :
 
 ```text
 hug_enyka_local
@@ -78,7 +78,7 @@ hug_enyka_local
 
 L'interclassement et l'encodage () peuvent rester sur la valeur par defaut proposee par MySQL/MAMP.
 
-### Initialiser la base de donnees
+### Initialiser la base de données
 
 ```bash
 php artisan migrate
@@ -97,19 +97,19 @@ Role: superadmin
 
 Activer le serveur local avec MAMP, puis ouvrir l'URL locale du projet.
 
-Si le projet n'est pas servi par MAMP, utiliser le serveur Laravel integre :
+Si le projet n'est pas servi par MAMP, utiliser le serveur Laravel integré :
 
 ```bash
 php artisan serve
 ```
 
-Dans ce cas, le site est accessible sur l'URL affichee par Laravel, generalement :
+Dans ce cas, le site est accessible sur l'URL affichée par Laravel, généralement :
 
 ```text
 http://127.0.0.1:8000
 ```
 
-### Developpement frontend
+### Développement frontend
 
 Si vous modifiez les fichiers CSS, JavaScript ou Vue, lancer Vite dans un autre terminal :
 
@@ -117,7 +117,111 @@ Si vous modifiez les fichiers CSS, JavaScript ou Vue, lancer Vite dans un autre 
 npm run dev
 ```
 
-Sinon, cette commande n'est pas necessaire pour simplement ouvrir le projet en local.
+Sinon, cette commande n'est pas nécessaire pour simplement ouvrir le projet en local.
+
+
+## Déploiement (production)
+
+Le déploiement est automatisé via un **Git Hook push-to-deploy**. À chaque `git push prod main`, le serveur met à jour le code et rebuild le projet automatiquement, sans passer par GitHub.
+
+### Configuration initiale du serveur (à faire une seule fois)
+
+#### 1. Créer le site dans le Manager Infomaniak
+
+- Créer un nouveau site dans le Manager Infomaniak
+- Cloner le repo dans le dossier du site créé via SSH
+- Une fois le projet en place, configurer le **Document Root** pour pointer sur le dossier `/public` du projet
+
+#### 2. Se connecter au serveur
+
+```bash
+ssh 9i1pnb_enyaschaerrer@9i1pnb.ftp.infomaniak.com
+```
+
+#### 3. Installer Node.js via NVM
+
+```bash
+touch ~/.bashrc
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+source ~/.bashrc
+nvm install --lts
+
+# Vérifier l'installation
+node -v && npm -v
+```
+
+#### 4. Préparer le dépôt Git bare
+
+```bash
+mkdir -p ~/git/hug-enyka.git
+cd ~/git/hug-enyka.git
+git init --bare
+```
+
+#### 5. Créer le Git Hook
+
+```bash
+nano ~/git/hug-enyka.git/hooks/post-receive
+```
+
+Contenu du hook :
+
+```bash
+#!/bin/bash
+
+GIT_WORK_TREE=/home/clients/1aa1db0e5a3858eeace68203d5ed3b7c/sites/coeur-dhonneur.ch/hug-enyka git checkout -f main
+
+cd /home/clients/1aa1db0e5a3858eeace68203d5ed3b7c/sites/coeur-dhonneur.ch/hug-enyka
+
+composer install --no-dev --optimize-autoloader
+
+export NVM_DIR="/home/clients/1aa1db0e5a3858eeace68203d5ed3b7c/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+
+npm ci
+npm run build
+
+php artisan migrate --force
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+```
+
+Rendre le hook exécutable :
+
+```bash
+chmod +x ~/git/hug-enyka.git/hooks/post-receive
+exit
+```
+
+#### 6. Ajouter le remote prod en local
+
+Dans ton dossier projet local :
+
+```bash
+git remote add prod 9i1pnb_enyaschaerrer@9i1pnb.ftp.infomaniak.com:git/hug-enyka.git
+```
+
+### Déployer
+
+S'assurer d'avoir la dernière version en local, puis :
+
+```bash
+git push prod main
+```
+
+Le serveur checkout le code, installe les dépendances, build les assets et migre la base de données automatiquement.
+
+### Commandes utiles
+
+```bash
+# Se connecter au serveur
+ssh 9i1pnb_enyaschaerrer@9i1pnb.ftp.infomaniak.com
+
+# Quitter le serveur
+exit
+```
+
 
 ## Structure actuelle
 
