@@ -2,7 +2,7 @@
 const navItems = [
     { label: 'Home', href: '/' },
     { label: 'Collecte', href: '/collecte' },
-    { label: 'Trophee', href: '/trophee' },
+    { label: 'Trophée', href: '/trophee' },
     { label: 'Label', href: '/label' },
     { label: 'Contact', href: '/contact' },
 ];
@@ -15,12 +15,14 @@ function isActivePath(href: string) {
 </script>
 
 <template>
-    <header class="sticky top-0 z-40 border-b border-red-100 bg-white/90 px-4 py-3 shadow-sm backdrop-blur">
+    <header class="font-cooper sticky top-0 z-40 border-b border-red-100 bg-white/90 px-4 py-3 shadow-sm backdrop-blur">
         <nav class="navbar mx-auto min-h-0 w-full max-w-6xl p-0">
             <div class="navbar-start">
                 <a class="inline-flex items-center gap-3" href="/" aria-label="Accueil">
                     <img class="h-9 w-auto object-contain" :src="'/img/logo_HUG.png'" alt="HUG" />
-                    <span class="text-sm font-black uppercase text-stone-400">X</span>
+                    <span class="text-xs font-semibold leading-tight uppercase text-stone-400">
+                        <span class="inline-block translate-y-[2px]">X</span>
+                    </span>
                     <img class="h-11 w-auto object-contain" :src="'/img/logo_heig-vd.png'" alt="HEIG-VD" />
                 </a>
             </div>
@@ -29,11 +31,11 @@ function isActivePath(href: string) {
                 <ul class="menu menu-horizontal gap-1 rounded-full border border-red-100 bg-rose-50 px-2 py-1">
                     <li v-for="item in navItems" :key="item.href">
                         <a
-                            class="rounded-full text-sm font-semibold text-red-950 hover:bg-white"
+                            class="rounded-full text-sm font-medium leading-tight text-red-950 hover:bg-white"
                             :class="isActivePath(item.href) ? 'bg-white shadow-sm' : ''"
                             :href="item.href"
                         >
-                            {{ item.label }}
+                            <span class="inline-block translate-y-[2px]">{{ item.label }}</span>
                         </a>
                     </li>
                 </ul>
@@ -48,14 +50,14 @@ function isActivePath(href: string) {
                     </button>
                     <ul class="menu dropdown-content z-50 mt-3 w-52 rounded-2xl border border-red-100 bg-white p-2 shadow-xl" tabindex="0">
                         <li v-for="item in navItems" :key="item.href">
-                            <a :class="isActivePath(item.href) ? 'bg-rose-50 font-bold text-red-700' : ''" :href="item.href">
-                                {{ item.label }}
+                            <a class="leading-tight" :class="isActivePath(item.href) ? 'bg-rose-50 font-bold text-red-700' : ''" :href="item.href">
+                                <span class="inline-block translate-y-[2px]">{{ item.label }}</span>
                             </a>
                         </li>
                     </ul>
                 </div>
 
-                <a class="btn btn-sm rounded-full border-red-200 bg-white text-red-700 hover:border-red-300 hover:bg-red-50" href="/admin">
+                <a class="btn btn-sm inline-flex items-center rounded-full border-red-200 bg-white font-semibold leading-tight text-red-700 hover:border-red-300 hover:bg-red-50" href="/admin">
                     <svg xmlns="http://www.w3.org/2000/svg" class="lucide lucide-user-round-cog-icon lucide-user-round-cog h-4 w-4" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="m14.305 19.53.923-.382"/>
                         <path d="m15.228 16.852-.923-.383"/>
@@ -69,7 +71,7 @@ function isActivePath(href: string) {
                         <circle cx="10" cy="8" r="5"/>
                         <circle cx="18" cy="18" r="3"/>
                     </svg>
-                    Admin
+                    <span class="inline-block translate-y-[2px]">Admin</span>
                 </a>
             </div>
         </nav>
