@@ -47,9 +47,10 @@
 
 .cooper-baseline {
     display: inline-block;
-    transform: translateY(0.12em);
 }
 
 .cooper-text-baseline {
-    transform: translateY(0.12em);
+}
+
+.cooper-input-baseline {
 }

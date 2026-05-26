@@ -304,12 +304,6 @@ function onBlur() {
 </template>
 
 <style scoped>
-.cooper-input-baseline {
-    line-height: 1;
-    padding-top: calc(0.625rem + 0.16em);
-    padding-bottom: calc(0.625rem - 0.16em);
-}
-
 .fade-enter-active,
 .fade-leave-active {
     transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;

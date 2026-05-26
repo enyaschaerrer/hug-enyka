@@ -2,6 +2,7 @@
 import { computed } from 'vue';
 import DashboardPage from './pages/admin/DashboardPage.vue';
 import LoginPage from './pages/admin/LoginPage.vue';
+import CoBrandedCollectePage from './pages/public/CoBrandedCollectePage.vue';
 import CollectePage from './pages/public/CollectePage.vue';
 import ContactPage from './pages/public/ContactPage.vue';
 import HomePage from './pages/public/HomePage.vue';
@@ -18,7 +19,14 @@ const pages = {
     '/admin/login': LoginPage,
 };
 
-const currentPage = computed(() => pages[window.location.pathname as keyof typeof pages] ?? HomePage);
+const isCoBrandedCollecte = /^\/collecte\/[^/]+\/[^/]+$/.test(window.location.pathname);
+const currentPage = computed(() => {
+    if (isCoBrandedCollecte) {
+        return CoBrandedCollectePage;
+    }
+
+    return pages[window.location.pathname as keyof typeof pages] ?? HomePage;
+});
 </script>
 
 <template>
