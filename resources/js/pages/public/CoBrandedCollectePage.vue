@@ -1,5 +1,7 @@
 <script setup lang="ts">
+import { onBeforeUnmount, onMounted, ref } from 'vue';
 import CoBrandedHeader from '../../components/public/CoBrandedHeader.vue';
+import CoBrandedPhoneModal from '../../components/CoBrandedPhoneModal.vue';
 import SmsConversationPrototype from '../../components/sms-chat/SmsConversationPrototype.vue';
 import TinderEligibilityPrototype from '../../components/tinder-cards/TinderEligibilityPrototype.vue';
 
@@ -40,6 +42,31 @@ const company = coBrandedCollecte?.company ?? {
     },
 };
 
+const showPhoneModal = ref(false);
+let desktopMediaQuery: MediaQueryList | null = null;
+let phoneModalTimeout: number | null = null;
+
+function syncPhoneModal(event?: MediaQueryListEvent) {
+    const isDesktop = event?.matches ?? desktopMediaQuery?.matches ?? false;
+
+    if (isDesktop) {
+        showPhoneModal.value = true;
+    }
+}
+
+onMounted(() => {
+    desktopMediaQuery = window.matchMedia('(min-width: 640px)');
+    phoneModalTimeout = window.setTimeout(() => syncPhoneModal(), 450);
+    desktopMediaQuery.addEventListener('change', syncPhoneModal);
+});
+
+onBeforeUnmount(() => {
+    if (phoneModalTimeout !== null) {
+        window.clearTimeout(phoneModalTimeout);
+    }
+
+    desktopMediaQuery?.removeEventListener('change', syncPhoneModal);
+});
 </script>
 
 <template>
@@ -49,5 +76,11 @@ const company = coBrandedCollecte?.company ?? {
         <TinderEligibilityPrototype />
 
         <SmsConversationPrototype />
+
+        <CoBrandedPhoneModal
+            :open="showPhoneModal"
+            :primary-color="company.colors.primary"
+            @close="showPhoneModal = false"
+        />
     </div>
 </template>
