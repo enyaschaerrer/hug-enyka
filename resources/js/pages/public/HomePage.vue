@@ -104,9 +104,9 @@ function getCardPosition(item: Card) {
                         :style="{ opacity: Math.min(Math.abs(delta), 0.92) }"
                     >
                         <div
-                            class="cooper-baseline -rotate-12 rounded-2xl border-4 border-red-500 bg-white px-6 py-3 text-4xl font-bold uppercase text-red-600 shadow-lg"
+                            class="-rotate-12 inline-flex items-center rounded-2xl border-4 border-red-500 bg-white px-6 py-3 text-4xl font-bold leading-none uppercase text-red-600 shadow-lg"
                         >
-                            C'est faux
+                            <span class="cooper-baseline">C'est faux</span>
                         </div>
                     </div>
                 </template>
@@ -117,9 +117,9 @@ function getCardPosition(item: Card) {
                         :style="{ opacity: Math.min(Math.abs(delta), 0.92) }"
                     >
                         <div
-                            class="cooper-baseline rotate-12 rounded-2xl border-4 border-emerald-500 bg-white px-6 py-3 text-4xl font-bold uppercase text-emerald-600 shadow-lg"
+                            class="inline-flex rotate-12 items-center rounded-2xl border-4 border-emerald-500 bg-white px-6 py-3 text-4xl font-bold leading-none uppercase text-emerald-600 shadow-lg"
                         >
-                            Je valide
+                            <span class="cooper-baseline">Je valide</span>
                         </div>
                     </div>
                 </template>
@@ -132,7 +132,7 @@ function getCardPosition(item: Card) {
                         >
                             <span class="cooper-baseline text-3xl font-bold">{{ hasMatch ? 'OK' : '!' }}</span>
                         </div>
-                        <h2 class="text-2xl font-bold leading-tight">
+                        <h2 class="cooper-text-baseline text-2xl font-bold leading-tight">
                             {{ hasMatch ? 'Match pour continuer' : 'Pas de match pour le moment' }}
                         </h2>
                         <p class="mt-3 text-sm font-normal leading-relaxed text-stone-600">

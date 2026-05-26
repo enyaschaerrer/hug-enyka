@@ -103,7 +103,7 @@ const glowClasses: Record<TinderItem['tone'], string> = {
         </div>
 
         <div class="rounded-3xl border border-red-100 bg-white/88 p-5 shadow-[0_12px_36px_rgba(127,29,29,0.08)] backdrop-blur">
-            <h2 class="text-2xl font-bold leading-tight text-red-950">
+            <h2 class="cooper-text-baseline text-2xl font-bold leading-tight text-red-950">
                 {{ item.question }}
             </h2>
             <p class="mt-3 text-base font-normal leading-relaxed text-stone-500">{{ item.bio }}</p>
