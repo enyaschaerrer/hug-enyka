@@ -24,7 +24,7 @@ defineProps<{
 
         <div class="flex items-center justify-center gap-3">
             <button
-                class="group inline-flex h-20 w-20 items-center justify-center rounded-3xl border-2 border-red-200 bg-white p-3 shadow-xl shadow-red-100 transition-transform transition-colors hover:translate-y-1 hover:rotate-[-2deg] hover:border-red-300 hover:bg-red-50 disabled:translate-y-0 disabled:rotate-0 disabled:opacity-35"
+                class="group inline-flex h-20 w-20 items-center justify-center rounded-3xl border-2 border-red-200 bg-white p-3 shadow-xl shadow-red-100 transition-colors hover:border-red-300 hover:bg-red-50 disabled:opacity-35"
                 type="button"
                 :disabled="isEnd"
                 aria-label="Refuser la carte"
@@ -34,7 +34,7 @@ defineProps<{
             </button>
 
             <button
-                class="group inline-flex h-20 w-20 items-center justify-center rounded-3xl border-2 border-emerald-200 bg-white p-3 shadow-xl shadow-emerald-100 transition-transform transition-colors hover:-translate-y-1 hover:rotate-2 hover:border-emerald-300 hover:bg-emerald-50 disabled:translate-y-0 disabled:rotate-0 disabled:opacity-35"
+                class="group inline-flex h-20 w-20 items-center justify-center rounded-3xl border-2 border-emerald-200 bg-white p-3 shadow-xl shadow-emerald-100 transition-colors hover:border-emerald-300 hover:bg-emerald-50 disabled:opacity-35"
                 type="button"
                 :disabled="isEnd"
                 aria-label="Valider la carte"
