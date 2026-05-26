@@ -204,6 +204,7 @@ pushBotNode(scenario.start);
 }
 
 .active-sanguy {
+    grid-row: 2;
     animation: active-sanguy-in 200ms ease-out both;
 }
 
