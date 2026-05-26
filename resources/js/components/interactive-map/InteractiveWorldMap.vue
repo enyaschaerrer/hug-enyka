@@ -187,10 +187,10 @@ function onBlur() {
 </script>
 
 <template>
-    <section ref="sectionRef" class="relative w-screen h-svh bg-gray-50 flex flex-col overflow-hidden">
+    <section ref="sectionRef" class="font-cooper relative w-screen h-svh bg-gray-50 flex flex-col overflow-hidden">
         <div class="mx-auto w-full max-w-3xl px-4 pt-5 text-center z-10">
-            <h2 class="text-2xl font-semibold text-gray-950">Delais de don dans le monde</h2>
-            <p class="mt-1 text-sm text-gray-500">
+            <h2 class="cooper-text-baseline text-2xl font-bold text-gray-950">Delais de don dans le monde</h2>
+            <p class="cooper-text-baseline mt-1 text-sm font-normal text-gray-500">
                 Recherchez un pays ou explorez la carte pour connaitre les delais avant de pouvoir donner son sang.
             </p>
         </div>
@@ -211,7 +211,7 @@ function onBlur() {
                     v-model="searchQuery"
                     type="text"
                     placeholder="Rechercher un pays..."
-                    class="w-full rounded-xl border border-gray-200 bg-white py-2.5 pl-9 pr-4 text-sm text-gray-900 placeholder-gray-400 shadow-md outline-none transition focus:border-gray-400 focus:shadow-lg"
+                    class="cooper-input-baseline w-full rounded-xl border border-gray-200 bg-white py-2.5 pl-9 pr-4 text-sm font-medium text-gray-900 placeholder-gray-400 shadow-md outline-none transition focus:border-gray-400 focus:shadow-lg"
                     @input="onInput"
                     @focus="searchFocused = true; onInput()"
                     @blur="onBlur"
@@ -220,16 +220,16 @@ function onBlur() {
                     v-if="showSuggestions"
                     class="absolute left-0 top-full mt-1 w-full overflow-hidden rounded-xl border border-gray-100 bg-white shadow-lg z-20"
                 >
-                    <li v-if="suggestions.length === 0" class="px-4 py-2.5 text-sm text-gray-400">
+                    <li v-if="suggestions.length === 0" class="px-4 py-2.5 text-sm font-medium text-gray-400">
                         0 résultat
                     </li>
                     <li
                         v-for="c in suggestions"
                         :key="c.iso2"
-                        class="flex items-center justify-between px-4 py-2.5 hover:bg-gray-50 cursor-pointer text-sm text-gray-900"
+                        class="flex items-center justify-between px-4 py-2.5 hover:bg-gray-50 cursor-pointer text-sm font-medium text-gray-900"
                         @mousedown.prevent="selectFromSearch(c)"
                     >
-                        <span>{{ c.name }}</span>
+                        <span class="cooper-baseline">{{ c.name }}</span>
                         <span :class="`fi fi-${c.iso2.toLowerCase()} rounded overflow-hidden`" style="width: 1.4em; height: 1.05em;"></span>
                     </li>
                 </ul>
@@ -277,31 +277,39 @@ function onBlur() {
                         :class="`fi fi-${selected.iso2.toLowerCase()} rounded overflow-hidden`"
                         style="width: 1.5em; height: 1.1em;"
                     ></span>
-                    <span class="font-semibold text-sm text-gray-800">{{ selected.name }}</span>
+                    <span class="cooper-baseline font-semibold text-sm text-gray-800">{{ selected.name }}</span>
                 </div>
                 <div v-if="selected.waitTime" class="text-sm font-medium text-red-500">
-                    Attendre {{ selected.waitTime }}
+                    <span class="cooper-baseline">Attendre {{ selected.waitTime }}</span>
                 </div>
-                <div v-else class="text-sm font-medium text-emerald-500">Aucun délai</div>
-                <p v-if="selected.description" class="mt-1.5 text-xs text-gray-400 leading-snug">
+                <div v-else class="text-sm font-medium text-emerald-500">
+                    <span class="cooper-baseline">Aucun délai</span>
+                </div>
+                <p v-if="selected.description" class="cooper-text-baseline mt-1.5 text-xs font-normal text-gray-400 leading-snug">
                     {{ selected.description }}
                 </p>
             </div>
         </transition>
 
         <!-- Légende heatmap -->
-        <div class="absolute bottom-4 right-4 flex items-center gap-2 text-xs bg-white/90 px-2 py-1 rounded shadow">
-            <span class="text-gray-500">Aucun délai</span>
+        <div class="absolute bottom-4 right-4 flex items-center gap-2 text-xs font-medium bg-white/90 px-2 py-1 rounded shadow">
+            <span class="cooper-baseline text-gray-500">Aucun délai</span>
             <div
                 class="w-16 h-2 rounded"
                 style="background: linear-gradient(to right, rgb(255,255,255), rgb(255,0,0)); border: 1px solid #e5e7eb;"
             ></div>
-            <span class="text-gray-500">12 mois</span>
+            <span class="cooper-baseline text-gray-500">12 mois</span>
         </div>
     </section>
 </template>
 
 <style scoped>
+.cooper-input-baseline {
+    line-height: 1;
+    padding-top: calc(0.625rem + 0.16em);
+    padding-bottom: calc(0.625rem - 0.16em);
+}
+
 .fade-enter-active,
 .fade-leave-active {
     transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;

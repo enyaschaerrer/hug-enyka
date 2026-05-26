@@ -212,6 +212,76 @@ body {
 }
 ```
 
+## Correction de baseline Cooper Hewitt
+
+Cooper Hewitt rend visuellement les textes un peu trop hauts dans certains composants, surtout dans les boutons, badges, bulles et inputs. Le probleme vient des metriques verticales de la police : le texte parait centre mathematiquement, mais pas centre optiquement.
+
+Pour eviter des corrections au cas par cas du type `translate-y-[2px]`, le projet utilise des classes de baseline reutilisables.
+
+### Texte inline
+
+Pour les textes courts dans des boutons, badges, labels, nav items ou compteurs :
+
+```css
+.cooper-baseline {
+    display: inline-block;
+    transform: translateY(0.12em);
+}
+```
+
+`0.12em` s'adapte automatiquement a la taille du texte :
+
+- petit texte : correction legere ;
+- texte standard : correction proche de 2px ;
+- gros titre ou tampon : correction plus forte.
+
+Exemple :
+
+```html
+<span class="cooper-baseline">Admin</span>
+```
+
+### Texte bloc
+
+Pour un paragraphe, un titre ou une ligne de texte qui doit garder son comportement de bloc :
+
+```css
+.cooper-text-baseline {
+    transform: translateY(0.12em);
+}
+```
+
+Exemple :
+
+```html
+<h2 class="cooper-text-baseline text-2xl font-bold">Titre</h2>
+```
+
+### Inputs
+
+Un `input` ne permet pas de wrapper son texte dans un `span`. Pour ce cas, on corrige la baseline avec un padding vertical asymetrique, sans changer la hauteur totale du champ :
+
+```css
+.cooper-input-baseline {
+    line-height: 1;
+    padding-top: calc(0.625rem + 0.16em);
+    padding-bottom: calc(0.625rem - 0.16em);
+}
+```
+
+Exemple :
+
+```html
+<input class="cooper-input-baseline text-sm font-medium" />
+```
+
+Regle pratique :
+
+- utiliser `cooper-baseline` pour les petits textes inline ;
+- utiliser `cooper-text-baseline` pour les titres, paragraphes ou textes de bulle ;
+- utiliser `cooper-input-baseline` pour les champs de formulaire ;
+- eviter les corrections Tailwind ponctuelles du type `translate-y-[2px]`, sauf test temporaire.
+
 ## Variantes Univers
 
 Famille CSS recommandee :
