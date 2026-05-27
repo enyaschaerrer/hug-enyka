@@ -187,7 +187,7 @@ function onBlur() {
 </script>
 
 <template>
-    <section ref="sectionRef" class="font-cooper relative w-screen h-svh bg-gray-50 flex flex-col overflow-hidden">
+    <section ref="sectionRef" class="font-cooper relative w-screen h-svh bg-rose-50 flex flex-col overflow-hidden">
         <div class="mx-auto w-full max-w-3xl px-4 pt-5 text-center z-10">
             <h2 class="cooper-text-baseline text-2xl font-bold text-gray-950">Delais de don dans le monde</h2>
             <p class="cooper-text-baseline mt-1 text-sm font-normal text-gray-500">

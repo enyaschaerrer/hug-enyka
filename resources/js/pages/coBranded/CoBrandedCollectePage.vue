@@ -4,6 +4,7 @@ import CoBrandedHeader from '../../components/public/CoBrandedHeader.vue';
 import CoBrandedPhoneModal from '../../components/modals/CoBrandedPhoneModal.vue';
 import SmsConversationPrototype from '../../components/sms-chat/SmsConversationPrototype.vue';
 import TinderEligibilityPrototype from '../../components/tinder-cards/TinderEligibilityPrototype.vue';
+import InteractiveWorldMap from '../../components/interactive-map/InteractiveWorldMap.vue';
 
 type CoBrandedCollecte = {
     company: {
@@ -77,6 +78,8 @@ onBeforeUnmount(() => {
         <TinderEligibilityPrototype />
 
         <SmsConversationPrototype />
+
+        <InteractiveWorldMap />
 
         <CoBrandedPhoneModal
             :open="showPhoneModal"

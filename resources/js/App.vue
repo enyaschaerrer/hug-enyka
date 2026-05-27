@@ -7,21 +7,11 @@ import CompanyEditPage from './pages/admin/CompanyEditPage.vue';
 import DashboardPage from './pages/admin/DashboardPage.vue';
 import LoginPage from './pages/admin/LoginPage.vue';
 import CookieConsentModal from './components/modals/CookieConsentModal.vue';
-import CoBrandedCollectePage from './pages/public/CoBrandedCollectePage.vue';
-import CollectePage from './pages/public/CollectePage.vue';
-import ContactPage from './pages/public/ContactPage.vue';
-import HomePage from './pages/public/HomePage.vue';
-import LabelPage from './pages/public/LabelPage.vue';
-import TrophyPage from './pages/public/TrophyPage.vue';
+import CoBrandedCollectePage from './pages/coBranded/CoBrandedCollectePage.vue';
 
 const { currentPath } = useAdminRouter();
 
 const pages = {
-    '/': HomePage,
-    '/collecte': CollectePage,
-    '/trophee': TrophyPage,
-    '/label': LabelPage,
-    '/contact': ContactPage,
     '/admin': DashboardPage,
     '/admin/campagnes': CampagnesPage,
     '/admin/login': LoginPage,
@@ -35,7 +25,7 @@ const currentPage = computed(() => {
     if (/^\/admin\/companies\/\d+\/edit$/.test(currentPath.value)) {
         return CompanyEditPage;
     }
-    return pages[currentPath.value as keyof typeof pages] ?? HomePage;
+    return pages[currentPath.value as keyof typeof pages] ?? null;
 });
 </script>
 
