@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
     'short_description',
     'address',
     'email',
+    'contact_message',
     'telephone',
     'employee_count',
     'slug',

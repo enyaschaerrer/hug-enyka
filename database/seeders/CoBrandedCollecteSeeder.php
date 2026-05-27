@@ -33,8 +33,6 @@ class CoBrandedCollecteSeeder extends Seeder
             'company_id' => $company->id,
             'start' => '2026-06-03 09:00:00',
             'end' => '2026-06-03 16:30:00',
-            'month' => 6,
-            'year' => 2026,
             'linkOneDoc' => 'https://example.com/prise-rendez-vous/rolex-demo',
         ]);
     }
