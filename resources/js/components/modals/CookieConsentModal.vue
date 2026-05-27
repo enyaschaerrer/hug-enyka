@@ -6,14 +6,14 @@ import type { CookieConsentCategory, CookieConsentPreferences } from '../../type
 const categories: CookieConsentCategory[] = [
     {
         id: 'necessary',
-        title: 'Cookies obligatoires',
-        description: 'Ils permettent le fonctionnement de Laravel, la session, la sécurité CSRF et l’accès admin. Ils ne peuvent pas être désactivés.',
+        title: 'Cookies nécessaires',
+        description: 'Ils permettent au site de fonctionner et de garder en mémoire vos préférences.',
         required: true,
     },
     {
         id: 'analytics',
-        title: 'Mesure d’audience et KPIs',
-        description: 'Ils serviront à mesurer les parcours anonymes, les clics sur les CTA, les abandons et les statistiques visibles dans l’admin CTS.',
+        title: 'Mesure d’audience anonyme',
+        description: 'Ces données anonymes aident les HUG à améliorer l’efficacité des collectes de sang.',
         required: false,
     },
 ];
@@ -24,7 +24,7 @@ const analyticsEnabled = ref(false);
 const hasDecision = ref(false);
 let previousBodyOverflow = '';
 
-const modalTitle = computed(() => (view.value === 'summary' ? 'Gestion des cookies' : 'Configurer les cookies'));
+const modalTitle = computed(() => (view.value === 'summary' ? 'Aidez-nous à améliorer l’expérience de collecte !' : 'Configurer les cookies'));
 
 function syncPreferences(preferences: CookieConsentPreferences | null = getCookieConsentPreferences()) {
     hasDecision.value = preferences !== null;
@@ -127,16 +127,9 @@ onBeforeUnmount(() => {
                 </h2>
 
                 <template v-if="view === 'summary'">
-                    <p class="mt-3 text-center font-cooper text-sm font-semibold leading-relaxed text-base-content/70">
-                        Nous utilisons des cookies nécessaires au fonctionnement du site. Avec votre accord, nous activerons aussi la mesure d’audience pour préparer les futurs KPIs anonymes de l’admin.
-                    </p>
-
-                    <div class="mt-6 space-y-3 rounded-2xl bg-base-200 p-4 font-cooper text-sm text-base-content/75">
+                    <div class="mt-6 space-y-3 rounded-2xl bg-black/[0.02] p-4 font-cooper text-sm leading-relaxed text-base-content/75">
                         <p>
-                            Les cookies de tracking sont désactivés par défaut.
-                        </p>
-                        <p>
-                            Vous pourrez modifier votre choix à tout moment depuis le bouton cookies en bas à gauche.
+                            Les cookies nécessaires gardent le site fonctionnel. Avec votre accord, une mesure d’audience anonyme aidera les HUG à comprendre ce qui facilite le passage à l’inscription et à améliorer les prochaines collectes. Cette mesure reste désactivée sans votre accord, et vous pouvez changer d’avis à tout moment.
                         </p>
                     </div>
 
@@ -149,7 +142,7 @@ onBeforeUnmount(() => {
                             Configurer
                         </button>
                         <button
-                            class="btn h-[48px] rounded-2xl border-none bg-black font-cooper text-[0.95rem] text-white hover:bg-black/85"
+                            class="btn h-[48px] rounded-2xl border-none bg-red-700 font-cooper text-[0.95rem] text-white hover:bg-red-800"
                             type="button"
                             @click="acceptAnalytics"
                         >
@@ -159,15 +152,11 @@ onBeforeUnmount(() => {
                 </template>
 
                 <template v-else>
-                    <p class="mt-3 text-center font-cooper text-sm font-semibold leading-relaxed text-base-content/70">
-                        Choisissez les catégories autorisées. Les cookies obligatoires restent actifs pour assurer la sécurité et le fonctionnement du site.
-                    </p>
-
                     <div class="mt-6 space-y-3">
                         <section
                             v-for="category in categories"
                             :key="category.id"
-                            class="rounded-2xl border border-base-300 bg-white p-4"
+                            class="rounded-2xl border border-base-300 bg-black/[0.02] p-4"
                         >
                             <div class="flex items-start justify-between gap-4">
                                 <div class="min-w-0">
@@ -182,13 +171,13 @@ onBeforeUnmount(() => {
                                 <input
                                     v-if="category.id === 'analytics'"
                                     v-model="analyticsEnabled"
-                                    class="toggle toggle-neutral mt-1 shrink-0"
+                                    class="toggle mt-1 shrink-0 transition-colors duration-200 ease-out checked:border-red-700 checked:bg-red-700 checked:text-white"
                                     type="checkbox"
                                     aria-label="Activer la mesure d’audience et les KPIs"
                                 />
                                 <input
                                     v-else
-                                    class="toggle toggle-neutral mt-1 shrink-0"
+                                    class="toggle mt-1 shrink-0 transition-colors duration-200 ease-out checked:border-red-700 checked:bg-red-700 checked:text-white"
                                     type="checkbox"
                                     checked
                                     disabled
@@ -216,7 +205,7 @@ onBeforeUnmount(() => {
                             Annuler
                         </button>
                         <button
-                            class="btn h-[48px] rounded-2xl border-none bg-black font-cooper text-[0.95rem] text-white hover:bg-black/85"
+                            class="btn h-[48px] rounded-2xl border-none bg-red-700 font-cooper text-[0.95rem] text-white hover:bg-red-800"
                             type="button"
                             @click="saveSettings"
                         >
