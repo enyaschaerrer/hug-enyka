@@ -11,8 +11,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
     'company_id',
     'start',
     'end',
-    'month',
-    'year',
     'access_token',
     'linkOneDoc',
 ])]
