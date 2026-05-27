@@ -28,3 +28,5 @@ Route::middleware(['auth', 'role:superadmin,admin'])->group(function () {
 });
 
 Route::fallback(fn () => redirect('/'));
+
+Route::post('/collecte/inscription', [CompanyController::class, 'store']);
