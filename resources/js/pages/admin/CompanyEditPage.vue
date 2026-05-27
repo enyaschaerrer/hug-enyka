@@ -1,15 +1,15 @@
 <script setup lang="ts">
-import { reactive, ref, watch } from 'vue';
+import { onMounted, reactive, ref, watch } from 'vue';
 import { useAdminRouter } from '../../composables/useAdminRouter';
 import AdminLayout from '../../components/layout/AdminLayout.vue';
 
-type AppState = {
-    csrfToken: string;
-};
+type AppState = { csrfToken: string };
 
 const appState = (window as unknown as { __APP__?: AppState }).__APP__;
 const csrfToken = appState?.csrfToken ?? '';
 const { navigate, flashMessage } = useAdminRouter();
+
+const companyId = window.location.pathname.split('/')[3];
 
 function slugify(input: string): string {
     return input
@@ -39,6 +39,8 @@ const form = reactive({
 
 const errors = ref<Record<string, string[]>>({});
 const submitting = ref(false);
+const loading = ref(true);
+const loadError = ref<string | null>(null);
 const slugTouched = ref(false);
 
 watch(() => form.name, (next) => {
@@ -60,6 +62,39 @@ function back(event: Event) {
     navigate('/admin');
 }
 
+async function fetchCompany() {
+    try {
+        const res = await fetch(`/admin/api/companies/${companyId}`, {
+            headers: { 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
+        });
+        if (res.ok) {
+            const data = await res.json();
+            form.name = data.name ?? '';
+            form.email = data.email ?? '';
+            form.slug = data.slug ?? '';
+            form.short_description = data.short_description ?? '';
+            form.address = data.address ?? '';
+            form.telephone = data.telephone ?? '';
+            form.employee_count = data.employee_count ?? '';
+            form.allowed_email_domains = data.allowed_email_domains ?? '';
+            form.source = data.source ?? '';
+            form.logo = data.logo ?? '';
+            form.primaryColor = data.primaryColor ?? '#c81e1e';
+            form.secondaryColor = data.secondaryColor ?? '#fecaca';
+            form.thirdColor = data.thirdColor ?? '#1f2937';
+            slugTouched.value = true;
+        } else if (res.status === 401) {
+            window.location.href = '/admin/login';
+        } else {
+            loadError.value = 'Entreprise introuvable.';
+        }
+    } catch {
+        loadError.value = 'Erreur réseau.';
+    } finally {
+        loading.value = false;
+    }
+}
+
 async function submit() {
     submitting.value = true;
     errors.value = {};
@@ -70,8 +105,8 @@ async function submit() {
     }
 
     try {
-        const res = await fetch('/admin/companies', {
-            method: 'POST',
+        const res = await fetch(`/admin/companies/${companyId}`, {
+            method: 'PATCH',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
@@ -82,8 +117,7 @@ async function submit() {
         });
 
         if (res.ok) {
-            const data = await res.json();
-            flashMessage.value = data.message ?? 'Entreprise créée.';
+            flashMessage.value = 'Entreprise mise à jour.';
             navigate('/admin');
             return;
         }
@@ -102,37 +136,32 @@ async function submit() {
         submitting.value = false;
     }
 }
+
+onMounted(fetchCompany);
 </script>
 
 <template>
     <AdminLayout>
     <div class="mx-auto w-full max-w-3xl">
             <div class="mb-6 flex items-center justify-between">
-                <h1 class="text-2xl font-semibold">Créer une entreprise</h1>
-                <a href="/admin" @click="back" class="btn btn-ghost btn-sm">Retour</a>
+                <h1 class="text-2xl font-semibold">Modifier l'entreprise</h1>
+                <a href="/admin" class="btn btn-ghost btn-sm" @click="back">Retour</a>
             </div>
 
-            <form @submit.prevent="submit" class="space-y-6">
+            <div v-if="loading" class="text-sm text-base-content/60">Chargement...</div>
+            <div v-else-if="loadError" class="alert alert-error"><span>{{ loadError }}</span></div>
+
+            <form v-else @submit.prevent="submit" class="space-y-6">
                 <section class="grid gap-x-4 gap-y-6 md:grid-cols-2">
                     <label class="flex flex-col w-full">
                         <span class="label-text">Nom *</span>
-                        <input
-                            v-model="form.name"
-                            type="text"
-                            class="cooper-input-baseline input input-bordered w-full"
-                            required
-                        />
+                        <input v-model="form.name" type="text" class="cooper-input-baseline input input-bordered w-full" required />
                         <p v-if="firstError('name')" class="mt-1 text-sm text-error">{{ firstError('name') }}</p>
                     </label>
 
                     <label class="flex flex-col w-full">
                         <span class="label-text">Email *</span>
-                        <input
-                            v-model="form.email"
-                            type="email"
-                            class="cooper-input-baseline input input-bordered w-full"
-                            required
-                        />
+                        <input v-model="form.email" type="email" class="cooper-input-baseline input input-bordered w-full" required />
                         <p v-if="firstError('email')" class="mt-1 text-sm text-error">{{ firstError('email') }}</p>
                     </label>
 
@@ -155,57 +184,33 @@ async function submit() {
 
                     <label class="flex flex-col w-full">
                         <span class="label-text">Téléphone</span>
-                        <input
-                            v-model="form.telephone"
-                            type="tel"
-                            class="cooper-input-baseline input input-bordered w-full"
-                        />
+                        <input v-model="form.telephone" type="tel" class="cooper-input-baseline input input-bordered w-full" />
                         <p v-if="firstError('telephone')" class="mt-1 text-sm text-error">{{ firstError('telephone') }}</p>
                     </label>
                 </section>
 
                 <label class="flex flex-col w-full">
                     <span class="label-text">Description courte</span>
-                    <textarea
-                        v-model="form.short_description"
-                        class="cooper-text-baseline textarea textarea-bordered w-full"
-                        rows="2"
-                        maxlength="500"
-                    ></textarea>
+                    <textarea v-model="form.short_description" class="cooper-text-baseline textarea textarea-bordered w-full" rows="2" maxlength="500"></textarea>
                     <p v-if="firstError('short_description')" class="mt-1 text-sm text-error">{{ firstError('short_description') }}</p>
                 </label>
 
                 <label class="flex flex-col w-full">
                     <span class="label-text">Adresse</span>
-                    <textarea
-                        v-model="form.address"
-                        class="cooper-text-baseline textarea textarea-bordered w-full"
-                        rows="2"
-                        maxlength="500"
-                    ></textarea>
+                    <textarea v-model="form.address" class="cooper-text-baseline textarea textarea-bordered w-full" rows="2" maxlength="500"></textarea>
                     <p v-if="firstError('address')" class="mt-1 text-sm text-error">{{ firstError('address') }}</p>
                 </label>
 
                 <section class="grid gap-x-4 gap-y-6 md:grid-cols-3">
                     <label class="flex flex-col w-full">
                         <span class="label-text">Nombre d'employés</span>
-                        <input
-                            v-model="form.employee_count"
-                            type="number"
-                            min="0"
-                            class="cooper-input-baseline input input-bordered w-full"
-                        />
+                        <input v-model="form.employee_count" type="number" min="0" class="cooper-input-baseline input input-bordered w-full" />
                         <p v-if="firstError('employee_count')" class="mt-1 text-sm text-error">{{ firstError('employee_count') }}</p>
                     </label>
 
                     <label class="flex flex-col w-full md:col-span-2">
                         <span class="label-text">Domaines email autorisés</span>
-                        <input
-                            v-model="form.allowed_email_domains"
-                            type="text"
-                            class="cooper-input-baseline input input-bordered w-full"
-                            placeholder="rolex.com,rolex.ch"
-                        />
+                        <input v-model="form.allowed_email_domains" type="text" class="cooper-input-baseline input input-bordered w-full" placeholder="rolex.com,rolex.ch" />
                         <p v-if="firstError('allowed_email_domains')" class="mt-1 text-sm text-error">{{ firstError('allowed_email_domains') }}</p>
                     </label>
                 </section>
@@ -213,26 +218,14 @@ async function submit() {
                 <section class="grid gap-x-4 gap-y-6 md:grid-cols-2">
                     <label class="flex flex-col w-full">
                         <span class="label-text">Source (référent)</span>
-                        <input
-                            v-model="form.source"
-                            type="text"
-                            class="cooper-input-baseline input input-bordered w-full"
-                            placeholder="Recommandation, salon, ..."
-                        />
+                        <input v-model="form.source" type="text" class="cooper-input-baseline input input-bordered w-full" placeholder="Recommandation, salon, ..." />
                         <p v-if="firstError('source')" class="mt-1 text-sm text-error">{{ firstError('source') }}</p>
                     </label>
 
                     <label class="flex flex-col w-full">
                         <span class="label-text">Chemin du logo</span>
-                        <input
-                            v-model="form.logo"
-                            type="text"
-                            class="cooper-input-baseline input input-bordered w-full"
-                            placeholder="/img/logos/exemple.png"
-                        />
-                        <span class="mt-1 text-xs text-base-content/60">
-                            Déposer le fichier dans public/img/logos/ et renseigner ici le chemin
-                        </span>
+                        <input v-model="form.logo" type="text" class="cooper-input-baseline input input-bordered w-full" placeholder="/img/logos/exemple.png" />
+                        <span class="mt-1 text-xs text-base-content/60">Déposer le fichier dans public/img/logos/</span>
                         <p v-if="firstError('logo')" class="mt-1 text-sm text-error">{{ firstError('logo') }}</p>
                     </label>
                 </section>
@@ -243,57 +236,24 @@ async function submit() {
                         <label class="flex flex-col w-full">
                             <span class="label-text-alt">Primaire</span>
                             <div class="join w-full">
-                                <input
-                                    v-model="form.primaryColor"
-                                    type="color"
-                                    class="join-item h-12 w-14 cursor-pointer border border-base-300 p-1"
-                                    aria-label="Sélecteur de couleur primaire"
-                                />
-                                <input
-                                    v-model="form.primaryColor"
-                                    type="text"
-                                    class="cooper-input-baseline join-item input input-bordered h-12 w-full"
-                                    placeholder="#c81e1e"
-                                    maxlength="7"
-                                />
+                                <input v-model="form.primaryColor" type="color" class="join-item h-12 w-14 cursor-pointer border border-base-300 p-1" aria-label="Couleur primaire" />
+                                <input v-model="form.primaryColor" type="text" class="cooper-input-baseline join-item input input-bordered h-12 w-full" placeholder="#c81e1e" maxlength="7" />
                             </div>
                             <p v-if="firstError('primaryColor')" class="mt-1 text-sm text-error">{{ firstError('primaryColor') }}</p>
                         </label>
                         <label class="flex flex-col w-full">
                             <span class="label-text-alt">Secondaire</span>
                             <div class="join w-full">
-                                <input
-                                    v-model="form.secondaryColor"
-                                    type="color"
-                                    class="join-item h-12 w-14 cursor-pointer border border-base-300 p-1"
-                                    aria-label="Sélecteur de couleur secondaire"
-                                />
-                                <input
-                                    v-model="form.secondaryColor"
-                                    type="text"
-                                    class="cooper-input-baseline join-item input input-bordered h-12 w-full"
-                                    placeholder="#fecaca"
-                                    maxlength="7"
-                                />
+                                <input v-model="form.secondaryColor" type="color" class="join-item h-12 w-14 cursor-pointer border border-base-300 p-1" aria-label="Couleur secondaire" />
+                                <input v-model="form.secondaryColor" type="text" class="cooper-input-baseline join-item input input-bordered h-12 w-full" placeholder="#fecaca" maxlength="7" />
                             </div>
                             <p v-if="firstError('secondaryColor')" class="mt-1 text-sm text-error">{{ firstError('secondaryColor') }}</p>
                         </label>
                         <label class="flex flex-col w-full">
                             <span class="label-text-alt">Tertiaire</span>
                             <div class="join w-full">
-                                <input
-                                    v-model="form.thirdColor"
-                                    type="color"
-                                    class="join-item h-12 w-14 cursor-pointer border border-base-300 p-1"
-                                    aria-label="Sélecteur de couleur tertiaire"
-                                />
-                                <input
-                                    v-model="form.thirdColor"
-                                    type="text"
-                                    class="cooper-input-baseline join-item input input-bordered h-12 w-full"
-                                    placeholder="#1f2937"
-                                    maxlength="7"
-                                />
+                                <input v-model="form.thirdColor" type="color" class="join-item h-12 w-14 cursor-pointer border border-base-300 p-1" aria-label="Couleur tertiaire" />
+                                <input v-model="form.thirdColor" type="text" class="cooper-input-baseline join-item input input-bordered h-12 w-full" placeholder="#1f2937" maxlength="7" />
                             </div>
                             <p v-if="firstError('thirdColor')" class="mt-1 text-sm text-error">{{ firstError('thirdColor') }}</p>
                         </label>
@@ -301,9 +261,9 @@ async function submit() {
                 </section>
 
                 <div class="flex justify-end gap-2 pt-4">
-                    <a href="/admin" @click="back" class="btn btn-ghost">Annuler</a>
+                    <a href="/admin" class="btn btn-ghost" @click="back">Annuler</a>
                     <button type="submit" class="btn btn-primary" :disabled="submitting">
-                        {{ submitting ? '...' : "Créer l'entreprise" }}
+                        {{ submitting ? '...' : 'Enregistrer' }}
                     </button>
                 </div>
             </form>

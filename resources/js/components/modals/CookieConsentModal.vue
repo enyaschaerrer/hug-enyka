@@ -122,13 +122,13 @@ onBeforeUnmount(() => {
             ></button>
 
             <div class="modal-box relative max-h-[calc(100svh-1.5rem)] w-[calc(100vw-1.5rem)] max-w-md scale-100 overflow-y-auto rounded-3xl bg-white p-4 text-stone-950 opacity-100 shadow-2xl translate-0 sm:max-h-[calc(100svh-4rem)] sm:p-5">
-                <h2 id="cookie-consent-title" class="mt-2 text-center font-cooper text-[1.55rem] font-semibold leading-tight text-base-content sm:text-[1.65rem]">
+                <h2 id="cookie-consent-title" class="cooper-text-baseline mt-2 text-center font-cooper text-[1.55rem] font-semibold leading-tight text-base-content sm:text-[1.65rem]">
                     {{ modalTitle }}
                 </h2>
 
                 <template v-if="view === 'summary'">
                     <div class="mt-6 space-y-3 rounded-2xl bg-black/[0.02] p-4 font-cooper text-sm leading-relaxed text-base-content/75">
-                        <p>
+                        <p class="cooper-text-baseline">
                             Les cookies nécessaires gardent le site fonctionnel. Avec votre accord, une mesure d’audience anonyme aidera les HUG à comprendre ce qui facilite le passage à l’inscription et à améliorer les prochaines collectes. Cette mesure reste désactivée sans votre accord, et vous pouvez changer d’avis à tout moment.
                         </p>
                     </div>
@@ -139,14 +139,14 @@ onBeforeUnmount(() => {
                             type="button"
                             @click="openSettings"
                         >
-                            Configurer
+                            <span class="cooper-baseline">Configurer</span>
                         </button>
                         <button
                             class="btn h-[48px] rounded-2xl border-none bg-red-700 font-cooper text-[0.95rem] text-white hover:bg-red-800"
                             type="button"
                             @click="acceptAnalytics"
                         >
-                            Je consens
+                            <span class="cooper-baseline">Je consens</span>
                         </button>
                     </div>
                 </template>
@@ -160,10 +160,10 @@ onBeforeUnmount(() => {
                         >
                             <div class="flex items-start justify-between gap-4">
                                 <div class="min-w-0">
-                                    <h3 class="font-cooper text-base font-semibold leading-tight text-base-content">
+                                    <h3 class="cooper-text-baseline font-cooper text-base font-semibold leading-tight text-base-content">
                                         {{ category.title }}
                                     </h3>
-                                    <p class="mt-2 font-cooper text-sm font-medium leading-relaxed text-base-content/65">
+                                    <p class="cooper-text-baseline mt-2 font-cooper text-sm font-medium leading-relaxed text-base-content/65">
                                         {{ category.description }}
                                     </p>
                                 </div>
@@ -194,7 +194,7 @@ onBeforeUnmount(() => {
                             type="button"
                             @click="view = 'summary'"
                         >
-                            Retour
+                            <span class="cooper-baseline">Retour</span>
                         </button>
                         <button
                             v-else
@@ -202,14 +202,14 @@ onBeforeUnmount(() => {
                             type="button"
                             @click="closeModal"
                         >
-                            Annuler
+                            <span class="cooper-baseline">Annuler</span>
                         </button>
                         <button
                             class="btn h-[48px] rounded-2xl border-none bg-red-700 font-cooper text-[0.95rem] text-white hover:bg-red-800"
                             type="button"
                             @click="saveSettings"
                         >
-                            Enregistrer
+                            <span class="cooper-baseline">Enregistrer</span>
                         </button>
                     </div>
                 </template>
