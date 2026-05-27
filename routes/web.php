@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AuthController;
+use App\Http\Controllers\Admin\CollectionController;
 use App\Http\Controllers\Admin\CompanyController;
 use App\Http\Controllers\CoBrandedCollecteController;
 use App\Http\Controllers\PublicSiteController;
@@ -20,7 +21,9 @@ Route::post('/admin/login', [AuthController::class, 'store'])->name('admin.login
 // Admin SPA shell + JSON actions — require auth + role
 Route::middleware(['auth', 'role:superadmin,admin'])->group(function () {
     Route::post('/admin/logout', [AuthController::class, 'destroy'])->name('admin.logout');
+    Route::get('/admin/api/companies', [CompanyController::class, 'index'])->name('admin.companies.index');
     Route::post('/admin/companies', [CompanyController::class, 'store'])->name('admin.companies.store');
+    Route::post('/admin/companies/{company}/collections', [CollectionController::class, 'store'])->name('admin.collections.store');
 
     Route::get('/admin/{any?}', fn () => view('app'))
         ->where('any', '.*')
