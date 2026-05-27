@@ -112,8 +112,8 @@ async function submit() {
             </div>
 
             <form @submit.prevent="submit" class="space-y-6">
-                <section class="grid gap-4 md:grid-cols-2">
-                    <label class="form-control w-full">
+                <section class="grid gap-x-4 gap-y-6 md:grid-cols-2">
+                    <label class="flex flex-col w-full">
                         <span class="label-text">Nom *</span>
                         <input
                             v-model="form.name"
@@ -124,7 +124,7 @@ async function submit() {
                         <p v-if="firstError('name')" class="mt-1 text-sm text-error">{{ firstError('name') }}</p>
                     </label>
 
-                    <label class="form-control w-full">
+                    <label class="flex flex-col w-full">
                         <span class="label-text">Email *</span>
                         <input
                             v-model="form.email"
@@ -135,7 +135,7 @@ async function submit() {
                         <p v-if="firstError('email')" class="mt-1 text-sm text-error">{{ firstError('email') }}</p>
                     </label>
 
-                    <label class="form-control w-full">
+                    <label class="flex flex-col w-full">
                         <span class="label-text">Slug URL *</span>
                         <input
                             v-model="form.slug"
@@ -152,7 +152,7 @@ async function submit() {
                         <p v-if="firstError('slug')" class="mt-1 text-sm text-error">{{ firstError('slug') }}</p>
                     </label>
 
-                    <label class="form-control w-full">
+                    <label class="flex flex-col w-full">
                         <span class="label-text">Téléphone</span>
                         <input
                             v-model="form.telephone"
@@ -163,7 +163,7 @@ async function submit() {
                     </label>
                 </section>
 
-                <label class="form-control w-full">
+                <label class="flex flex-col w-full">
                     <span class="label-text">Description courte</span>
                     <textarea
                         v-model="form.short_description"
@@ -174,7 +174,7 @@ async function submit() {
                     <p v-if="firstError('short_description')" class="mt-1 text-sm text-error">{{ firstError('short_description') }}</p>
                 </label>
 
-                <label class="form-control w-full">
+                <label class="flex flex-col w-full">
                     <span class="label-text">Adresse</span>
                     <textarea
                         v-model="form.address"
@@ -185,8 +185,8 @@ async function submit() {
                     <p v-if="firstError('address')" class="mt-1 text-sm text-error">{{ firstError('address') }}</p>
                 </label>
 
-                <section class="grid gap-4 md:grid-cols-3">
-                    <label class="form-control w-full">
+                <section class="grid gap-x-4 gap-y-6 md:grid-cols-3">
+                    <label class="flex flex-col w-full">
                         <span class="label-text">Nombre d'employés</span>
                         <input
                             v-model="form.employee_count"
@@ -197,7 +197,7 @@ async function submit() {
                         <p v-if="firstError('employee_count')" class="mt-1 text-sm text-error">{{ firstError('employee_count') }}</p>
                     </label>
 
-                    <label class="form-control w-full md:col-span-2">
+                    <label class="flex flex-col w-full md:col-span-2">
                         <span class="label-text">Domaines email autorisés</span>
                         <input
                             v-model="form.allowed_email_domains"
@@ -209,8 +209,8 @@ async function submit() {
                     </label>
                 </section>
 
-                <section class="grid gap-4 md:grid-cols-2">
-                    <label class="form-control w-full">
+                <section class="grid gap-x-4 gap-y-6 md:grid-cols-2">
+                    <label class="flex flex-col w-full">
                         <span class="label-text">Source (référent)</span>
                         <input
                             v-model="form.source"
@@ -221,7 +221,7 @@ async function submit() {
                         <p v-if="firstError('source')" class="mt-1 text-sm text-error">{{ firstError('source') }}</p>
                     </label>
 
-                    <label class="form-control w-full">
+                    <label class="flex flex-col w-full">
                         <span class="label-text">Chemin du logo</span>
                         <input
                             v-model="form.logo"
@@ -238,32 +238,62 @@ async function submit() {
 
                 <section>
                     <p class="mb-2 label-text">Couleurs co-brandées</p>
-                    <div class="grid gap-4 md:grid-cols-3">
-                        <label class="form-control w-full">
+                    <div class="grid gap-x-4 gap-y-6 md:grid-cols-3">
+                        <label class="flex flex-col w-full">
                             <span class="label-text-alt">Primaire</span>
-                            <input
-                                v-model="form.primaryColor"
-                                type="color"
-                                class="input input-bordered h-12 w-full p-1"
-                            />
+                            <div class="join w-full">
+                                <input
+                                    v-model="form.primaryColor"
+                                    type="color"
+                                    class="join-item h-12 w-14 cursor-pointer border border-base-300 p-1"
+                                    aria-label="Sélecteur de couleur primaire"
+                                />
+                                <input
+                                    v-model="form.primaryColor"
+                                    type="text"
+                                    class="cooper-input-baseline join-item input input-bordered h-12 w-full"
+                                    placeholder="#c81e1e"
+                                    maxlength="7"
+                                />
+                            </div>
                             <p v-if="firstError('primaryColor')" class="mt-1 text-sm text-error">{{ firstError('primaryColor') }}</p>
                         </label>
-                        <label class="form-control w-full">
+                        <label class="flex flex-col w-full">
                             <span class="label-text-alt">Secondaire</span>
-                            <input
-                                v-model="form.secondaryColor"
-                                type="color"
-                                class="input input-bordered h-12 w-full p-1"
-                            />
+                            <div class="join w-full">
+                                <input
+                                    v-model="form.secondaryColor"
+                                    type="color"
+                                    class="join-item h-12 w-14 cursor-pointer border border-base-300 p-1"
+                                    aria-label="Sélecteur de couleur secondaire"
+                                />
+                                <input
+                                    v-model="form.secondaryColor"
+                                    type="text"
+                                    class="cooper-input-baseline join-item input input-bordered h-12 w-full"
+                                    placeholder="#fecaca"
+                                    maxlength="7"
+                                />
+                            </div>
                             <p v-if="firstError('secondaryColor')" class="mt-1 text-sm text-error">{{ firstError('secondaryColor') }}</p>
                         </label>
-                        <label class="form-control w-full">
+                        <label class="flex flex-col w-full">
                             <span class="label-text-alt">Tertiaire</span>
-                            <input
-                                v-model="form.thirdColor"
-                                type="color"
-                                class="input input-bordered h-12 w-full p-1"
-                            />
+                            <div class="join w-full">
+                                <input
+                                    v-model="form.thirdColor"
+                                    type="color"
+                                    class="join-item h-12 w-14 cursor-pointer border border-base-300 p-1"
+                                    aria-label="Sélecteur de couleur tertiaire"
+                                />
+                                <input
+                                    v-model="form.thirdColor"
+                                    type="text"
+                                    class="cooper-input-baseline join-item input input-bordered h-12 w-full"
+                                    placeholder="#1f2937"
+                                    maxlength="7"
+                                />
+                            </div>
                             <p v-if="firstError('thirdColor')" class="mt-1 text-sm text-error">{{ firstError('thirdColor') }}</p>
                         </label>
                     </div>
