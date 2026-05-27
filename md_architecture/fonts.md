@@ -214,24 +214,24 @@ body {
 
 ## Baseline Cooper Hewitt
 
-Cooper Hewitt peut avoir une baseline visuellement differente selon le composant, mais le rendu actuel du projet ne justifie pas une correction globale par defaut.
+Cooper Hewitt rend visuellement les textes un peu trop hauts dans certains composants, surtout dans les boutons, badges, bulles et inputs. Le probleme vient des metriques verticales de la police : le texte parait centre mathematiquement, mais pas centre optiquement.
 
-La correction precedente avec `transform: translateY(0.12em)` s'est revelee trop agressive : elle descendait trop les textes dans plusieurs composants. Elle ne doit donc pas etre appliquee globalement a tous les textes.
+Pour eviter des corrections au cas par cas du type `translate-y-[2px]`, le projet utilise des classes de baseline reutilisables.
 
 Le principe actuel est :
 
-- garder les textes Cooper sans decalage par defaut ;
-- verifier visuellement les composants un par un ;
-- appliquer une correction locale seulement si un bouton, badge, label, bulle ou input est clairement mal centre ;
-- eviter de modifier `line-height` globalement, car cela peut casser la hauteur des paragraphes, boutons, bulles, inputs et titres.
+- utiliser une correction proportionnelle a la taille du texte ;
+- garder les wrappers de baseline limites aux composants Cooper ;
+- eviter les corrections Tailwind ponctuelles sauf test temporaire.
 
-### Texte inline neutre
+### Texte inline
 
-Classe neutre utilisable pour wrapper un texte court sans changer sa baseline :
+Pour les textes courts dans des boutons, badges, labels, nav items ou compteurs :
 
 ```css
 .cooper-baseline {
     display: inline-block;
+    transform: translateY(0.12em);
 }
 ```
 
@@ -241,27 +241,13 @@ Exemple :
 <span class="cooper-baseline">Admin</span>
 ```
 
-### Correction locale si necessaire
+### Texte bloc
 
-Si un composant precis a besoin d'un ajustement apres verification visuelle, creer une classe locale au composant ou une classe dediee au type de composant, avec une valeur faible et testee.
-
-Exemple possible pour un cas ponctuel :
-
-```css
-.cooper-button-baseline-adjust {
-    display: inline-block;
-    transform: translateY(0.04em);
-}
-```
-
-Cette correction ne doit pas remplacer `cooper-baseline` globalement.
-
-### Texte bloc neutre
-
-Pour un paragraphe, un titre ou une ligne de texte qui doit garder son comportement de bloc sans decalage :
+Pour un paragraphe, un titre ou une ligne de texte qui doit garder son comportement de bloc :
 
 ```css
 .cooper-text-baseline {
+    transform: translateY(0.12em);
 }
 ```
 
@@ -273,12 +259,14 @@ Exemple :
 
 ### Inputs
 
-Ne pas appliquer de padding vertical asymetrique global sur les inputs Cooper. Cela peut casser l'alignement avec les hauteurs DaisyUI/Tailwind.
-
-La classe peut rester neutre si elle est deja utilisee dans le code :
+Un `input` ne permet pas de wrapper son texte dans un `span`. Pour ce cas, on corrige la baseline avec un padding vertical asymetrique, sans changer la hauteur totale du champ :
 
 ```css
-.cooper-input-baseline {}
+.cooper-input-baseline {
+    line-height: 1;
+    padding-top: calc(0.625rem + 0.16em);
+    padding-bottom: calc(0.625rem - 0.16em);
+}
 ```
 
 Exemple :
@@ -289,10 +277,10 @@ Exemple :
 
 Regle pratique :
 
-- utiliser `cooper-baseline`, `cooper-text-baseline` et `cooper-input-baseline` comme classes neutres par defaut ;
-- ne pas mettre de `translateY` ou de `line-height` global dans ces classes ;
-- appliquer une correction locale seulement sur un composant identifie comme mal aligne ;
-- documenter la raison si une correction locale est ajoutee.
+- utiliser `cooper-baseline` pour les petits textes inline ;
+- utiliser `cooper-text-baseline` pour les titres, paragraphes ou textes de bulle ;
+- utiliser `cooper-input-baseline` pour les champs de formulaire ;
+- eviter les corrections Tailwind ponctuelles du type `translate-y-[2px]`, sauf test temporaire.
 
 ## Variantes Univers
 

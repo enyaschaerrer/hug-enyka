@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onBeforeUnmount, onMounted, ref } from 'vue';
 import CoBrandedHeader from '../../components/public/CoBrandedHeader.vue';
-import CoBrandedPhoneModal from '../../components/CoBrandedPhoneModal.vue';
+import CoBrandedPhoneModal from '../../components/modals/CoBrandedPhoneModal.vue';
 import SmsConversationPrototype from '../../components/sms-chat/SmsConversationPrototype.vue';
 import TinderEligibilityPrototype from '../../components/tinder-cards/TinderEligibilityPrototype.vue';
 

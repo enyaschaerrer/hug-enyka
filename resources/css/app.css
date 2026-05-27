@@ -47,10 +47,15 @@
 
 .cooper-baseline {
     display: inline-block;
+    transform: translateY(0.12em);
 }
 
 .cooper-text-baseline {
+    transform: translateY(0.12em);
 }
 
 .cooper-input-baseline {
+    line-height: 1;
+    padding-top: calc(0.625rem + 0.16em);
+    padding-bottom: calc(0.625rem - 0.16em);
 }

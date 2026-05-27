@@ -104,7 +104,7 @@ async function submit() {
 </script>
 
 <template>
-    <main class="min-h-screen bg-base-200 px-4 py-8 text-base-content">
+    <main class="font-cooper min-h-screen bg-base-200 px-4 py-8 text-base-content">
         <div class="mx-auto w-full max-w-3xl rounded bg-base-100 p-6 shadow">
             <div class="mb-6 flex items-center justify-between">
                 <h1 class="text-2xl font-semibold">Créer une entreprise</h1>
@@ -118,7 +118,8 @@ async function submit() {
                         <input
                             v-model="form.name"
                             type="text"
-                            class="input input-bordered w-full"
+                            class="cooper-input-baseline input input-bordered w-full"
+                            v-model="name"
                             required
                         />
                         <p v-if="firstError('name')" class="mt-1 text-sm text-error">{{ firstError('name') }}</p>
@@ -129,7 +130,8 @@ async function submit() {
                         <input
                             v-model="form.email"
                             type="email"
-                            class="input input-bordered w-full"
+                            class="cooper-input-baseline input input-bordered w-full"
+                            :value="old.email ?? ''"
                             required
                         />
                         <p v-if="firstError('email')" class="mt-1 text-sm text-error">{{ firstError('email') }}</p>
@@ -140,7 +142,8 @@ async function submit() {
                         <input
                             v-model="form.slug"
                             type="text"
-                            class="input input-bordered w-full"
+                            class="cooper-input-baseline input input-bordered w-full"
+                            v-model="slug"
                             maxlength="20"
                             pattern="[A-Za-z0-9_-]+"
                             @input="onSlugInput"
@@ -157,7 +160,8 @@ async function submit() {
                         <input
                             v-model="form.telephone"
                             type="tel"
-                            class="input input-bordered w-full"
+                            class="cooper-input-baseline input input-bordered w-full"
+                            :value="old.telephone ?? ''"
                         />
                         <p v-if="firstError('telephone')" class="mt-1 text-sm text-error">{{ firstError('telephone') }}</p>
                     </label>
@@ -166,8 +170,8 @@ async function submit() {
                 <label class="form-control w-full">
                     <span class="label-text">Description courte</span>
                     <textarea
-                        v-model="form.short_description"
-                        class="textarea textarea-bordered w-full"
+                        name="short_description"
+                        class="cooper-text-baseline textarea textarea-bordered w-full"
                         rows="2"
                         maxlength="500"
                     ></textarea>
@@ -177,8 +181,8 @@ async function submit() {
                 <label class="form-control w-full">
                     <span class="label-text">Adresse</span>
                     <textarea
-                        v-model="form.address"
-                        class="textarea textarea-bordered w-full"
+                        name="address"
+                        class="cooper-text-baseline textarea textarea-bordered w-full"
                         rows="2"
                         maxlength="500"
                     ></textarea>
@@ -192,7 +196,8 @@ async function submit() {
                             v-model="form.employee_count"
                             type="number"
                             min="0"
-                            class="input input-bordered w-full"
+                            class="cooper-input-baseline input input-bordered w-full"
+                            :value="old.employee_count ?? ''"
                         />
                         <p v-if="firstError('employee_count')" class="mt-1 text-sm text-error">{{ firstError('employee_count') }}</p>
                     </label>
@@ -202,7 +207,7 @@ async function submit() {
                         <input
                             v-model="form.allowed_email_domains"
                             type="text"
-                            class="input input-bordered w-full"
+                            class="cooper-input-baseline input input-bordered w-full"
                             placeholder="rolex.com,rolex.ch"
                         />
                         <p v-if="firstError('allowed_email_domains')" class="mt-1 text-sm text-error">{{ firstError('allowed_email_domains') }}</p>
@@ -215,7 +220,7 @@ async function submit() {
                         <input
                             v-model="form.source"
                             type="text"
-                            class="input input-bordered w-full"
+                            class="cooper-input-baseline input input-bordered w-full"
                             placeholder="Recommandation, salon, ..."
                         />
                         <p v-if="firstError('source')" class="mt-1 text-sm text-error">{{ firstError('source') }}</p>
@@ -226,7 +231,7 @@ async function submit() {
                         <input
                             v-model="form.logo"
                             type="text"
-                            class="input input-bordered w-full"
+                            class="cooper-input-baseline input input-bordered w-full"
                             placeholder="/img/logos/exemple.png"
                         />
                         <span class="mt-1 text-xs text-base-content/60">
