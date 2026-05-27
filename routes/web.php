@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AuthController;
+use App\Http\Controllers\Admin\CompanyController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\CoBrandedCollecteController;
 use App\Http\Controllers\PublicSiteController;
@@ -19,6 +20,9 @@ Route::post('/admin/login', [AuthController::class, 'store'])->name('admin.login
 Route::middleware(['auth', 'role:superadmin,admin'])->group(function () {
     Route::get('/admin', [DashboardController::class, 'index'])->name('admin.dashboard');
     Route::post('/admin/logout', [AuthController::class, 'destroy'])->name('admin.logout');
+
+    Route::get('/admin/companies/create', [CompanyController::class, 'create'])->name('admin.companies.create');
+    Route::post('/admin/companies', [CompanyController::class, 'store'])->name('admin.companies.store');
 });
 
 Route::fallback(fn () => redirect('/'));
