@@ -39,7 +39,7 @@ async function logout() {
         <!-- Sidebar -->
         <aside class="flex w-56 shrink-0 flex-col border-r border-base-300 bg-base-100">
             <div class="border-b border-base-300 px-4 py-5">
-                <p class="text-sm font-semibold text-base-content">Admin CTS</p>
+                <p class="cooper-text-baseline text-sm font-semibold text-base-content">Admin CTS</p>
             </div>
 
             <nav class="flex-1 px-2 py-4">
@@ -50,7 +50,7 @@ async function logout() {
                             :class="{ active: currentPath === '/admin' }"
                             @click="goTo('/admin', $event)"
                         >
-                            Dashboard
+                            <span class="cooper-baseline">Dashboard</span>
                         </a>
                     </li>
                     <li>
@@ -63,21 +63,21 @@ async function logout() {
                             }"
                             @click="goTo('/admin/campagnes', $event)"
                         >
-                            Campagnes
+                            <span class="cooper-baseline">Campagnes</span>
                         </a>
                     </li>
                 </ul>
             </nav>
 
             <div class="border-t border-base-300 px-4 py-4">
-                <p class="text-sm font-medium truncate">{{ user?.name }}</p>
-                <p class="text-xs text-base-content/50 truncate">{{ user?.email }}</p>
+                <p class="cooper-text-baseline text-sm font-medium truncate">{{ user?.name }}</p>
+                <p class="cooper-text-baseline text-xs text-base-content/50 truncate">{{ user?.email }}</p>
                 <button
                     type="button"
                     class="btn btn-ghost btn-xs mt-3 w-full justify-start px-2"
                     @click="logout"
                 >
-                    Déconnexion
+                    <span class="cooper-baseline">Déconnexion</span>
                 </button>
             </div>
         </aside>

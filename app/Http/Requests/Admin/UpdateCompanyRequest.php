@@ -32,6 +32,9 @@ class UpdateCompanyRequest extends FormRequest
             'primaryColor' => ['nullable', 'string', 'regex:/^#[0-9a-fA-F]{6}$/'],
             'secondaryColor' => ['nullable', 'string', 'regex:/^#[0-9a-fA-F]{6}$/'],
             'thirdColor' => ['nullable', 'string', 'regex:/^#[0-9a-fA-F]{6}$/'],
+            'collection_start' => ['required', 'date'],
+            'collection_end' => ['required', 'date', 'after:collection_start'],
+            'collection_linkOneDoc' => ['required', 'string', 'max:500'],
         ];
     }
 }

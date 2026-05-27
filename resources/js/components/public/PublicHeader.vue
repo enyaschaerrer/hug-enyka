@@ -53,10 +53,6 @@ function isActivePath(href: string) {
                     </ul>
                 </div>
 
-                <a class="btn btn-sm hidden items-center rounded-full border-emerald-200 bg-white font-semibold leading-tight text-emerald-800 hover:border-emerald-300 hover:bg-emerald-50 sm:inline-flex" href="/collecte/rolex/7f4c9b8e2a6d4f01">
-                    <span class="cooper-baseline">Co-brandé</span>
-                </a>
-
                 <a class="btn btn-sm inline-flex items-center rounded-full border-red-200 bg-white font-semibold leading-tight text-red-700 hover:border-red-300 hover:bg-red-50" href="/admin">
                     <svg xmlns="http://www.w3.org/2000/svg" class="lucide lucide-user-round-cog-icon lucide-user-round-cog h-4 w-4" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="m14.305 19.53.923-.382"/>
