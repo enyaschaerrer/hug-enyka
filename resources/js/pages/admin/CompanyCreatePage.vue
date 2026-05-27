@@ -41,7 +41,7 @@ function firstError(field: string): string | null {
 </script>
 
 <template>
-    <main class="min-h-screen bg-base-200 px-4 py-8 text-base-content">
+    <main class="font-cooper min-h-screen bg-base-200 px-4 py-8 text-base-content">
         <div class="mx-auto w-full max-w-3xl rounded bg-base-100 p-6 shadow">
             <div class="mb-6 flex items-center justify-between">
                 <h1 class="text-2xl font-semibold">Créer une entreprise</h1>
@@ -57,7 +57,7 @@ function firstError(field: string): string | null {
                         <input
                             name="name"
                             type="text"
-                            class="input input-bordered w-full"
+                            class="cooper-input-baseline input input-bordered w-full"
                             v-model="name"
                             required
                         />
@@ -69,7 +69,7 @@ function firstError(field: string): string | null {
                         <input
                             name="email"
                             type="email"
-                            class="input input-bordered w-full"
+                            class="cooper-input-baseline input input-bordered w-full"
                             :value="old.email ?? ''"
                             required
                         />
@@ -81,7 +81,7 @@ function firstError(field: string): string | null {
                         <input
                             name="slug"
                             type="text"
-                            class="input input-bordered w-full"
+                            class="cooper-input-baseline input input-bordered w-full"
                             v-model="slug"
                             maxlength="20"
                             pattern="[A-Za-z0-9_-]+"
@@ -99,7 +99,7 @@ function firstError(field: string): string | null {
                         <input
                             name="telephone"
                             type="tel"
-                            class="input input-bordered w-full"
+                            class="cooper-input-baseline input input-bordered w-full"
                             :value="old.telephone ?? ''"
                         />
                         <p v-if="firstError('telephone')" class="mt-1 text-sm text-error">{{ firstError('telephone') }}</p>
@@ -110,7 +110,7 @@ function firstError(field: string): string | null {
                     <span class="label-text">Description courte</span>
                     <textarea
                         name="short_description"
-                        class="textarea textarea-bordered w-full"
+                        class="cooper-text-baseline textarea textarea-bordered w-full"
                         rows="2"
                         maxlength="500"
                     >{{ old.short_description ?? '' }}</textarea>
@@ -121,7 +121,7 @@ function firstError(field: string): string | null {
                     <span class="label-text">Adresse</span>
                     <textarea
                         name="address"
-                        class="textarea textarea-bordered w-full"
+                        class="cooper-text-baseline textarea textarea-bordered w-full"
                         rows="2"
                         maxlength="500"
                     >{{ old.address ?? '' }}</textarea>
@@ -135,7 +135,7 @@ function firstError(field: string): string | null {
                             name="employee_count"
                             type="number"
                             min="0"
-                            class="input input-bordered w-full"
+                            class="cooper-input-baseline input input-bordered w-full"
                             :value="old.employee_count ?? ''"
                         />
                         <p v-if="firstError('employee_count')" class="mt-1 text-sm text-error">{{ firstError('employee_count') }}</p>
@@ -146,7 +146,7 @@ function firstError(field: string): string | null {
                         <input
                             name="allowed_email_domains"
                             type="text"
-                            class="input input-bordered w-full"
+                            class="cooper-input-baseline input input-bordered w-full"
                             placeholder="rolex.com,rolex.ch"
                             :value="old.allowed_email_domains ?? ''"
                         />
@@ -160,7 +160,7 @@ function firstError(field: string): string | null {
                         <input
                             name="source"
                             type="text"
-                            class="input input-bordered w-full"
+                            class="cooper-input-baseline input input-bordered w-full"
                             placeholder="Recommandation, salon, ..."
                             :value="old.source ?? ''"
                         />
@@ -172,7 +172,7 @@ function firstError(field: string): string | null {
                         <input
                             name="logo"
                             type="text"
-                            class="input input-bordered w-full"
+                            class="cooper-input-baseline input input-bordered w-full"
                             placeholder="/img/logos/exemple.png"
                             :value="old.logo ?? ''"
                         />
