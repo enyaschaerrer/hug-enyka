@@ -15,11 +15,6 @@
                     user: @json(auth()->user()?->only(['id', 'name', 'email'])),
                 },
                 csrfToken: @json(csrf_token()),
-                errors: @json($errors->toArray()),
-                old: @json((object) old()),
-                flash: {
-                    success: @json(session('success')),
-                },
                 coBrandedCollecte: @json($coBrandedCollecte ?? null),
             };
         </script>

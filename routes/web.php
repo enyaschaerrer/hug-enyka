@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\CompanyController;
-use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\CoBrandedCollecteController;
 use App\Http\Controllers\PublicSiteController;
 use Illuminate\Support\Facades\Route;
@@ -14,15 +13,18 @@ Route::get('/label', [PublicSiteController::class, 'home'])->name('public.label'
 Route::get('/contact', [PublicSiteController::class, 'home'])->name('public.contact');
 Route::get('/collecte/{brand}/{token}', [CoBrandedCollecteController::class, 'show'])->name('public.collecte.cobranded');
 
-Route::get('/admin/login', [AuthController::class, 'create'])->name('login');
+// Admin SPA shell — login page is public
+Route::get('/admin/login', fn () => view('app'))->name('login');
 Route::post('/admin/login', [AuthController::class, 'store'])->name('admin.login.store');
 
+// Admin SPA shell + JSON actions — require auth + role
 Route::middleware(['auth', 'role:superadmin,admin'])->group(function () {
-    Route::get('/admin', [DashboardController::class, 'index'])->name('admin.dashboard');
     Route::post('/admin/logout', [AuthController::class, 'destroy'])->name('admin.logout');
-
-    Route::get('/admin/companies/create', [CompanyController::class, 'create'])->name('admin.companies.create');
     Route::post('/admin/companies', [CompanyController::class, 'store'])->name('admin.companies.store');
+
+    Route::get('/admin/{any?}', fn () => view('app'))
+        ->where('any', '.*')
+        ->name('admin.shell');
 });
 
 Route::fallback(fn () => redirect('/'));

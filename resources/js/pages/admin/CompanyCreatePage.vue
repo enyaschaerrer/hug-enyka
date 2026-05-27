@@ -1,15 +1,14 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue';
+import { reactive, ref, watch } from 'vue';
+import { useAdminRouter } from '../../composables/useAdminRouter';
 
 type AppState = {
     csrfToken: string;
-    errors: Record<string, string[]>;
-    old: Record<string, string | null | undefined>;
 };
 
 const appState = (window as unknown as { __APP__?: AppState }).__APP__;
-const errors = appState?.errors ?? {};
-const old = appState?.old ?? {};
+const csrfToken = appState?.csrfToken ?? '';
+const { navigate, flashMessage } = useAdminRouter();
 
 function slugify(input: string): string {
     return input
@@ -21,13 +20,29 @@ function slugify(input: string): string {
         .slice(0, 20);
 }
 
-const name = ref<string>(old.name ?? '');
-const slug = ref<string>(old.slug ?? '');
-const slugTouched = ref<boolean>(Boolean(old.slug));
+const form = reactive({
+    name: '',
+    email: '',
+    slug: '',
+    short_description: '',
+    address: '',
+    telephone: '',
+    employee_count: '' as string | number,
+    allowed_email_domains: '',
+    source: '',
+    logo: '',
+    primaryColor: '#c81e1e',
+    secondaryColor: '#fecaca',
+    thirdColor: '#1f2937',
+});
 
-watch(name, (next) => {
+const errors = ref<Record<string, string[]>>({});
+const submitting = ref(false);
+const slugTouched = ref(false);
+
+watch(() => form.name, (next) => {
     if (!slugTouched.value) {
-        slug.value = slugify(next);
+        form.slug = slugify(next);
     }
 });
 
@@ -36,7 +51,55 @@ function onSlugInput() {
 }
 
 function firstError(field: string): string | null {
-    return errors[field]?.[0] ?? null;
+    return errors.value[field]?.[0] ?? null;
+}
+
+function back(event: Event) {
+    event.preventDefault();
+    navigate('/admin');
+}
+
+async function submit() {
+    submitting.value = true;
+    errors.value = {};
+
+    const payload: Record<string, unknown> = { ...form };
+    if (payload.employee_count === '') {
+        payload.employee_count = null;
+    }
+
+    try {
+        const res = await fetch('/admin/companies', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': csrfToken,
+                'X-Requested-With': 'XMLHttpRequest',
+            },
+            body: JSON.stringify(payload),
+        });
+
+        if (res.ok) {
+            const data = await res.json();
+            flashMessage.value = data.message ?? 'Entreprise créée.';
+            navigate('/admin');
+            return;
+        }
+
+        if (res.status === 422) {
+            const data = await res.json();
+            errors.value = data.errors ?? {};
+        } else if (res.status === 401) {
+            window.location.href = '/admin/login';
+        } else {
+            errors.value = { name: ['Erreur serveur. Réessaye.'] };
+        }
+    } catch {
+        errors.value = { name: ['Erreur réseau. Réessaye.'] };
+    } finally {
+        submitting.value = false;
+    }
 }
 </script>
 
@@ -45,17 +108,15 @@ function firstError(field: string): string | null {
         <div class="mx-auto w-full max-w-3xl rounded bg-base-100 p-6 shadow">
             <div class="mb-6 flex items-center justify-between">
                 <h1 class="text-2xl font-semibold">Créer une entreprise</h1>
-                <a href="/admin" class="btn btn-ghost btn-sm">Retour</a>
+                <a href="/admin" @click="back" class="btn btn-ghost btn-sm">Retour</a>
             </div>
 
-            <form method="post" action="/admin/companies" class="space-y-6">
-                <input type="hidden" name="_token" :value="appState?.csrfToken" />
-
+            <form @submit.prevent="submit" class="space-y-6">
                 <section class="grid gap-4 md:grid-cols-2">
                     <label class="form-control w-full">
                         <span class="label-text">Nom *</span>
                         <input
-                            name="name"
+                            v-model="form.name"
                             type="text"
                             class="cooper-input-baseline input input-bordered w-full"
                             v-model="name"
@@ -67,7 +128,7 @@ function firstError(field: string): string | null {
                     <label class="form-control w-full">
                         <span class="label-text">Email *</span>
                         <input
-                            name="email"
+                            v-model="form.email"
                             type="email"
                             class="cooper-input-baseline input input-bordered w-full"
                             :value="old.email ?? ''"
@@ -79,7 +140,7 @@ function firstError(field: string): string | null {
                     <label class="form-control w-full">
                         <span class="label-text">Slug URL *</span>
                         <input
-                            name="slug"
+                            v-model="form.slug"
                             type="text"
                             class="cooper-input-baseline input input-bordered w-full"
                             v-model="slug"
@@ -89,7 +150,7 @@ function firstError(field: string): string | null {
                             required
                         />
                         <span class="mt-1 text-xs text-base-content/60">
-                            URL co-brandée : /collecte/{{ slug || '...' }}/{token}
+                            URL co-brandée : /collecte/{{ form.slug || '...' }}/{token}
                         </span>
                         <p v-if="firstError('slug')" class="mt-1 text-sm text-error">{{ firstError('slug') }}</p>
                     </label>
@@ -97,7 +158,7 @@ function firstError(field: string): string | null {
                     <label class="form-control w-full">
                         <span class="label-text">Téléphone</span>
                         <input
-                            name="telephone"
+                            v-model="form.telephone"
                             type="tel"
                             class="cooper-input-baseline input input-bordered w-full"
                             :value="old.telephone ?? ''"
@@ -113,7 +174,7 @@ function firstError(field: string): string | null {
                         class="cooper-text-baseline textarea textarea-bordered w-full"
                         rows="2"
                         maxlength="500"
-                    >{{ old.short_description ?? '' }}</textarea>
+                    ></textarea>
                     <p v-if="firstError('short_description')" class="mt-1 text-sm text-error">{{ firstError('short_description') }}</p>
                 </label>
 
@@ -124,7 +185,7 @@ function firstError(field: string): string | null {
                         class="cooper-text-baseline textarea textarea-bordered w-full"
                         rows="2"
                         maxlength="500"
-                    >{{ old.address ?? '' }}</textarea>
+                    ></textarea>
                     <p v-if="firstError('address')" class="mt-1 text-sm text-error">{{ firstError('address') }}</p>
                 </label>
 
@@ -132,7 +193,7 @@ function firstError(field: string): string | null {
                     <label class="form-control w-full">
                         <span class="label-text">Nombre d'employés</span>
                         <input
-                            name="employee_count"
+                            v-model="form.employee_count"
                             type="number"
                             min="0"
                             class="cooper-input-baseline input input-bordered w-full"
@@ -144,11 +205,10 @@ function firstError(field: string): string | null {
                     <label class="form-control w-full md:col-span-2">
                         <span class="label-text">Domaines email autorisés</span>
                         <input
-                            name="allowed_email_domains"
+                            v-model="form.allowed_email_domains"
                             type="text"
                             class="cooper-input-baseline input input-bordered w-full"
                             placeholder="rolex.com,rolex.ch"
-                            :value="old.allowed_email_domains ?? ''"
                         />
                         <p v-if="firstError('allowed_email_domains')" class="mt-1 text-sm text-error">{{ firstError('allowed_email_domains') }}</p>
                     </label>
@@ -158,11 +218,10 @@ function firstError(field: string): string | null {
                     <label class="form-control w-full">
                         <span class="label-text">Source (référent)</span>
                         <input
-                            name="source"
+                            v-model="form.source"
                             type="text"
                             class="cooper-input-baseline input input-bordered w-full"
                             placeholder="Recommandation, salon, ..."
-                            :value="old.source ?? ''"
                         />
                         <p v-if="firstError('source')" class="mt-1 text-sm text-error">{{ firstError('source') }}</p>
                     </label>
@@ -170,11 +229,10 @@ function firstError(field: string): string | null {
                     <label class="form-control w-full">
                         <span class="label-text">Chemin du logo</span>
                         <input
-                            name="logo"
+                            v-model="form.logo"
                             type="text"
                             class="cooper-input-baseline input input-bordered w-full"
                             placeholder="/img/logos/exemple.png"
-                            :value="old.logo ?? ''"
                         />
                         <span class="mt-1 text-xs text-base-content/60">
                             Déposer le fichier dans public/img/logos/ et renseigner ici le chemin
@@ -189,30 +247,27 @@ function firstError(field: string): string | null {
                         <label class="form-control w-full">
                             <span class="label-text-alt">Primaire</span>
                             <input
-                                name="primaryColor"
+                                v-model="form.primaryColor"
                                 type="color"
                                 class="input input-bordered h-12 w-full p-1"
-                                :value="old.primaryColor ?? '#c81e1e'"
                             />
                             <p v-if="firstError('primaryColor')" class="mt-1 text-sm text-error">{{ firstError('primaryColor') }}</p>
                         </label>
                         <label class="form-control w-full">
                             <span class="label-text-alt">Secondaire</span>
                             <input
-                                name="secondaryColor"
+                                v-model="form.secondaryColor"
                                 type="color"
                                 class="input input-bordered h-12 w-full p-1"
-                                :value="old.secondaryColor ?? '#fecaca'"
                             />
                             <p v-if="firstError('secondaryColor')" class="mt-1 text-sm text-error">{{ firstError('secondaryColor') }}</p>
                         </label>
                         <label class="form-control w-full">
                             <span class="label-text-alt">Tertiaire</span>
                             <input
-                                name="thirdColor"
+                                v-model="form.thirdColor"
                                 type="color"
                                 class="input input-bordered h-12 w-full p-1"
-                                :value="old.thirdColor ?? '#1f2937'"
                             />
                             <p v-if="firstError('thirdColor')" class="mt-1 text-sm text-error">{{ firstError('thirdColor') }}</p>
                         </label>
@@ -220,8 +275,10 @@ function firstError(field: string): string | null {
                 </section>
 
                 <div class="flex justify-end gap-2 pt-4">
-                    <a href="/admin" class="btn btn-ghost">Annuler</a>
-                    <button type="submit" class="btn btn-primary">Créer l'entreprise</button>
+                    <a href="/admin" @click="back" class="btn btn-ghost">Annuler</a>
+                    <button type="submit" class="btn btn-primary" :disabled="submitting">
+                        {{ submitting ? '...' : "Créer l'entreprise" }}
+                    </button>
                 </div>
             </form>
         </div>

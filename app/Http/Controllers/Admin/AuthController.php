@@ -5,20 +5,14 @@ namespace App\Http\Controllers\Admin;
 use App\Enums\UserRole;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\LoginRequest;
-use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
-use Illuminate\View\View;
 
 class AuthController extends Controller
 {
-    public function create(): View
-    {
-        return view('app');
-    }
-
-    public function store(LoginRequest $request): RedirectResponse
+    public function store(LoginRequest $request): JsonResponse
     {
         if (! Auth::attempt($request->credentials())) {
             throw ValidationException::withMessages([
@@ -30,7 +24,6 @@ class AuthController extends Controller
 
         if (! $request->user()?->role->isOneOf([UserRole::SuperAdmin->value, UserRole::Admin->value])) {
             Auth::logout();
-
             $request->session()->invalidate();
             $request->session()->regenerateToken();
 
@@ -39,16 +32,15 @@ class AuthController extends Controller
             ]);
         }
 
-        return redirect()->intended('/admin');
+        return response()->json(['redirect' => '/admin']);
     }
 
-    public function destroy(Request $request): RedirectResponse
+    public function destroy(Request $request): JsonResponse
     {
         Auth::logout();
-
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect('/admin/login');
+        return response()->json(['redirect' => '/admin/login']);
     }
 }
