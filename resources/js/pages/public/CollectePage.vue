@@ -1,8 +1,9 @@
+<script setup lang="ts">
+import PublicHeader from '../../components/public/PublicHeader.vue';
+</script>
+
 <template>
-    <main class="min-h-screen bg-base-200 px-4 py-8">
-        <section class="mx-auto w-full max-w-4xl rounded bg-base-100 p-6 shadow">
-            <p class="text-sm text-base-content/70">Site Trophee</p>
-            <h1 class="text-2xl font-semibold">Collecte</h1>
-        </section>
+    <main class="min-h-screen bg-rose-50 text-stone-950">
+        <PublicHeader />
     </main>
 </template>
