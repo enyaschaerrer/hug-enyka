@@ -2,6 +2,7 @@
 import { computed } from 'vue';
 import DashboardPage from './pages/admin/DashboardPage.vue';
 import LoginPage from './pages/admin/LoginPage.vue';
+import CookieConsentModal from './components/modals/CookieConsentModal.vue';
 import CoBrandedCollectePage from './pages/public/CoBrandedCollectePage.vue';
 import CollectePage from './pages/public/CollectePage.vue';
 import ContactPage from './pages/public/ContactPage.vue';
@@ -31,4 +32,5 @@ const currentPage = computed(() => {
 
 <template>
     <component :is="currentPage" />
+    <CookieConsentModal />
 </template>

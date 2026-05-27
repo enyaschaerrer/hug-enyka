@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { nextTick, ref, watch } from 'vue';
+import { nextTick, onBeforeUnmount, ref, watch } from 'vue';
 import QRCodeStyling from 'qr-code-styling';
 
 const props = defineProps<{
@@ -14,6 +14,7 @@ defineEmits<{
 const qrCodeContainer = ref<HTMLElement | null>(null);
 const qrCodeReady = ref(false);
 let qrCode: QRCodeStyling | null = null;
+let previousBodyOverflow = '';
 
 async function renderQrCode() {
     await nextTick();
@@ -53,14 +54,31 @@ async function renderQrCode() {
     qrCodeReady.value = true;
 }
 
+function lockBodyScroll() {
+    previousBodyOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+}
+
+function unlockBodyScroll() {
+    document.body.style.overflow = previousBodyOverflow;
+}
+
 watch(
     () => props.open,
     (isOpen) => {
         if (isOpen) {
+            lockBodyScroll();
             void renderQrCode();
+            return;
         }
+
+        unlockBodyScroll();
     },
 );
+
+onBeforeUnmount(() => {
+    unlockBodyScroll();
+});
 </script>
 
 <template>
