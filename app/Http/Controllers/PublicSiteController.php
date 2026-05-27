@@ -8,6 +8,6 @@ class PublicSiteController extends Controller
 {
     public function home(): View
     {
-        return view('app');
+        return view('public.home');
     }
 }
