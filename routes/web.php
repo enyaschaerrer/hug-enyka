@@ -25,6 +25,7 @@ Route::middleware(['auth', 'role:superadmin,admin'])->group(function () {
     Route::get('/admin/api/companies/{company}', [CompanyController::class, 'show'])->name('admin.companies.show');
     Route::post('/admin/companies', [CompanyController::class, 'store'])->name('admin.companies.store');
     Route::patch('/admin/companies/{company}', [CompanyController::class, 'update'])->name('admin.companies.update');
+    Route::delete('/admin/companies/{company}', [CompanyController::class, 'destroy'])->name('admin.companies.destroy');
     Route::post('/admin/companies/{company}/collections', [CollectionController::class, 'store'])->name('admin.collections.store');
     Route::patch('/admin/companies/{company}/collections/{collection}', [CollectionController::class, 'update'])->name('admin.collections.update');
 

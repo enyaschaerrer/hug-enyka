@@ -51,41 +51,41 @@ async function submit() {
     <div data-theme="light" class="font-cooper flex min-h-screen items-center justify-center bg-base-200">
         <div class="w-full max-w-sm">
             <div class="mb-8 text-center">
-                <p class="text-xs font-medium tracking-widest text-base-content/40 uppercase">Admin CTS</p>
-                <h1 class="mt-2 text-2xl font-semibold">Trophée de la Générosité</h1>
+                <p class="cooper-text-baseline text-xs font-medium tracking-widest text-base-content/40 uppercase">Admin CTS</p>
+                <h1 class="cooper-text-baseline mt-2 text-2xl font-semibold">Trophée de la Générosité</h1>
             </div>
 
             <div class="card bg-base-100 shadow-sm">
                 <div class="card-body gap-4">
                     <form class="space-y-4" @submit.prevent="submit">
                         <label class="form-control w-full">
-                            <span class="label-text mb-1">Email</span>
+                            <span class="cooper-baseline label-text mb-1">Email</span>
                             <input
                                 v-model="email"
                                 type="email"
                                 autocomplete="email"
-                                class="input input-bordered w-full"
+                                class="cooper-input-baseline input input-bordered w-full"
                                 required
                             />
                         </label>
 
                         <label class="form-control w-full">
-                            <span class="label-text mb-1">Mot de passe</span>
+                            <span class="cooper-baseline label-text mb-1">Mot de passe</span>
                             <input
                                 v-model="password"
                                 type="password"
                                 autocomplete="current-password"
-                                class="input input-bordered w-full"
+                                class="cooper-input-baseline input input-bordered w-full"
                                 required
                             />
                         </label>
 
-                        <p v-if="errors.email?.length" class="text-sm text-error">
+                        <p v-if="errors.email?.length" class="cooper-text-baseline text-sm text-error">
                             {{ errors.email[0] }}
                         </p>
 
                         <button type="submit" class="btn btn-primary w-full" :disabled="submitting">
-                            {{ submitting ? '...' : 'Connexion' }}
+                            <span class="cooper-baseline">{{ submitting ? '...' : 'Connexion' }}</span>
                         </button>
                     </form>
                 </div>
