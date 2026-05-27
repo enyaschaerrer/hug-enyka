@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { onMounted, reactive, ref, watch } from 'vue';
 import { useAdminRouter } from '../../composables/useAdminRouter';
+import AdminLayout from '../../components/layout/AdminLayout.vue';
 
 type AppState = { csrfToken: string };
 
@@ -140,8 +141,8 @@ onMounted(fetchCompany);
 </script>
 
 <template>
-    <main class="font-cooper min-h-screen bg-base-200 px-4 py-8 text-base-content">
-        <div class="mx-auto w-full max-w-3xl rounded bg-base-100 p-6 shadow">
+    <AdminLayout>
+    <div class="mx-auto w-full max-w-3xl">
             <div class="mb-6 flex items-center justify-between">
                 <h1 class="text-2xl font-semibold">Modifier l'entreprise</h1>
                 <a href="/admin" class="btn btn-ghost btn-sm" @click="back">Retour</a>
@@ -266,6 +267,6 @@ onMounted(fetchCompany);
                     </button>
                 </div>
             </form>
-        </div>
-    </main>
+    </div>
+    </AdminLayout>
 </template>

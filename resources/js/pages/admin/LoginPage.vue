@@ -1,9 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 
-type AppState = {
-    csrfToken: string;
-};
+type AppState = { csrfToken: string };
 
 const appState = (window as unknown as { __APP__?: AppState }).__APP__;
 const csrfToken = appState?.csrfToken ?? '';
@@ -31,7 +29,6 @@ async function submit() {
 
         if (res.ok) {
             const data = await res.json();
-            // Full reload to refresh server-injected auth.user state
             window.location.href = data.redirect ?? '/admin';
             return;
         }
@@ -51,41 +48,48 @@ async function submit() {
 </script>
 
 <template>
-    <main class="min-h-screen bg-base-200 px-4 py-8 text-base-content">
-        <div class="mx-auto w-full max-w-sm rounded bg-base-100 p-6 shadow">
-            <h1 class="mb-6 text-2xl font-semibold">Admin</h1>
+    <div data-theme="light" class="font-cooper flex min-h-screen items-center justify-center bg-base-200">
+        <div class="w-full max-w-sm">
+            <div class="mb-8 text-center">
+                <p class="text-xs font-medium tracking-widest text-base-content/40 uppercase">Admin CTS</p>
+                <h1 class="mt-2 text-2xl font-semibold">Trophée de la Générosité</h1>
+            </div>
 
-            <form @submit.prevent="submit" class="space-y-4">
-                <label class="form-control w-full">
-                    <span class="label-text">Email</span>
-                    <input
-                        v-model="email"
-                        type="email"
-                        autocomplete="email"
-                        class="input input-bordered w-full"
-                        required
-                    />
-                </label>
+            <div class="card bg-base-100 shadow-sm">
+                <div class="card-body gap-4">
+                    <form class="space-y-4" @submit.prevent="submit">
+                        <label class="form-control w-full">
+                            <span class="label-text mb-1">Email</span>
+                            <input
+                                v-model="email"
+                                type="email"
+                                autocomplete="email"
+                                class="input input-bordered w-full"
+                                required
+                            />
+                        </label>
 
-                <label class="form-control w-full">
-                    <span class="label-text">Password</span>
-                    <input
-                        v-model="password"
-                        type="password"
-                        autocomplete="current-password"
-                        class="input input-bordered w-full"
-                        required
-                    />
-                </label>
+                        <label class="form-control w-full">
+                            <span class="label-text mb-1">Mot de passe</span>
+                            <input
+                                v-model="password"
+                                type="password"
+                                autocomplete="current-password"
+                                class="input input-bordered w-full"
+                                required
+                            />
+                        </label>
 
-                <p v-if="errors.email?.length" class="text-sm text-error">
-                    {{ errors.email[0] }}
-                </p>
+                        <p v-if="errors.email?.length" class="text-sm text-error">
+                            {{ errors.email[0] }}
+                        </p>
 
-                <button type="submit" class="btn btn-primary w-full" :disabled="submitting">
-                    {{ submitting ? '...' : 'Login' }}
-                </button>
-            </form>
+                        <button type="submit" class="btn btn-primary w-full" :disabled="submitting">
+                            {{ submitting ? '...' : 'Connexion' }}
+                        </button>
+                    </form>
+                </div>
+            </div>
         </div>
-    </main>
+    </div>
 </template>

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import { useAdminRouter } from './composables/useAdminRouter';
+import CampagnesPage from './pages/admin/CampagnesPage.vue';
 import CompanyCreatePage from './pages/admin/CompanyCreatePage.vue';
 import CompanyEditPage from './pages/admin/CompanyEditPage.vue';
 import DashboardPage from './pages/admin/DashboardPage.vue';
@@ -22,6 +23,7 @@ const pages = {
     '/label': LabelPage,
     '/contact': ContactPage,
     '/admin': DashboardPage,
+    '/admin/campagnes': CampagnesPage,
     '/admin/login': LoginPage,
     '/admin/companies/create': CompanyCreatePage,
 };
@@ -39,5 +41,5 @@ const currentPage = computed(() => {
 
 <template>
     <component :is="currentPage" />
-    <CookieConsentModal />
+    <CookieConsentModal v-if="!currentPath.startsWith('/admin')" />
 </template>
