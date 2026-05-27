@@ -6,21 +6,16 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <meta name="robots" content="noindex, nofollow">
 
-        <title>{{ config('app.name', 'Laravel') }}</title>
+        <title>@yield('title', config('app.name'))</title>
 
         @fonts
         @vite(['resources/css/app.css', 'resources/js/app.ts'])
-        <script>
-            window.__APP__ = {
-                auth: {
-                    user: @json(auth()->user()?->only(['id', 'name', 'email'])),
-                },
-                csrfToken: @json(csrf_token()),
-                coBrandedCollecte: @json($coBrandedCollecte ?? null),
-            };
-        </script>
     </head>
     <body>
-        <div id="app"></div>
+        @include('partials.public-header')
+
+        <main>
+            @yield('content')
+        </main>
     </body>
 </html>

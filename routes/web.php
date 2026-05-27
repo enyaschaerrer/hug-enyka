@@ -8,10 +8,10 @@ use App\Http\Controllers\PublicSiteController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [PublicSiteController::class, 'home'])->name('public.home');
-Route::get('/collecte', [PublicSiteController::class, 'home'])->name('public.collecte');
-Route::get('/trophee', [PublicSiteController::class, 'home'])->name('public.trophy');
-Route::get('/label', [PublicSiteController::class, 'home'])->name('public.label');
-Route::get('/contact', [PublicSiteController::class, 'home'])->name('public.contact');
+Route::get('/collecte', fn () => view('app'))->name('public.collecte');
+Route::get('/trophee', fn () => view('app'))->name('public.trophy');
+Route::get('/label', fn () => view('app'))->name('public.label');
+Route::get('/contact', fn () => view('app'))->name('public.contact');
 Route::get('/collecte/{brand}/{token}', [CoBrandedCollecteController::class, 'show'])->name('public.collecte.cobranded');
 
 // Admin SPA shell — login page is public
