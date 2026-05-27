@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { nextTick, onBeforeUnmount, ref, watch } from 'vue';
+import { computed, nextTick, onBeforeUnmount, ref, watch } from 'vue';
 import QRCodeStyling from 'qr-code-styling';
+import { readableTextColor } from '../../utils/contrast';
 
 const props = defineProps<{
     open: boolean;
@@ -13,6 +14,8 @@ defineEmits<{
 
 const qrCodeContainer = ref<HTMLElement | null>(null);
 const qrCodeReady = ref(false);
+const actionBackgroundColor = computed(() => props.primaryColor ?? '#111111');
+const actionTextColor = computed(() => readableTextColor(actionBackgroundColor.value));
 let qrCode: QRCodeStyling | null = null;
 let previousBodyOverflow = '';
 
@@ -119,9 +122,9 @@ onBeforeUnmount(() => {
 
                 <div class="modal-action">
                     <button
-                        class="btn relative w-full overflow-hidden rounded-2xl border-none px-6 h-[48px] text-[0.95rem] text-white transition duration-200 ease-out before:absolute before:inset-0 before:bg-black/0 before:transition before:duration-200 before:ease-out hover:before:bg-black/15"
+                        class="btn relative h-[48px] w-full overflow-hidden rounded-2xl border-none px-6 text-[0.95rem] transition duration-200 ease-out before:absolute before:inset-0 before:bg-black/0 before:transition before:duration-200 before:ease-out hover:before:bg-black/15"
                         type="button"
-                        :style="{ backgroundColor: primaryColor ?? '#111111' }"
+                        :style="{ backgroundColor: actionBackgroundColor, color: actionTextColor }"
                         @click="$emit('close')"
                     >
                         <span class="relative z-10">Continuer sur cet appareil</span>
