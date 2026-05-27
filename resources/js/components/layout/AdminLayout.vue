@@ -38,8 +38,14 @@ async function logout() {
     <div data-theme="light" class="font-cooper flex min-h-screen bg-base-200 text-base-content">
         <!-- Sidebar -->
         <aside class="flex w-56 shrink-0 flex-col border-r border-base-300 bg-base-100">
-            <div class="border-b border-base-300 px-4 py-5">
+            <div class="border-b border-base-300 px-4 py-5 flex items-center justify-between">
                 <p class="cooper-text-baseline text-sm font-semibold text-base-content">Admin CTS</p>
+                <a href="/" title="Retour au site" class="btn btn-ghost btn-xs px-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5z" />
+                        <polyline points="9 21 9 12 15 12 15 21" />
+                    </svg>
+                </a>
             </div>
 
             <nav class="flex-1 px-2 py-4">
