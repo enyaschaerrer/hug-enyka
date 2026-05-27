@@ -8,13 +8,21 @@ type AppState = {
         } | null;
     };
     csrfToken: string;
+    flash?: {
+        success: string | null;
+    };
 };
 
 const appState = (window as unknown as { __APP__?: AppState }).__APP__;
+const flashSuccess = appState?.flash?.success ?? null;
 </script>
 
 <template>
-    <main class="min-h-screen bg-base-200 px-4 py-8 text-base-content">
+    <main class="min-h-screen space-y-4 bg-base-200 px-4 py-8 text-base-content">
+        <div v-if="flashSuccess" class="alert alert-success">
+            <span>{{ flashSuccess }}</span>
+        </div>
+
         <div class="flex items-center justify-between gap-4 rounded bg-base-100 p-6 shadow">
             <div>
                 <p class="text-sm text-base-content/70">Admin dashboard</p>
