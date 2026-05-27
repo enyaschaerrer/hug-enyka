@@ -38,6 +38,11 @@ const collectionForm = ref({ start: '', end: '', linkOneDoc: '' });
 const collectionErrors = ref<Record<string, string[]>>({});
 const submittingCollection = ref(false);
 
+const editingCollectionId = ref<number | null>(null);
+const editForm = ref({ start: '', end: '', linkOneDoc: '' });
+const editErrors = ref<Record<string, string[]>>({});
+const submittingEdit = ref(false);
+
 function formatDate(iso: string): string {
     return new Date(iso).toLocaleString('fr-CH', {
         day: '2-digit', month: '2-digit', year: 'numeric',
@@ -86,6 +91,54 @@ async function logout() {
         window.location.href = data?.redirect ?? '/admin/login';
     } catch {
         window.location.href = '/admin/login';
+    }
+}
+
+function toDatetimeLocal(iso: string): string {
+    return iso.slice(0, 16);
+}
+
+function openEditForm(col: CollectionRow) {
+    editingCollectionId.value = col.id;
+    editForm.value = {
+        start: toDatetimeLocal(col.start),
+        end: toDatetimeLocal(col.end),
+        linkOneDoc: col.linkOneDoc,
+    };
+    editErrors.value = {};
+}
+
+async function saveEdit(company: CompanyRow, col: CollectionRow) {
+    submittingEdit.value = true;
+    editErrors.value = {};
+    try {
+        const res = await fetch(`/admin/companies/${company.id}/collections/${col.id}`, {
+            method: 'PATCH',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': csrfToken,
+                'X-Requested-With': 'XMLHttpRequest',
+            },
+            body: JSON.stringify(editForm.value),
+        });
+        if (res.ok) {
+            const data = await res.json();
+            const idx = company.collections.findIndex(c => c.id === col.id);
+            if (idx !== -1) company.collections[idx] = data.collection;
+            editingCollectionId.value = null;
+        } else if (res.status === 422) {
+            const data = await res.json();
+            editErrors.value = data.errors ?? {};
+        } else if (res.status === 401) {
+            window.location.href = '/admin/login';
+        } else {
+            editErrors.value = { start: ['Erreur serveur. Réessaye.'] };
+        }
+    } catch {
+        editErrors.value = { start: ['Erreur réseau. Réessaye.'] };
+    } finally {
+        submittingEdit.value = false;
     }
 }
 
@@ -176,13 +229,22 @@ onMounted(fetchCompanies);
                                 <span v-if="company.employee_count"> · {{ company.employee_count }} employés</span>
                             </p>
                         </div>
-                        <button
-                            type="button"
-                            class="btn btn-outline btn-sm shrink-0"
-                            @click="toggleCollectionForm(company.id)"
-                        >
-                            {{ openCollectionForm === company.id ? 'Annuler' : '+ Collecte' }}
-                        </button>
+                        <div class="flex shrink-0 gap-2">
+                            <a
+                                :href="`/admin/companies/${company.id}/edit`"
+                                class="btn btn-ghost btn-sm"
+                                @click.prevent="navigate(`/admin/companies/${company.id}/edit`)"
+                            >
+                                Modifier
+                            </a>
+                            <button
+                                type="button"
+                                class="btn btn-outline btn-sm"
+                                @click="toggleCollectionForm(company.id)"
+                            >
+                                {{ openCollectionForm === company.id ? 'Annuler' : '+ Collecte' }}
+                            </button>
+                        </div>
                     </div>
 
                     <!-- Collections list -->
@@ -194,14 +256,46 @@ onMounted(fetchCompanies);
                         <div
                             v-for="col in company.collections"
                             :key="col.id"
-                            class="mt-1 flex flex-wrap items-center gap-3 rounded bg-base-200 px-3 py-2 text-sm"
+                            class="mt-1 rounded bg-base-200 px-3 py-2 text-sm"
                         >
-                            <span class="text-base-content/70">{{ formatDate(col.start) }} → {{ formatDate(col.end) }}</span>
-                            <a
-                                :href="col.url"
-                                target="_blank"
-                                class="link link-primary font-mono text-xs"
-                            >{{ col.url }}</a>
+                            <div class="flex flex-wrap items-center gap-3">
+                                <span class="text-base-content/70">{{ formatDate(col.start) }} → {{ formatDate(col.end) }}</span>
+                                <a :href="col.url" target="_blank" class="link link-primary font-mono text-xs">{{ col.url }}</a>
+                                <button
+                                    type="button"
+                                    class="btn btn-ghost btn-xs ml-auto"
+                                    @click="editingCollectionId === col.id ? editingCollectionId = null : openEditForm(col)"
+                                >
+                                    {{ editingCollectionId === col.id ? 'Annuler' : 'Modifier' }}
+                                </button>
+                            </div>
+
+                            <form
+                                v-if="editingCollectionId === col.id"
+                                class="mt-3 space-y-3 border-t border-base-300 pt-3"
+                                @submit.prevent="saveEdit(company, col)"
+                            >
+                                <div class="grid gap-3 sm:grid-cols-3">
+                                    <label class="flex flex-col gap-1">
+                                        <span class="text-xs">Début *</span>
+                                        <input v-model="editForm.start" type="datetime-local" class="input input-bordered input-sm" required />
+                                        <p v-if="editErrors.start" class="text-xs text-error">{{ editErrors.start[0] }}</p>
+                                    </label>
+                                    <label class="flex flex-col gap-1">
+                                        <span class="text-xs">Fin *</span>
+                                        <input v-model="editForm.end" type="datetime-local" class="input input-bordered input-sm" required />
+                                        <p v-if="editErrors.end" class="text-xs text-error">{{ editErrors.end[0] }}</p>
+                                    </label>
+                                    <label class="flex flex-col gap-1">
+                                        <span class="text-xs">Lien OneDoc *</span>
+                                        <input v-model="editForm.linkOneDoc" type="text" class="input input-bordered input-sm" required />
+                                        <p v-if="editErrors.linkOneDoc" class="text-xs text-error">{{ editErrors.linkOneDoc[0] }}</p>
+                                    </label>
+                                </div>
+                                <button type="submit" class="btn btn-primary btn-sm" :disabled="submittingEdit">
+                                    {{ submittingEdit ? '...' : 'Enregistrer' }}
+                                </button>
+                            </form>
                         </div>
                     </div>
 

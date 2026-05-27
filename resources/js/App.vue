@@ -2,6 +2,7 @@
 import { computed } from 'vue';
 import { useAdminRouter } from './composables/useAdminRouter';
 import CompanyCreatePage from './pages/admin/CompanyCreatePage.vue';
+import CompanyEditPage from './pages/admin/CompanyEditPage.vue';
 import DashboardPage from './pages/admin/DashboardPage.vue';
 import LoginPage from './pages/admin/LoginPage.vue';
 import CookieConsentModal from './components/modals/CookieConsentModal.vue';
@@ -28,6 +29,9 @@ const pages = {
 const currentPage = computed(() => {
     if (/^\/collecte\/[^/]+\/[^/]+$/.test(currentPath.value)) {
         return CoBrandedCollectePage;
+    }
+    if (/^\/admin\/companies\/\d+\/edit$/.test(currentPath.value)) {
+        return CompanyEditPage;
     }
     return pages[currentPath.value as keyof typeof pages] ?? HomePage;
 });
