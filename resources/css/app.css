@@ -40,9 +40,175 @@
 }
 
 @theme {
+    /* ----- Fonts ----- */
     --font-cooper: 'Cooper Hewitt', ui-sans-serif, system-ui, sans-serif;
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
+
+    /* ----- Typographie (Cooper Hewitt) -----
+       Génère les utilitaires : text-display / text-heading / text-body / text-caption
+       Chacun bundle font-size + line-height + font-weight. */
+    --text-display: 34px;
+    --text-display--line-height: 1.2;
+    --text-display--font-weight: 700; /* Bold */
+
+    --text-heading: 23px;
+    --text-heading--line-height: 1.3;
+    --text-heading--font-weight: 500; /* Medium */
+
+    --text-body: 16px;
+    --text-body--line-height: 1.5;
+    --text-body--font-weight: 500; /* Medium */
+
+    --text-caption: 13px;
+    --text-caption--line-height: 1.4;
+    --text-caption--font-weight: 400; /* Book */
+
+    /* ----- Palettes — Coeur d'Honneur ----- */
+
+    /* FuzzyWuzzyBrown — rouge brique chaud (badges, accents) */
+    --color-fuzzywuzzybrown-50: #fdf4f3;
+    --color-fuzzywuzzybrown-200: #f9d4d2;
+    --color-fuzzywuzzybrown-300: #f3b2ae;
+    --color-fuzzywuzzybrown-400: #ec8380;
+    --color-fuzzywuzzybrown-500: #e05453;
+    --color-fuzzywuzzybrown-600: #d1444a;
+    --color-fuzzywuzzybrown-700: #ab252e;
+    --color-fuzzywuzzybrown-800: #90212c;
+    --color-fuzzywuzzybrown-900: #7b202c;
+    --color-fuzzywuzzybrown-950: #440d13;
+
+    /* Geraldine — rose corail (header) */
+    --color-geraldine-50: #fef3f2;
+    --color-geraldine-100: #fee3e2;
+    --color-geraldine-200: #fecdca;
+    --color-geraldine-300: #fc928c;
+    --color-geraldine-400: #f97770;
+    --color-geraldine-500: #f04c43;
+    --color-geraldine-600: #dd2f25;
+    --color-geraldine-700: #ba241b;
+    --color-geraldine-800: #9a211a;
+    --color-geraldine-900: #80211c;
+    --color-geraldine-950: #450d0a;
+
+    /* Martinique — violet/indigo (navigation, CTA) */
+    --color-martinique-50: #f4f5fa;
+    --color-martinique-100: #e6e8f3;
+    --color-martinique-200: #d2d5eb;
+    --color-martinique-300: #b4badc;
+    --color-martinique-400: #9098ca;
+    --color-martinique-500: #757abc;
+    --color-martinique-600: #6262ae;
+    --color-martinique-700: #5a579e;
+    --color-martinique-800: #4f4b82;
+    --color-martinique-900: #413f69;
+    --color-martinique-950: #2f2d46;
+
+    /* BlackRussian — bleu profond / texte principal */
+    --color-blackrussian-50: #ecf0ff;
+    --color-blackrussian-100: #dbe3ff;
+    --color-blackrussian-200: #bfccff;
+    --color-blackrussian-300: #98aaff;
+    --color-blackrussian-400: #707dff;
+    --color-blackrussian-500: #4e51ff;
+    --color-blackrussian-600: #3b2ffc;
+    --color-blackrussian-700: #3223df;
+    --color-blackrussian-800: #281fb4;
+    --color-blackrussian-900: #26228d;
+    --color-blackrussian-950: #0c0a29;
+
+    /* Merino — beige sable (fonds, podium 1er) */
+    --color-merino-50: #faf8f2;
+    --color-merino-100: #f4efe3;
+    --color-merino-200: #e6dac2;
+    --color-merino-300: #d6c19b;
+    --color-merino-400: #c5a372;
+    --color-merino-500: #b98c56;
+    --color-merino-600: #ab794b;
+    --color-merino-700: #8f613f;
+    --color-merino-800: #744f38;
+    --color-merino-900: #5e4230;
+    --color-merino-950: #322118;
+
+    /* ----- Palettes — HUG ----- */
+
+    --color-vistablue-50: #f0f9f2;
+    --color-vistablue-100: #dcefde;
+    --color-vistablue-200: #bbdfc2;
+    --color-vistablue-300: #9fd0ab;
+    --color-vistablue-400: #5daa72;
+    --color-vistablue-500: #3c8d55;
+    --color-vistablue-600: #2b7042;
+    --color-vistablue-700: #225a36;
+    --color-vistablue-800: #1d482d;
+    --color-vistablue-900: #193b26;
+    --color-vistablue-950: #0d2115;
+
+    --color-pictonblue-50: #f1f9fe;
+    --color-pictonblue-100: #e1f3fd;
+    --color-pictonblue-200: #bde7fa;
+    --color-pictonblue-300: #82d6f7;
+    --color-pictonblue-400: #3abff0;
+    --color-pictonblue-500: #17a9e0;
+    --color-pictonblue-600: #0a88bf;
+    --color-pictonblue-700: #096d9b;
+    --color-pictonblue-800: #0c5c80;
+    --color-pictonblue-900: #104c6a;
+    --color-pictonblue-950: #0b3146;
+
+    --color-montecarlo-50: #f3faf9;
+    --color-montecarlo-100: #d7f0ee;
+    --color-montecarlo-200: #aee1df;
+    --color-montecarlo-300: #70c4c3;
+    --color-montecarlo-400: #53acae;
+    --color-montecarlo-500: #3a8f92;
+    --color-montecarlo-600: #2c7175;
+    --color-montecarlo-700: #275a5e;
+    --color-montecarlo-800: #23494c;
+    --color-montecarlo-900: #213e40;
+    --color-montecarlo-950: #0e2225;
+
+    --color-catskillwhite-50: #f1f7f7;
+    --color-catskillwhite-100: #ebf3f3;
+    --color-catskillwhite-200: #d2e5e4;
+    --color-catskillwhite-300: #abcecb;
+    --color-catskillwhite-400: #7eb2ad;
+    --color-catskillwhite-500: #5e9994;
+    --color-catskillwhite-600: #4a7f7c;
+    --color-catskillwhite-700: #3c6866;
+    --color-catskillwhite-800: #355755;
+    --color-catskillwhite-900: #304a49;
+    --color-catskillwhite-950: #203131;
+
+    --color-chicago-50: #faf9f9;
+    --color-chicago-100: #f5f4f4;
+    --color-chicago-200: #e6e5e5;
+    --color-chicago-300: #d4d3d3;
+    --color-chicago-400: #a4a2a2;
+    --color-chicago-500: #737171;
+    --color-chicago-600: #575656;
+    --color-chicago-700: #404040;
+    --color-chicago-800: #272626;
+    --color-chicago-900: #1a1919;
+    --color-chicago-950: #0b0a0a;
+
+    --color-razzmatazz-50: #fff0f3;
+    --color-razzmatazz-100: #ffe1e8;
+    --color-razzmatazz-200: #ffc8d7;
+    --color-razzmatazz-300: #ff9bb6;
+    --color-razzmatazz-400: #ff6391;
+    --color-razzmatazz-500: #ff2c70;
+    --color-razzmatazz-600: #f60860;
+    --color-razzmatazz-700: #e5005a;
+    --color-razzmatazz-800: #ae034c;
+    --color-razzmatazz-900: #940747;
+    --color-razzmatazz-950: #530024;
+}
+
+/* ----- Règles globales — public ----- */
+body {
+    font-family: var(--font-cooper);
+    color: var(--color-blackrussian-950);
 }
 
 .cooper-baseline {
