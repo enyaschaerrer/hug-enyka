@@ -16,5 +16,6 @@
     <body class="min-h-screen bg-rose-50">
         @include('partials.public-header')
         <div id="collecte-form"></div>
+        <div id="cookie-consent-root"></div>
     </body>
 </html>

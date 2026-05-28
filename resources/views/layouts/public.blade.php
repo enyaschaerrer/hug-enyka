@@ -19,5 +19,6 @@
         </main>
 
         @include('partials.public-footer')
+        <div id="cookie-consent-root"></div>
     </body>
 </html>
