@@ -8,7 +8,6 @@ import DashboardPage from './pages/admin/DashboardPage.vue';
 import LoginPage from './pages/admin/LoginPage.vue';
 import CookieConsentModal from './components/modals/CookieConsentModal.vue';
 import CoBrandedCollectePage from './pages/coBranded/CoBrandedCollectePage.vue';
-import CollectePage from './pages/public/CollectePage.vue';
 
 const { currentPath } = useAdminRouter();
 

@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import PublicHeader from "../../components/public/PublicHeader.vue";
 
 const form = ref({
     companyName: "",
@@ -55,7 +54,6 @@ async function handleSubmit() {
 
 <template>
     <main class="min-h-screen bg-rose-50 text-stone-950">
-        <PublicHeader />
 
         <section class="mx-auto max-w-2xl px-4 py-16">
             <div v-if="!submitted">

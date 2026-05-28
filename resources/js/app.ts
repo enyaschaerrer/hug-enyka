@@ -2,6 +2,10 @@ import { createApp } from 'vue';
 import App from './App.vue';
 import Companies from './components/public/Companies.vue';
 import Podium from './components/public/Podium.vue';
+import CollecteForm from './components/public/CollecteForm.vue'
+
+const el = document.getElementById('collecte-form')
+if (el) createApp(CollecteForm).mount(el)
 
 const spaRoot = document.getElementById('app');
 if (spaRoot) {
