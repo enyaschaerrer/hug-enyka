@@ -35,9 +35,9 @@ async function logout() {
 </script>
 
 <template>
-    <div data-theme="light" class="font-cooper flex min-h-screen bg-base-200 text-base-content">
+    <div data-theme="light" class="font-cooper flex h-screen overflow-hidden bg-base-200 text-base-content">
         <!-- Sidebar -->
-        <aside class="flex w-56 shrink-0 flex-col border-r border-base-300 bg-base-100">
+        <aside class="flex h-screen w-56 shrink-0 flex-col border-r border-base-300 bg-base-100">
             <div class="border-b border-base-300 px-4 py-5 flex items-center justify-between">
                 <p class="cooper-text-baseline text-sm font-semibold text-base-content">Admin CTS</p>
                 <a href="/" title="Retour au site" class="btn btn-ghost btn-xs px-1">
@@ -89,7 +89,7 @@ async function logout() {
         </aside>
 
         <!-- Content -->
-        <main class="flex-1 p-8">
+        <main class="min-w-0 flex-1 overflow-y-auto bg-[#FAF8F2] p-8">
             <slot />
         </main>
     </div>
