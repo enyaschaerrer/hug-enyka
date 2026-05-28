@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\CollectionController;
 use App\Http\Controllers\Admin\CompanyController;
+use App\Http\Controllers\Admin\KpiController;
 use App\Http\Controllers\CoBrandedCollecteController;
 use App\Http\Controllers\Public\CompanyController as PublicCompanyController;
 use App\Http\Controllers\PublicSiteController;
@@ -23,6 +24,7 @@ Route::post('/admin/login', [AuthController::class, 'store'])->name('admin.login
 // Admin SPA shell + JSON actions — require auth + role
 Route::middleware(['auth', 'role:superadmin,admin'])->group(function () {
     Route::post('/admin/logout', [AuthController::class, 'destroy'])->name('admin.logout');
+    Route::get('/admin/api/kpis', [KpiController::class, 'index'])->name('admin.kpis.index');
     Route::get('/admin/api/companies', [CompanyController::class, 'index'])->name('admin.companies.index');
     Route::get('/admin/api/companies/{company}', [CompanyController::class, 'show'])->name('admin.companies.show');
     Route::post('/admin/companies', [CompanyController::class, 'store'])->name('admin.companies.store');

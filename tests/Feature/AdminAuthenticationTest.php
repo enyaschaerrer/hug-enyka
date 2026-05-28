@@ -30,12 +30,12 @@ class AdminAuthenticationTest extends TestCase
             'role' => UserRole::SuperAdmin,
         ]);
 
-        $this->from('/admin/login')
-            ->post('/admin/login', [
+        $this->postJson('/admin/login', [
                 'email' => 'superadmin@example.com',
                 'password' => 'password',
             ])
-            ->assertRedirect('/admin');
+            ->assertOk()
+            ->assertJsonPath('redirect', '/admin');
 
         $this->assertAuthenticatedAs($superAdmin);
 
@@ -68,8 +68,9 @@ class AdminAuthenticationTest extends TestCase
         ]);
 
         $this->actingAs($admin)
-            ->post('/admin/logout')
-            ->assertRedirect('/admin/login');
+            ->postJson('/admin/logout')
+            ->assertOk()
+            ->assertJsonPath('redirect', '/admin/login');
 
         $this->assertGuest();
     }
