@@ -20,5 +20,6 @@
 
         @include('partials.public-footer')
         <div id="cookie-consent-root"></div>
+        @stack('scripts')
     </body>
 </html>
