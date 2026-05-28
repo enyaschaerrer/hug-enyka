@@ -122,4 +122,13 @@ class CompanyController extends Controller
             ])->values(),
         ];
     }
+
+    public function registrations(): JsonResponse
+    {
+        $registrations = Company::query()
+            ->latest()
+            ->get(['id', 'name', 'email', 'created_at']);
+
+        return response()->json($registrations);
+    }
 }
