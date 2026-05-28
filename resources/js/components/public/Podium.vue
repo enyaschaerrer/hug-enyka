@@ -1,49 +1,43 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 
-type PodiumEntry = { name: string; trophies: number };
-type YearPodium = { first: PodiumEntry; second: PodiumEntry; third: PodiumEntry };
+type PodiumEntry = { name: string | null; logo: string | null; trophies: number };
+type YearPodium = { year: number; first: PodiumEntry; second: PodiumEntry; third: PodiumEntry };
 
-// Données en dur pour l'instant — à remplacer par une requête plus tard.
-const podiumByYear: Record<number, YearPodium> = {
-    2024: {
-        first: { name: 'Entreprise A', trophies: 3 },
-        second: { name: 'Entreprise B', trophies: 2 },
-        third: { name: 'Entreprise C', trophies: 1 },
-    },
-    2025: {
-        first: { name: 'Entreprise D', trophies: 4 },
-        second: { name: 'Entreprise E', trophies: 3 },
-        third: { name: 'Entreprise F', trophies: 1 },
-    },
-    2026: {
-        first: { name: 'Entreprise G', trophies: 5 },
-        second: { name: 'Entreprise H', trophies: 2 },
-        third: { name: 'Entreprise I', trophies: 1 },
-    },
-};
+const props = defineProps<{
+    initialPodiums: YearPodium[];
+}>();
 
-const availableYears = Object.keys(podiumByYear).map(Number).sort();
-const selectedYear = ref(availableYears.at(-1)!);
+const podiumByYear = computed<Record<number, YearPodium>>(() =>
+    Object.fromEntries(props.initialPodiums.map((p) => [p.year, p])),
+);
 
-const currentPodium = computed(() => podiumByYear[selectedYear.value]);
+const availableYears = computed(() => props.initialPodiums.map((p) => p.year).sort());
+
+const selectedYear = ref(availableYears.value.at(-1)!);
+
+const currentPodium = computed(() => podiumByYear.value[selectedYear.value]);
 
 function prevYear() {
-    const idx = availableYears.indexOf(selectedYear.value);
-    if (idx > 0) selectedYear.value = availableYears[idx - 1];
+    const idx = availableYears.value.indexOf(selectedYear.value);
+    if (idx > 0) selectedYear.value = availableYears.value[idx - 1];
 }
 
 function nextYear() {
-    const idx = availableYears.indexOf(selectedYear.value);
-    if (idx < availableYears.length - 1) selectedYear.value = availableYears[idx + 1];
+    const idx = availableYears.value.indexOf(selectedYear.value);
+    if (idx < availableYears.value.length - 1) selectedYear.value = availableYears.value[idx + 1];
 }
 </script>
 
 <template>
     <section class="bg-[#FAF8F2] px-12 py-16">
         <div class="mx-auto max-w-6xl">
+            <div v-if="!currentPodium" class="text-center text-sm text-stone-500">
+                Aucun podium disponible pour l'instant.
+            </div>
+            <template v-else>
             <div class="flex items-center justify-between">
-                <h2 class="text-2xl font-bold text-stone-900">Le podium du Prix Du Coeur</h2>
+                <h2 class="text-2xl font-bold text-stone-900">Le podium du Prix du Coeur</h2>
 
                 <div class="flex items-center gap-3">
                     <button
@@ -77,20 +71,26 @@ function nextYear() {
                 <div class="flex items-end justify-center gap-3">
                     <!-- 3e -->
                     <div class="flex flex-col items-center">
-                        <div class="mb-2 h-16 w-24 rounded bg-stone-300"></div>
-                        <div class="mb-1 text-xs text-stone-600">{{ currentPodium.third.name }}</div>
+                        <div class="mb-2 flex h-16 w-24 items-center justify-center rounded bg-white p-2">
+                            <img v-if="currentPodium.third.logo" :src="currentPodium.third.logo" :alt="currentPodium.third.name ?? ''" class="max-h-full max-w-full object-contain" />
+                        </div>
+                        <div class="mb-1 text-xs text-stone-600">{{ currentPodium.third.name ?? '—' }}</div>
                         <div class="flex h-32 w-28 items-center justify-center rounded-t-lg bg-[#757ABC] text-3xl font-bold text-white">3</div>
                     </div>
                     <!-- 1er -->
                     <div class="flex flex-col items-center">
-                        <div class="mb-2 h-16 w-24 rounded bg-stone-300"></div>
-                        <div class="mb-1 text-xs text-stone-600">{{ currentPodium.first.name }}</div>
+                        <div class="mb-2 flex h-16 w-24 items-center justify-center rounded bg-white p-2">
+                            <img v-if="currentPodium.first.logo" :src="currentPodium.first.logo" :alt="currentPodium.first.name ?? ''" class="max-h-full max-w-full object-contain" />
+                        </div>
+                        <div class="mb-1 text-xs text-stone-600">{{ currentPodium.first.name ?? '—' }}</div>
                         <div class="flex h-48 w-28 items-center justify-center rounded-t-lg bg-[#D6C19B] text-3xl font-bold text-white">1</div>
                     </div>
                     <!-- 2e -->
                     <div class="flex flex-col items-center">
-                        <div class="mb-2 h-16 w-24 rounded bg-stone-300"></div>
-                        <div class="mb-1 text-xs text-stone-600">{{ currentPodium.second.name }}</div>
+                        <div class="mb-2 flex h-16 w-24 items-center justify-center rounded bg-white p-2">
+                            <img v-if="currentPodium.second.logo" :src="currentPodium.second.logo" :alt="currentPodium.second.name ?? ''" class="max-h-full max-w-full object-contain" />
+                        </div>
+                        <div class="mb-1 text-xs text-stone-600">{{ currentPodium.second.name ?? '—' }}</div>
                         <div class="flex h-40 w-28 items-center justify-center rounded-t-lg bg-[#EC8380] text-3xl font-bold text-white">2</div>
                     </div>
                 </div>
@@ -100,26 +100,27 @@ function nextYear() {
                     <li class="flex items-center gap-4 border-b border-[#D6C19B] pb-3">
                         <span class="flex h-10 w-10 items-center justify-center rounded-full border-2 border-[#D6C19B] text-[#D6C19B]">›</span>
                         <div>
-                            <div class="font-semibold text-stone-900">{{ currentPodium.first.name }} 1er place</div>
-                            <div class="text-sm text-stone-600">Nbr de trophées effectués par l'entreprise</div>
+                            <div class="font-semibold text-stone-900">{{ currentPodium.first.name ?? '—' }} — 1ère place</div>
+                            <div class="text-sm text-stone-600">{{ currentPodium.first.trophies }} trophée{{ currentPodium.first.trophies > 1 ? 's' : '' }} remporté{{ currentPodium.first.trophies > 1 ? 's' : '' }}</div>
                         </div>
                     </li>
                     <li class="flex items-center gap-4 border-b border-[#EC8380] pb-3">
                         <span class="flex h-10 w-10 items-center justify-center rounded-full border-2 border-[#EC8380] text-[#EC8380]">›</span>
                         <div>
-                            <div class="font-semibold text-stone-900">{{ currentPodium.second.name }} 2ème place</div>
-                            <div class="text-sm text-stone-600">Nbr de trophées effectués par l'entreprise</div>
+                            <div class="font-semibold text-stone-900">{{ currentPodium.second.name ?? '—' }} — 2ème place</div>
+                            <div class="text-sm text-stone-600">{{ currentPodium.second.trophies }} trophée{{ currentPodium.second.trophies > 1 ? 's' : '' }} remporté{{ currentPodium.second.trophies > 1 ? 's' : '' }}</div>
                         </div>
                     </li>
                     <li class="flex items-center gap-4 border-b border-[#757ABC] pb-3">
                         <span class="flex h-10 w-10 items-center justify-center rounded-full border-2 border-[#757ABC] text-[#757ABC]">›</span>
                         <div>
-                            <div class="font-semibold text-stone-900">{{ currentPodium.third.name }} 3ème place</div>
-                            <div class="text-sm text-stone-600">Nbr de trophées effectués par l'entreprise</div>
+                            <div class="font-semibold text-stone-900">{{ currentPodium.third.name ?? '—' }} — 3ème place</div>
+                            <div class="text-sm text-stone-600">{{ currentPodium.third.trophies }} trophée{{ currentPodium.third.trophies > 1 ? 's' : '' }} remporté{{ currentPodium.third.trophies > 1 ? 's' : '' }}</div>
                         </div>
                     </li>
                 </ul>
             </div>
+            </template>
         </div>
     </section>
 </template>

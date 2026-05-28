@@ -10,10 +10,12 @@ if (spaRoot) {
 
 const podiumRoot = document.getElementById('podium');
 if (podiumRoot) {
-    createApp(Podium).mount(podiumRoot);
+    const initialPodiums = JSON.parse(podiumRoot.dataset.podiums ?? '[]');
+    createApp(Podium, { initialPodiums }).mount(podiumRoot);
 }
 
 const companiesRoot = document.getElementById('companies');
 if (companiesRoot) {
-    createApp(Companies).mount(companiesRoot);
+    const initialCompanies = JSON.parse(companiesRoot.dataset.companies ?? '[]');
+    createApp(Companies, { initialCompanies }).mount(companiesRoot);
 }

@@ -14,8 +14,10 @@
     <body>
         @include('partials.public-header')
 
-        <main>
+        <main class="pb-24">
             @yield('content')
         </main>
+
+        @include('partials.public-footer')
     </body>
 </html>
