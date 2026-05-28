@@ -16,7 +16,7 @@
                 href="#companies"
                 class="flex min-h-20 w-44 translate-x-3 items-center rounded-l-2xl border-4 border-r-0 border-[#76523A] bg-[#EAE0C9] px-5 py-4 text-sm font-bold leading-tight text-[#76523A] transition-transform duration-200 ease-out hover:translate-x-0"
             >
-                S’inscrire au Prix du Coeur
+                S’inscrire au Prix du Cœur
             </a>
         </aside>
 
