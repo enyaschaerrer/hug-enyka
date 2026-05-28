@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" data-theme="light">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -13,7 +13,8 @@
             };
         </script>
     </head>
-    <body class="min-h-screen bg-rose-50">
+    <body class="min-h-screen bg-[#FAF8F2] text-stone-950">
+        @section('banner', '/img/banners/banner_home.webp')
         @include('partials.public-header')
         <div id="collecte-form"></div>
         <div id="cookie-consent-root"></div>
