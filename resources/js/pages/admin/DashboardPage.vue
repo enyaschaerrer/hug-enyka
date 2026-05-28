@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue';
+import { computed, onMounted, onUnmounted, ref } from 'vue';
 import AdminLayout from '../../components/layout/AdminLayout.vue';
 
 type KpiValue = {
@@ -19,6 +19,9 @@ type FunnelStep = {
 };
 
 type KpiPayload = {
+    live: {
+        activeVisitors: KpiValue;
+    };
     summary: {
         registeredUsers: KpiValue;
         participationRate: KpiValue;
@@ -32,6 +35,7 @@ type KpiPayload = {
 const loading = ref(true);
 const loadError = ref<string | null>(null);
 const kpis = ref<KpiPayload | null>(null);
+let refreshTimer: number | undefined;
 
 const summaryCards = computed(() => {
     if (!kpis.value) {
@@ -85,7 +89,8 @@ function progressWidth(value: number | null): string {
 }
 
 async function fetchKpis() {
-    loading.value = true;
+    const showInitialLoader = !kpis.value;
+    loading.value = showInitialLoader;
     loadError.value = null;
 
     try {
@@ -103,19 +108,44 @@ async function fetchKpis() {
     } catch {
         loadError.value = 'Erreur réseau.';
     } finally {
-        loading.value = false;
+        if (showInitialLoader) {
+            loading.value = false;
+        }
     }
 }
 
-onMounted(fetchKpis);
+onMounted(() => {
+    fetchKpis();
+    refreshTimer = window.setInterval(fetchKpis, 30000);
+});
+
+onUnmounted(() => {
+    if (refreshTimer) {
+        window.clearInterval(refreshTimer);
+    }
+});
 </script>
 
 <template>
     <AdminLayout>
         <section class="min-h-full rounded-sm bg-[#FAF8F2] p-1 pr-4 text-[#1f1f22]">
-            <div class="mb-6">
-                <h1 class="cooper-text-baseline text-3xl font-semibold">Bienvenue dans votre dashboard</h1>
-                <p class="cooper-text-baseline mt-1 text-lg text-base-content/60">Campagne 2026 · vue globale CTS</p>
+            <div class="mb-6 flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+                <div>
+                    <h1 class="cooper-text-baseline text-3xl font-semibold">Bienvenue dans votre dashboard</h1>
+                    <p class="cooper-text-baseline mt-1 text-lg text-base-content/60">Campagne 2026 · vue globale CTS</p>
+                </div>
+
+                <article
+                    v-if="kpis?.live.activeVisitors"
+                    class="flex w-full items-center justify-between gap-4 border border-[#5a002a]/10 bg-white px-4 py-2.5 text-[#5a002a] shadow-sm sm:w-80"
+                >
+                    <p class="cooper-text-baseline text-sm font-medium leading-tight text-[#5a002a]/65">
+                        Nombre d’utilisateurs connectés
+                    </p>
+                    <p class="cooper-text-baseline text-2xl font-bold leading-none">
+                        {{ displayValue(kpis.live.activeVisitors.value, 'number') }}
+                    </p>
+                </article>
             </div>
 
             <div v-if="loading" class="cooper-text-baseline text-sm text-base-content/50">Chargement des KPIs...</div>

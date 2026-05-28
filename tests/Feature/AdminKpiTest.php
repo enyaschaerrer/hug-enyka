@@ -66,9 +66,37 @@ class AdminKpiTest extends TestCase
             ]);
         }
 
+        DB::table('sessions')->insert([
+            [
+                'id' => 'active-session-1',
+                'user_id' => null,
+                'ip_address' => '127.0.0.1',
+                'user_agent' => 'Feature test',
+                'payload' => '',
+                'last_activity' => now()->subMinutes(2)->timestamp,
+            ],
+            [
+                'id' => 'active-session-2',
+                'user_id' => null,
+                'ip_address' => '127.0.0.1',
+                'user_agent' => 'Feature test',
+                'payload' => '',
+                'last_activity' => now()->timestamp,
+            ],
+            [
+                'id' => 'inactive-session',
+                'user_id' => null,
+                'ip_address' => '127.0.0.1',
+                'user_agent' => 'Feature test',
+                'payload' => '',
+                'last_activity' => now()->subMinutes(8)->timestamp,
+            ],
+        ]);
+
         $this->actingAs($admin)
             ->getJson('/admin/api/kpis')
             ->assertOk()
+            ->assertJsonPath('live.activeVisitors.value', 2)
             ->assertJsonPath('summary.registeredUsers.value', 4)
             ->assertJsonPath('summary.participationRate.value', 40)
             ->assertJsonPath('summary.labelledCompanies.value', 1)

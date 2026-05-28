@@ -13,6 +13,10 @@ class KpiController extends Controller
 {
     public function index(): JsonResponse
     {
+        $activeVisitors = DB::table('sessions')
+            ->where('last_activity', '>=', now()->subMinutes(5)->timestamp)
+            ->count();
+
         $registeredUsers = User::query()
             ->where('role', UserRole::User->value)
             ->count();
@@ -35,6 +39,14 @@ class KpiController extends Controller
             ->count();
 
         return response()->json([
+            'live' => [
+                'activeVisitors' => [
+                    'label' => 'Nombre d’utilisateurs connectés',
+                    'value' => $activeVisitors,
+                    'available' => true,
+                    'note' => 'Sessions actives sur les 5 dernières minutes.',
+                ],
+            ],
             'summary' => [
                 'registeredUsers' => [
                     'label' => 'Inscrits',
