@@ -8,6 +8,7 @@ import DashboardPage from './pages/admin/DashboardPage.vue';
 import LoginPage from './pages/admin/LoginPage.vue';
 import CookieConsentModal from './components/modals/CookieConsentModal.vue';
 import CoBrandedCollectePage from './pages/coBranded/CoBrandedCollectePage.vue';
+import RegistrationsPage from './pages/admin/RegistrationsPage.vue';
 
 const { currentPath } = useAdminRouter();
 
@@ -16,6 +17,7 @@ const pages = {
     '/admin/campagnes': CampagnesPage,
     '/admin/login': LoginPage,
     '/admin/companies/create': CompanyCreatePage,
+    '/admin/registrations': RegistrationsPage,
 };
 
 const currentPage = computed(() => {

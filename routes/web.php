@@ -32,6 +32,7 @@ Route::middleware(['auth', 'role:superadmin,admin'])->group(function () {
     Route::delete('/admin/companies/{company}', [CompanyController::class, 'destroy'])->name('admin.companies.destroy');
     Route::post('/admin/companies/{company}/collections', [CollectionController::class, 'store'])->name('admin.collections.store');
     Route::patch('/admin/companies/{company}/collections/{collection}', [CollectionController::class, 'update'])->name('admin.collections.update');
+    Route::get('/admin/api/registrations', [CompanyController::class, 'registrations']);
 
     Route::get('/admin/{any?}', fn () => view('app'))
         ->where('any', '.*')

@@ -81,6 +81,15 @@ async function logout() {
                             Campagnes
                         </a>
                     </li>
+                    <li class="m-0 p-0">
+                        <a
+                            href="/admin/registrations"
+                            :class="navLinkClasses(currentPath === '/admin/registrations')"
+                            @click="goTo('/admin/registrations', $event)"
+                        >
+                            Inscriptions
+                        </a>
+                    </li>
                 </ul>
             </nav>
 
