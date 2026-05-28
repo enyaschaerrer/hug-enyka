@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [PublicSiteController::class, 'home'])->name('public.home');
 Route::get('/collecte', fn () => view('public.collection'))->name('public.collecte');
 Route::get('/trophee', fn () => view('app'))->name('public.trophy');
-Route::get('/label', fn () => view('app'))->name('public.label');
+Route::get('/label', [PublicSiteController::class, 'label'])->name('public.label');
 Route::get('/contact', fn () => view('app'))->name('public.contact');
 Route::post('/collecte/inscription', [PublicCompanyController::class, 'store'])->name('public.collecte.inscription');
 Route::get('/collecte/{brand}/{token}', [CoBrandedCollecteController::class, 'show'])->name('public.collecte.cobranded');

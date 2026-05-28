@@ -2,7 +2,8 @@ import { createApp } from 'vue';
 import App from './App.vue';
 import Companies from './components/public/Companies.vue';
 import Podium from './components/public/Podium.vue';
-import CollecteForm from './components/public/CollecteForm.vue'
+import CollecteForm from './components/public/CollecteForm.vue';
+import CookieConsentModal from './components/modals/CookieConsentModal.vue';
 
 const el = document.getElementById('collecte-form')
 if (el) createApp(CollecteForm).mount(el)
@@ -22,4 +23,9 @@ const companiesRoot = document.getElementById('companies');
 if (companiesRoot) {
     const initialCompanies = JSON.parse(companiesRoot.dataset.companies ?? '[]');
     createApp(Companies, { initialCompanies }).mount(companiesRoot);
+}
+
+const cookieConsentRoot = document.getElementById('cookie-consent-root');
+if (cookieConsentRoot) {
+    createApp(CookieConsentModal).mount(cookieConsentRoot);
 }

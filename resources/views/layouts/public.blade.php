@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" data-theme="light">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -11,7 +11,7 @@
         @fonts
         @vite(['resources/css/app.css', 'resources/js/app.ts'])
     </head>
-    <body>
+    <body class="bg-[#FAF8F2] text-stone-950">
         @include('partials.public-header')
 
         <main class="pb-24">
@@ -19,5 +19,6 @@
         </main>
 
         @include('partials.public-footer')
+        <div id="cookie-consent-root"></div>
     </body>
 </html>

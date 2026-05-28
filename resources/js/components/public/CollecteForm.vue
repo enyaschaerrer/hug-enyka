@@ -53,7 +53,7 @@ async function handleSubmit() {
 </script>
 
 <template>
-    <main class="min-h-screen bg-rose-50 text-stone-950">
+    <main class="min-h-screen bg-[#FAF8F2] text-stone-950">
 
         <section class="mx-auto max-w-2xl px-4 py-16">
             <div v-if="!submitted">

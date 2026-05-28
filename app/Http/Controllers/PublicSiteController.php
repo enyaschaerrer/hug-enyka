@@ -11,27 +11,7 @@ class PublicSiteController extends Controller
 {
     public function home(): View
     {
-        // Entreprises participantes : année d'adhésion = MIN(year(start)) des collectes,
-        // nb de trophées = count des prizes liés.
-        $companies = Company::query()
-            ->withMin('collections', 'start')
-            ->orderBy('name')
-            ->get();
-
-        $prizeCounts = DB::table('prizes')
-            ->select('company_id', DB::raw('COUNT(*) as count'))
-            ->whereIn('company_id', $companies->pluck('id'))
-            ->groupBy('company_id')
-            ->pluck('count', 'company_id');
-
-        $companiesData = $companies->map(fn ($c) => [
-            'name' => $c->name,
-            'logo' => $c->logo,
-            'adhesionYear' => $c->collections_min_start
-                ? Carbon::parse($c->collections_min_start)->year
-                : null,
-            'trophies' => (int) ($prizeCounts[$c->id] ?? 0),
-        ])->values();
+        $companiesData = $this->companiesData();
 
         // Podium par édition (type 'donneur' pour l'instant).
         $podiumRows = DB::table('prizes as p')
@@ -98,5 +78,37 @@ class PublicSiteController extends Controller
             'companies' => $companiesData,
             'podiums' => $podiumsData,
         ]);
+    }
+
+    public function label(): View
+    {
+        return view('public.label', [
+            'companies' => $this->companiesData(),
+        ]);
+    }
+
+    private function companiesData()
+    {
+        // Entreprises participantes : année d'adhésion = MIN(year(start)) des collectes,
+        // nb de trophées = count des prizes liés.
+        $companies = Company::query()
+            ->withMin('collections', 'start')
+            ->orderBy('name')
+            ->get();
+
+        $prizeCounts = DB::table('prizes')
+            ->select('company_id', DB::raw('COUNT(*) as count'))
+            ->whereIn('company_id', $companies->pluck('id'))
+            ->groupBy('company_id')
+            ->pluck('count', 'company_id');
+
+        return $companies->map(fn ($c) => [
+            'name' => $c->name,
+            'logo' => $c->logo,
+            'adhesionYear' => $c->collections_min_start
+                ? Carbon::parse($c->collections_min_start)->year
+                : null,
+            'trophies' => (int) ($prizeCounts[$c->id] ?? 0),
+        ])->values();
     }
 }
