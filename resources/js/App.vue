@@ -12,7 +12,6 @@ import CoBrandedCollectePage from './pages/coBranded/CoBrandedCollectePage.vue';
 const { currentPath } = useAdminRouter();
 
 const pages = {
-    '/collecte': CollectePage,
     '/admin': DashboardPage,
     '/admin/campagnes': CampagnesPage,
     '/admin/login': LoginPage,
