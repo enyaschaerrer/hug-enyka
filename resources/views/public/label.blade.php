@@ -5,6 +5,21 @@
 
 @section('content')
     <section class="relative overflow-hidden bg-[#FAF8F2] px-6 pb-16 pt-8 sm:px-10 lg:px-12">
+        <aside class="absolute right-0 top-8 z-30 hidden flex-col gap-4 lg:flex">
+            <a
+                href="/collecte"
+                class="flex min-h-20 w-44 translate-x-3 items-center rounded-l-2xl border-4 border-r-0 border-[#76523A] bg-[#EAE0C9] px-5 py-4 text-sm font-bold leading-tight text-[#76523A] transition-transform duration-200 ease-out hover:translate-x-0"
+            >
+                S’inscrire à une collecte
+            </a>
+            <a
+                href="#companies"
+                class="flex min-h-20 w-44 translate-x-3 items-center rounded-l-2xl border-4 border-r-0 border-[#76523A] bg-[#EAE0C9] px-5 py-4 text-sm font-bold leading-tight text-[#76523A] transition-transform duration-200 ease-out hover:translate-x-0"
+            >
+                S’inscrire au Prix du Coeur
+            </a>
+        </aside>
+
         <div class="mx-auto max-w-6xl">
             <h1 class="text-left text-2xl font-semibold text-stone-900">
                 Le label Coeur d’Honneur, qu’est-ce que c’est ?
