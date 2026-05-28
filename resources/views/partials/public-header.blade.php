@@ -3,26 +3,21 @@
         ['label' => 'Accueil', 'href' => '/'],
         ['label' => 'Label CDH', 'href' => '/label'],
         ['label' => 'Collecte', 'href' => '/collecte'],
-        ['label' => 'Participation au Prix Du Coeur', 'href' => '/trophee'],
+        ['label' => 'Participation au Prix du Coeur', 'href' => '/trophee'],
     ];
     $currentPath = '/' . trim(request()->path(), '/');
     $currentPath = $currentPath === '/' ? '/' : rtrim($currentPath, '/');
 @endphp
 
-<header>
-    {{-- Bandeau supérieur --}}
-    <div class="flex items-start justify-between bg-pink-600 px-12 py-10 text-white">
-        <div class="text-3xl font-bold leading-tight">
-            Donner son sang,<br>c'est classe.
-        </div>
-        <div class="text-right">
-            <div class="text-xl font-bold uppercase tracking-wide">@yield('page-title')</div>
-            <div class="mt-1 text-sm opacity-90">@yield('page-description')</div>
-        </div>
-    </div>
+{{-- Bandeau supérieur (image par page) — défile normalement --}}
+@hasSection('banner')
+    <img src="@yield('banner')" alt="" class="block w-full" />
+@else
+    <div class="h-24 bg-pink-600"></div>
+@endif
 
-    {{-- Barre de navigation --}}
-    <nav class="flex items-center justify-between bg-[#5A579E] px-12 py-3 text-white">
+{{-- Barre de navigation — sticky au top une fois atteinte --}}
+<nav class="sticky top-0 z-40 flex items-center justify-between bg-[#5A579E] px-12 py-3 text-white">
         <ul class="flex items-center gap-2">
             @foreach ($navItems as $item)
                 <li>
@@ -51,4 +46,3 @@
             </svg>
         </a>
     </nav>
-</header>

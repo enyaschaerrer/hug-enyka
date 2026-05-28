@@ -1,35 +1,45 @@
 @extends('layouts.public')
 
 @section('title', 'Accueil — Coeur d\'Honneur')
-@section('page-title', 'TITRE DE LA PAGE')
-@section('page-description', 'description de la page')
-
-@php
-    // Données en dur pour l'instant — à remplacer par une requête BDD plus tard.
-    $jury = [
-        ['name' => 'Nom Prénom Jury', 'role' => 'Titre/Description'],
-        ['name' => 'Nom Prénom Jury', 'role' => 'Titre/Description'],
-        ['name' => 'Nom Prénom Jury', 'role' => 'Titre/Description'],
-    ];
-@endphp
+@section('banner', '/img/banners/banner_home.webp')
 
 @section('content')
-    {{-- Section 1 : Le Prix Du Coeur --}}
+    {{-- Section 1 : Le Prix du Coeur --}}
     <section class="bg-[#FAF8F2] px-12 py-16">
         <div class="mx-auto max-w-6xl">
             <div class="flex items-start justify-between gap-12">
                 <div class="max-w-2xl">
-                    <h2 class="text-2xl font-bold text-stone-900">Le Prix Du Coeur</h2>
+                    <h2 class="text-2xl font-bold text-stone-900">Le Prix du Coeur</h2>
                     <p class="mt-4 text-stone-700">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
-                        ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation
-                        ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
-                        reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
-                        occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                        Chaque année, le Prix du Coeur met à l'honneur les entreprises de la région
+                        qui s'engagent activement dans le don du sang aux côtés du Centre de Transfusion
+                        Sanguine des HUG. À travers les collectes organisées sur leur lieu de travail,
+                        salariés et employeurs se rassemblent autour d'un même geste : sauver des vies.
+                        Trois récompenses sont décernées par un jury composé de soignants et de
+                        personnalités du monde de la santé, pour saluer la mobilisation, la fidélité
+                        et l'inventivité des entreprises participantes.
                     </p>
                 </div>
-                <div class="flex h-40 w-40 shrink-0 items-center justify-center rounded-2xl bg-stone-200 text-sm text-stone-500">
-                    Illustration
+                <div class="flex shrink-0 items-center gap-4">
+                    <img
+                        src="/img/mascots/blutly1.webp"
+                        alt="Mascottes Blutly et Sanguy"
+                        class="h-70 w-70 object-contain"
+                    />
+                    <div class="flex flex-col gap-3">
+                        <a
+                            href="/contact"
+                            class="rounded-full bg-[#D6C19B] px-5 py-3 text-center text-sm font-semibold text-stone-900 transition hover:bg-[#c9b384]"
+                        >
+                            Mettre en place une collecte
+                        </a>
+                        <a
+                            href="#"
+                            class="rounded-full bg-[#D6C19B] px-5 py-3 text-center text-sm font-semibold text-stone-900 transition hover:bg-[#c9b384]"
+                        >
+                            S'inscrire au Prix du Coeur
+                        </a>
+                    </div>
                 </div>
             </div>
 
@@ -39,10 +49,14 @@
                 <div class="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
                     @foreach ($jury as $member)
                         <article class="flex gap-4">
-                            <div class="h-24 w-24 shrink-0 rounded-md bg-stone-200"></div>
+                            <img
+                                src="{{ $member['photo'] }}"
+                                alt="{{ $member['name'] }}"
+                                class="h-24 w-24 shrink-0 rounded-md object-cover"
+                            />
                             <div>
                                 <div class="font-semibold text-stone-900">{{ $member['name'] }}</div>
-                                <div class="text-sm text-stone-600">{{ $member['role'] }}</div>
+                                <p class="mt-1 text-sm text-stone-600">{{ $member['bio'] }}</p>
                             </div>
                         </article>
                     @endforeach
@@ -51,14 +65,9 @@
         </div>
     </section>
 
-    {{-- Bande copyright --}}
-    <div class="bg-[#E6E8F3] px-12 py-3 text-center text-sm text-stone-600">
-        &copy; Copyright - Enyka
-    </div>
-
     {{-- Section 2 : Podium (îlot Vue) --}}
-    <div id="podium"></div>
+    <div id="podium" data-podiums='@json($podiums)'></div>
 
     {{-- Section 3 : Entreprises participantes (îlot Vue) --}}
-    <div id="companies"></div>
+    <div id="companies" data-companies='@json($companies)'></div>
 @endsection
