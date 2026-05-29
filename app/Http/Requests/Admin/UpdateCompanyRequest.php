@@ -28,6 +28,7 @@ class UpdateCompanyRequest extends FormRequest
             'employee_count' => ['nullable', 'integer', 'min:0'],
             'allowed_email_domains' => ['nullable', 'string', 'max:255'],
             'source' => ['nullable', 'string', 'max:255'],
+            'trophy' => ['boolean'],
             'logo' => ['nullable', 'string', 'max:255'],
             'primaryColor' => ['nullable', 'string', 'regex:/^#[0-9a-fA-F]{6}$/'],
             'secondaryColor' => ['nullable', 'string', 'regex:/^#[0-9a-fA-F]{6}$/'],

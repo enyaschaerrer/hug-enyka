@@ -33,6 +33,7 @@ const form = reactive({
     employee_count: '' as string | number,
     allowed_email_domains: '',
     source: '',
+    trophy: false,
     logo: '',
     primaryColor: '#c81e1e',
     secondaryColor: '#fecaca',
@@ -403,6 +404,15 @@ async function submit() {
                                 default-time="17:00"
                             />
                             <p v-if="firstError('collection_end')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('collection_end') }}</p>
+                        </label>
+
+                        <label class="flex items-center gap-3 md:col-span-2">
+                            <input
+                                v-model="form.trophy"
+                                type="checkbox"
+                                class="checkbox checked:[--input-color:var(--color-primary)] checked:[color:var(--color-primary-content)]"
+                            />
+                            <span class="cooper-baseline text-sm font-medium text-base-content/75">Participation au prix du cœur</span>
                         </label>
 
                         <label class="flex w-full flex-col gap-2 md:col-span-2">

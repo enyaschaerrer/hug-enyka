@@ -35,38 +35,30 @@ const months = [
 
 const weekDays = ['Lu', 'Ma', 'Me', 'Je', 'Ve', 'Sa', 'Di'];
 const isOpen = ref(false);
+const hoveredDate = ref<Date | null>(null);
+const openUpward = ref(false);
+const triggerRef = ref<HTMLButtonElement | null>(null);
+
+function toggleOpen() {
+    if (!isOpen.value && triggerRef.value) {
+        const rect = triggerRef.value.getBoundingClientRect();
+        openUpward.value = window.innerHeight - rect.bottom < 420;
+    }
+    isOpen.value = !isOpen.value;
+}
 const selectedTime = ref(timeFromValue(props.modelValue) ?? props.defaultTime);
 const visibleMonth = ref(monthFromValue(props.modelValue) ?? new Date().getMonth());
-const visibleYear = ref(yearFromValue(props.modelValue) ?? new Date().getFullYear());
+const visibleYear = new Date().getFullYear();
 
 const selectedDate = computed(() => dateOnly(props.modelValue));
 const effectiveMinDateTime = computed(() => props.minDateTime ?? (props.mode === 'start' ? todayStartValue() : null));
 const minDate = computed(() => dateOnly(effectiveMinDateTime.value));
 const referenceDate = computed(() => dateOnly(props.referenceDateTime));
 
-const years = computed(() => {
-    const currentYear = new Date().getFullYear();
-    const values = new Set<number>();
-
-    for (let year = currentYear; year <= currentYear + 5; year += 1) {
-        values.add(year);
-    }
-
-    if (selectedDate.value) {
-        values.add(selectedDate.value.getFullYear());
-    }
-
-    if (referenceDate.value) {
-        values.add(referenceDate.value.getFullYear());
-    }
-
-    return Array.from(values).sort((a, b) => a - b);
-});
-
 const calendarDays = computed(() => {
-    const firstDay = new Date(visibleYear.value, visibleMonth.value, 1);
+    const firstDay = new Date(visibleYear, visibleMonth.value, 1);
     const firstWeekday = (firstDay.getDay() + 6) % 7;
-    const daysInMonth = new Date(visibleYear.value, visibleMonth.value + 1, 0).getDate();
+    const daysInMonth = new Date(visibleYear, visibleMonth.value + 1, 0).getDate();
     const days: Array<Date | null> = [];
 
     for (let index = 0; index < firstWeekday; index += 1) {
@@ -74,7 +66,7 @@ const calendarDays = computed(() => {
     }
 
     for (let day = 1; day <= daysInMonth; day += 1) {
-        days.push(new Date(visibleYear.value, visibleMonth.value, day));
+        days.push(new Date(visibleYear, visibleMonth.value, day));
     }
 
     while (days.length % 7 !== 0) {
@@ -95,8 +87,6 @@ const displayValue = computed(() => {
         day: '2-digit',
         month: '2-digit',
         year: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
     }).format(parsed);
 });
 
@@ -106,7 +96,19 @@ watch(() => props.modelValue, (next) => {
     const date = parseLocalDateTime(next);
     if (date) {
         visibleMonth.value = date.getMonth();
-        visibleYear.value = date.getFullYear();
+    }
+});
+
+watch(effectiveMinDateTime, (newMin) => {
+    if (!newMin || !props.modelValue) {
+        return;
+    }
+
+    const current = parseLocalDateTime(props.modelValue);
+    const min = parseLocalDateTime(newMin);
+
+    if (current && min && current.getTime() < min.getTime()) {
+        emit('update:modelValue', '');
     }
 });
 
@@ -133,10 +135,6 @@ function parseLocalDateTime(value: string | null | undefined): Date | null {
 function dateOnly(value: string | null | undefined): Date | null {
     const parsed = parseLocalDateTime(value);
     return parsed ? new Date(parsed.getFullYear(), parsed.getMonth(), parsed.getDate()) : null;
-}
-
-function yearFromValue(value: string): number | null {
-    return parseLocalDateTime(value)?.getFullYear() ?? null;
 }
 
 function monthFromValue(value: string): number | null {
@@ -174,17 +172,40 @@ function isSameDate(first: Date | null, second: Date | null): boolean {
         && first.getDate() === second.getDate());
 }
 
+function isInRange(day: Date): boolean {
+    if (props.mode !== 'end' || !referenceDate.value) {
+        return false;
+    }
+
+    const end = hoveredDate.value ?? selectedDate.value;
+    if (!end) {
+        return false;
+    }
+
+    return day.getTime() > referenceDate.value.getTime() && day.getTime() < end.getTime();
+}
+
+function setHovered(day: Date | null): void {
+    if (props.mode === 'end') {
+        hoveredDate.value = day;
+    }
+}
+
 function isDisabled(day: Date | null): boolean {
     if (!day || !minDate.value) {
         return false;
     }
 
-    return day.getTime() < minDate.value.getTime();
+    return day.getTime() <= minDate.value.getTime();
 }
 
 function dayClasses(day: Date | null): string {
     if (!day) {
         return 'invisible';
+    }
+
+    if (props.mode === 'end' && isSameDate(day, referenceDate.value)) {
+        return 'bg-[#5A002A]/10 border border-[#5A002A]/50 text-[#5A002A] font-medium cursor-not-allowed';
     }
 
     if (isDisabled(day)) {
@@ -195,8 +216,14 @@ function dayClasses(day: Date | null): string {
         return 'btn-primary';
     }
 
-    if (isSameDate(day, referenceDate.value) && props.mode === 'end') {
-        return 'border border-[#5A002A] text-[#5A002A]';
+    if (props.mode === 'end') {
+        if (isSameDate(day, hoveredDate.value)) {
+            return 'bg-primary/25 text-primary';
+        }
+
+        if (isInRange(day)) {
+            return 'bg-primary/10 text-primary rounded-none';
+        }
     }
 
     if (isSameDate(day, dateOnly(toDateTimeValue(new Date(), '00:00')))) {
@@ -223,39 +250,22 @@ function selectDate(day: Date | null): void {
     emit('update:modelValue', nextValue);
 }
 
-function updateTime(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    selectedTime.value = input.value || props.defaultTime;
-
-    if (selectedDate.value) {
-        selectDate(selectedDate.value);
-    }
-}
 
 function previousMonth(): void {
-    if (visibleMonth.value === 0) {
-        visibleMonth.value = 11;
-        visibleYear.value -= 1;
-        return;
+    if (visibleMonth.value > 0) {
+        visibleMonth.value -= 1;
     }
-
-    visibleMonth.value -= 1;
 }
 
 function nextMonth(): void {
-    if (visibleMonth.value === 11) {
-        visibleMonth.value = 0;
-        visibleYear.value += 1;
-        return;
+    if (visibleMonth.value < 11) {
+        visibleMonth.value += 1;
     }
-
-    visibleMonth.value += 1;
 }
 
 function selectToday(): void {
     const today = new Date();
     visibleMonth.value = today.getMonth();
-    visibleYear.value = today.getFullYear();
     selectDate(today);
 }
 
@@ -283,34 +293,33 @@ function iconPath(): string[] {
 <template>
     <div class="relative">
         <button
+            ref="triggerRef"
             type="button"
-            class="cooper-datetime-baseline input input-bordered flex w-full items-center justify-between pr-3 text-left"
-            @click="isOpen = !isOpen"
+            class="cooper-datetime-baseline group input input-bordered flex w-full items-center justify-between pr-3 text-left font-cooper font-medium text-sm"
+            @click="toggleOpen"
         >
-            <span class="cooper-baseline truncate" :class="displayValue ? 'text-base-content' : 'text-base-content/35'">
+            <span class="cooper-baseline truncate transition-colors duration-200 ease-out group-hover:text-primary" :class="displayValue ? 'text-base-content' : 'text-base-content/35'">
                 {{ displayValue || label }}
             </span>
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 shrink-0 text-base-content/55 transition-colors duration-200 ease-out hover:text-black" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 shrink-0 cursor-pointer text-base-content/55 transition-colors duration-200 ease-out group-hover:text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <path v-for="path in iconPath()" :key="path" :d="path" />
             </svg>
         </button>
 
+        <div v-if="isOpen" class="fixed inset-0 z-20" @mousedown="isOpen = false"></div>
+
         <div
             v-if="isOpen"
-            class="absolute left-0 top-[calc(100%+0.5rem)] z-30 w-full min-w-[22rem] border border-base-300 bg-white p-4 shadow-xl"
+            class="absolute left-0 z-30 w-full min-w-[22rem] border border-base-300 bg-white p-4 shadow-xl"
+            :class="openUpward ? 'bottom-[calc(100%+0.5rem)]' : 'top-[calc(100%+0.5rem)]'"
         >
             <div class="flex items-center gap-2">
                 <button type="button" class="btn btn-ghost btn-sm px-2" @click="previousMonth">
                     <span class="cooper-baseline">←</span>
                 </button>
-                <select v-model.number="visibleMonth" class="select select-bordered select-sm min-h-9 flex-1 font-cooper">
+                <select v-model.number="visibleMonth" class="cooper-input-baseline select select-bordered select-sm min-h-9 flex-1 font-cooper font-medium text-sm">
                     <option v-for="(month, index) in months" :key="month" :value="index">
                         {{ month }}
-                    </option>
-                </select>
-                <select v-model.number="visibleYear" class="select select-bordered select-sm min-h-9 w-24 font-cooper">
-                    <option v-for="year in years" :key="year" :value="year">
-                        {{ year }}
                     </option>
                 </select>
                 <button type="button" class="btn btn-ghost btn-sm px-2" @click="nextMonth">
@@ -322,7 +331,7 @@ function iconPath(): string[] {
                 <span v-for="day in weekDays" :key="day" class="cooper-baseline py-1">{{ day }}</span>
             </div>
 
-            <div class="mt-1 grid grid-cols-7 gap-1">
+            <div class="mt-1 grid grid-cols-7 gap-1" @mouseleave="setHovered(null)">
                 <button
                     v-for="(day, index) in calendarDays"
                     :key="day?.toISOString() ?? `blank-${index}`"
@@ -330,29 +339,21 @@ function iconPath(): string[] {
                     class="btn btn-sm min-h-9 px-0 font-cooper"
                     :class="dayClasses(day)"
                     :disabled="isDisabled(day)"
+                    @mouseenter="setHovered(day)"
                     @click="selectDate(day)"
                 >
                     <span class="cooper-baseline">{{ day?.getDate() }}</span>
                 </button>
             </div>
 
-            <div class="mt-4 flex items-end justify-between gap-3">
+            <div class="mt-4 flex items-center justify-between gap-3">
                 <button v-if="mode === 'start'" type="button" class="btn btn-ghost btn-sm font-cooper" @click="selectToday">
-                    <span class="cooper-baseline">Aujourd’hui</span>
+                    <span class="cooper-baseline">Aujourd&#39;hui</span>
                 </button>
-                <label class="flex flex-col gap-2">
-                    <span class="cooper-baseline text-xs font-medium text-base-content/55">Heure</span>
-                    <input
-                        :value="selectedTime"
-                        type="time"
-                        class="cooper-input-baseline input input-bordered input-sm h-10 w-32 font-cooper"
-                        @input="updateTime"
-                    />
-                </label>
                 <p v-if="mode === 'end' && referenceDateTime" class="cooper-text-baseline text-xs text-base-content/45">
-                    Début : {{ new Intl.DateTimeFormat('fr-CH', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }).format(parseLocalDateTime(referenceDateTime) ?? new Date()) }}
+                    Début : {{ new Intl.DateTimeFormat('fr-CH', { day: '2-digit', month: '2-digit', year: 'numeric' }).format(parseLocalDateTime(referenceDateTime) ?? new Date()) }}
                 </p>
-                <button type="button" class="btn btn-primary btn-sm font-cooper" @click="isOpen = false">
+                <button type="button" class="btn btn-primary btn-sm font-cooper ml-auto" @click="isOpen = false">
                     <span class="cooper-baseline">Valider</span>
                 </button>
             </div>
