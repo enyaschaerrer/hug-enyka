@@ -8,10 +8,10 @@ Police principale : **Cooper Hewitt**
 | Rôle | Police | Graisse | Taille |
 |------|--------|---------|--------|
 | Display | Cooper Hewitt | Bold | 38px |
-| Heading t1 | Cooper Hewitt | Medium | 23px |
-| Heading t2 | Cooper Hewitt | Medium | 20px |
+| Heading t1 | Cooper Hewitt | Semi-bold | 23px |
+| Heading t2 | Cooper Hewitt | Semi-bold | 20px |
 | Heading t3 | Cooper Hewitt | Medium | 18px |
-| Body | Cooper Hewitt | Medium | 16px |
+| Body | Cooper Hewitt | Book | 16px |
 | Caption | Cooper Hewitt | Book | 13px |
 
 ---

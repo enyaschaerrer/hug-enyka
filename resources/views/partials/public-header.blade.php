@@ -24,7 +24,7 @@
                     <a
                         href="{{ $item['href'] }}"
                         @class([
-                            'block rounded-full px-5 py-2 text-body transition',
+                            'block rounded-full px-5 py-2 text-body font-medium transition',
                             'bg-white text-martinique-700' => $currentPath === $item['href'],
                             'hover:bg-white/10' => $currentPath !== $item['href'],
                         ])
