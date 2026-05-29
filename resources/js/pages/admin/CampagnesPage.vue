@@ -194,6 +194,7 @@ onMounted(fetchCompanies);
                     </div>
                     <div class="flex shrink-0 gap-2">
                         <a
+                            v-if="activeCollections(company).length > 0"
                             :href="`/admin/companies/${company.id}/edit`"
                             class="btn btn-ghost btn-sm font-cooper"
                             @click.prevent="navigate(`/admin/companies/${company.id}/edit`)"

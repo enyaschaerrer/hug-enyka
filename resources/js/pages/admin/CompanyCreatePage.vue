@@ -1,9 +1,19 @@
 <script setup lang="ts">
-import { reactive, ref, watch } from 'vue';
+import { onMounted, reactive, ref, watch } from 'vue';
 import { useAdminRouter } from '../../composables/useAdminRouter';
 import AdminDateTimePicker from '../../components/admin/AdminDateTimePicker.vue';
 import AdminLayout from '../../components/layout/AdminLayout.vue';
 import { readableTextColor } from '../../utils/contrast';
+
+type PendingForm = {
+    id: number;
+    name: string;
+    email: string;
+    phone: string | null;
+    address: string | null;
+    message: string | null;
+    trophy: boolean;
+};
 
 type AppState = {
     csrfToken: string;
@@ -43,9 +53,63 @@ const form = reactive({
     collection_linkOneDoc: '',
 });
 
+const pendingForms = ref<PendingForm[]>([]);
+const pendingSearch = ref('');
+const pendingOpen = ref(false);
+const selectedFormId = ref<number | null>(null);
+
+const filteredPending = ref<PendingForm[]>([]);
+
+watch(pendingSearch, (query) => {
+    const q = query.toLowerCase().trim();
+    filteredPending.value = q
+        ? pendingForms.value.filter((f) =>
+            f.name.toLowerCase().includes(q) || f.email.toLowerCase().includes(q),
+        )
+        : pendingForms.value;
+});
+
+function openPendingDropdown() {
+    filteredPending.value = pendingForms.value;
+    pendingOpen.value = true;
+}
+
+function selectPendingForm(pending: PendingForm) {
+    selectedFormId.value = pending.id;
+    pendingSearch.value = `${pending.name} — ${pending.email}`;
+    pendingOpen.value = false;
+    form.name = pending.name;
+    form.email = pending.email;
+    form.telephone = pending.phone ?? '';
+    form.address = pending.address ?? '';
+    form.trophy = pending.trophy;
+    slugTouched.value = false;
+}
+
+function clearPendingSelection() {
+    selectedFormId.value = null;
+    pendingSearch.value = '';
+}
+
+async function fetchPendingForms() {
+    try {
+        const res = await fetch('/admin/api/registrations/pending', {
+            headers: { 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
+        });
+        if (res.ok) {
+            pendingForms.value = await res.json();
+            filteredPending.value = pendingForms.value;
+        }
+    } catch {
+        // silently ignore
+    }
+}
+
 const errors = ref<Record<string, string[]>>({});
 const submitting = ref(false);
 const slugTouched = ref(false);
+
+onMounted(fetchPendingForms);
 
 watch(() => form.name, (next) => {
     if (!slugTouched.value) {
@@ -89,6 +153,16 @@ async function submit() {
 
         if (res.ok) {
             const data = await res.json();
+            if (selectedFormId.value !== null) {
+                await fetch(`/admin/forms/${selectedFormId.value}/treated`, {
+                    method: 'PATCH',
+                    headers: {
+                        'Accept': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken,
+                        'X-Requested-With': 'XMLHttpRequest',
+                    },
+                });
+            }
             flashMessage.value = data.message ?? 'Campagne créée.';
             navigate('/admin/campagnes');
             return;
@@ -122,6 +196,49 @@ async function submit() {
                     <span class="cooper-baseline">Retour</span>
                 </a>
                 <h1 class="cooper-text-baseline text-2xl font-semibold">Créer une campagne</h1>
+            </div>
+
+            <div v-if="pendingForms.length > 0" class="mb-6 rounded-box border border-amber-200 bg-amber-50 p-5">
+                <p class="cooper-text-baseline mb-3 text-sm font-semibold text-amber-900">
+                    Pré-remplir depuis une inscription en attente
+                </p>
+                <div class="relative">
+                    <div class="relative">
+                        <input
+                            v-model="pendingSearch"
+                            type="text"
+                            class="cooper-input-baseline input input-bordered w-full font-cooper text-sm"
+                            :class="selectedFormId !== null ? 'pr-9' : ''"
+                            placeholder="Rechercher par nom ou email..."
+                            autocomplete="off"
+                            @focus="openPendingDropdown"
+                            @input="pendingOpen = true"
+                        />
+                        <button
+                            v-if="selectedFormId !== null"
+                            type="button"
+                            class="absolute right-3 top-1/2 -translate-y-1/2 text-base-content/40 transition-colors hover:text-base-content"
+                            @click="clearPendingSelection"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+                        </button>
+                    </div>
+                    <div v-if="pendingOpen && filteredPending.length > 0" class="fixed inset-0 z-20" @mousedown="pendingOpen = false"></div>
+                    <ul v-if="pendingOpen && filteredPending.length > 0" class="absolute left-0 top-[calc(100%+0.25rem)] z-30 w-full rounded-box border border-base-300 bg-white py-1 shadow-xl">
+                        <li
+                            v-for="pending in filteredPending"
+                            :key="pending.id"
+                            class="cursor-pointer px-4 py-2.5 transition-colors duration-100 hover:bg-base-200/60"
+                            @mousedown.prevent="selectPendingForm(pending)"
+                        >
+                            <span class="cooper-baseline text-sm font-semibold text-base-content">{{ pending.name }}</span>
+                            <span class="cooper-baseline ml-3 text-sm text-base-content/55">{{ pending.email }}</span>
+                        </li>
+                    </ul>
+                </div>
+                <p v-if="selectedFormId !== null" class="cooper-text-baseline mt-2 text-xs text-amber-700">
+                    Champs pré-remplis. L&#39;inscription sera marquée comme traitée lors de la création.
+                </p>
             </div>
 
             <form @submit.prevent="submit" class="space-y-6 font-cooper">

@@ -55,6 +55,23 @@ async function fetchRegistrations() {
     }
 }
 
+async function deleteRegistration(reg: Registration) {
+    if (!window.confirm(`Supprimer l'inscription de "${reg.name}" ?`)) return;
+
+    const res = await fetch(`/admin/forms/${reg.id}`, {
+        method: 'DELETE',
+        headers: {
+            'Accept': 'application/json',
+            'X-CSRF-TOKEN': csrfToken,
+            'X-Requested-With': 'XMLHttpRequest',
+        },
+    });
+
+    if (res.ok) {
+        registrations.value = registrations.value.filter((r) => r.id !== reg.id);
+    }
+}
+
 async function toggleTreated(reg: Registration) {
     const res = await fetch(`/admin/forms/${reg.id}/treated`, {
         method: 'PATCH',
@@ -216,6 +233,7 @@ onUnmounted(() => {
                         <div class="w-1/5 text-center">
                             <div class="inline-flex gap-2">
                                 <button
+                                    v-if="!reg.treated"
                                     class="rounded border border-stone-200 bg-stone-50 px-3 py-1 text-xs font-medium text-stone-600 transition hover:bg-stone-100 font-cooper"
                                     @click="openDetail(reg.id)"
                                 >
@@ -224,11 +242,18 @@ onUnmounted(() => {
                                 <button
                                     class="rounded border px-3 py-1 text-xs font-medium transition font-cooper"
                                     :class="reg.treated
-                                        ? 'border-stone-200 bg-stone-50 text-stone-400 hover:bg-stone-100'
+                                        ? 'border-amber-300 bg-amber-50 text-amber-700 hover:bg-amber-100'
                                         : 'border-emerald-200 bg-emerald-50 text-emerald-700 hover:bg-emerald-100'"
                                     @click="toggleTreated(reg)"
                                 >
                                     <span class="cooper-baseline">{{ reg.treated ? 'Réouvrir' : 'Traité' }}</span>
+                                </button>
+                                <button
+                                    v-if="reg.treated"
+                                    class="rounded border border-red-200 bg-red-50 px-3 py-1 text-xs font-medium text-red-600 transition hover:bg-red-100 font-cooper"
+                                    @click="deleteRegistration(reg)"
+                                >
+                                    <span class="cooper-baseline">Supprimer</span>
                                 </button>
                             </div>
                         </div>
