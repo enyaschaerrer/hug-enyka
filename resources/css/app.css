@@ -77,13 +77,13 @@
     --text-display--line-height: 40px;
     --text-display--font-weight: 700; /* Bold */
 
-    --text-heading-t1: 28px;
+    --text-heading-t1: 25px;
     --text-heading-t1--line-height: 28px;
-    --text-heading-t1--font-weight: 500; /* Medium */
+    --text-heading-t1--font-weight: 600; /* Semi-bold */
 
-    --text-heading-t2: 20px;
-    --text-heading-t2--line-height: 28px;
-    --text-heading-t2--font-weight: 500; /* Medium */
+    --text-heading-t2: 21px;
+    --text-heading-t2--line-height: 26px;
+    --text-heading-t2--font-weight: 600; /* Semi-bold */
 
     --text-heading-t3: 18px;
     --text-heading-t3--line-height: 25px;
@@ -91,7 +91,7 @@
 
     --text-body: 16px;
     --text-body--line-height: 20px;
-    --text-body--font-weight: 500; /* Medium */
+    --text-body--font-weight: 400; /* Book */
 
     --text-caption: 13px;
     --text-caption--line-height: 16px;

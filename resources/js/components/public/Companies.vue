@@ -78,13 +78,12 @@ function resetFilters() {
 <template>
     <section class="px-12 py-16">
         <div class="mx-auto max-w-6xl">
-            <div class="flex items-start justify-between gap-6">
-                <div>
-                    <h2 class="text-display text-martinique-950">{{ props.title }}</h2>
-                    <p class="mt-2 text-body text-martinique-950">{{ props.description }}</p>
-                </div>
+            <div>
+                <h2 class="text-display text-martinique-950">{{ props.title }}</h2>
+                <p class="mt-2 text-body text-martinique-950">{{ props.description }}</p>
+            </div>
 
-                <div class="relative flex shrink-0 items-center gap-3">
+            <div class="relative mt-8 flex items-center gap-3">
                     <button
                         type="button"
                         class="flex h-9 w-9 items-center justify-center rounded-full bg-martinique-100 text-martinique-700 hover:bg-martinique-200"
@@ -106,7 +105,7 @@ function resetFilters() {
                     <!-- Filtre popup -->
                     <div
                         v-if="isFilterOpen"
-                        class="absolute right-0 top-full z-30 mt-3 flex max-h-[80vh] w-80 flex-col overflow-y-auto rounded-2xl border border-martinique-200 bg-martinique-50 p-5 shadow-lg"
+                        class="absolute left-0 top-full z-30 mt-3 flex max-h-[80vh] w-80 flex-col overflow-y-auto rounded-2xl border border-martinique-200 bg-martinique-50 p-5 shadow-lg"
                     >
                         <div class="flex items-center justify-between">
                             <div class="flex items-center gap-2 text-heading-t3 text-martinique-800">
@@ -175,7 +174,6 @@ function resetFilters() {
                         </button>
                     </div>
                 </div>
-            </div>
 
             <div class="mt-16 grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-3 lg:grid-cols-4">
                 <article v-for="company in visible" :key="company.name" class="flex flex-col">

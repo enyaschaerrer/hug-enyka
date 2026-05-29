@@ -57,75 +57,73 @@ function selectPrizeType(type: PrizeType) {
 <template>
     <section class="px-12 py-16">
         <div class="mx-auto max-w-6xl">
-            <div class="flex items-center justify-between">
-                <h2 class="text-display text-martinique-950">Le podium du Prix du Coeur</h2>
+            <h2 class="text-display text-martinique-950">Le podium du Prix du Coeur</h2>
 
-                <div class="relative flex items-center gap-3">
-                    <button
-                        type="button"
-                        class="flex h-9 w-9 items-center justify-center rounded-full bg-chicago-200 text-martinique-950 transition hover:bg-chicago-300 disabled:opacity-40"
-                        :disabled="!availableYears.length || selectedYear === availableYears[0]"
-                        aria-label="Année précédente"
-                        @click="prevYear"
-                    >
-                        <span class="material-symbols-outlined rotate-180" aria-hidden="true">arrow_forward_ios</span>
-                    </button>
-                    <span class="min-w-[3rem] text-center text-heading-t2 text-martinique-950">{{ selectedYear ?? '—' }}</span>
-                    <button
-                        type="button"
-                        class="flex h-9 w-9 items-center justify-center rounded-full bg-chicago-200 text-martinique-950 transition hover:bg-chicago-300 disabled:opacity-40"
-                        :disabled="!availableYears.length || selectedYear === availableYears.at(-1)"
-                        aria-label="Année suivante"
-                        @click="nextYear"
-                    >
-                        <span class="material-symbols-outlined" aria-hidden="true">arrow_forward_ios</span>
-                    </button>
+            <div class="relative mt-8 flex items-center gap-3">
+                <button
+                    type="button"
+                    class="flex h-9 w-9 items-center justify-center rounded-full bg-chicago-200 text-martinique-950 transition hover:bg-chicago-300 disabled:opacity-40"
+                    :disabled="!availableYears.length || selectedYear === availableYears[0]"
+                    aria-label="Année précédente"
+                    @click="prevYear"
+                >
+                    <span class="material-symbols-outlined rotate-180" aria-hidden="true">arrow_forward_ios</span>
+                </button>
+                <span class="min-w-[3rem] text-center text-heading-t2 text-martinique-950">{{ selectedYear ?? '—' }}</span>
+                <button
+                    type="button"
+                    class="flex h-9 w-9 items-center justify-center rounded-full bg-chicago-200 text-martinique-950 transition hover:bg-chicago-300 disabled:opacity-40"
+                    :disabled="!availableYears.length || selectedYear === availableYears.at(-1)"
+                    aria-label="Année suivante"
+                    @click="nextYear"
+                >
+                    <span class="material-symbols-outlined" aria-hidden="true">arrow_forward_ios</span>
+                </button>
 
-                    <button
-                        type="button"
-                        class="ml-4 flex h-9 w-9 items-center justify-center rounded-full bg-chicago-200 text-martinique-950 hover:bg-chicago-300"
-                        aria-label="Filtrer"
-                        @click="isFilterOpen = !isFilterOpen"
-                    >
-                        <span class="material-symbols-outlined" aria-hidden="true">filter_list</span>
-                    </button>
+                <button
+                    type="button"
+                    class="ml-4 flex h-9 w-9 items-center justify-center rounded-full bg-chicago-200 text-martinique-950 hover:bg-chicago-300"
+                    aria-label="Filtrer"
+                    @click="isFilterOpen = !isFilterOpen"
+                >
+                    <span class="material-symbols-outlined" aria-hidden="true">filter_list</span>
+                </button>
 
-                    <!-- Filtre popup -->
-                    <div
-                        v-if="isFilterOpen"
-                        class="absolute right-0 top-full z-30 mt-3 w-80 rounded-2xl border border-martinique-200 bg-martinique-50 p-5 shadow-lg"
-                    >
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center gap-2 text-heading-t3 text-martinique-800">
-                                <span class="material-symbols-outlined" aria-hidden="true">filter_list</span>
-                                Filtrer par
-                            </div>
-                            <button
-                                type="button"
-                                class="text-martinique-800 hover:text-martinique-700"
-                                aria-label="Fermer le filtre"
-                                @click="isFilterOpen = false"
-                            >
-                                <span class="material-symbols-outlined" aria-hidden="true">close</span>
-                            </button>
+                <!-- Filtre popup -->
+                <div
+                    v-if="isFilterOpen"
+                    class="absolute left-0 top-full z-30 mt-3 w-80 rounded-2xl border border-martinique-200 bg-martinique-50 p-5 shadow-lg"
+                >
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-2 text-heading-t3 text-martinique-800">
+                            <span class="material-symbols-outlined" aria-hidden="true">filter_list</span>
+                            Filtrer par
                         </div>
-
-                        <div class="mt-4 border-b border-martinique-200 pb-2 text-body text-martinique-800">Type de prix</div>
-
-                        <ul class="mt-3 flex flex-col gap-3">
-                            <li v-for="option in prizeTypeOptions" :key="option.value">
-                                <label class="flex cursor-pointer items-center gap-3 text-body text-martinique-800">
-                                    <input
-                                        type="checkbox"
-                                        class="h-4 w-4 rounded border-martinique-300 text-martinique-700 focus:ring-martinique-500"
-                                        :checked="selectedPrizeType === option.value"
-                                        @change="selectPrizeType(option.value)"
-                                    />
-                                    {{ option.label }}
-                                </label>
-                            </li>
-                        </ul>
+                        <button
+                            type="button"
+                            class="text-martinique-800 hover:text-martinique-700"
+                            aria-label="Fermer le filtre"
+                            @click="isFilterOpen = false"
+                        >
+                            <span class="material-symbols-outlined" aria-hidden="true">close</span>
+                        </button>
                     </div>
+
+                    <div class="mt-4 border-b border-martinique-200 pb-2 text-body text-martinique-800">Type de prix</div>
+
+                    <ul class="mt-3 flex flex-col gap-3">
+                        <li v-for="option in prizeTypeOptions" :key="option.value">
+                            <label class="flex cursor-pointer items-center gap-3 text-body text-martinique-800">
+                                <input
+                                    type="checkbox"
+                                    class="h-4 w-4 rounded border-martinique-300 text-martinique-700 focus:ring-martinique-500"
+                                    :checked="selectedPrizeType === option.value"
+                                    @change="selectPrizeType(option.value)"
+                                />
+                                {{ option.label }}
+                            </label>
+                        </li>
+                    </ul>
                 </div>
             </div>
 
