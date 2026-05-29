@@ -103,8 +103,8 @@ onBeforeUnmount(() => {
             <button class="absolute inset-0 cursor-default bg-black/70" type="button" aria-label="Fermer" @click="$emit('close')"></button>
 
             <div class="modal-box relative max-w-sm scale-100 rounded-3xl bg-white p-4 text-stone-950 opacity-100 translate-0">
-                <h2 class="mt-[15px] text-center font-cooper text-[1.65rem] font-semibold text-base-content">Continuer sur mobile ?</h2>
-                <p class="mt-2 text-center font-cooper text-sm font-semibold text-base-content/70">
+                <h2 class="cooper-text-baseline mt-[15px] text-center font-cooper text-[1.65rem] font-semibold text-base-content">Continuer sur mobile ?</h2>
+                <p class="cooper-text-baseline mt-2 text-center font-cooper text-sm font-semibold text-base-content/70">
                     Pour une expérience plus fluide et interactive, scannez ce QR code avec votre smartphone.
                 </p>
 
@@ -127,7 +127,7 @@ onBeforeUnmount(() => {
                         :style="{ backgroundColor: actionBackgroundColor, color: actionTextColor }"
                         @click="$emit('close')"
                     >
-                        <span class="relative z-10">Continuer sur cet appareil</span>
+                        <span class="cooper-baseline relative z-10">Continuer sur cet appareil</span>
                     </button>
                 </div>
             </div>

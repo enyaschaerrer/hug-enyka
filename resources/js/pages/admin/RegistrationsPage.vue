@@ -172,27 +172,27 @@ onUnmounted(() => {
                 <!-- Onglets -->
                 <div class="mb-4 flex gap-2 border-b border-base-300">
                     <button
-                        class="px-5 py-2.5 text-sm font-medium transition font-cooper"
+                        class="cursor-pointer px-5 py-2.5 text-sm font-medium transition font-cooper"
                         :class="activeTab === 'pending'
                             ? 'border-b-2 border-[#5a002a] text-[#5a002a]'
                             : 'text-base-content/50 hover:text-base-content'"
                         @click="activeTab = 'pending'"
                     >
                         <span class="cooper-baseline">En attente</span>
-                        <span class="ml-1.5 rounded-full bg-rose-100 px-2 py-0.5 text-xs text-[#5a002a]">
-                            {{ registrations.filter(r => !r.treated).length }}
+                        <span class="ml-1.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-rose-100 text-xs text-[#5a002a]">
+                            <span class="cooper-baseline">{{ registrations.filter(r => !r.treated).length }}</span>
                         </span>
                     </button>
                     <button
-                        class="px-5 py-2.5 text-sm font-medium transition font-cooper"
+                        class="cursor-pointer px-5 py-2.5 text-sm font-medium transition font-cooper"
                         :class="activeTab === 'treated'
                             ? 'border-b-2 border-[#5a002a] text-[#5a002a]'
                             : 'text-base-content/50 hover:text-base-content'"
                         @click="activeTab = 'treated'"
                     >
                         <span class="cooper-baseline">Traitées</span>
-                        <span class="ml-1.5 rounded-full bg-stone-100 px-2 py-0.5 text-xs text-stone-500">
-                            {{ registrations.filter(r => r.treated).length }}
+                        <span class="ml-1.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-stone-100 text-xs text-stone-500">
+                            <span class="cooper-baseline">{{ registrations.filter(r => r.treated).length }}</span>
                         </span>
                     </button>
                 </div>
@@ -217,7 +217,8 @@ onUnmounted(() => {
                         v-for="reg in filteredRegistrations"
                         :key="reg.id"
                         class="flex items-center border-b border-base-200 px-5 py-3 hover:bg-rose-50/40"
-                        :class="reg.treated ? 'opacity-50' : ''"
+                        :class="[reg.treated ? 'opacity-50' : 'cursor-pointer']"
+                        @click="!reg.treated && openDetail(reg.id)"
                     >
                         <div class="w-1/5 truncate font-medium"><span class="cooper-baseline">{{ reg.name }}</span></div>
                         <div class="w-1/5 truncate text-base-content/70"><span class="cooper-baseline">{{ reg.email }}</span></div>
@@ -230,17 +231,17 @@ onUnmounted(() => {
                                 <span class="cooper-baseline">{{ reg.trophy ? 'Oui' : 'Non' }}</span>
                             </span>
                         </div>
-                        <div class="w-1/5 text-center">
+                        <div class="w-1/5 text-center" @click.stop>
                             <div class="inline-flex gap-2">
                                 <button
                                     v-if="!reg.treated"
-                                    class="rounded border border-stone-200 bg-stone-50 px-3 py-1 text-xs font-medium text-stone-600 transition hover:bg-stone-100 font-cooper"
+                                    class="cursor-pointer rounded border border-stone-200 bg-stone-50 px-3 py-1 text-xs font-medium text-stone-600 transition hover:bg-stone-100 font-cooper"
                                     @click="openDetail(reg.id)"
                                 >
                                     <span class="cooper-baseline">Voir</span>
                                 </button>
                                 <button
-                                    class="rounded border px-3 py-1 text-xs font-medium transition font-cooper"
+                                    class="cursor-pointer rounded border px-3 py-1 text-xs font-medium transition font-cooper"
                                     :class="reg.treated
                                         ? 'border-amber-300 bg-amber-50 text-amber-700 hover:bg-amber-100'
                                         : 'border-emerald-200 bg-emerald-50 text-emerald-700 hover:bg-emerald-100'"
@@ -250,7 +251,7 @@ onUnmounted(() => {
                                 </button>
                                 <button
                                     v-if="reg.treated"
-                                    class="rounded border border-red-200 bg-red-50 px-3 py-1 text-xs font-medium text-red-600 transition hover:bg-red-100 font-cooper"
+                                    class="cursor-pointer rounded border border-red-200 bg-red-50 px-3 py-1 text-xs font-medium text-red-600 transition hover:bg-red-100 font-cooper"
                                     @click="deleteRegistration(reg)"
                                 >
                                     <span class="cooper-baseline">Supprimer</span>
