@@ -295,7 +295,7 @@ function iconPath(): string[] {
         <button
             ref="triggerRef"
             type="button"
-            class="cooper-datetime-baseline group input input-bordered flex w-full items-center justify-between pr-3 text-left font-cooper font-medium text-sm"
+            class="cooper-datetime-baseline group input input-bordered flex w-full cursor-pointer items-center justify-between pr-3 text-left font-cooper font-medium text-sm"
             @click="toggleOpen"
         >
             <span class="cooper-baseline truncate transition-colors duration-200 ease-out group-hover:text-primary" :class="displayValue ? 'text-base-content' : 'text-base-content/35'">
