@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue';
+import { computed, onUnmounted, ref, watch } from 'vue';
 
 const props = withDefaults(defineProps<{
     modelValue: string;
@@ -35,6 +35,36 @@ const months = [
 
 const weekDays = ['Lu', 'Ma', 'Me', 'Je', 'Ve', 'Sa', 'Di'];
 const isOpen = ref(false);
+const hoveredDate = ref<Date | null>(null);
+const openUpward = ref(false);
+const triggerRef = ref<HTMLButtonElement | null>(null);
+const containerRef = ref<HTMLDivElement | null>(null);
+
+function handleClickOutside(event: MouseEvent) {
+    if (containerRef.value && !containerRef.value.contains(event.target as Node)) {
+        isOpen.value = false;
+    }
+}
+
+watch(isOpen, (val) => {
+    if (val) {
+        document.addEventListener('mousedown', handleClickOutside);
+    } else {
+        document.removeEventListener('mousedown', handleClickOutside);
+    }
+});
+
+onUnmounted(() => {
+    document.removeEventListener('mousedown', handleClickOutside);
+});
+
+function toggleOpen() {
+    if (!isOpen.value && triggerRef.value) {
+        const rect = triggerRef.value.getBoundingClientRect();
+        openUpward.value = window.innerHeight - rect.bottom < 420;
+    }
+    isOpen.value = !isOpen.value;
+}
 const selectedTime = ref(timeFromValue(props.modelValue) ?? props.defaultTime);
 const visibleMonth = ref(monthFromValue(props.modelValue) ?? new Date().getMonth());
 const visibleYear = ref(yearFromValue(props.modelValue) ?? new Date().getFullYear());
@@ -174,6 +204,25 @@ function isSameDate(first: Date | null, second: Date | null): boolean {
         && first.getDate() === second.getDate());
 }
 
+function isInRange(day: Date): boolean {
+    if (props.mode !== 'end' || !referenceDate.value) {
+        return false;
+    }
+
+    const end = hoveredDate.value ?? selectedDate.value;
+    if (!end) {
+        return false;
+    }
+
+    return day.getTime() > referenceDate.value.getTime() && day.getTime() < end.getTime();
+}
+
+function setHovered(day: Date | null): void {
+    if (props.mode === 'end') {
+        hoveredDate.value = day;
+    }
+}
+
 function isDisabled(day: Date | null): boolean {
     if (!day || !minDate.value) {
         return false;
@@ -195,8 +244,18 @@ function dayClasses(day: Date | null): string {
         return 'btn-primary';
     }
 
-    if (isSameDate(day, referenceDate.value) && props.mode === 'end') {
-        return 'border border-[#5A002A] text-[#5A002A]';
+    if (props.mode === 'end') {
+        if (isSameDate(day, referenceDate.value)) {
+            return 'bg-[#5A002A]/10 border border-[#5A002A]/50 text-[#5A002A] font-medium';
+        }
+
+        if (isSameDate(day, hoveredDate.value)) {
+            return 'bg-primary/25 text-primary';
+        }
+
+        if (isInRange(day)) {
+            return 'bg-primary/10 text-primary rounded-none';
+        }
     }
 
     if (isSameDate(day, dateOnly(toDateTimeValue(new Date(), '00:00')))) {
@@ -281,23 +340,25 @@ function iconPath(): string[] {
 </script>
 
 <template>
-    <div class="relative">
+    <div ref="containerRef" class="relative">
         <button
+            ref="triggerRef"
             type="button"
             class="cooper-datetime-baseline input input-bordered flex w-full items-center justify-between pr-3 text-left"
-            @click="isOpen = !isOpen"
+            @click="toggleOpen"
         >
             <span class="cooper-baseline truncate" :class="displayValue ? 'text-base-content' : 'text-base-content/35'">
                 {{ displayValue || label }}
             </span>
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 shrink-0 text-base-content/55 transition-colors duration-200 ease-out hover:text-black" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 shrink-0 cursor-pointer text-base-content/55 transition-colors duration-200 ease-out hover:text-black" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <path v-for="path in iconPath()" :key="path" :d="path" />
             </svg>
         </button>
 
         <div
             v-if="isOpen"
-            class="absolute left-0 top-[calc(100%+0.5rem)] z-30 w-full min-w-[22rem] border border-base-300 bg-white p-4 shadow-xl"
+            class="absolute left-0 z-30 w-full min-w-[22rem] border border-base-300 bg-white p-4 shadow-xl"
+            :class="openUpward ? 'bottom-[calc(100%+0.5rem)]' : 'top-[calc(100%+0.5rem)]'"
         >
             <div class="flex items-center gap-2">
                 <button type="button" class="btn btn-ghost btn-sm px-2" @click="previousMonth">
@@ -322,7 +383,7 @@ function iconPath(): string[] {
                 <span v-for="day in weekDays" :key="day" class="cooper-baseline py-1">{{ day }}</span>
             </div>
 
-            <div class="mt-1 grid grid-cols-7 gap-1">
+            <div class="mt-1 grid grid-cols-7 gap-1" @mouseleave="setHovered(null)">
                 <button
                     v-for="(day, index) in calendarDays"
                     :key="day?.toISOString() ?? `blank-${index}`"
@@ -330,6 +391,7 @@ function iconPath(): string[] {
                     class="btn btn-sm min-h-9 px-0 font-cooper"
                     :class="dayClasses(day)"
                     :disabled="isDisabled(day)"
+                    @mouseenter="setHovered(day)"
                     @click="selectDate(day)"
                 >
                     <span class="cooper-baseline">{{ day?.getDate() }}</span>
