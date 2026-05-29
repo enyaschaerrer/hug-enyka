@@ -7,16 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 class Form extends Model
 {
     protected $fillable = [
-        'company_id',
-        'name',
-        'email',
-        'phone',
-        'address',
-        'message',
-        'trophy',
+        'company_id', 'name', 'email', 'phone',
+        'address', 'message', 'trophy', 'treated',
     ];
 
     protected $casts = [
-        'trophy' => 'boolean',
+        'trophy'  => 'boolean',
+        'treated' => 'boolean',
     ];
 }
