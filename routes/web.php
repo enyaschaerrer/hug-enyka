@@ -33,6 +33,8 @@ Route::middleware(['auth', 'role:superadmin,admin'])->group(function () {
     Route::post('/admin/companies/{company}/collections', [CollectionController::class, 'store'])->name('admin.collections.store');
     Route::patch('/admin/companies/{company}/collections/{collection}', [CollectionController::class, 'update'])->name('admin.collections.update');
     Route::get('/admin/api/registrations', [CompanyController::class, 'registrations']);
+    Route::patch('/admin/forms/{form}/treated', [CompanyController::class, 'toggleTreated']);
+    Route::get('/admin/forms/{form}', [CompanyController::class, 'showForm']);
 
     Route::get('/admin/{any?}', fn () => view('app'))
         ->where('any', '.*')

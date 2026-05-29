@@ -7,6 +7,7 @@ use App\Http\Requests\Admin\StoreCompanyRequest;
 use App\Http\Requests\Admin\UpdateCompanyRequest;
 use App\Models\Collection;
 use App\Models\Company;
+use App\Models\Form;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Arr;
 
@@ -125,10 +126,53 @@ class CompanyController extends Controller
 
     public function registrations(): JsonResponse
     {
-        $registrations = Company::query()
+        $registrations = Form::query()
             ->latest()
-            ->get(['id', 'name', 'email', 'created_at']);
+            ->get(['id', 'name', 'email', 'phone', 'address', 'message', 'trophy', 'treated', 'created_at']);
 
         return response()->json($registrations);
+    }
+
+    public function toggleTreated(Form $form): JsonResponse
+    {
+        $form->update(['treated' => !$form->treated]);
+        return response()->json(['message' => 'Statut mis à jour.']);
+    }
+
+    public function showForm(Form $form): JsonResponse
+    {
+        $name = trim($form->name);
+        $nameWithoutNumbers = trim(preg_replace('/\d+/', '', $name));
+
+        $words = collect(preg_split('/\s+/', $nameWithoutNumbers))
+            ->filter(fn($word) => strlen($word) > 2)
+            ->values();
+
+        $query = Company::query();
+
+        foreach ($words as $word) {
+            $query->orWhere('name', 'like', '%' . $word . '%');
+        }
+
+        $query->orWhereRaw('SOUNDEX(name) = SOUNDEX(?)', [$name]);
+        $query->orWhereRaw('SOUNDEX(name) = SOUNDEX(?)', [$nameWithoutNumbers]);
+
+        $allCompanies = Company::query()->get(['id', 'name', 'email']);
+
+        $matchingCompanies = $query->get(['id', 'name', 'email'])
+            ->merge(
+                $allCompanies->filter(function ($company) use ($nameWithoutNumbers) {
+                    $companyNameWithoutNumbers = trim(preg_replace('/\d+/', '', $company->name));
+                    return stripos($companyNameWithoutNumbers, $nameWithoutNumbers) !== false
+                        || stripos($nameWithoutNumbers, $companyNameWithoutNumbers) !== false;
+                })
+            )
+            ->unique('id')
+            ->values();
+
+        return response()->json([
+            'form'              => $form,
+            'matchingCompanies' => $matchingCompanies,
+        ]);
     }
 }
