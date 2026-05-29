@@ -2,6 +2,7 @@
 import { reactive, ref, watch } from 'vue';
 import { useAdminRouter } from '../../composables/useAdminRouter';
 import AdminLayout from '../../components/layout/AdminLayout.vue';
+import { readableTextColor } from '../../utils/contrast';
 
 type AppState = {
     csrfToken: string;
@@ -248,12 +249,33 @@ async function submit() {
                         <label class="flex w-full flex-col gap-2">
                             <span class="cooper-baseline label-text-alt">Primaire</span>
                             <div class="join w-full">
-                                <input
-                                    v-model="form.primaryColor"
-                                    type="color"
-                                    class="join-item h-12 w-14 cursor-pointer border border-base-300 p-1"
-                                    aria-label="Sélecteur de couleur primaire"
-                                />
+                                <span
+                                    class="join-item input input-bordered group relative h-12 w-14 overflow-hidden p-0 transition-colors duration-200 ease-out"
+                                    :style="{ backgroundColor: form.primaryColor }"
+                                >
+                                    <input
+                                        v-model="form.primaryColor"
+                                        type="color"
+                                        class="absolute inset-0 h-full w-full cursor-pointer opacity-0"
+                                        aria-label="Sélecteur de couleur primaire"
+                                    />
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        class="pointer-events-none absolute left-1/2 top-1/2 h-5 w-5 -translate-x-1/2 -translate-y-1/2 opacity-0 transition-opacity duration-200 ease-out group-hover:opacity-100 group-focus-within:opacity-100"
+                                        :style="{ color: readableTextColor(form.primaryColor) }"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        aria-hidden="true"
+                                    >
+                                        <path d="m12 9-8.414 8.414A2 2 0 0 0 3 18.828v1.344a2 2 0 0 1-.586 1.414A2 2 0 0 1 3.828 21h1.344a2 2 0 0 0 1.414-.586L15 12" />
+                                        <path d="m18 9 .4.4a1 1 0 1 1-3 3l-3.8-3.8a1 1 0 1 1 3-3l.4.4 3.4-3.4a1 1 0 1 1 3 3z" />
+                                        <path d="m2 22 .414-.414" />
+                                    </svg>
+                                </span>
                                 <input
                                     v-model="form.primaryColor"
                                     type="text"
@@ -267,12 +289,33 @@ async function submit() {
                         <label class="flex w-full flex-col gap-2">
                             <span class="cooper-baseline label-text-alt">Secondaire</span>
                             <div class="join w-full">
-                                <input
-                                    v-model="form.secondaryColor"
-                                    type="color"
-                                    class="join-item h-12 w-14 cursor-pointer border border-base-300 p-1"
-                                    aria-label="Sélecteur de couleur secondaire"
-                                />
+                                <span
+                                    class="join-item input input-bordered group relative h-12 w-14 overflow-hidden p-0 transition-colors duration-200 ease-out"
+                                    :style="{ backgroundColor: form.secondaryColor }"
+                                >
+                                    <input
+                                        v-model="form.secondaryColor"
+                                        type="color"
+                                        class="absolute inset-0 h-full w-full cursor-pointer opacity-0"
+                                        aria-label="Sélecteur de couleur secondaire"
+                                    />
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        class="pointer-events-none absolute left-1/2 top-1/2 h-5 w-5 -translate-x-1/2 -translate-y-1/2 opacity-0 transition-opacity duration-200 ease-out group-hover:opacity-100 group-focus-within:opacity-100"
+                                        :style="{ color: readableTextColor(form.secondaryColor) }"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        aria-hidden="true"
+                                    >
+                                        <path d="m12 9-8.414 8.414A2 2 0 0 0 3 18.828v1.344a2 2 0 0 1-.586 1.414A2 2 0 0 1 3.828 21h1.344a2 2 0 0 0 1.414-.586L15 12" />
+                                        <path d="m18 9 .4.4a1 1 0 1 1-3 3l-3.8-3.8a1 1 0 1 1 3-3l.4.4 3.4-3.4a1 1 0 1 1 3 3z" />
+                                        <path d="m2 22 .414-.414" />
+                                    </svg>
+                                </span>
                                 <input
                                     v-model="form.secondaryColor"
                                     type="text"
@@ -286,12 +329,33 @@ async function submit() {
                         <label class="flex w-full flex-col gap-2">
                             <span class="cooper-baseline label-text-alt">Tertiaire</span>
                             <div class="join w-full">
-                                <input
-                                    v-model="form.thirdColor"
-                                    type="color"
-                                    class="join-item h-12 w-14 cursor-pointer border border-base-300 p-1"
-                                    aria-label="Sélecteur de couleur tertiaire"
-                                />
+                                <span
+                                    class="join-item input input-bordered group relative h-12 w-14 overflow-hidden p-0 transition-colors duration-200 ease-out"
+                                    :style="{ backgroundColor: form.thirdColor }"
+                                >
+                                    <input
+                                        v-model="form.thirdColor"
+                                        type="color"
+                                        class="absolute inset-0 h-full w-full cursor-pointer opacity-0"
+                                        aria-label="Sélecteur de couleur tertiaire"
+                                    />
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        class="pointer-events-none absolute left-1/2 top-1/2 h-5 w-5 -translate-x-1/2 -translate-y-1/2 opacity-0 transition-opacity duration-200 ease-out group-hover:opacity-100 group-focus-within:opacity-100"
+                                        :style="{ color: readableTextColor(form.thirdColor) }"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        aria-hidden="true"
+                                    >
+                                        <path d="m12 9-8.414 8.414A2 2 0 0 0 3 18.828v1.344a2 2 0 0 1-.586 1.414A2 2 0 0 1 3.828 21h1.344a2 2 0 0 0 1.414-.586L15 12" />
+                                        <path d="m18 9 .4.4a1 1 0 1 1-3 3l-3.8-3.8a1 1 0 1 1 3-3l.4.4 3.4-3.4a1 1 0 1 1 3 3z" />
+                                        <path d="m2 22 .414-.414" />
+                                    </svg>
+                                </span>
                                 <input
                                     v-model="form.thirdColor"
                                     type="text"
