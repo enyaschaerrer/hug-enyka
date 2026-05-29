@@ -90,6 +90,15 @@ async function logout() {
                             <span class="cooper-baseline">Campagnes</span>
                         </a>
                     </li>
+                    <li class="m-0 p-0">
+                        <a
+                            href="/admin/trophee"
+                            :class="navLinkClasses(currentPath === '/admin/trophee')"
+                            @click="goTo('/admin/trophee', $event)"
+                        >
+                            <span class="cooper-baseline">Trophée</span>
+                        </a>
+                    </li>
                 </ul>
             </nav>
 
