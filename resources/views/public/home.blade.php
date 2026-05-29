@@ -4,6 +4,8 @@
 @section('banner', '/img/banners/banner_home.webp')
 
 @section('content')
+    @include('partials.public-side-cta')
+
     {{-- Section 1 : Le Prix du Coeur --}}
     <section class="px-12 py-16">
         <div class="mx-auto max-w-6xl">
@@ -20,27 +22,11 @@
                         et l'inventivité des entreprises participantes.
                     </p>
                 </div>
-                <div class="flex shrink-0 items-center gap-4">
-                    <img
-                        src="/img/mascots/blutly1.webp"
-                        alt="Mascottes Blutly et Sanguy"
-                        class="h-70 w-70 object-contain"
-                    />
-                    <div class="flex flex-col gap-3">
-                        <a
-                            href="/contact"
-                            class="rounded-full bg-merino-300 px-5 py-3 text-center text-body font-semibold text-martinique-950 transition hover:bg-merino-400"
-                        >
-                            Mettre en place une collecte
-                        </a>
-                        <a
-                            href="#"
-                            class="rounded-full bg-merino-300 px-5 py-3 text-center text-body font-semibold text-martinique-950 transition hover:bg-merino-400"
-                        >
-                            S'inscrire au Prix du Coeur
-                        </a>
-                    </div>
-                </div>
+                <img
+                    src="/img/mascots/blutly1.webp"
+                    alt="Mascottes Blutly et Sanguy"
+                    class="h-70 w-70 shrink-0 object-contain"
+                />
             </div>
 
             {{-- Sous-section : Le jury --}}

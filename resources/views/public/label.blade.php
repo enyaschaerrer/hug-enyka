@@ -4,21 +4,9 @@
 @section('banner', '/img/banners/banner_label.webp')
 
 @section('content')
+    @include('partials.public-side-cta')
+
     <section class="relative overflow-hidden px-12 py-16">
-        <aside class="absolute right-0 top-8 z-30 hidden flex-col gap-4 lg:flex">
-            <a
-                href="/collecte"
-                class="flex min-h-20 w-44 translate-x-3 items-center rounded-l-2xl border-3 border-r-0 border-merino-800 bg-merino-200 px-5 py-4 text-body font-bold text-merino-800 transition-transform duration-200 ease-out hover:translate-x-0"
-            >
-                Mettre en place une collecte
-            </a>
-            <a
-                href="#companies"
-                class="flex min-h-20 w-44 translate-x-3 items-center rounded-l-2xl border-3 border-r-0 border-merino-800 bg-merino-200 px-5 py-4 text-body font-bold text-merino-800 transition-transform duration-200 ease-out hover:translate-x-0"
-            >
-                S’inscrire au Prix du Cœur
-            </a>
-        </aside>
 
         <div class="mx-auto max-w-6xl">
             <h1 class="text-left text-display text-martinique-950">
