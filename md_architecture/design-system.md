@@ -7,19 +7,21 @@ Police principale : **Cooper Hewitt**
 
 | Rôle | Police | Graisse | Taille |
 |------|--------|---------|--------|
-| Display | Cooper Hewitt | Bold | 34px |
-| Heading | Cooper Hewitt | Medium | 23px |
+| Display | Cooper Hewitt | Bold | 38px |
+| Heading t1 | Cooper Hewitt | Medium | 23px |
+| Heading t2 | Cooper Hewitt | Medium | 20px |
+| Heading t3 | Cooper Hewitt | Medium | 18px |
 | Body | Cooper Hewitt | Medium | 16px |
 | Caption | Cooper Hewitt | Book | 13px |
 
 ---
 
 ## Couleurs principales site Coeur d'Honneur
-`#0C0A29` 
-`#2F2D46` 
-`#F4EFE3` 
-`#FC928C` 
-`#D1444A` 
+Martinique 500 - `#757ABC` 
+Martinique 700 - `#5A579E` 
+Martinique 950 - `#2F2D46` 
+Fuzzy Wuzzy Brown 600 - `#D1444A` 
+Fuzzy Wuzzy Brown 400 - `#EC8380` 
 
 ---
 
