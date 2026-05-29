@@ -145,10 +145,26 @@ class CompanyController extends Controller
         return response()->json($registrations);
     }
 
+    public function pendingRegistrations(): JsonResponse
+    {
+        $registrations = Form::query()
+            ->where('treated', false)
+            ->latest()
+            ->get(['id', 'name', 'email', 'phone', 'address', 'message', 'trophy', 'treated', 'created_at']);
+
+        return response()->json($registrations);
+    }
+
     public function toggleTreated(Form $form): JsonResponse
     {
         $form->update(['treated' => !$form->treated]);
         return response()->json(['message' => 'Statut mis à jour.']);
+    }
+
+    public function destroyForm(Form $form): JsonResponse
+    {
+        $form->delete();
+        return response()->json(['message' => 'Inscription supprimée.']);
     }
 
     public function showForm(Form $form): JsonResponse

@@ -74,20 +74,20 @@ async function logout() {
                     </li>
                     <li class="m-0 p-0">
                         <a
-                            href="/admin/campagnes"
-                            :class="navLinkClasses(currentPath === '/admin/campagnes' || currentPath.startsWith('/admin/companies'))"
-                            @click="goTo('/admin/campagnes', $event)"
-                        >
-                            <span class="cooper-baseline">Campagnes</span>
-                        </a>
-                    </li>
-                    <li class="m-0 p-0">
-                        <a
                             href="/admin/registrations"
                             :class="navLinkClasses(currentPath === '/admin/registrations')"
                             @click="goTo('/admin/registrations', $event)"
                         >
                             <span class="cooper-baseline">Inscriptions</span>
+                        </a>
+                    </li>
+                    <li class="m-0 p-0">
+                        <a
+                            href="/admin/campagnes"
+                            :class="navLinkClasses(currentPath === '/admin/campagnes' || currentPath.startsWith('/admin/companies'))"
+                            @click="goTo('/admin/campagnes', $event)"
+                        >
+                            <span class="cooper-baseline">Campagnes</span>
                         </a>
                     </li>
                 </ul>
