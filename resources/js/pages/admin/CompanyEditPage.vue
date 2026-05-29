@@ -79,6 +79,15 @@ function back(event: Event) {
     navigate('/admin/campagnes');
 }
 
+function openDatePicker(event: Event) {
+    const input = (event.currentTarget as HTMLElement)
+        .parentElement
+        ?.querySelector('input[type="datetime-local"]') as HTMLInputElement | null;
+
+    input?.showPicker?.();
+    input?.focus();
+}
+
 async function fetchCompany() {
     try {
         const res = await fetch(`/admin/api/companies/${companyId}`, {
@@ -169,11 +178,15 @@ onMounted(fetchCompany);
 <template>
     <AdminLayout>
     <div class="mx-auto w-full max-w-3xl">
-            <div class="mb-6 flex items-center justify-between">
-                <h1 class="cooper-text-baseline text-2xl font-semibold">Modifier la campagne</h1>
-                <a href="/admin/campagnes" class="btn btn-ghost btn-sm font-cooper" @click="back">
+            <div class="mb-6">
+                <a href="/admin/campagnes" class="mb-3 inline-flex items-center gap-2 font-cooper text-sm font-medium text-base-content/45 transition-colors duration-200 ease-out hover:text-black" @click="back">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M6 8L2 12L6 16" />
+                        <path d="M2 12H22" />
+                    </svg>
                     <span class="cooper-baseline">Retour</span>
                 </a>
+                <h1 class="cooper-text-baseline text-2xl font-semibold">Modifier la campagne</h1>
             </div>
 
             <div v-if="loading" class="cooper-text-baseline text-sm text-base-content/60">Chargement...</div>
@@ -360,13 +373,37 @@ onMounted(fetchCompany);
                     <div class="grid gap-x-4 gap-y-6 md:grid-cols-2">
                         <label class="flex w-full flex-col gap-2">
                             <span class="cooper-baseline label-text">Début *</span>
-                            <input v-model="form.collection_start" type="datetime-local" class="cooper-datetime-baseline input input-bordered w-full" required />
+                            <span class="relative block">
+                                <input v-model="form.collection_start" type="datetime-local" class="cooper-datetime-baseline input input-bordered w-full pr-11" required />
+                                <button type="button" class="absolute right-3 top-1/2 -translate-y-1/2 text-base-content/55 transition-colors duration-200 ease-out hover:text-black" aria-label="Ouvrir le calendrier de début" @click="openDatePicker">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                        <path d="m14 18 4-4 4 4" />
+                                        <path d="M16 2v4" />
+                                        <path d="M18 22v-8" />
+                                        <path d="M21 11.343V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h9" />
+                                        <path d="M3 10h18" />
+                                        <path d="M8 2v4" />
+                                    </svg>
+                                </button>
+                            </span>
                             <p v-if="firstError('collection_start')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('collection_start') }}</p>
                         </label>
 
                         <label class="flex w-full flex-col gap-2">
                             <span class="cooper-baseline label-text">Fin *</span>
-                            <input v-model="form.collection_end" type="datetime-local" class="cooper-datetime-baseline input input-bordered w-full" required />
+                            <span class="relative block">
+                                <input v-model="form.collection_end" type="datetime-local" class="cooper-datetime-baseline input input-bordered w-full pr-11" required />
+                                <button type="button" class="absolute right-3 top-1/2 -translate-y-1/2 text-base-content/55 transition-colors duration-200 ease-out hover:text-black" aria-label="Ouvrir le calendrier de fin" @click="openDatePicker">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                        <path d="m14 18 4 4 4-4" />
+                                        <path d="M16 2v4" />
+                                        <path d="M18 14v8" />
+                                        <path d="M21 11.354V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h7.343" />
+                                        <path d="M3 10h18" />
+                                        <path d="M8 2v4" />
+                                    </svg>
+                                </button>
+                            </span>
                             <p v-if="firstError('collection_end')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('collection_end') }}</p>
                         </label>
 

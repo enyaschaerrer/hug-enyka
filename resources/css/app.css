@@ -261,7 +261,7 @@ input[type='color']::-moz-color-swatch {
 }
 
 .cooper-datetime-baseline::-webkit-calendar-picker-indicator {
-    transform: translateY(0.03em);
+    opacity: 0;
 }
 
 .cooper-textarea-baseline {
