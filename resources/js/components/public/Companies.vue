@@ -16,8 +16,25 @@ const search = ref('');
 const pageSize = 8;
 const visibleCount = ref(pageSize);
 
+const isFilterOpen = ref(false);
+const selectedYears = ref<Set<number>>(new Set());
+const minTrophies = ref(0);
+
+const availableYears = computed(() => {
+    const years = new Set<number>();
+    for (const c of props.initialCompanies) {
+        if (c.adhesionYear !== null) years.add(c.adhesionYear);
+    }
+    return [...years].sort();
+});
+
 const filtered = computed(() =>
-    props.initialCompanies.filter((c) => c.name.toLowerCase().includes(search.value.toLowerCase())),
+    props.initialCompanies.filter((c) => {
+        if (!c.name.toLowerCase().includes(search.value.toLowerCase())) return false;
+        if (selectedYears.value.size > 0 && (c.adhesionYear === null || !selectedYears.value.has(c.adhesionYear))) return false;
+        if (c.trophies < minTrophies.value) return false;
+        return true;
+    }),
 );
 
 const visible = computed(() => filtered.value.slice(0, visibleCount.value));
@@ -26,10 +43,30 @@ const hasMore = computed(() => visibleCount.value < filtered.value.length);
 function showMore() {
     visibleCount.value += pageSize;
 }
+
+function toggleYear(year: number) {
+    const next = new Set(selectedYears.value);
+    if (next.has(year)) next.delete(year);
+    else next.add(year);
+    selectedYears.value = next;
+}
+
+function incrementTrophies() {
+    minTrophies.value += 1;
+}
+
+function decrementTrophies() {
+    if (minTrophies.value > 0) minTrophies.value -= 1;
+}
+
+function resetFilters() {
+    selectedYears.value = new Set();
+    minTrophies.value = 0;
+}
 </script>
 
 <template>
-    <section class="bg-merino-50 px-12 py-16">
+    <section class="px-12 py-16">
         <div class="mx-auto max-w-6xl">
             <div class="flex items-start justify-between gap-6">
                 <div>
@@ -37,18 +74,93 @@ function showMore() {
                     <p class="mt-2 text-body text-martinique-950">Découvrez les entreprises qui ont pris part au Prix du Coeur depuis sa création. </p>
                 </div>
 
-                <div class="flex shrink-0 items-center gap-3">
-                    <button type="button" class="flex h-9 w-9 items-center justify-center rounded-full bg-martinique-100 text-martinique-700 hover:bg-martinique-200" aria-label="Filtrer">
-                        ☰
+                <div class="relative flex shrink-0 items-center gap-3">
+                    <button
+                        type="button"
+                        class="flex h-9 w-9 items-center justify-center rounded-full bg-martinique-100 text-martinique-700 hover:bg-martinique-200"
+                        aria-label="Filtrer"
+                        @click="isFilterOpen = !isFilterOpen"
+                    >
+                        <span class="material-symbols-outlined" aria-hidden="true">filter_list</span>
                     </button>
                     <div class="relative">
                         <input
                             v-model="search"
                             type="search"
                             placeholder="Recherche"
-                            class="w-56 rounded-full border border-martinique-200 bg-white px-4 py-2 pl-9 text-body text-martinique-950 placeholder-martinique-400 focus:border-martinique-500 focus:outline-none"
+                            class="w-56 rounded-full bg-martinique-100 px-4 py-2 pl-11 text-body text-martinique-700 placeholder-martinique-700 focus:border-martinique-500 focus:outline-none"
                         />
-                        <span class="absolute left-3 top-1/2 -translate-y-1/2 text-martinique-400">⌕</span>
+                        <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-martinique-700" aria-hidden="true">search</span>
+                    </div>
+
+                    <!-- Filtre popup -->
+                    <div
+                        v-if="isFilterOpen"
+                        class="absolute right-0 top-full z-30 mt-3 flex max-h-[80vh] w-80 flex-col overflow-y-auto rounded-2xl border border-martinique-200 bg-martinique-50 p-5 shadow-lg"
+                    >
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-2 text-heading-t3 text-martinique-800">
+                                <span class="material-symbols-outlined" aria-hidden="true">filter_list</span>
+                                Filtrer par
+                            </div>
+                            <button
+                                type="button"
+                                class="text-martinique-800 hover:text-martinique-700"
+                                aria-label="Fermer le filtre"
+                                @click="isFilterOpen = false"
+                            >
+                                <span class="material-symbols-outlined" aria-hidden="true">close</span>
+                            </button>
+                        </div>
+
+                        <div class="mt-4 border-b border-martinique-200 pb-2 text-body text-martinique-800">Année d'adhésion</div>
+
+                        <ul class="mt-3 flex flex-col gap-3">
+                            <li v-for="year in availableYears" :key="year">
+                                <label class="flex cursor-pointer items-center gap-3 text-body text-martinique-800">
+                                    <input
+                                        type="checkbox"
+                                        class="h-4 w-4 rounded border-martinique-300 text-martinique-700 focus:ring-martinique-500"
+                                        :checked="selectedYears.has(year)"
+                                        @change="toggleYear(year)"
+                                    />
+                                    {{ year }}
+                                </label>
+                            </li>
+                        </ul>
+
+                        <div class="mt-5 border-b border-martinique-200 pb-2 text-body text-martinique-800">Nombre de trophées gagnés</div>
+
+                        <div class="mt-3 inline-flex items-center gap-2 rounded-md border border-martinique-300 bg-white px-3 py-1">
+                            <span class="text-body text-martinique-800">{{ minTrophies }}</span>
+                            <div class="flex flex-col">
+                                <button
+                                    type="button"
+                                    class="flex h-4 w-4 items-center justify-center text-martinique-800 hover:text-martinique-700"
+                                    aria-label="Augmenter"
+                                    @click="incrementTrophies"
+                                >
+                                    <span class="material-symbols-outlined -rotate-90" style="font-size: 16px;" aria-hidden="true">arrow_forward_ios</span>
+                                </button>
+                                <button
+                                    type="button"
+                                    class="flex h-4 w-4 items-center justify-center text-martinique-800 hover:text-martinique-700 disabled:opacity-40"
+                                    aria-label="Diminuer"
+                                    :disabled="minTrophies <= 0"
+                                    @click="decrementTrophies"
+                                >
+                                    <span class="material-symbols-outlined rotate-90" style="font-size: 16px;" aria-hidden="true">arrow_forward_ios</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <button
+                            type="button"
+                            class="mt-5 rounded-full border border-martinique-300 px-4 py-2 text-body text-martinique-800 transition hover:bg-martinique-100"
+                            @click="resetFilters"
+                        >
+                            Réinitialiser
+                        </button>
                     </div>
                 </div>
             </div>
@@ -88,7 +200,7 @@ function showMore() {
             <div v-if="hasMore" class="mt-10 flex justify-center">
                 <button
                     type="button"
-                    class="rounded-full bg-martinique-700 px-8 py-3 text-body font-semibold text-white transition hover:bg-martinique-800"
+                    class="rounded-full bg-martinique-700 px-8 py-3 text-body text-white transition hover:bg-martinique-800"
                     @click="showMore"
                 >
                     Voir plus

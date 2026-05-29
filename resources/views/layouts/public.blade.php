@@ -11,7 +11,7 @@
         @fonts
         @vite(['resources/css/app.css', 'resources/js/app.ts'])
     </head>
-    <body class="bg-[#FAF8F2] text-stone-950">
+    <body class="bg-merino-50">
         @include('partials.public-header')
 
         <main class="pb-24">

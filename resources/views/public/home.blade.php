@@ -5,7 +5,7 @@
 
 @section('content')
     {{-- Section 1 : Le Prix du Coeur --}}
-    <section class="bg-merino-50 px-12 py-16">
+    <section class="px-12 py-16">
         <div class="mx-auto max-w-6xl">
             <div class="flex items-start justify-between gap-12">
                 <div class="max-w-2xl">
