@@ -381,7 +381,7 @@ async function submit() {
                             <input
                                 v-model="form.collection_start"
                                 type="datetime-local"
-                                class="cooper-input-baseline input input-bordered w-full"
+                                class="cooper-datetime-baseline input input-bordered w-full"
                                 required
                             />
                             <p v-if="firstError('collection_start')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('collection_start') }}</p>
@@ -392,7 +392,7 @@ async function submit() {
                             <input
                                 v-model="form.collection_end"
                                 type="datetime-local"
-                                class="cooper-input-baseline input input-bordered w-full"
+                                class="cooper-datetime-baseline input input-bordered w-full"
                                 required
                             />
                             <p v-if="firstError('collection_end')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('collection_end') }}</p>

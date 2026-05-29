@@ -360,13 +360,13 @@ onMounted(fetchCompany);
                     <div class="grid gap-x-4 gap-y-6 md:grid-cols-2">
                         <label class="flex w-full flex-col gap-2">
                             <span class="cooper-baseline label-text">Début *</span>
-                            <input v-model="form.collection_start" type="datetime-local" class="cooper-input-baseline input input-bordered w-full" required />
+                            <input v-model="form.collection_start" type="datetime-local" class="cooper-datetime-baseline input input-bordered w-full" required />
                             <p v-if="firstError('collection_start')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('collection_start') }}</p>
                         </label>
 
                         <label class="flex w-full flex-col gap-2">
                             <span class="cooper-baseline label-text">Fin *</span>
-                            <input v-model="form.collection_end" type="datetime-local" class="cooper-input-baseline input input-bordered w-full" required />
+                            <input v-model="form.collection_end" type="datetime-local" class="cooper-datetime-baseline input input-bordered w-full" required />
                             <p v-if="firstError('collection_end')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('collection_end') }}</p>
                         </label>
 

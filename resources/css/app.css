@@ -250,6 +250,20 @@ input[type='color']::-moz-color-swatch {
     padding-bottom: calc(0.625rem - 0.16em);
 }
 
+.cooper-datetime-baseline {
+    line-height: 1.2;
+    padding-top: 0.625rem;
+    padding-bottom: 0.625rem;
+}
+
+.cooper-datetime-baseline::-webkit-datetime-edit {
+    transform: translateY(0.20em);
+}
+
+.cooper-datetime-baseline::-webkit-calendar-picker-indicator {
+    transform: translateY(0.03em);
+}
+
 .cooper-textarea-baseline {
     line-height: 1.45;
     padding-top: calc(0.625rem + 0.08em);
