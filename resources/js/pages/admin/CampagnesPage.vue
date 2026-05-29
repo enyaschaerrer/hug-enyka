@@ -206,7 +206,7 @@ onMounted(fetchCompanies);
                         </a>
                         <button
                             type="button"
-                            class="btn btn-error btn-outline btn-sm font-cooper"
+                            class="btn btn-outline btn-sm border-red-600 font-cooper text-red-700 hover:border-red-700 hover:bg-red-700 hover:text-white"
                             :disabled="deletingCompanyId === company.id"
                             @click="deleteCompany(company)"
                         >
