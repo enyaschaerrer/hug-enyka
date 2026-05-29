@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue';
+import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import { getCookieConsentPreferences, hasCookieConsentDecision, saveCookieConsentPreferences } from '../../services/cookieConsent';
 import type { CookieConsentCategory, CookieConsentPreferences } from '../../types/cookie-consent';
 
@@ -22,6 +22,7 @@ const isOpen = ref(false);
 const view = ref<'summary' | 'settings'>('summary');
 const analyticsEnabled = ref(false);
 const hasDecision = ref(false);
+const toggleTransition = ref(false);
 let previousBodyOverflow = '';
 
 const modalTitle = computed(() => (view.value === 'summary' ? 'Aidez-nous à améliorer l’expérience de collecte !' : 'Configurer les cookies'));
@@ -85,6 +86,10 @@ onMounted(() => {
 watch(isOpen, (isModalOpen) => {
     if (isModalOpen) {
         lockBodyScroll();
+        toggleTransition.value = false;
+        setTimeout(() => {
+            toggleTransition.value = true;
+        }, 50);
         return;
     }
 
@@ -142,7 +147,8 @@ onBeforeUnmount(() => {
                             <span class="cooper-baseline">Configurer</span>
                         </button>
                         <button
-                            class="btn h-[48px] rounded-2xl border-none bg-red-700 font-cooper text-[0.95rem] text-white hover:bg-red-800"
+                            class="btn h-[48px] rounded-2xl border-none font-cooper text-[0.95rem] text-white transition-[filter] duration-150 hover:brightness-90 ease-in-out"
+                            style="background-color: #5a579e;"
                             type="button"
                             @click="acceptAnalytics"
                         >
@@ -171,13 +177,15 @@ onBeforeUnmount(() => {
                                 <input
                                     v-if="category.id === 'analytics'"
                                     v-model="analyticsEnabled"
-                                    class="toggle mt-1 shrink-0 transition-colors duration-200 ease-out checked:border-red-700 checked:bg-red-700 checked:text-white"
+                                    class="toggle mt-1 shrink-0 transition-colors ease-in-out checked:border-[#5a579e] checked:bg-[#5a579e] checked:text-white"
+                                    :class="toggleTransition ? 'duration-150' : 'duration-0'"
                                     type="checkbox"
                                     aria-label="Activer la mesure d’audience et les KPIs"
                                 />
                                 <input
                                     v-else
-                                    class="toggle mt-1 shrink-0 transition-colors duration-200 ease-out checked:border-red-700 checked:bg-red-700 checked:text-white"
+                                    class="toggle mt-1 shrink-0 transition-colors ease-in-out checked:border-[#5a579e] checked:bg-[#5a579e] checked:text-white"
+                                    :class="toggleTransition ? 'duration-150' : 'duration-0'"
                                     type="checkbox"
                                     checked
                                     disabled
@@ -205,7 +213,8 @@ onBeforeUnmount(() => {
                             <span class="cooper-baseline">Annuler</span>
                         </button>
                         <button
-                            class="btn h-[48px] rounded-2xl border-none bg-red-700 font-cooper text-[0.95rem] text-white hover:bg-red-800"
+                            class="btn h-[48px] rounded-2xl border-none font-cooper text-[0.95rem] text-white transition-[filter] duration-150 hover:brightness-90 ease-in-out"
+                            style="background-color: #5a579e;"
                             type="button"
                             @click="saveSettings"
                         >
