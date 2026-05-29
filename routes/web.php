@@ -5,7 +5,7 @@ use App\Http\Controllers\Admin\CollectionController;
 use App\Http\Controllers\Admin\CompanyController;
 use App\Http\Controllers\Admin\KpiController;
 use App\Http\Controllers\CoBrandedCollecteController;
-use App\Http\Controllers\Public\CompanyController as PublicCompanyController;
+use App\Http\Controllers\Public\CompanyFormController;
 use App\Http\Controllers\PublicSiteController;
 use Illuminate\Support\Facades\Route;
 
@@ -14,7 +14,7 @@ Route::get('/collecte', fn () => view('public.collection'))->name('public.collec
 Route::get('/trophee', fn () => view('app'))->name('public.trophy');
 Route::get('/label', [PublicSiteController::class, 'label'])->name('public.label');
 Route::get('/contact', fn () => view('app'))->name('public.contact');
-Route::post('/collecte/inscription', [PublicCompanyController::class, 'store'])->name('public.collecte.inscription');
+Route::post('/collecte/inscription', [CompanyFormController::class, 'store'])->name('public.collecte.inscription');
 Route::get('/collecte/{brand}/{token}', [CoBrandedCollecteController::class, 'show'])->name('public.collecte.cobranded');
 
 // Admin SPA shell — login page is public
