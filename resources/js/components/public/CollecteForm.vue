@@ -61,11 +61,6 @@ async function handleSubmit() {
 
         <section class="mx-auto max-w-2xl px-4 py-16">
             <div v-if="!submitted">
-                <div class="mb-10">
-                    <h3 class="mt-2 text-2xl font-black text-stone-900">
-                        Envie d'organiser une collecte ?
-                    </h3>
-                </div>
 
                 <form @submit.prevent="handleSubmit">
                     <div class="space-y-6 rounded-2xl bg-white p-8">

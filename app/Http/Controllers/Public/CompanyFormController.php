@@ -35,4 +35,25 @@ class CompanyFormController extends Controller
 
         return response()->json(['message' => 'Inscription enregistrée.'], 201);
     }
+
+    public function storePrize(Request $request): JsonResponse
+    {
+        $validated = $request->validate([
+            'labelled' => 'required|boolean',
+            'name'     => 'required|string|max:255',
+            'email'    => 'required|email|max:255',
+            'message'  => 'nullable|string',
+        ]);
+
+        $form = Form::create([
+            'name'    => $validated['name'],
+            'email'   => $validated['email'],
+            'message' => $validated['message'] ?? null,
+            'trophy'  => true,
+        ]);
+
+        Mail::send(new CompanyRegistrationMail($form));
+
+        return response()->json(['message' => 'Candidature enregistrée.'], 201);
+    }
 }
