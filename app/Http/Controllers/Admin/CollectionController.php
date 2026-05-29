@@ -32,6 +32,7 @@ class CollectionController extends Controller
                 'access_token' => $collection->access_token,
                 'linkOneDoc' => $collection->linkOneDoc,
                 'url' => '/collecte/' . $company->slug . '/' . $collection->access_token,
+                'is_active' => $collection->isActive(),
             ],
         ], 201);
     }
@@ -49,6 +50,7 @@ class CollectionController extends Controller
                 'access_token' => $collection->access_token,
                 'linkOneDoc' => $collection->linkOneDoc,
                 'url' => '/collecte/' . $company->slug . '/' . $collection->access_token,
+                'is_active' => $collection->isActive(),
             ],
         ]);
     }

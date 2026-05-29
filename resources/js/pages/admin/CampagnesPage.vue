@@ -10,6 +10,7 @@ type CollectionRow = {
     access_token: string;
     linkOneDoc: string;
     url: string;
+    is_active: boolean;
 };
 
 type CompanyRow = {
@@ -31,6 +32,10 @@ const companies = ref<CompanyRow[]>([]);
 const loadingCompanies = ref(true);
 const loadError = ref<string | null>(null);
 const deletingCompanyId = ref<number | null>(null);
+const disabledLinkMessage = ref<string | null>(null);
+const copyMessage = ref<string | null>(null);
+let disabledLinkTimer: number | undefined;
+let copyMessageTimer: number | undefined;
 
 function formatDate(iso: string): string {
     return new Date(iso).toLocaleString('fr-CH', {
@@ -63,6 +68,52 @@ async function fetchCompanies() {
 function goToCreate(event: Event) {
     event.preventDefault();
     navigate('/admin/companies/create');
+}
+
+function activeCollections(company: CompanyRow): CollectionRow[] {
+    return company.collections.filter((collection) => collection.is_active);
+}
+
+function inactiveCollections(company: CompanyRow): CollectionRow[] {
+    return company.collections.filter((collection) => !collection.is_active);
+}
+
+function showDisabledLinkMessage() {
+    disabledLinkMessage.value = 'Cette collecte n’est pas active. Le lien public renvoie une 404.';
+
+    if (disabledLinkTimer) {
+        window.clearTimeout(disabledLinkTimer);
+    }
+
+    disabledLinkTimer = window.setTimeout(() => {
+        disabledLinkMessage.value = null;
+    }, 3500);
+}
+
+function absoluteCollectionUrl(collection: CollectionRow): string {
+    return new URL(collection.url, window.location.origin).toString();
+}
+
+async function copyCollectionUrl(collection: CollectionRow) {
+    try {
+        await navigator.clipboard.writeText(absoluteCollectionUrl(collection));
+        copyMessage.value = 'URL complète copiée.';
+    } catch {
+        copyMessage.value = 'Impossible de copier l’URL.';
+    }
+
+    if (copyMessageTimer) {
+        window.clearTimeout(copyMessageTimer);
+    }
+
+    copyMessageTimer = window.setTimeout(() => {
+        copyMessage.value = null;
+    }, 2500);
+}
+
+function editCollection(company: CompanyRow, collection: CollectionRow, event: Event) {
+    event.preventDefault();
+    navigate(`/admin/companies/${company.id}/edit?collection=${collection.id}`);
 }
 
 async function deleteCompany(company: CompanyRow) {
@@ -106,6 +157,16 @@ onMounted(fetchCompanies);
         <div v-if="flashMessage" class="alert alert-success mb-6">
             <span class="cooper-baseline">{{ flashMessage }}</span>
         </div>
+        <div v-if="disabledLinkMessage" class="toast toast-end toast-top z-50">
+            <div class="alert alert-warning shadow-sm">
+                <span class="cooper-baseline">{{ disabledLinkMessage }}</span>
+            </div>
+        </div>
+        <div v-if="copyMessage" class="toast toast-end toast-top z-50">
+            <div class="alert alert-success shadow-sm">
+                <span class="cooper-baseline">{{ copyMessage }}</span>
+            </div>
+        </div>
 
         <div class="mb-6 flex items-center justify-between">
             <h1 class="cooper-text-baseline text-2xl font-semibold">Campagnes</h1>
@@ -130,7 +191,7 @@ onMounted(fetchCompanies);
                     <div>
                         <p class="cooper-text-baseline font-semibold">{{ company.name }}</p>
                         <p class="cooper-text-baseline mt-0.5 text-sm text-base-content/50">
-                            <span class="cooper-baseline">{{ company.slug }}</span>
+                            <span>{{ company.slug }}</span>
                             · {{ company.email }}
                             <span v-if="company.employee_count"> · {{ company.employee_count }} employés</span>
                         </p>
@@ -157,22 +218,83 @@ onMounted(fetchCompanies);
                 <!-- Collections -->
                 <div class="mt-4">
                     <p class="cooper-text-baseline mb-2 text-xs font-medium tracking-wider text-base-content/40 uppercase">
-                        Collectes ({{ company.collections.length }})
+                        Collecte active
                     </p>
                     <p v-if="company.collections.length === 0" class="cooper-text-baseline text-sm text-base-content/40">Aucune collecte.</p>
+                    <p v-else-if="activeCollections(company).length === 0" class="cooper-text-baseline text-sm text-base-content/40">
+                        Aucune collecte active pour le moment.
+                    </p>
 
                     <div
-                        v-for="col in company.collections"
+                        v-for="col in activeCollections(company)"
                         :key="col.id"
-                        class="mt-1 rounded-lg bg-base-200 px-4 py-3 text-sm"
+                        class="mt-1 rounded-lg border border-emerald-100 bg-emerald-50 px-4 py-3 text-sm"
                     >
-                        <div class="flex flex-wrap items-center gap-3">
-                            <span class="cooper-baseline text-base-content/60">{{ formatDate(col.start) }} → {{ formatDate(col.end) }}</span>
-                            <a :href="col.url" target="_blank" class="link link-primary text-xs">
-                                <span class="cooper-baseline">{{ col.url }}</span>
-                            </a>
+                        <div class="flex items-center justify-between gap-3">
+                            <div class="flex min-w-0 flex-1 items-center gap-4">
+                                <span class="cooper-baseline shrink-0 text-sm font-medium text-emerald-800">
+                                    {{ formatDate(col.start) }} → {{ formatDate(col.end) }}
+                                </span>
+                                <a :href="col.url" target="_blank" class="link link-primary min-w-0 truncate text-sm">
+                                    <span class="cooper-baseline">{{ col.url }}</span>
+                                </a>
+                            </div>
+                            <div class="flex shrink-0 items-center gap-1">
+                                <button
+                                    type="button"
+                                    title="Copier l’URL complète"
+                                    class="inline-flex h-9 w-9 items-center justify-center rounded-full text-emerald-700 transition-colors hover:bg-white hover:text-emerald-900"
+                                    @click="copyCollectionUrl(col)"
+                                >
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                        <rect x="9" y="9" width="13" height="13" rx="2" />
+                                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                                    </svg>
+                                </button>
+                                <a
+                                    :href="col.url"
+                                    target="_blank"
+                                    title="Ouvrir la page co-brandée"
+                                    class="inline-flex h-9 w-9 items-center justify-center rounded-full text-emerald-700 transition-colors hover:bg-white hover:text-emerald-900"
+                                >
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                        <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z" />
+                                        <circle cx="12" cy="12" r="3" />
+                                    </svg>
+                                </a>
+                            </div>
                         </div>
                     </div>
+
+                    <details v-if="inactiveCollections(company).length > 0" class="collapse-arrow collapse mt-3 bg-base-200">
+                        <summary class="collapse-title min-h-11 px-4 py-3 text-sm font-medium text-base-content/60">
+                            <span class="cooper-baseline">Historique ({{ inactiveCollections(company).length }})</span>
+                        </summary>
+                        <div class="collapse-content px-4 pb-4">
+                            <div
+                                v-for="col in inactiveCollections(company)"
+                                :key="col.id"
+                                class="flex items-center justify-between gap-3 border-t border-base-300 py-3 first:border-t-0"
+                            >
+                                <div class="flex min-w-0 flex-1 items-center gap-4">
+                                    <span class="cooper-baseline shrink-0 text-sm text-base-content/55">
+                                        {{ formatDate(col.start) }} → {{ formatDate(col.end) }}
+                                    </span>
+                                    <span class="cooper-baseline min-w-0 truncate text-xs text-base-content/35">{{ col.url }}</span>
+                                    <button type="button" class="btn btn-ghost btn-xs cursor-not-allowed font-cooper opacity-50" @click="showDisabledLinkMessage">
+                                        <span class="cooper-baseline">Lien désactivé</span>
+                                    </button>
+                                </div>
+                                <a
+                                    :href="`/admin/companies/${company.id}/edit?collection=${col.id}`"
+                                    class="btn btn-ghost btn-xs shrink-0 font-cooper"
+                                    @click="editCollection(company, col, $event)"
+                                >
+                                    <span class="cooper-baseline">Modifier</span>
+                                </a>
+                            </div>
+                        </div>
+                    </details>
                 </div>
             </div>
         </div>

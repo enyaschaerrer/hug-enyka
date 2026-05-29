@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\CarbonInterface;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -29,5 +30,12 @@ class Collection extends Model
     public function company(): BelongsTo
     {
         return $this->belongsTo(Company::class);
+    }
+
+    public function isActive(?CarbonInterface $now = null): bool
+    {
+        $now ??= now();
+
+        return $this->end !== null && $this->end->greaterThanOrEqualTo($now);
     }
 }

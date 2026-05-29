@@ -5,6 +5,7 @@ import AdminLayout from '../../components/layout/AdminLayout.vue';
 
 type AppState = { csrfToken: string };
 type CollectionPayload = {
+    id: number;
     start: string | null;
     end: string | null;
     linkOneDoc: string | null;
@@ -50,6 +51,9 @@ const submitting = ref(false);
 const loading = ref(true);
 const loadError = ref<string | null>(null);
 const slugTouched = ref(false);
+const selectedCollectionId = ref<number | null>(
+    Number(new URLSearchParams(window.location.search).get('collection')) || null,
+);
 
 watch(() => form.name, (next) => {
     if (!slugTouched.value) {
@@ -94,7 +98,9 @@ async function fetchCompany() {
             form.primaryColor = data.primaryColor ?? '#c81e1e';
             form.secondaryColor = data.secondaryColor ?? '#fecaca';
             form.thirdColor = data.thirdColor ?? '#1f2937';
-            const collection = (data.collections?.[0] ?? null) as CollectionPayload | null;
+            const collections = (data.collections ?? []) as CollectionPayload[];
+            const collection = collections.find((item) => item.id === selectedCollectionId.value) ?? collections[0] ?? null;
+            selectedCollectionId.value = collection?.id ?? null;
             form.collection_start = toDatetimeLocal(collection?.start);
             form.collection_end = toDatetimeLocal(collection?.end);
             form.collection_linkOneDoc = collection?.linkOneDoc ?? '';
@@ -118,6 +124,9 @@ async function submit() {
     const payload: Record<string, unknown> = { ...form };
     if (payload.employee_count === '') {
         payload.employee_count = null;
+    }
+    if (selectedCollectionId.value !== null) {
+        payload.collection_id = selectedCollectionId.value;
     }
 
     try {

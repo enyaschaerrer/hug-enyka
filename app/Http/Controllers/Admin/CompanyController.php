@@ -14,7 +14,7 @@ class CompanyController extends Controller
 {
     public function index(): JsonResponse
     {
-        $companies = Company::with('collections')->get();
+        $companies = Company::with(['collections' => fn ($query) => $query->orderByDesc('start')])->get();
 
         return response()->json($companies->map(fn ($company) => [
             'id' => $company->id,
@@ -22,14 +22,7 @@ class CompanyController extends Controller
             'slug' => $company->slug,
             'email' => $company->email,
             'employee_count' => $company->employee_count,
-            'collections' => $company->collections->map(fn ($col) => [
-                'id' => $col->id,
-                'start' => $col->start?->toIso8601String(),
-                'end' => $col->end?->toIso8601String(),
-                'access_token' => $col->access_token,
-                'linkOneDoc' => $col->linkOneDoc,
-                'url' => '/collecte/' . $company->slug . '/' . $col->access_token,
-            ]),
+            'collections' => $company->collections->map(fn ($col) => $this->collectionPayload($company, $col)),
         ]));
     }
 
@@ -59,6 +52,7 @@ class CompanyController extends Controller
     {
         $validated = $request->validated();
         $company->update(Arr::except($validated, [
+            'collection_id',
             'collection_start',
             'collection_end',
             'collection_linkOneDoc',
@@ -86,7 +80,13 @@ class CompanyController extends Controller
      */
     private function saveCollection(Company $company, array $validated): void
     {
-        $collection = $company->collections()->oldest('id')->first();
+        $collection = isset($validated['collection_id'])
+            ? $company->collections()->whereKey($validated['collection_id'])->first()
+            : $company->collections()->oldest('id')->first();
+
+        if (isset($validated['collection_id']) && ! $collection) {
+            abort(404);
+        }
         $payload = [
             'start' => $validated['collection_start'],
             'end' => $validated['collection_end'],
@@ -112,14 +112,25 @@ class CompanyController extends Controller
     {
         return [
             ...$company->toArray(),
-            'collections' => $company->collections->map(fn ($col) => [
-                'id' => $col->id,
-                'start' => $col->start?->toIso8601String(),
-                'end' => $col->end?->toIso8601String(),
-                'access_token' => $col->access_token,
-                'linkOneDoc' => $col->linkOneDoc,
-                'url' => '/collecte/' . $company->slug . '/' . $col->access_token,
-            ])->values(),
+            'collections' => $company->collections
+                ->map(fn ($col) => $this->collectionPayload($company, $col))
+                ->values(),
+        ];
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function collectionPayload(Company $company, Collection $collection): array
+    {
+        return [
+            'id' => $collection->id,
+            'start' => $collection->start?->toIso8601String(),
+            'end' => $collection->end?->toIso8601String(),
+            'access_token' => $collection->access_token,
+            'linkOneDoc' => $collection->linkOneDoc,
+            'url' => '/collecte/' . $company->slug . '/' . $collection->access_token,
+            'is_active' => $collection->isActive(),
         ];
     }
 

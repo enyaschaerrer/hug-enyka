@@ -4,11 +4,14 @@ const currentPath = ref<string>(window.location.pathname);
 const flashMessage = ref<string | null>(null);
 
 function navigate(path: string): void {
-    if (path === currentPath.value) {
+    const nextUrl = new URL(path, window.location.origin);
+
+    if (nextUrl.pathname === currentPath.value && nextUrl.search === window.location.search) {
         return;
     }
-    window.history.pushState({}, '', path);
-    currentPath.value = path;
+
+    window.history.pushState({}, '', `${nextUrl.pathname}${nextUrl.search}`);
+    currentPath.value = nextUrl.pathname;
 }
 
 window.addEventListener('popstate', () => {
