@@ -13,7 +13,7 @@ const { currentPath, navigate } = useAdminRouter();
 
 function navLinkClasses(active: boolean): string {
     return [
-        'cooper-text-baseline flex min-h-16 items-center px-8 text-[1.35rem] font-medium transition-colors',
+        'flex min-h-16 items-center px-8 text-[1.35rem] font-medium transition-colors',
         active
             ? 'bg-[#F8E8EF] text-[#9B2F5C]'
             : 'text-[#2F2F36] hover:bg-[#FAF8F2] hover:text-[#9B2F5C]',
@@ -69,7 +69,7 @@ async function logout() {
                             :class="navLinkClasses(currentPath === '/admin')"
                             @click="goTo('/admin', $event)"
                         >
-                            Dashboard
+                            <span class="cooper-baseline">Dashboard</span>
                         </a>
                     </li>
                     <li class="m-0 p-0">
@@ -78,7 +78,7 @@ async function logout() {
                             :class="navLinkClasses(currentPath === '/admin/campagnes' || currentPath.startsWith('/admin/companies'))"
                             @click="goTo('/admin/campagnes', $event)"
                         >
-                            Campagnes
+                            <span class="cooper-baseline">Campagnes</span>
                         </a>
                     </li>
                     <li class="m-0 p-0">
@@ -87,7 +87,7 @@ async function logout() {
                             :class="navLinkClasses(currentPath === '/admin/registrations')"
                             @click="goTo('/admin/registrations', $event)"
                         >
-                            Inscriptions
+                            <span class="cooper-baseline">Inscriptions</span>
                         </a>
                     </li>
                 </ul>
@@ -99,10 +99,10 @@ async function logout() {
                     <p class="cooper-text-baseline mt-1 truncate text-xs text-[#2F2F36]/45">{{ user?.email }}</p>
                     <button
                         type="button"
-                        class="cooper-text-baseline mt-4 inline-flex w-full items-center justify-center border border-[#5A002A]/15 px-3 py-2 text-sm font-medium text-[#5A002A]/75 transition-colors hover:bg-[#F8E8EF] hover:text-[#5A002A]"
+                        class="mt-4 inline-flex w-full items-center justify-center border border-[#5A002A]/15 px-3 py-2 text-sm font-medium text-[#5A002A]/75 transition-colors hover:bg-[#F8E8EF] hover:text-[#5A002A]"
                         @click="logout"
                     >
-                        Déconnexion
+                        <span class="cooper-baseline">Déconnexion</span>
                     </button>
                 </div>
             </div>

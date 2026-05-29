@@ -188,8 +188,8 @@ onUnmounted(() => {
                             >
                                 <span class="cooper-baseline text-lg font-medium">{{ step.label }}</span>
                                 <span class="flex items-baseline gap-3">
-                                    <strong class="text-2xl">{{ displayValue(step.value, 'number') }}</strong>
-                                    <span v-if="step.rate !== null" class="text-lg">{{ step.rate }}%</span>
+                                    <strong class="cooper-baseline text-2xl">{{ displayValue(step.value, 'number') }}</strong>
+                                    <span v-if="step.rate !== null" class="cooper-baseline text-lg">{{ step.rate }}%</span>
                                 </span>
                             </div>
                             <p

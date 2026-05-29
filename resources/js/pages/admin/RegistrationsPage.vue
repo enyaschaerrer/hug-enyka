@@ -99,21 +99,21 @@ onUnmounted(() => {
                     @click="hasNew = false"
                 >
                     <span class="h-2 w-2 animate-pulse rounded-full bg-emerald-500"></span>
-                    Nouvelles inscriptions
+                    <span class="cooper-baseline">Nouvelles inscriptions</span>
                 </div>
             </div>
 
             <div v-if="loading" class="cooper-text-baseline text-sm text-base-content/50">Chargement...</div>
-            <div v-else-if="loadError" class="alert alert-error"><span>{{ loadError }}</span></div>
+            <div v-else-if="loadError" class="alert alert-error"><span class="cooper-baseline">{{ loadError }}</span></div>
             <div v-else-if="registrations.length === 0" class="cooper-text-baseline text-sm text-base-content/50">
                 Aucune inscription pour le moment.
             </div>
 
             <div v-else class="border border-base-300 bg-white">
                 <div class="flex border-b border-base-300 bg-[#f8e7ee] px-5 py-3 text-xs font-semibold uppercase tracking-wide text-[#5a002a]">
-                    <div class="w-1/4">Entreprise</div>
-                    <div class="w-1/4">Email</div>
-                    <div class="w-1/6">Date</div>
+                    <div class="w-1/4"><span class="cooper-baseline">Entreprise</span></div>
+                    <div class="w-1/4"><span class="cooper-baseline">Email</span></div>
+                    <div class="w-1/6"><span class="cooper-baseline">Date</span></div>
                 </div>
 
                 <div
@@ -121,9 +121,9 @@ onUnmounted(() => {
                     :key="reg.id"
                     class="flex items-center border-b border-base-200 px-5 py-3 hover:bg-rose-50/40"
                 >
-                    <div class="w-1/4 truncate font-medium">{{ reg.name }}</div>
-                    <div class="w-1/4 truncate text-base-content/70">{{ reg.email }}</div>
-                    <div class="w-1/6 truncate text-base-content/50">{{ formatDate(reg.created_at) }}</div>
+                    <div class="w-1/4 truncate font-medium"><span class="cooper-baseline">{{ reg.name }}</span></div>
+                    <div class="w-1/4 truncate text-base-content/70"><span class="cooper-baseline">{{ reg.email }}</span></div>
+                    <div class="w-1/6 truncate text-base-content/50"><span class="cooper-baseline">{{ formatDate(reg.created_at) }}</span></div>
                 </div>
             </div>
         </section>

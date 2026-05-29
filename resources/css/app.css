@@ -211,6 +211,13 @@ body {
     color: var(--color-blackrussian-950);
 }
 
+button,
+input,
+select,
+textarea {
+    font-family: var(--font-cooper);
+}
+
 .cooper-baseline {
     display: inline-block;
     transform: translateY(0.12em);
@@ -224,4 +231,10 @@ body {
     line-height: 1;
     padding-top: calc(0.625rem + 0.16em);
     padding-bottom: calc(0.625rem - 0.16em);
+}
+
+.cooper-textarea-baseline {
+    line-height: 1.45;
+    padding-top: calc(0.625rem + 0.08em);
+    padding-bottom: calc(0.625rem - 0.08em);
 }

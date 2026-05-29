@@ -161,7 +161,7 @@ onMounted(fetchCompany);
     <div class="mx-auto w-full max-w-3xl">
             <div class="mb-6 flex items-center justify-between">
                 <h1 class="cooper-text-baseline text-2xl font-semibold">Modifier la campagne</h1>
-                <a href="/admin/campagnes" class="btn btn-ghost btn-sm" @click="back">
+                <a href="/admin/campagnes" class="btn btn-ghost btn-sm font-cooper" @click="back">
                     <span class="cooper-baseline">Retour</span>
                 </a>
             </div>
@@ -169,21 +169,21 @@ onMounted(fetchCompany);
             <div v-if="loading" class="cooper-text-baseline text-sm text-base-content/60">Chargement...</div>
             <div v-else-if="loadError" class="alert alert-error"><span class="cooper-baseline">{{ loadError }}</span></div>
 
-            <form v-else @submit.prevent="submit" class="space-y-6">
+            <form v-else @submit.prevent="submit" class="space-y-6 font-cooper">
                 <section class="grid gap-x-4 gap-y-6 md:grid-cols-2">
-                    <label class="flex flex-col w-full">
+                    <label class="flex w-full flex-col gap-2">
                         <span class="cooper-baseline label-text">Nom *</span>
                         <input v-model="form.name" type="text" class="cooper-input-baseline input input-bordered w-full" required />
                         <p v-if="firstError('name')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('name') }}</p>
                     </label>
 
-                    <label class="flex flex-col w-full">
+                    <label class="flex w-full flex-col gap-2">
                         <span class="cooper-baseline label-text">Email *</span>
                         <input v-model="form.email" type="email" class="cooper-input-baseline input input-bordered w-full" required />
                         <p v-if="firstError('email')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('email') }}</p>
                     </label>
 
-                    <label class="flex flex-col w-full">
+                    <label class="flex w-full flex-col gap-2">
                         <span class="cooper-baseline label-text">Slug URL *</span>
                         <input
                             v-model="form.slug"
@@ -200,33 +200,33 @@ onMounted(fetchCompany);
                         <p v-if="firstError('slug')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('slug') }}</p>
                     </label>
 
-                    <label class="flex flex-col w-full">
+                    <label class="flex w-full flex-col gap-2">
                         <span class="cooper-baseline label-text">Téléphone</span>
                         <input v-model="form.telephone" type="tel" class="cooper-input-baseline input input-bordered w-full" />
                         <p v-if="firstError('telephone')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('telephone') }}</p>
                     </label>
                 </section>
 
-                <label class="flex flex-col w-full">
+                <label class="flex w-full flex-col gap-2">
                     <span class="cooper-baseline label-text">Description courte</span>
-                    <textarea v-model="form.short_description" class="cooper-text-baseline textarea textarea-bordered w-full" rows="2" maxlength="500"></textarea>
+                    <textarea v-model="form.short_description" class="cooper-textarea-baseline textarea textarea-bordered w-full font-cooper" rows="2" maxlength="500"></textarea>
                     <p v-if="firstError('short_description')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('short_description') }}</p>
                 </label>
 
-                <label class="flex flex-col w-full">
+                <label class="flex w-full flex-col gap-2">
                     <span class="cooper-baseline label-text">Adresse</span>
-                    <textarea v-model="form.address" class="cooper-text-baseline textarea textarea-bordered w-full" rows="2" maxlength="500"></textarea>
+                    <textarea v-model="form.address" class="cooper-textarea-baseline textarea textarea-bordered w-full font-cooper" rows="2" maxlength="500"></textarea>
                     <p v-if="firstError('address')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('address') }}</p>
                 </label>
 
                 <section class="grid gap-x-4 gap-y-6 md:grid-cols-3">
-                    <label class="flex flex-col w-full">
+                    <label class="flex w-full flex-col gap-2">
                         <span class="cooper-baseline label-text">Nombre d'employés</span>
                         <input v-model="form.employee_count" type="number" min="0" class="cooper-input-baseline input input-bordered w-full" />
                         <p v-if="firstError('employee_count')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('employee_count') }}</p>
                     </label>
 
-                    <label class="flex flex-col w-full md:col-span-2">
+                    <label class="flex w-full flex-col gap-2 md:col-span-2">
                         <span class="cooper-baseline label-text">Domaines email autorisés</span>
                         <input v-model="form.allowed_email_domains" type="text" class="cooper-input-baseline input input-bordered w-full" placeholder="rolex.com,rolex.ch" />
                         <p v-if="firstError('allowed_email_domains')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('allowed_email_domains') }}</p>
@@ -234,13 +234,13 @@ onMounted(fetchCompany);
                 </section>
 
                 <section class="grid gap-x-4 gap-y-6 md:grid-cols-2">
-                    <label class="flex flex-col w-full">
+                    <label class="flex w-full flex-col gap-2">
                         <span class="cooper-baseline label-text">Source (référent)</span>
                         <input v-model="form.source" type="text" class="cooper-input-baseline input input-bordered w-full" placeholder="Recommandation, salon, ..." />
                         <p v-if="firstError('source')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('source') }}</p>
                     </label>
 
-                    <label class="flex flex-col w-full">
+                    <label class="flex w-full flex-col gap-2">
                         <span class="cooper-baseline label-text">Chemin du logo</span>
                         <input v-model="form.logo" type="text" class="cooper-input-baseline input input-bordered w-full" placeholder="/img/logos/exemple.png" />
                         <span class="cooper-text-baseline mt-1 text-xs text-base-content/60">Déposer le fichier dans public/img/logos/</span>
@@ -249,29 +249,29 @@ onMounted(fetchCompany);
                 </section>
 
                 <section>
-                    <p class="cooper-text-baseline mb-2 label-text">Couleurs co-brandées</p>
+                    <p class="cooper-text-baseline mb-3 label-text">Couleurs co-brandées</p>
                     <div class="grid gap-x-4 gap-y-6 md:grid-cols-3">
-                        <label class="flex flex-col w-full">
+                        <label class="flex w-full flex-col gap-2">
                             <span class="cooper-baseline label-text-alt">Primaire</span>
                             <div class="join w-full">
                                 <input v-model="form.primaryColor" type="color" class="join-item h-12 w-14 cursor-pointer border border-base-300 p-1" aria-label="Couleur primaire" />
-                                <input v-model="form.primaryColor" type="text" class="cooper-input-baseline join-item input input-bordered h-12 w-full" placeholder="#c81e1e" maxlength="7" />
+                                <input v-model="form.primaryColor" type="text" class="cooper-input-baseline join-item input input-bordered h-12 w-full font-cooper" placeholder="#c81e1e" maxlength="7" />
                             </div>
                             <p v-if="firstError('primaryColor')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('primaryColor') }}</p>
                         </label>
-                        <label class="flex flex-col w-full">
+                        <label class="flex w-full flex-col gap-2">
                             <span class="cooper-baseline label-text-alt">Secondaire</span>
                             <div class="join w-full">
                                 <input v-model="form.secondaryColor" type="color" class="join-item h-12 w-14 cursor-pointer border border-base-300 p-1" aria-label="Couleur secondaire" />
-                                <input v-model="form.secondaryColor" type="text" class="cooper-input-baseline join-item input input-bordered h-12 w-full" placeholder="#fecaca" maxlength="7" />
+                                <input v-model="form.secondaryColor" type="text" class="cooper-input-baseline join-item input input-bordered h-12 w-full font-cooper" placeholder="#fecaca" maxlength="7" />
                             </div>
                             <p v-if="firstError('secondaryColor')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('secondaryColor') }}</p>
                         </label>
-                        <label class="flex flex-col w-full">
+                        <label class="flex w-full flex-col gap-2">
                             <span class="cooper-baseline label-text-alt">Tertiaire</span>
                             <div class="join w-full">
                                 <input v-model="form.thirdColor" type="color" class="join-item h-12 w-14 cursor-pointer border border-base-300 p-1" aria-label="Couleur tertiaire" />
-                                <input v-model="form.thirdColor" type="text" class="cooper-input-baseline join-item input input-bordered h-12 w-full" placeholder="#1f2937" maxlength="7" />
+                                <input v-model="form.thirdColor" type="text" class="cooper-input-baseline join-item input input-bordered h-12 w-full font-cooper" placeholder="#1f2937" maxlength="7" />
                             </div>
                             <p v-if="firstError('thirdColor')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('thirdColor') }}</p>
                         </label>
@@ -285,19 +285,19 @@ onMounted(fetchCompany);
                     </div>
 
                     <div class="grid gap-x-4 gap-y-6 md:grid-cols-2">
-                        <label class="flex flex-col w-full">
+                        <label class="flex w-full flex-col gap-2">
                             <span class="cooper-baseline label-text">Début *</span>
                             <input v-model="form.collection_start" type="datetime-local" class="cooper-input-baseline input input-bordered w-full" required />
                             <p v-if="firstError('collection_start')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('collection_start') }}</p>
                         </label>
 
-                        <label class="flex flex-col w-full">
+                        <label class="flex w-full flex-col gap-2">
                             <span class="cooper-baseline label-text">Fin *</span>
                             <input v-model="form.collection_end" type="datetime-local" class="cooper-input-baseline input input-bordered w-full" required />
                             <p v-if="firstError('collection_end')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('collection_end') }}</p>
                         </label>
 
-                        <label class="flex flex-col w-full md:col-span-2">
+                        <label class="flex w-full flex-col gap-2 md:col-span-2">
                             <span class="cooper-baseline label-text">Lien OneDoc *</span>
                             <input v-model="form.collection_linkOneDoc" type="text" class="cooper-input-baseline input input-bordered w-full" placeholder="https://..." required />
                             <p v-if="firstError('collection_linkOneDoc')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('collection_linkOneDoc') }}</p>
@@ -306,10 +306,10 @@ onMounted(fetchCompany);
                 </section>
 
                 <div class="flex justify-end gap-2 pt-4">
-                    <a href="/admin/campagnes" class="btn btn-ghost" @click="back">
+                    <a href="/admin/campagnes" class="btn btn-ghost font-cooper" @click="back">
                         <span class="cooper-baseline">Annuler</span>
                     </a>
-                    <button type="submit" class="btn btn-primary" :disabled="submitting">
+                    <button type="submit" class="btn btn-primary font-cooper" :disabled="submitting">
                         <span class="cooper-baseline">{{ submitting ? '...' : 'Enregistrer' }}</span>
                     </button>
                 </div>

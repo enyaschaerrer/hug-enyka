@@ -109,7 +109,7 @@ onMounted(fetchCompanies);
 
         <div class="mb-6 flex items-center justify-between">
             <h1 class="cooper-text-baseline text-2xl font-semibold">Campagnes</h1>
-            <a href="/admin/companies/create" class="btn btn-primary btn-sm" @click="goToCreate">
+            <a href="/admin/companies/create" class="btn btn-primary btn-sm font-cooper" @click="goToCreate">
                 <span class="cooper-baseline">Créer une nouvelle campagne</span>
             </a>
         </div>
@@ -130,7 +130,7 @@ onMounted(fetchCompanies);
                     <div>
                         <p class="cooper-text-baseline font-semibold">{{ company.name }}</p>
                         <p class="cooper-text-baseline mt-0.5 text-sm text-base-content/50">
-                            <span class="font-mono">{{ company.slug }}</span>
+                            <span class="cooper-baseline">{{ company.slug }}</span>
                             · {{ company.email }}
                             <span v-if="company.employee_count"> · {{ company.employee_count }} employés</span>
                         </p>
@@ -138,14 +138,14 @@ onMounted(fetchCompanies);
                     <div class="flex shrink-0 gap-2">
                         <a
                             :href="`/admin/companies/${company.id}/edit`"
-                            class="btn btn-ghost btn-sm"
+                            class="btn btn-ghost btn-sm font-cooper"
                             @click.prevent="navigate(`/admin/companies/${company.id}/edit`)"
                         >
                             <span class="cooper-baseline">Modifier</span>
                         </a>
                         <button
                             type="button"
-                            class="btn btn-error btn-outline btn-sm"
+                            class="btn btn-error btn-outline btn-sm font-cooper"
                             :disabled="deletingCompanyId === company.id"
                             @click="deleteCompany(company)"
                         >
@@ -168,7 +168,7 @@ onMounted(fetchCompanies);
                     >
                         <div class="flex flex-wrap items-center gap-3">
                             <span class="cooper-baseline text-base-content/60">{{ formatDate(col.start) }} → {{ formatDate(col.end) }}</span>
-                            <a :href="col.url" target="_blank" class="link link-primary font-mono text-xs">
+                            <a :href="col.url" target="_blank" class="link link-primary text-xs">
                                 <span class="cooper-baseline">{{ col.url }}</span>
                             </a>
                         </div>

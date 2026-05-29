@@ -112,14 +112,14 @@ async function submit() {
     <div class="mx-auto w-full max-w-3xl">
             <div class="mb-6 flex items-center justify-between">
                 <h1 class="cooper-text-baseline text-2xl font-semibold">Créer une campagne</h1>
-                <a href="/admin/campagnes" @click="back" class="btn btn-ghost btn-sm">
+                <a href="/admin/campagnes" @click="back" class="btn btn-ghost btn-sm font-cooper">
                     <span class="cooper-baseline">Retour</span>
                 </a>
             </div>
 
-            <form @submit.prevent="submit" class="space-y-6">
+            <form @submit.prevent="submit" class="space-y-6 font-cooper">
                 <section class="grid gap-x-4 gap-y-6 md:grid-cols-2">
-                    <label class="flex flex-col w-full">
+                    <label class="flex w-full flex-col gap-2">
                         <span class="cooper-baseline label-text">Nom *</span>
                         <input
                             v-model="form.name"
@@ -130,7 +130,7 @@ async function submit() {
                         <p v-if="firstError('name')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('name') }}</p>
                     </label>
 
-                    <label class="flex flex-col w-full">
+                    <label class="flex w-full flex-col gap-2">
                         <span class="cooper-baseline label-text">Email *</span>
                         <input
                             v-model="form.email"
@@ -141,7 +141,7 @@ async function submit() {
                         <p v-if="firstError('email')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('email') }}</p>
                     </label>
 
-                    <label class="flex flex-col w-full">
+                    <label class="flex w-full flex-col gap-2">
                         <span class="cooper-baseline label-text">Slug URL *</span>
                         <input
                             v-model="form.slug"
@@ -158,7 +158,7 @@ async function submit() {
                         <p v-if="firstError('slug')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('slug') }}</p>
                     </label>
 
-                    <label class="flex flex-col w-full">
+                    <label class="flex w-full flex-col gap-2">
                         <span class="cooper-baseline label-text">Téléphone</span>
                         <input
                             v-model="form.telephone"
@@ -169,22 +169,22 @@ async function submit() {
                     </label>
                 </section>
 
-                <label class="flex flex-col w-full">
+                <label class="flex w-full flex-col gap-2">
                     <span class="cooper-baseline label-text">Description courte</span>
                     <textarea
                         v-model="form.short_description"
-                        class="cooper-text-baseline textarea textarea-bordered w-full"
+                        class="cooper-textarea-baseline textarea textarea-bordered w-full font-cooper"
                         rows="2"
                         maxlength="500"
                     ></textarea>
                     <p v-if="firstError('short_description')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('short_description') }}</p>
                 </label>
 
-                <label class="flex flex-col w-full">
+                <label class="flex w-full flex-col gap-2">
                     <span class="cooper-baseline label-text">Adresse</span>
                     <textarea
                         v-model="form.address"
-                        class="cooper-text-baseline textarea textarea-bordered w-full"
+                        class="cooper-textarea-baseline textarea textarea-bordered w-full font-cooper"
                         rows="2"
                         maxlength="500"
                     ></textarea>
@@ -192,7 +192,7 @@ async function submit() {
                 </label>
 
                 <section class="grid gap-x-4 gap-y-6 md:grid-cols-3">
-                    <label class="flex flex-col w-full">
+                    <label class="flex w-full flex-col gap-2">
                         <span class="cooper-baseline label-text">Nombre d'employés</span>
                         <input
                             v-model="form.employee_count"
@@ -203,7 +203,7 @@ async function submit() {
                         <p v-if="firstError('employee_count')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('employee_count') }}</p>
                     </label>
 
-                    <label class="flex flex-col w-full md:col-span-2">
+                    <label class="flex w-full flex-col gap-2 md:col-span-2">
                         <span class="cooper-baseline label-text">Domaines email autorisés</span>
                         <input
                             v-model="form.allowed_email_domains"
@@ -216,7 +216,7 @@ async function submit() {
                 </section>
 
                 <section class="grid gap-x-4 gap-y-6 md:grid-cols-2">
-                    <label class="flex flex-col w-full">
+                    <label class="flex w-full flex-col gap-2">
                         <span class="cooper-baseline label-text">Source (référent)</span>
                         <input
                             v-model="form.source"
@@ -227,7 +227,7 @@ async function submit() {
                         <p v-if="firstError('source')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('source') }}</p>
                     </label>
 
-                    <label class="flex flex-col w-full">
+                    <label class="flex w-full flex-col gap-2">
                         <span class="cooper-baseline label-text">Chemin du logo</span>
                         <input
                             v-model="form.logo"
@@ -243,9 +243,9 @@ async function submit() {
                 </section>
 
                 <section>
-                    <p class="cooper-text-baseline mb-2 label-text">Couleurs co-brandées</p>
+                    <p class="cooper-text-baseline mb-3 label-text">Couleurs co-brandées</p>
                     <div class="grid gap-x-4 gap-y-6 md:grid-cols-3">
-                        <label class="flex flex-col w-full">
+                        <label class="flex w-full flex-col gap-2">
                             <span class="cooper-baseline label-text-alt">Primaire</span>
                             <div class="join w-full">
                                 <input
@@ -257,14 +257,14 @@ async function submit() {
                                 <input
                                     v-model="form.primaryColor"
                                     type="text"
-                                    class="cooper-input-baseline join-item input input-bordered h-12 w-full"
+                                    class="cooper-input-baseline join-item input input-bordered h-12 w-full font-cooper"
                                     placeholder="#c81e1e"
                                     maxlength="7"
                                 />
                             </div>
                             <p v-if="firstError('primaryColor')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('primaryColor') }}</p>
                         </label>
-                        <label class="flex flex-col w-full">
+                        <label class="flex w-full flex-col gap-2">
                             <span class="cooper-baseline label-text-alt">Secondaire</span>
                             <div class="join w-full">
                                 <input
@@ -276,14 +276,14 @@ async function submit() {
                                 <input
                                     v-model="form.secondaryColor"
                                     type="text"
-                                    class="cooper-input-baseline join-item input input-bordered h-12 w-full"
+                                    class="cooper-input-baseline join-item input input-bordered h-12 w-full font-cooper"
                                     placeholder="#fecaca"
                                     maxlength="7"
                                 />
                             </div>
                             <p v-if="firstError('secondaryColor')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('secondaryColor') }}</p>
                         </label>
-                        <label class="flex flex-col w-full">
+                        <label class="flex w-full flex-col gap-2">
                             <span class="cooper-baseline label-text-alt">Tertiaire</span>
                             <div class="join w-full">
                                 <input
@@ -295,7 +295,7 @@ async function submit() {
                                 <input
                                     v-model="form.thirdColor"
                                     type="text"
-                                    class="cooper-input-baseline join-item input input-bordered h-12 w-full"
+                                    class="cooper-input-baseline join-item input input-bordered h-12 w-full font-cooper"
                                     placeholder="#1f2937"
                                     maxlength="7"
                                 />
@@ -312,7 +312,7 @@ async function submit() {
                     </div>
 
                     <div class="grid gap-x-4 gap-y-6 md:grid-cols-2">
-                        <label class="flex flex-col w-full">
+                        <label class="flex w-full flex-col gap-2">
                             <span class="cooper-baseline label-text">Début *</span>
                             <input
                                 v-model="form.collection_start"
@@ -323,7 +323,7 @@ async function submit() {
                             <p v-if="firstError('collection_start')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('collection_start') }}</p>
                         </label>
 
-                        <label class="flex flex-col w-full">
+                        <label class="flex w-full flex-col gap-2">
                             <span class="cooper-baseline label-text">Fin *</span>
                             <input
                                 v-model="form.collection_end"
@@ -334,7 +334,7 @@ async function submit() {
                             <p v-if="firstError('collection_end')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('collection_end') }}</p>
                         </label>
 
-                        <label class="flex flex-col w-full md:col-span-2">
+                        <label class="flex w-full flex-col gap-2 md:col-span-2">
                             <span class="cooper-baseline label-text">Lien OneDoc *</span>
                             <input
                                 v-model="form.collection_linkOneDoc"
@@ -349,10 +349,10 @@ async function submit() {
                 </section>
 
                 <div class="flex justify-end gap-2 pt-4">
-                    <a href="/admin/campagnes" @click="back" class="btn btn-ghost">
+                    <a href="/admin/campagnes" @click="back" class="btn btn-ghost font-cooper">
                         <span class="cooper-baseline">Annuler</span>
                     </a>
-                    <button type="submit" class="btn btn-primary" :disabled="submitting">
+                    <button type="submit" class="btn btn-primary font-cooper" :disabled="submitting">
                         <span class="cooper-baseline">{{ submitting ? '...' : 'Créer la campagne' }}</span>
                     </button>
                 </div>
