@@ -233,6 +233,7 @@ onUnmounted(() => {
                         <div class="w-1/5 text-center">
                             <div class="inline-flex gap-2">
                                 <button
+                                    v-if="!reg.treated"
                                     class="rounded border border-stone-200 bg-stone-50 px-3 py-1 text-xs font-medium text-stone-600 transition hover:bg-stone-100 font-cooper"
                                     @click="openDetail(reg.id)"
                                 >
