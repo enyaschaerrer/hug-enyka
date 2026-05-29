@@ -13,37 +13,32 @@ class PublicSiteController extends Controller
     {
         $companiesData = $this->companiesData();
 
-        // Podium par édition (type 'donneur' pour l'instant).
+        // Podiums par type ('donneur' / 'ambassadeur' / 'prixJury') et par édition.
         $podiumRows = DB::table('prizes as p')
             ->join('trophy_editions as te', 'te.id', '=', 'p.trophy_edition_id')
             ->join('companies as c', 'c.id', '=', 'p.company_id')
-            ->where('p.type', 'donneur')
             ->orderBy('te.year')
             ->orderBy('p.rank')
-            ->select(['te.year', 'p.rank', 'c.id as company_id', 'c.name as company_name', 'c.logo as company_logo'])
+            ->select(['te.year', 'p.rank', 'p.type', 'c.id as company_id', 'c.name as company_name', 'c.logo as company_logo'])
             ->get();
 
-        // Nombre de trophées cumulés par (entreprise, année) : tous les prizes où l'édition est <= année.
-        $allPrizes = DB::table('prizes as p')
-            ->join('trophy_editions as te', 'te.id', '=', 'p.trophy_edition_id')
-            ->where('p.type', 'donneur')
-            ->select('p.company_id', 'te.year')
-            ->get();
-
-        $trophyCountAt = fn (int $companyId, int $year) => $allPrizes
+        // Nombre de prix cumulés par (entreprise, année, type) : prizes où l'édition est <= année.
+        $trophyCountAt = fn (int $companyId, int $year, string $type) => $podiumRows
             ->where('company_id', $companyId)
+            ->where('type', $type)
             ->where('year', '<=', $year)
             ->count();
 
-        $podiumsData = $podiumRows
+        $buildPodiumsForType = fn (string $type) => $podiumRows
+            ->where('type', $type)
             ->groupBy('year')
-            ->map(function ($rows, $year) use ($trophyCountAt) {
+            ->map(function ($rows, $year) use ($trophyCountAt, $type) {
                 $year = (int) $year;
                 $byRank = $rows->keyBy('rank');
                 $entry = fn ($r) => [
                     'name' => $r?->company_name,
                     'logo' => $r?->company_logo,
-                    'trophies' => $r ? $trophyCountAt($r->company_id, $year) : 0,
+                    'trophies' => $r ? $trophyCountAt($r->company_id, $year, $type) : 0,
                 ];
                 return [
                     'year' => $year,
@@ -53,6 +48,12 @@ class PublicSiteController extends Controller
                 ];
             })
             ->values();
+
+        $podiumsData = [
+            'donneur' => $buildPodiumsForType('donneur'),
+            'ambassadeur' => $buildPodiumsForType('ambassadeur'),
+            'prixJury' => $buildPodiumsForType('prixJury'),
+        ];
 
         // Jury : pas de modèle, données en dur.
         $jury = [
