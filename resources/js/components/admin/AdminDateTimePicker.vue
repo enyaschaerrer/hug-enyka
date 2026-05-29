@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onUnmounted, ref, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
 
 const props = withDefaults(defineProps<{
     modelValue: string;
@@ -38,25 +38,6 @@ const isOpen = ref(false);
 const hoveredDate = ref<Date | null>(null);
 const openUpward = ref(false);
 const triggerRef = ref<HTMLButtonElement | null>(null);
-const containerRef = ref<HTMLDivElement | null>(null);
-
-function handleClickOutside(event: MouseEvent) {
-    if (containerRef.value && !containerRef.value.contains(event.target as Node)) {
-        isOpen.value = false;
-    }
-}
-
-watch(isOpen, (val) => {
-    if (val) {
-        document.addEventListener('mousedown', handleClickOutside);
-    } else {
-        document.removeEventListener('mousedown', handleClickOutside);
-    }
-});
-
-onUnmounted(() => {
-    document.removeEventListener('mousedown', handleClickOutside);
-});
 
 function toggleOpen() {
     if (!isOpen.value && triggerRef.value) {
@@ -115,6 +96,19 @@ watch(() => props.modelValue, (next) => {
     const date = parseLocalDateTime(next);
     if (date) {
         visibleMonth.value = date.getMonth();
+    }
+});
+
+watch(effectiveMinDateTime, (newMin) => {
+    if (!newMin || !props.modelValue) {
+        return;
+    }
+
+    const current = parseLocalDateTime(props.modelValue);
+    const min = parseLocalDateTime(newMin);
+
+    if (current && min && current.getTime() < min.getTime()) {
+        emit('update:modelValue', '');
     }
 });
 
@@ -202,12 +196,16 @@ function isDisabled(day: Date | null): boolean {
         return false;
     }
 
-    return day.getTime() < minDate.value.getTime();
+    return day.getTime() <= minDate.value.getTime();
 }
 
 function dayClasses(day: Date | null): string {
     if (!day) {
         return 'invisible';
+    }
+
+    if (props.mode === 'end' && isSameDate(day, referenceDate.value)) {
+        return 'bg-[#5A002A]/10 border border-[#5A002A]/50 text-[#5A002A] font-medium cursor-not-allowed';
     }
 
     if (isDisabled(day)) {
@@ -219,10 +217,6 @@ function dayClasses(day: Date | null): string {
     }
 
     if (props.mode === 'end') {
-        if (isSameDate(day, referenceDate.value)) {
-            return 'bg-[#5A002A]/10 border border-[#5A002A]/50 text-[#5A002A] font-medium';
-        }
-
         if (isSameDate(day, hoveredDate.value)) {
             return 'bg-primary/25 text-primary';
         }
@@ -297,20 +291,22 @@ function iconPath(): string[] {
 </script>
 
 <template>
-    <div ref="containerRef" class="relative">
+    <div class="relative">
         <button
             ref="triggerRef"
             type="button"
-            class="cooper-datetime-baseline input input-bordered flex w-full items-center justify-between pr-3 text-left"
+            class="cooper-datetime-baseline group input input-bordered flex w-full items-center justify-between pr-3 text-left font-cooper font-medium text-sm"
             @click="toggleOpen"
         >
-            <span class="cooper-baseline truncate" :class="displayValue ? 'text-base-content' : 'text-base-content/35'">
+            <span class="cooper-baseline truncate transition-colors duration-200 ease-out group-hover:text-primary" :class="displayValue ? 'text-base-content' : 'text-base-content/35'">
                 {{ displayValue || label }}
             </span>
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 shrink-0 cursor-pointer text-base-content/55 transition-colors duration-200 ease-out hover:text-black" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 shrink-0 cursor-pointer text-base-content/55 transition-colors duration-200 ease-out group-hover:text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <path v-for="path in iconPath()" :key="path" :d="path" />
             </svg>
         </button>
+
+        <div v-if="isOpen" class="fixed inset-0 z-20" @mousedown="isOpen = false"></div>
 
         <div
             v-if="isOpen"
@@ -321,7 +317,7 @@ function iconPath(): string[] {
                 <button type="button" class="btn btn-ghost btn-sm px-2" @click="previousMonth">
                     <span class="cooper-baseline">←</span>
                 </button>
-                <select v-model.number="visibleMonth" class="cooper-input-baseline select select-bordered select-sm min-h-9 flex-1 font-cooper">
+                <select v-model.number="visibleMonth" class="cooper-input-baseline select select-bordered select-sm min-h-9 flex-1 font-cooper font-medium text-sm">
                     <option v-for="(month, index) in months" :key="month" :value="index">
                         {{ month }}
                     </option>
