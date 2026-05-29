@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { reactive, ref, watch } from 'vue';
 import { useAdminRouter } from '../../composables/useAdminRouter';
+import AdminDateTimePicker from '../../components/admin/AdminDateTimePicker.vue';
 import AdminLayout from '../../components/layout/AdminLayout.vue';
 import { readableTextColor } from '../../utils/contrast';
 
@@ -62,15 +63,6 @@ function firstError(field: string): string | null {
 function back(event: Event) {
     event.preventDefault();
     navigate('/admin/campagnes');
-}
-
-function openDatePicker(event: Event) {
-    const input = (event.currentTarget as HTMLElement)
-        .parentElement
-        ?.querySelector('input[type="datetime-local"]') as HTMLInputElement | null;
-
-    input?.showPicker?.();
-    input?.focus();
 }
 
 async function submit() {
@@ -391,47 +383,25 @@ async function submit() {
                     <div class="grid gap-x-4 gap-y-6 md:grid-cols-2">
                         <label class="flex w-full flex-col gap-2">
                             <span class="cooper-baseline label-text">Début *</span>
-                            <span class="relative block">
-                                <input
-                                    v-model="form.collection_start"
-                                    type="datetime-local"
-                                    class="cooper-datetime-baseline input input-bordered w-full pr-11"
-                                    required
-                                />
-                                <button type="button" class="absolute right-3 top-1/2 -translate-y-1/2 text-base-content/55 transition-colors duration-200 ease-out hover:text-black" aria-label="Ouvrir le calendrier de début" @click="openDatePicker">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                                        <path d="m14 18 4-4 4 4" />
-                                        <path d="M16 2v4" />
-                                        <path d="M18 22v-8" />
-                                        <path d="M21 11.343V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h9" />
-                                        <path d="M3 10h18" />
-                                        <path d="M8 2v4" />
-                                    </svg>
-                                </button>
-                            </span>
+                            <AdminDateTimePicker
+                                v-model="form.collection_start"
+                                label="Choisir une date de début"
+                                mode="start"
+                                default-time="09:00"
+                            />
                             <p v-if="firstError('collection_start')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('collection_start') }}</p>
                         </label>
 
                         <label class="flex w-full flex-col gap-2">
                             <span class="cooper-baseline label-text">Fin *</span>
-                            <span class="relative block">
-                                <input
-                                    v-model="form.collection_end"
-                                    type="datetime-local"
-                                    class="cooper-datetime-baseline input input-bordered w-full pr-11"
-                                    required
-                                />
-                                <button type="button" class="absolute right-3 top-1/2 -translate-y-1/2 text-base-content/55 transition-colors duration-200 ease-out hover:text-black" aria-label="Ouvrir le calendrier de fin" @click="openDatePicker">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                                        <path d="m14 18 4 4 4-4" />
-                                        <path d="M16 2v4" />
-                                        <path d="M18 14v8" />
-                                        <path d="M21 11.354V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h7.343" />
-                                        <path d="M3 10h18" />
-                                        <path d="M8 2v4" />
-                                    </svg>
-                                </button>
-                            </span>
+                            <AdminDateTimePicker
+                                v-model="form.collection_end"
+                                label="Choisir une date de fin"
+                                mode="end"
+                                :min-date-time="form.collection_start || null"
+                                :reference-date-time="form.collection_start || null"
+                                default-time="17:00"
+                            />
                             <p v-if="firstError('collection_end')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('collection_end') }}</p>
                         </label>
 
