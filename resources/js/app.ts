@@ -22,7 +22,13 @@ if (podiumRoot) {
 const companiesRoot = document.getElementById('companies');
 if (companiesRoot) {
     const initialCompanies = JSON.parse(companiesRoot.dataset.companies ?? '[]');
-    createApp(Companies, { initialCompanies }).mount(companiesRoot);
+    const props: Record<string, unknown> = { initialCompanies };
+    if (companiesRoot.dataset.title) props.title = companiesRoot.dataset.title;
+    if (companiesRoot.dataset.description) props.description = companiesRoot.dataset.description;
+    if (companiesRoot.dataset.showTrophies !== undefined) {
+        props.showTrophies = companiesRoot.dataset.showTrophies !== 'false';
+    }
+    createApp(Companies, props).mount(companiesRoot);
 }
 
 const cookieConsentRoot = document.getElementById('cookie-consent-root');
