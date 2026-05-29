@@ -3,7 +3,7 @@
         ['label' => 'Accueil', 'href' => '/'],
         ['label' => 'Label CDH', 'href' => '/label'],
         ['label' => 'Collecte', 'href' => '/collecte'],
-        ['label' => 'Participation au Prix du Coeur', 'href' => '/prix'],
+        ['label' => 'Participation au Prix du Coeur', 'href' => '/prize'],
     ];
     $currentPath = '/' . trim(request()->path(), '/');
     $currentPath = $currentPath === '/' ? '/' : rtrim($currentPath, '/');

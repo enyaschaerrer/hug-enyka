@@ -11,11 +11,12 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [PublicSiteController::class, 'home'])->name('public.home');
 Route::get('/collecte', fn () => view('public.collection'))->name('public.collecte');
-Route::get('/prix', fn () => view('app'))->name('public.prize');
+Route::get('/prize', fn () => view('public.prize'))->name('public.prize');
 Route::get('/label', [PublicSiteController::class, 'label'])->name('public.label');
-Route::get('/contact', fn () => view('app'))->name('public.contact');
+Route::get('/contact', fn () => view('public.contact'))->name('public.contact');
 Route::post('/collecte/inscription', [CompanyFormController::class, 'store'])->name('public.collecte.inscription');
 Route::get('/collecte/{brand}/{token}', [CoBrandedCollecteController::class, 'show'])->name('public.collecte.cobranded');
+Route::post('/prize/inscription', [CompanyFormController::class, 'storePrize']);
 
 // Admin SPA shell — login page is public
 Route::get('/admin/login', fn () => view('app'))->name('login');
