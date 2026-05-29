@@ -2,12 +2,13 @@
 import { ref } from "vue";
 
 const form = ref({
-    companyName: "",
-    email: "",
-    phone: "",
-    npa: "",
-    locality: "",
-    referredBy: "",
+    companyName: '',
+    email: '',
+    phone: '',
+    npa: '',
+    locality: '',
+    referredBy: '',
+    message: '',         
     participatePrixCoeur: false,
 });
 
@@ -29,9 +30,12 @@ async function handleSubmit() {
                 'X-Requested-With': 'XMLHttpRequest',
             },
             body: JSON.stringify({
-                name:  form.value.companyName,
-                email: form.value.email,
-                slug:  form.value.companyName.toLowerCase().substring(0, 20),
+                name:    form.value.companyName,
+                email:   form.value.email,
+                phone:   form.value.phone,
+                address: `${form.value.npa} ${form.value.locality}`.trim(),
+                message: form.value.message,     
+                trophy:  form.value.participatePrixCoeur,
             }),
         });
 
@@ -139,6 +143,19 @@ async function handleSubmit() {
                                     class="w-full rounded-xl border border-stone-200 bg-white px-4 py-3 text-stone-900 placeholder-stone-300 outline-none transition focus:border-rose-300 focus:ring-2 focus:ring-rose-100"
                                 />
                             </div>
+                        </div>
+
+                        <!-- Message -->
+                        <div>
+                            <label class="mb-1.5 block text-sm font-medium text-stone-700">
+                                Message
+                            </label>
+                            <textarea
+                                v-model="form.message"
+                                rows="4"
+                                placeholder="Décrivez votre projet de collecte, vos besoins..."
+                                class="w-full rounded-xl border border-stone-200 bg-white px-4 py-3 text-stone-900 placeholder-stone-300 outline-none transition focus:border-rose-300 focus:ring-2 focus:ring-rose-100"
+                            ></textarea>
                         </div>
 
                         <!-- Prix du Cœur -->
