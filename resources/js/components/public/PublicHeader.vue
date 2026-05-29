@@ -2,7 +2,7 @@
 const navItems = [
     { label: 'Home', href: '/' },
     { label: 'Collecte', href: '/collecte' },
-    { label: 'Trophée', href: '/trophee' },
+    { label: 'Trophée', href: '/prix' },
     { label: 'Label', href: '/label' },
     { label: 'Contact', href: '/contact' },
 ];

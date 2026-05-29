@@ -48,21 +48,30 @@
     /* ----- Typographie (Cooper Hewitt) -----
        Génère les utilitaires : text-display / text-heading / text-body / text-caption
        Chacun bundle font-size + line-height + font-weight. */
-    --text-display: 34px;
-    --text-display--line-height: 1.2;
+    --text-display: 38px;
+    --text-display--line-height: 40px;
     --text-display--font-weight: 700; /* Bold */
 
-    --text-heading: 23px;
-    --text-heading--line-height: 1.3;
-    --text-heading--font-weight: 500; /* Medium */
+    --text-heading-t1: 28px;
+    --text-heading-t1--line-height: 28px;
+    --text-heading-t1--font-weight: 500; /* Medium */
+
+    --text-heading-t2: 20px;
+    --text-heading-t2--line-height: 28px;
+    --text-heading-t2--font-weight: 500; /* Medium */
+
+    --text-heading-t3: 18px;
+    --text-heading-t3--line-height: 25px;
+    --text-heading-t3--font-weight: 500; /* Medium */
 
     --text-body: 16px;
-    --text-body--line-height: 1.5;
+    --text-body--line-height: 20px;
     --text-body--font-weight: 500; /* Medium */
 
     --text-caption: 13px;
-    --text-caption--line-height: 1.4;
+    --text-caption--line-height: 16px;
     --text-caption--font-weight: 400; /* Book */
+
 
     /* ----- Palettes — Coeur d'Honneur ----- */
 
@@ -129,6 +138,7 @@
     --color-merino-800: #744f38;
     --color-merino-900: #5e4230;
     --color-merino-950: #322118;
+
 
     /* ----- Palettes — HUG ----- */
 
@@ -208,7 +218,7 @@
 /* ----- Règles globales — public ----- */
 body {
     font-family: var(--font-cooper);
-    color: var(--color-blackrussian-950);
+    color: var(--color-martinique-900);
 }
 
 .cooper-baseline {
