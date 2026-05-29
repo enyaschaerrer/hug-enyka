@@ -48,7 +48,7 @@ async function logout() {
         <!-- Sidebar -->
         <aside class="flex h-screen w-72 shrink-0 flex-col border-r border-[#EFE8DD] bg-white">
             <div class="flex min-h-24 items-center justify-between px-8">
-                <p class="cooper-text-baseline text-lg font-semibold text-[#5A002A]">Admin CTS</p>
+                <p class="cooper-text-baseline text-lg font-semibold text-[#5A002A]">Administration CTS</p>
                 <a
                     href="/"
                     title="Retour au site"

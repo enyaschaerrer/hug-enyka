@@ -51,31 +51,30 @@ async function submit() {
     <div data-theme="light" class="font-cooper flex min-h-screen items-center justify-center bg-base-200">
         <div class="w-full max-w-sm">
             <div class="mb-8 text-center">
-                <p class="cooper-text-baseline text-xs font-medium tracking-widest text-base-content/40 uppercase">Admin CTS</p>
-                <h1 class="cooper-text-baseline mt-2 text-2xl font-semibold">Trophée de la Générosité</h1>
+                <h1 class="cooper-text-baseline text-2xl font-semibold">Administration CTS</h1>
             </div>
 
             <div class="card bg-base-100 shadow-sm">
-                <div class="card-body gap-4">
-                    <form class="space-y-4" @submit.prevent="submit">
+                <div class="card-body">
+                    <form class="flex flex-col gap-5 font-cooper" @submit.prevent="submit">
                         <label class="form-control w-full">
-                            <span class="cooper-baseline label-text mb-1">Email</span>
+                            <span class="cooper-baseline label-text mb-2 font-medium">Email</span>
                             <input
                                 v-model="email"
                                 type="email"
                                 autocomplete="email"
-                                class="cooper-input-baseline input input-bordered w-full"
+                                class="cooper-input-baseline input input-bordered w-full font-cooper"
                                 required
                             />
                         </label>
 
                         <label class="form-control w-full">
-                            <span class="cooper-baseline label-text mb-1">Mot de passe</span>
+                            <span class="cooper-baseline label-text mb-2 font-medium">Mot de passe</span>
                             <input
                                 v-model="password"
                                 type="password"
                                 autocomplete="current-password"
-                                class="cooper-input-baseline input input-bordered w-full"
+                                class="cooper-input-baseline input input-bordered w-full font-cooper"
                                 required
                             />
                         </label>
@@ -84,7 +83,7 @@ async function submit() {
                             {{ errors.email[0] }}
                         </p>
 
-                        <button type="submit" class="btn btn-primary w-full" :disabled="submitting">
+                        <button type="submit" class="btn btn-primary mt-1 w-full font-cooper" :disabled="submitting">
                             <span class="cooper-baseline">{{ submitting ? '...' : 'Connexion' }}</span>
                         </button>
                     </form>
