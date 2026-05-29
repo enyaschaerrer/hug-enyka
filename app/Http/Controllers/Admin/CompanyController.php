@@ -23,6 +23,7 @@ class CompanyController extends Controller
             'slug' => $company->slug,
             'email' => $company->email,
             'employee_count' => $company->employee_count,
+            'trophy' => (bool) $company->trophy,
             'collections' => $company->collections->map(fn ($col) => $this->collectionPayload($company, $col)),
         ]));
     }

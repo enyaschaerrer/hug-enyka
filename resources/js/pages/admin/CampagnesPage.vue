@@ -19,6 +19,7 @@ type CompanyRow = {
     slug: string;
     email: string;
     employee_count: number | null;
+    trophy: boolean;
     collections: CollectionRow[];
 };
 
@@ -79,7 +80,7 @@ function inactiveCollections(company: CompanyRow): CollectionRow[] {
 }
 
 function showDisabledLinkMessage() {
-    disabledLinkMessage.value = 'Cette collecte n’est pas active. Le lien public renvoie une 404.';
+    disabledLinkMessage.value = "Cette collecte est terminée. Le lien public renvoie une 404.";
 
     if (disabledLinkTimer) {
         window.clearTimeout(disabledLinkTimer);
@@ -109,11 +110,6 @@ async function copyCollectionUrl(collection: CollectionRow) {
     copyMessageTimer = window.setTimeout(() => {
         copyMessage.value = null;
     }, 2500);
-}
-
-function editCollection(company: CompanyRow, collection: CollectionRow, event: Event) {
-    event.preventDefault();
-    navigate(`/admin/companies/${company.id}/edit?collection=${collection.id}`);
 }
 
 async function deleteCompany(company: CompanyRow) {
@@ -239,29 +235,35 @@ onMounted(fetchCompanies);
                                     <span class="cooper-baseline">{{ col.url }}</span>
                                 </a>
                             </div>
-                            <div class="flex shrink-0 items-center gap-1">
-                                <button
-                                    type="button"
-                                    title="Copier l’URL complète"
-                                    class="inline-flex h-9 w-9 items-center justify-center rounded-full text-emerald-700 transition-colors hover:bg-white hover:text-emerald-900"
-                                    @click="copyCollectionUrl(col)"
-                                >
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                                        <rect x="9" y="9" width="13" height="13" rx="2" />
-                                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
-                                    </svg>
-                                </button>
-                                <a
-                                    :href="col.url"
-                                    target="_blank"
-                                    title="Ouvrir la page co-brandée"
-                                    class="inline-flex h-9 w-9 items-center justify-center rounded-full text-emerald-700 transition-colors hover:bg-white hover:text-emerald-900"
-                                >
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                                        <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z" />
-                                        <circle cx="12" cy="12" r="3" />
-                                    </svg>
-                                </a>
+                            <div class="flex shrink-0 items-center gap-3">
+                                <span v-if="company.trophy" class="inline-flex items-center gap-1.5 rounded-full border border-emerald-100 bg-white px-3 py-1.5 text-xs font-medium text-[#5A002A]">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5"/></svg>
+                                    <span class="cooper-baseline">Participe au prix du cœur</span>
+                                </span>
+                                <div class="flex items-center gap-1">
+                                    <button
+                                        type="button"
+                                        title="Copier l’URL complète"
+                                        class="inline-flex h-9 w-9 items-center justify-center rounded-full text-emerald-700 transition-colors hover:bg-white hover:text-emerald-900"
+                                        @click="copyCollectionUrl(col)"
+                                    >
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                            <rect x="9" y="9" width="13" height="13" rx="2" />
+                                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                                        </svg>
+                                    </button>
+                                    <a
+                                        :href="col.url"
+                                        target="_blank"
+                                        title="Ouvrir la page co-brandée"
+                                        class="inline-flex h-9 w-9 items-center justify-center rounded-full text-emerald-700 transition-colors hover:bg-white hover:text-emerald-900"
+                                    >
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                            <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z" />
+                                            <circle cx="12" cy="12" r="3" />
+                                        </svg>
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -285,13 +287,6 @@ onMounted(fetchCompanies);
                                         <span class="cooper-baseline">Lien désactivé</span>
                                     </button>
                                 </div>
-                                <a
-                                    :href="`/admin/companies/${company.id}/edit?collection=${col.id}`"
-                                    class="btn btn-ghost btn-xs shrink-0 font-cooper"
-                                    @click="editCollection(company, col, $event)"
-                                >
-                                    <span class="cooper-baseline">Modifier</span>
-                                </a>
                             </div>
                         </div>
                     </details>
