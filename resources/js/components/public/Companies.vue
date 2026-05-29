@@ -8,9 +8,19 @@ type Company = {
     trophies: number;
 };
 
-const props = defineProps<{
-    initialCompanies: Company[];
-}>();
+const props = withDefaults(
+    defineProps<{
+        initialCompanies: Company[];
+        title?: string;
+        description?: string;
+        showTrophies?: boolean;
+    }>(),
+    {
+        title: 'Présentation des entreprises participantes',
+        description: 'Découvrez les entreprises qui ont pris part au Prix du Coeur depuis sa création.',
+        showTrophies: true,
+    },
+);
 
 const search = ref('');
 const pageSize = 8;
@@ -70,8 +80,8 @@ function resetFilters() {
         <div class="mx-auto max-w-6xl">
             <div class="flex items-start justify-between gap-6">
                 <div>
-                    <h2 class="text-display text-martinique-950">Présentation des entreprises participantes</h2>
-                    <p class="mt-2 text-body text-martinique-950">Découvrez les entreprises qui ont pris part au Prix du Coeur depuis sa création. </p>
+                    <h2 class="text-display text-martinique-950">{{ props.title }}</h2>
+                    <p class="mt-2 text-body text-martinique-950">{{ props.description }}</p>
                 </div>
 
                 <div class="relative flex shrink-0 items-center gap-3">
@@ -129,30 +139,32 @@ function resetFilters() {
                             </li>
                         </ul>
 
-                        <div class="mt-5 border-b border-martinique-200 pb-2 text-body text-martinique-800">Nombre de trophées gagnés</div>
+                        <template v-if="props.showTrophies">
+                            <div class="mt-5 border-b border-martinique-200 pb-2 text-body text-martinique-800">Nombre de trophées gagnés</div>
 
-                        <div class="mt-3 inline-flex items-center gap-2 rounded-md border border-martinique-300 bg-white px-3 py-1">
-                            <span class="text-body text-martinique-800">{{ minTrophies }}</span>
-                            <div class="flex flex-col">
-                                <button
-                                    type="button"
-                                    class="flex h-4 w-4 items-center justify-center text-martinique-800 hover:text-martinique-700"
-                                    aria-label="Augmenter"
-                                    @click="incrementTrophies"
-                                >
-                                    <span class="material-symbols-outlined -rotate-90" style="font-size: 16px;" aria-hidden="true">arrow_forward_ios</span>
-                                </button>
-                                <button
-                                    type="button"
-                                    class="flex h-4 w-4 items-center justify-center text-martinique-800 hover:text-martinique-700 disabled:opacity-40"
-                                    aria-label="Diminuer"
-                                    :disabled="minTrophies <= 0"
-                                    @click="decrementTrophies"
-                                >
-                                    <span class="material-symbols-outlined rotate-90" style="font-size: 16px;" aria-hidden="true">arrow_forward_ios</span>
-                                </button>
+                            <div class="mt-3 inline-flex items-center gap-2 rounded-md border border-martinique-300 bg-white px-3 py-1">
+                                <span class="text-body text-martinique-800">{{ minTrophies }}</span>
+                                <div class="flex flex-col">
+                                    <button
+                                        type="button"
+                                        class="flex h-4 w-4 items-center justify-center text-martinique-800 hover:text-martinique-700"
+                                        aria-label="Augmenter"
+                                        @click="incrementTrophies"
+                                    >
+                                        <span class="material-symbols-outlined -rotate-90" style="font-size: 16px;" aria-hidden="true">arrow_forward_ios</span>
+                                    </button>
+                                    <button
+                                        type="button"
+                                        class="flex h-4 w-4 items-center justify-center text-martinique-800 hover:text-martinique-700 disabled:opacity-40"
+                                        aria-label="Diminuer"
+                                        :disabled="minTrophies <= 0"
+                                        @click="decrementTrophies"
+                                    >
+                                        <span class="material-symbols-outlined rotate-90" style="font-size: 16px;" aria-hidden="true">arrow_forward_ios</span>
+                                    </button>
+                                </div>
                             </div>
-                        </div>
+                        </template>
 
                         <button
                             type="button"
@@ -165,7 +177,7 @@ function resetFilters() {
                 </div>
             </div>
 
-            <div class="mt-10 grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-3 lg:grid-cols-4">
+            <div class="mt-16 grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-3 lg:grid-cols-4">
                 <article v-for="company in visible" :key="company.name" class="flex flex-col">
                     <div class="flex h-24 items-center justify-center rounded bg-white p-3">
                         <img
@@ -182,7 +194,7 @@ function resetFilters() {
                             <div class="mt-1 text-caption text-martinique-950">
                                 Année d'adhésion <span class="ml-1 font-semibold">{{ company.adhesionYear ?? '—' }}</span>
                             </div>
-                            <div class="text-caption text-martinique-950">
+                            <div v-if="props.showTrophies" class="text-caption text-martinique-950">
                                 Prix gagnés
                                 <span class="ml-1 inline-flex h-5 min-w-[1.25rem] items-center justify-center rounded-full bg-fuzzywuzzybrown-700 px-1 text-caption font-medium text-white">
                                     {{ company.trophies }}

@@ -134,7 +134,7 @@ function selectPrizeType(type: PrizeType) {
             </div>
 
             <template v-else>
-                <div class="mt-10 grid grid-cols-1 gap-12 lg:grid-cols-2">
+                <div class="mt-13 grid grid-cols-1 gap-12 lg:grid-cols-2">
                     <!-- Podium 3 marches : 3e à gauche, 1er au centre, 2e à droite -->
                     <div class="flex items-end justify-center gap-3">
                         <!-- 3e -->
