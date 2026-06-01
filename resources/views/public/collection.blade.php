@@ -35,9 +35,9 @@
                 </article>
 
                 {{-- Colonne droite : mascotte + Card 2 --}}
-                <div class="flex flex-col items-center gap-6">
+                <div class="flex flex-col items-center gap-8">
                     <img
-                        src="/img/mascots/sanguy_happy.png"
+                        src="/img/mascots/sanguy_satisfied.webp"
                         alt=""
                         class="pointer-events-none h-48 w-auto object-contain"
                     />
@@ -59,7 +59,7 @@
             <div class="mt-8 grid grid-cols-1 items-start gap-8 lg:grid-cols-2">
 
                 {{-- Colonne gauche : Communication + Blutly + Jour-J --}}
-                <div class="flex flex-col items-center gap-6">
+                <div class="flex flex-col items-center gap-8">
                     <article class="w-full rounded-2xl bg-fuzzywuzzybrown-900 px-8 pb-9 pt-5 text-white shadow-sm">
                         <div class="mb-5 w-fit rounded-full bg-fuzzywuzzybrown-50 px-5 py-1.5 text-body font-semibold text-fuzzywuzzybrown-900">
                             Communication
@@ -72,7 +72,7 @@
                     </article>
 
                     <img
-                        src="/img/mascots/blutly_happy.png"
+                        src="/img/mascots/blutly_hero.webp"
                         alt=""
                         class="pointer-events-none h-48 w-auto object-contain"
                     />

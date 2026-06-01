@@ -19,7 +19,7 @@ Route::get('/collecte/{brand}/{token}', [CoBrandedCollecteController::class, 'sh
 Route::post('/prize/inscription', [CompanyFormController::class, 'storePrize']);
 
 // Admin SPA shell — login page is public
-Route::get('/admin/login', fn () => view('app'))->name('login');
+Route::get('/admin/login', fn () => view('admin.login'))->name('login');
 Route::post('/admin/login', [AuthController::class, 'store'])->name('admin.login.store');
 
 // Admin SPA shell + JSON actions — require auth + role

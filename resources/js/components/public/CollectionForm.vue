@@ -72,7 +72,7 @@ async function handleSubmit() {
                             type="text"
                             required
                             placeholder="Entreprise SA"
-                            class="w-full rounded-xl border border-martinique-200 bg-white px-4 py-3 text-body text-martinique-950 placeholder-martinique-400 outline-none transition focus:border-martinique-500 focus:ring-2 focus:ring-martinique-200"
+                            class="w-full rounded-xl border-2 border-martinique-300 bg-white px-4 py-3 text-body text-martinique-950 placeholder-martinique-400 outline-none transition focus:border-martinique-500 focus:ring-2 focus:ring-martinique-200"
                         />
                     </div>
 
@@ -86,7 +86,7 @@ async function handleSubmit() {
                             type="email"
                             required
                             placeholder="contact@entreprise.ch"
-                            class="w-full rounded-xl border border-martinique-200 bg-white px-4 py-3 text-body text-martinique-950 placeholder-martinique-400 outline-none transition focus:border-martinique-500 focus:ring-2 focus:ring-martinique-200"
+                            class="w-full rounded-xl border-2 border-martinique-300 bg-white px-4 py-3 text-body text-martinique-950 placeholder-martinique-400 outline-none transition focus:border-martinique-500 focus:ring-2 focus:ring-martinique-200"
                         />
                     </div>
 
@@ -99,7 +99,7 @@ async function handleSubmit() {
                             v-model="form.phone"
                             type="tel"
                             placeholder="+41 79 000 00 00"
-                            class="w-full rounded-xl border border-martinique-200 bg-white px-4 py-3 text-body text-martinique-950 placeholder-martinique-400 outline-none transition focus:border-martinique-500 focus:ring-2 focus:ring-martinique-200"
+                            class="w-full rounded-xl border-2 border-martinique-300 bg-white px-4 py-3 text-body text-martinique-950 placeholder-martinique-400 outline-none transition focus:border-martinique-500 focus:ring-2 focus:ring-martinique-200"
                         />
                     </div>
 
@@ -112,7 +112,7 @@ async function handleSubmit() {
                                 type="text"
                                 placeholder="1400"
                                 maxlength="4"
-                                class="w-full rounded-xl border border-martinique-200 bg-white px-4 py-3 text-body text-martinique-950 placeholder-martinique-400 outline-none transition focus:border-martinique-500 focus:ring-2 focus:ring-martinique-200"
+                                class="w-full rounded-xl border-2 border-martinique-300 bg-white px-4 py-3 text-body text-martinique-950 placeholder-martinique-400 outline-none transition focus:border-martinique-500 focus:ring-2 focus:ring-martinique-200"
                             />
                         </div>
                         <div>
@@ -121,7 +121,7 @@ async function handleSubmit() {
                                 v-model="form.locality"
                                 type="text"
                                 placeholder="Yverdon-les-Bains"
-                                class="w-full rounded-xl border border-martinique-200 bg-white px-4 py-3 text-body text-martinique-950 placeholder-martinique-400 outline-none transition focus:border-martinique-500 focus:ring-2 focus:ring-martinique-200"
+                                class="w-full rounded-xl border-2 border-martinique-300 bg-white px-4 py-3 text-body text-martinique-950 placeholder-martinique-400 outline-none transition focus:border-martinique-500 focus:ring-2 focus:ring-martinique-200"
                             />
                         </div>
                     </div>
@@ -135,12 +135,12 @@ async function handleSubmit() {
                             v-model="form.message"
                             rows="4"
                             placeholder="Décrivez votre projet de collecte, vos besoins..."
-                            class="w-full rounded-xl border border-martinique-200 bg-white px-4 py-3 text-body text-martinique-950 placeholder-martinique-400 outline-none transition focus:border-martinique-500 focus:ring-2 focus:ring-martinique-200"
+                            class="w-full rounded-xl border-2 border-martinique-300 bg-white px-4 py-3 text-body text-martinique-950 placeholder-martinique-400 outline-none transition focus:border-martinique-500 focus:ring-2 focus:ring-martinique-200"
                         ></textarea>
                     </div>
 
                     <!-- Prix du Cœur -->
-                    <label class="flex cursor-pointer items-start gap-4 rounded-2xl border border-martinique-200 bg-white p-5 transition hover:border-martinique-300 hover:bg-martinique-50">
+                    <label class="flex cursor-pointer items-start gap-4 rounded-2xl border-2 border-martinique-300 bg-white p-5 transition hover:border-martinique-400 hover:bg-martinique-50">
                         <div class="relative mt-0.5 flex-shrink-0">
                             <input
                                 v-model="form.participatePrixCoeur"
@@ -182,7 +182,7 @@ async function handleSubmit() {
                         <button
                             type="submit"
                             :disabled="loading"
-                            class="rounded-full bg-fuzzywuzzybrown-700 px-6 py-3.5 text-body text-white transition hover:bg-fuzzywuzzybrown-800 active:scale-[0.98] disabled:opacity-60"
+                            class="rounded-full bg-fuzzywuzzybrown-800 px-6 py-3.5 text-body text-white transition hover:bg-fuzzywuzzybrown-600 active:scale-[0.98] disabled:opacity-60"
                         >
                             <span v-if="loading">Envoi en cours…</span>
                             <span v-else>Envoyer la demande</span>

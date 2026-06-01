@@ -1,12 +1,9 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import CollectionForm from './CollectionForm.vue';
 
-
-const step = ref<1 | 2 | 3>(1);
+const step = ref<1 | 2>(1);
 const loading = ref(false);
 const submitted = ref(false);
-const showCollecte = ref(false);
 
 const appState = (window as unknown as { __APP__?: { csrfToken: string } }).__APP__;
 const csrfToken = appState?.csrfToken ?? '';
@@ -15,15 +12,14 @@ const form = ref({
     labelled: null as boolean | null,
     name: '',
     email: '',
-    message: '',
 });
 
-function nextStep() {
-    if (form.value.labelled === false) {
-        showCollecte.value = true; 
-        return;
+function selectLabelled(value: boolean) {
+    form.value.labelled = value;
+    if (value === true) {
+        step.value = 2;
     }
-    step.value = 2;
+    // Si Non : on reste sur l'étape 1 et on affiche le bloc d'explication via v-if sur form.labelled
 }
 
 function goBack() {
@@ -46,7 +42,6 @@ async function handleSubmit() {
                 labelled: form.value.labelled,
                 name:     form.value.name,
                 email:    form.value.email,
-                message:  form.value.message,
             }),
         });
 
@@ -65,138 +60,109 @@ async function handleSubmit() {
 </script>
 
 <template>
-    <CollecteForm v-if="showCollecte" />
+    <section class="mx-auto max-w-2xl px-4 py-16">
 
-    <div v-else class="mx-auto max-w-xl px-4 py-16">
-
-        <!-- Succès -->
-        <div v-if="submitted" class="py-16 text-center">
-            <div class="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-rose-100">
-                <svg class="h-8 w-8 text-rose-500" viewBox="0 0 24 24" fill="none">
-                    <path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
-                </svg>
-            </div>
-            <h2 class="text-2xl font-black text-stone-900">Demande envoyée !</h2>
-            <p class="mt-3 text-stone-500">Nous avons bien reçu votre candidature et reviendrons vers vous rapidement.</p>
+        <!-- État de succès -->
+        <div v-if="submitted" class="text-center">
+            <h2 class="text-display text-martinique-950">Merci pour votre inscription !</h2>
+            <img
+                :src="'/img/mascots/blutly_sanguy_love.webp'"
+                alt=""
+                class="mx-auto my-8 h-48 w-auto object-contain"
+            />
+            <p class="text-body text-martinique-700">
+                Nous avons bien reçu votre candidature et reviendrons vers vous rapidement.
+            </p>
         </div>
 
         <template v-else>
-            <h2 class="mb-10 text-2xl font-black text-center text-stone-900">Participez au Prix Du Coeur</h2>
-            <!-- Indicateur d'étapes -->
-            <div class="mb-10 flex items-center gap-3">
-                <div
-                    class="flex h-7 w-7 items-center justify-center rounded-full text-xs font-bold"
-                    :class="step >= 1 ? 'bg-rose-500 text-white' : 'bg-stone-200 text-stone-500'"
-                >1</div>
-                <div class="h-px flex-1" :class="step >= 2 ? 'bg-rose-500' : 'bg-stone-200'"></div>
-                <div
-                    class="flex h-7 w-7 items-center justify-center rounded-full text-xs font-bold"
-                    :class="step >= 2 ? 'bg-rose-500 text-white' : 'bg-stone-200 text-stone-500'"
-                >2</div>
-            </div>
+            <h2 class="text-center text-display text-martinique-950">Participez au Prix du Coeur</h2>
 
             <!-- Étape 1 -->
-            <div v-if="step === 1" class="bg-white p-8 rounded-2xl">
-                <p class="mb-8 text-l font-black text-stone-900">Êtes-vous une entreprise déjà labellisée "Cœur D'Honneur" ?</p>
+            <template v-if="step === 1">
+                <div class="mt-10 rounded-2xl bg-martinique-100 p-8">
+                    <p class="text-center text-body text-martinique-800">
+                        Êtes-vous une entreprise déjà labellisée "Cœur d'Honneur" ?
+                    </p>
 
-                <div class="space-y-4">
-                    <label
-                        class="flex cursor-pointer items-center gap-4 rounded-2xl border-2 p-5 transition"
-                        :class="form.labelled === true ? 'border-rose-400 bg-rose-50' : 'border-stone-200 bg-white hover:border-rose-200'"
-                    >
-                        <input
-                            type="radio"
-                            class="sr-only"
-                            :value="true"
-                            v-model="form.labelled"
-                        />
-                        <div
-                            class="flex h-5 w-5 shrink-0 items-center justify-center rounded-full border-2"
-                            :class="form.labelled === true ? 'border-rose-500 bg-rose-500' : 'border-stone-300'"
+                    <div class="mt-6 flex justify-center gap-4">
+                        <button
+                            type="button"
+                            :class="form.labelled === true ? 'border-martinique-800 bg-martinique-400 text-white' : 'border-martinique-300 bg-white text-martinique-800 hover:bg-martinique-50'"
+                            class="rounded-xl border-2 px-10 py-3 text-body transition"
+                            @click="selectLabelled(true)"
                         >
-                            <div v-if="form.labelled === true" class="h-2 w-2 rounded-full bg-white"></div>
-                        </div>
-                        <span class="font-semibold text-stone-900">Oui, nous sommes labellisés</span>
-                    </label>
-
-                    <label
-                        class="flex cursor-pointer items-center gap-4 rounded-2xl border-2 p-5 transition"
-                        :class="form.labelled === false ? 'border-rose-400 bg-rose-50' : 'border-stone-200 bg-white hover:border-rose-200'"
-                    >
-                        <input
-                            type="radio"
-                            class="sr-only"
-                            :value="false"
-                            v-model="form.labelled"
-                        />
-                        <div
-                            class="flex h-5 w-5 shrink-0 items-center justify-center rounded-full border-2"
-                            :class="form.labelled === false ? 'border-rose-500 bg-rose-500' : 'border-stone-300'"
+                            Oui
+                        </button>
+                        <button
+                            type="button"
+                            :class="form.labelled === false ? 'border-martinique-800 bg-martinique-400 text-white' : 'border-martinique-300 bg-white text-martinique-800 hover:bg-martinique-50'"
+                            class="rounded-xl border-2 px-10 py-3 text-body transition"
+                            @click="selectLabelled(false)"
                         >
-                            <div v-if="form.labelled === false" class="h-2 w-2 rounded-full bg-white"></div>
-                        </div>
-                        <span class="font-semibold text-stone-900">Non, nous ne sommes pas labellisés</span>
-                    </label>
+                            Non
+                        </button>
+                    </div>
                 </div>
 
-                <div class="mt-8 flex justify-end">
-                    <button
-                        :disabled="form.labelled === null"
-                        class="rounded-xl bg-rose-500 px-6 py-3 font-semibold text-white transition hover:bg-rose-600 disabled:opacity-40"
-                        @click="nextStep"
+                <!-- Bloc d'explication si "Non" sélectionné -->
+                <div
+                    v-if="form.labelled === false"
+                    class="mt-8 rounded-2xl border-2 border-martinique-300 p-8 text-center"
+                >
+                    <p class="text-body text-martinique-800">
+                        Pour pouvoir participer au Prix du Coeur, il faut être labellisé "Cœur d'Honneur".
+                    </p>
+                    <p class="mt-2 text-heading-t3 font-semibold text-martinique-950">
+                        Mettez en place une collecte et obtenez notre label !
+                    </p>
+                    <a
+                        href="/collecte#formulaire"
+                        class="mt-6 inline-block rounded-full bg-fuzzywuzzybrown-800 px-6 py-3 text-body text-white transition hover:bg-fuzzywuzzybrown-600"
                     >
-                        Continuer →
-                    </button>
+                        Formulaire de contact
+                    </a>
                 </div>
-            </div>
+            </template>
 
             <!-- Étape 2 -->
             <div v-if="step === 2">
-
-                <div class="space-y-5 rounded-2xl bg-white p-8">
+                <div class="mt-10 space-y-6 rounded-2xl bg-martinique-100 p-8">
                     <div>
-                        <label class="mb-1.5 block text-sm font-medium text-stone-700">Nom de l'entreprise</label>
+                        <label class="mb-1.5 block text-body text-martinique-800">Nom de l'entreprise</label>
                         <input
                             v-model="form.name"
                             type="text"
                             required
                             placeholder="Entreprise SA"
-                            class="w-full rounded-xl border border-stone-200 bg-white px-4 py-3 text-stone-900 placeholder-stone-300 outline-none transition focus:border-rose-300 focus:ring-2 focus:ring-rose-100"
+                            class="w-full rounded-xl border-2 border-martinique-300 bg-white px-4 py-3 text-body text-martinique-950 placeholder-martinique-400 outline-none transition focus:border-martinique-500 focus:ring-2 focus:ring-martinique-200"
                         />
                     </div>
 
                     <div>
-                        <label class="mb-1.5 block text-sm font-medium text-stone-700">Adresse e-mail</label>
+                        <label class="mb-1.5 block text-body text-martinique-800">Adresse e-mail</label>
                         <input
                             v-model="form.email"
                             type="email"
                             required
                             placeholder="contact@entreprise.ch"
-                            class="w-full rounded-xl border border-stone-200 bg-white px-4 py-3 text-stone-900 placeholder-stone-300 outline-none transition focus:border-rose-300 focus:ring-2 focus:ring-rose-100"
+                            class="w-full rounded-xl border-2 border-martinique-300 bg-white px-4 py-3 text-body text-martinique-950 placeholder-martinique-400 outline-none transition focus:border-martinique-500 focus:ring-2 focus:ring-martinique-200"
                         />
-                    </div>
-
-                    <div>
-                        <label class="mb-1.5 block text-sm font-medium text-stone-700">Message</label>
-                        <textarea
-                            v-model="form.message"
-                            rows="4"
-                            placeholder="Décrivez votre candidature..."
-                            class="w-full rounded-xl border border-stone-200 bg-white px-4 py-3 text-stone-900 placeholder-stone-300 outline-none transition focus:border-rose-300 focus:ring-2 focus:ring-rose-100"
-                        ></textarea>
                     </div>
                 </div>
 
-                <div class="mt-6 flex justify-between">
+                <div class="mt-4 flex justify-between">
                     <button
-                        class="rounded-xl border border-stone-200 px-6 py-3 font-semibold text-stone-600 transition hover:bg-stone-50"
+                        type="button"
+                        class="rounded-full border border-martinique-300 px-6 py-3 text-body text-martinique-800 transition hover:bg-martinique-100"
                         @click="goBack"
                     >
                         ← Retour
                     </button>
                     <button
+                        type="button"
                         :disabled="!form.name || !form.email || loading"
-                        class="rounded-xl bg-rose-500 px-6 py-3 font-semibold text-white transition hover:bg-rose-600 disabled:opacity-40"
+                        class="rounded-full bg-fuzzywuzzybrown-800 px-6 py-3 text-body text-white transition hover:bg-fuzzywuzzybrown-600 disabled:opacity-40"
                         @click="handleSubmit"
                     >
                         <span v-if="loading">Envoi en cours…</span>
@@ -205,5 +171,5 @@ async function handleSubmit() {
                 </div>
             </div>
         </template>
-    </div>
+    </section>
 </template>

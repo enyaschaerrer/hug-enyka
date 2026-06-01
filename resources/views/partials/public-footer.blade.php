@@ -1,4 +1,4 @@
-<footer class="fixed bottom-0 left-0 right-0 z-40 border-t border-martinique-200 bg-white/95 px-6 py-3 text-caption text-martinique-950 backdrop-blur">
+<footer class="fixed bottom-0 left-0 right-0 z-40 bg-martinique-300 px-6 py-3 text-caption text-martinique-900 backdrop-blur">
     <div class="mx-auto flex max-w-6xl flex-col gap-1 text-center sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:text-left">
         <p>
             Vous naviguez sur un projet réalisé dans le cadre d'un cours étudiant à la HEIG-VD. Aucune donnée n'est officielle.

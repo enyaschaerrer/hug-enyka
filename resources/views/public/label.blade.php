@@ -15,20 +15,20 @@
 
             <div class="relative mt-14 min-h-[320px]">
                 <img
-                    src="/img/mascots/blutly_happy.png"
+                    src="/img/mascots/blutly_hero.webp"
                     alt=""
                     class="pointer-events-none absolute bottom-0 left-0 hidden h-56 w-auto object-contain lg:block"
                 />
 
                 <img
-                    src="/img/mascots/sanguy_happy.png"
+                    src="/img/mascots/sanguy_thumbs_up.webp"
                     alt=""
                     class="pointer-events-none absolute bottom-0 right-0 hidden h-56 w-auto object-contain lg:block"
                 />
 
                 <div class="mx-auto grid max-w-4xl gap-8 lg:grid-cols-3">
                     <article class="rounded-2xl bg-fuzzywuzzybrown-900 px-8 pb-9 pt-5 text-center text-white shadow-sm">
-                        <div class="mx-auto -mt-1 mb-5 w-fit rounded-full bg-fuzzywuzzybrown-50 px-5 py-1.5 text-body font-semibold text-fuzzywuzzybrown-900">
+                        <div class="mx-auto -mt-1 mb-5 w-fit rounded-full bg-fuzzywuzzybrown-50 px-5 py-1.5 text-body font-medium text-fuzzywuzzybrown-900">
                             Engagement reconnu
                         </div>
                         <p class="text-body">
@@ -37,7 +37,7 @@
                     </article>
 
                     <article class="rounded-2xl bg-fuzzywuzzybrown-900 px-8 pb-9 pt-5 text-center text-white shadow-sm">
-                        <div class="mx-auto -mt-1 mb-5 w-fit rounded-full bg-fuzzywuzzybrown-50 px-5 py-1.5 text-body font-semibold text-fuzzywuzzybrown-900">
+                        <div class="mx-auto -mt-1 mb-5 w-fit rounded-full bg-fuzzywuzzybrown-50 px-5 py-1.5 text-body font-medium text-fuzzywuzzybrown-900">
                             Reconnaissance officielle
                         </div>
                         <p class="text-body">
@@ -46,7 +46,7 @@
                     </article>
 
                     <article class="rounded-2xl bg-fuzzywuzzybrown-900 px-8 pb-9 pt-5 text-center text-white shadow-sm">
-                        <div class="mx-auto -mt-1 mb-5 w-fit rounded-full bg-fuzzywuzzybrown-50 px-5 py-1.5 text-body font-semibold text-fuzzywuzzybrown-900">
+                        <div class="mx-auto -mt-1 mb-5 w-fit rounded-full bg-fuzzywuzzybrown-50 px-5 py-1.5 text-body font-medium text-fuzzywuzzybrown-900">
                             Image renforcée
                         </div>
                         <p class="text-body">
