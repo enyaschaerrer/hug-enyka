@@ -43,7 +43,20 @@ function getCountry(id?: string | number): Country | null {
     return countryById.get(Number(id)) ?? null;
 }
 
-// Heatmap : riskScore 0 = blanc, 100 = rouge saturé
+// Score déterministe par durée d'attente : même durée = même couleur
+const WAIT_TIME_SCORES: Record<string, number> = {
+    '1 mois': 25,
+    '3 mois': 55,
+    '6 mois': 78,
+    '12 mois': 100,
+};
+
+function waitTimeScore(waitTime: string | null): number {
+    if (waitTime === null) return 0;
+    return WAIT_TIME_SCORES[waitTime] ?? 0;
+}
+
+// Heatmap : score 0 = blanc, 100 = rouge saturé
 function riskColor(score: number, darken = 0): string {
     const base = 255 - darken;
     const v = Math.round(base * (1 - score / 100));
@@ -54,8 +67,7 @@ function getFill(f: { id?: string | number }): string {
     const country = getCountry(f.id);
     if (!country) return '#e5e7eb';
 
-    // Un pays safe (waitTime null) est toujours blanc sur la heatmap.
-    const score = country.waitTime === null ? 0 : country.riskScore;
+    const score = waitTimeScore(country.waitTime);
 
     const isSelected = selected.value?.numericId === country.numericId;
     const isHovered = !isSelected && hoveredId.value === country.numericId;
