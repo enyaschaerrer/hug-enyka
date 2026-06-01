@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AuthController;
+use App\Http\Controllers\Admin\AccountController;
 use App\Http\Controllers\Admin\CollectionController;
 use App\Http\Controllers\Admin\CompanyController;
 use App\Http\Controllers\Admin\KpiController;
@@ -29,6 +30,13 @@ Route::post('/admin/login', [AuthController::class, 'store'])->name('admin.login
 // Admin SPA shell + JSON actions — require auth + role
 Route::middleware(['auth', 'role:superadmin,admin'])->group(function () {
     Route::post('/admin/logout', [AuthController::class, 'destroy'])->name('admin.logout');
+    Route::get('/admin/comptes', fn () => view('app'))->middleware('role:superadmin')->name('admin.accounts');
+    Route::middleware('role:superadmin')->group(function () {
+        Route::get('/admin/api/accounts', [AccountController::class, 'index'])->name('admin.accounts.index');
+        Route::post('/admin/accounts', [AccountController::class, 'store'])->name('admin.accounts.store');
+        Route::patch('/admin/accounts/{user}', [AccountController::class, 'update'])->name('admin.accounts.update');
+        Route::delete('/admin/accounts/{user}', [AccountController::class, 'destroy'])->name('admin.accounts.destroy');
+    });
     Route::get('/admin/api/kpis', [KpiController::class, 'index'])->name('admin.kpis.index');
     Route::get('/admin/api/companies', [CompanyController::class, 'index'])->name('admin.companies.index');
     Route::get('/admin/api/companies/{company}', [CompanyController::class, 'show'])->name('admin.companies.show');
