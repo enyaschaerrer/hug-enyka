@@ -20,41 +20,45 @@ let qrCode: QRCodeStyling | null = null;
 let previousBodyOverflow = '';
 
 async function renderQrCode() {
-    await nextTick();
+    try {
+        await nextTick();
 
-    if (!qrCodeContainer.value) {
-        return;
+        if (!qrCodeContainer.value) {
+            return;
+        }
+
+        qrCodeContainer.value.innerHTML = '';
+        qrCode = new QRCodeStyling({
+            type: 'svg',
+            width: 220,
+            height: 220,
+            margin: 1,
+            data: window.location.href,
+            qrOptions: {
+                errorCorrectionLevel: 'M',
+            },
+            dotsOptions: {
+                type: 'square',
+                color: '#111111',
+            },
+            cornersSquareOptions: {
+                type: 'rounded',
+                color: '#111111',
+            },
+            cornersDotOptions: {
+                type: 'rounded',
+                color: '#111111',
+            },
+            backgroundOptions: {
+                color: '#ffffff',
+            },
+        });
+
+        qrCode.append(qrCodeContainer.value);
+        qrCodeReady.value = true;
+    } catch {
+        qrCodeReady.value = true;
     }
-
-    qrCodeContainer.value.innerHTML = '';
-    qrCode = new QRCodeStyling({
-        type: 'svg',
-        width: 220,
-        height: 220,
-        margin: 1,
-        data: window.location.href,
-        qrOptions: {
-            errorCorrectionLevel: 'M',
-        },
-        dotsOptions: {
-            type: 'square',
-            color: '#111111',
-        },
-        cornersSquareOptions: {
-            type: 'rounded',
-            color: '#111111',
-        },
-        cornersDotOptions: {
-            type: 'rounded',
-            color: '#111111',
-        },
-        backgroundOptions: {
-            color: '#ffffff',
-        },
-    });
-
-    qrCode.append(qrCodeContainer.value);
-    qrCodeReady.value = true;
 }
 
 function lockBodyScroll() {

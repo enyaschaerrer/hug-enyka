@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Admin;
 
+use App\Rules\EmailDomainListRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateCompanyRequest extends FormRequest
@@ -26,7 +27,7 @@ class UpdateCompanyRequest extends FormRequest
             'address' => ['nullable', 'string', 'max:500'],
             'telephone' => ['nullable', 'string', 'max:50'],
             'employee_count' => ['nullable', 'integer', 'min:0'],
-            'allowed_email_domains' => ['nullable', 'string', 'max:255'],
+            'allowed_email_domains' => ['required', 'string', 'max:255', new EmailDomainListRule()],
             'source' => ['nullable', 'string', 'max:255'],
             'trophy' => ['boolean'],
             'logo' => ['nullable', 'string', 'max:255'],

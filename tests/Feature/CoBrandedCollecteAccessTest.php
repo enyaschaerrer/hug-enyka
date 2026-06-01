@@ -2,9 +2,13 @@
 
 namespace Tests\Feature;
 
+use App\Enums\UserRole;
+use App\Mail\CoBrandedAccessCodeMail;
 use App\Models\Company;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Tests\TestCase;
 
 class CoBrandedCollecteAccessTest extends TestCase
@@ -50,12 +54,176 @@ class CoBrandedCollecteAccessTest extends TestCase
             ->assertNotFound();
     }
 
+    public function test_employee_can_request_access_code_for_allowed_domain(): void
+    {
+        Mail::fake();
+        $this->travelTo('2026-06-15 12:00:00');
+
+        $company = $this->createCompanyWithCollection(
+            token: 'active-token',
+            start: '2026-06-15 09:00:00',
+            end: '2026-06-15 16:30:00',
+        );
+
+        $this->postJson('/collecte/' . $company->slug . '/active-token/access-code', [
+            'email' => 'personne@example.com',
+        ])->assertOk();
+
+        $user = User::where('email', 'personne@example.com')->firstOrFail();
+        $this->assertSame(UserRole::User, $user->role);
+        $this->assertSame($company->id, $user->company_id);
+
+        $this->assertDatabaseHas('collections_users', [
+            'user_id' => $user->id,
+        ]);
+
+        Mail::assertSent(CoBrandedAccessCodeMail::class);
+    }
+
+    public function test_employee_access_code_rejects_unallowed_domain(): void
+    {
+        Mail::fake();
+        $this->travelTo('2026-06-15 12:00:00');
+
+        $company = $this->createCompanyWithCollection(
+            token: 'active-token',
+            start: '2026-06-15 09:00:00',
+            end: '2026-06-15 16:30:00',
+        );
+
+        $this->postJson('/collecte/' . $company->slug . '/active-token/access-code', [
+            'email' => 'personne@other.test',
+        ])->assertUnprocessable();
+
+        Mail::assertNothingSent();
+    }
+
+    public function test_employee_can_login_after_being_attached_to_collection(): void
+    {
+        $this->travelTo('2026-06-15 12:00:00');
+
+        $company = $this->createCompanyWithCollection(
+            token: 'active-token',
+            start: '2026-06-15 09:00:00',
+            end: '2026-06-15 16:30:00',
+        );
+        $collectionId = DB::table('collections')->where('access_token', 'active-token')->value('id');
+        $user = User::create([
+            'company_id' => $company->id,
+            'name' => 'Personne test',
+            'email' => 'personne@example.com',
+            'professional_email' => 'personne@example.com',
+            'password' => 'ABC123',
+            'role' => UserRole::User,
+            'email_validated' => true,
+        ]);
+        DB::table('collections_users')->insert([
+            'collection_id' => $collectionId,
+            'user_id' => $user->id,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        $this->postJson('/collecte/' . $company->slug . '/active-token/login', [
+            'email' => 'personne@example.com',
+            'password' => 'ABC123',
+        ])->assertOk();
+
+        $this->assertAuthenticatedAs($user);
+    }
+
+    public function test_employee_access_password_is_case_insensitive(): void
+    {
+        $this->travelTo('2026-06-15 12:00:00');
+
+        $company = $this->createCompanyWithCollection(
+            token: 'active-token',
+            start: '2026-06-15 09:00:00',
+            end: '2026-06-15 16:30:00',
+        );
+        $collectionId = DB::table('collections')->where('access_token', 'active-token')->value('id');
+        $user = User::create([
+            'company_id' => $company->id,
+            'name' => 'Personne test',
+            'email' => 'personne@example.com',
+            'professional_email' => 'personne@example.com',
+            'password' => 'ABC123',
+            'role' => UserRole::User,
+            'email_validated' => true,
+        ]);
+        DB::table('collections_users')->insert([
+            'collection_id' => $collectionId,
+            'user_id' => $user->id,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        $this->postJson('/collecte/' . $company->slug . '/active-token/login', [
+            'email' => 'personne@example.com',
+            'password' => 'abc123',
+        ])->assertOk();
+
+        $this->assertAuthenticatedAs($user);
+    }
+
+    public function test_employee_can_logout_from_cobranded_collection(): void
+    {
+        $this->travelTo('2026-06-15 12:00:00');
+
+        $company = $this->createCompanyWithCollection(
+            token: 'active-token',
+            start: '2026-06-15 09:00:00',
+            end: '2026-06-15 16:30:00',
+        );
+        $user = User::create([
+            'company_id' => $company->id,
+            'name' => 'Personne test',
+            'email' => 'personne@example.com',
+            'professional_email' => 'personne@example.com',
+            'password' => 'ABC123',
+            'role' => UserRole::User,
+            'email_validated' => true,
+        ]);
+
+        $this->actingAs($user)
+            ->postJson('/collecte/' . $company->slug . '/active-token/logout')
+            ->assertOk()
+            ->assertJson(['reload' => true]);
+
+        $this->assertGuest();
+    }
+
+    public function test_admin_can_access_cobranded_collection_without_employee_auth(): void
+    {
+        $this->travelTo('2026-06-15 12:00:00');
+
+        $company = $this->createCompanyWithCollection(
+            token: 'active-token',
+            start: '2026-06-15 09:00:00',
+            end: '2026-06-15 16:30:00',
+        );
+        $admin = User::create([
+            'name' => 'Admin',
+            'email' => 'admin@example.test',
+            'professional_email' => 'admin@example.test',
+            'password' => 'password',
+            'role' => UserRole::Admin,
+            'email_validated' => true,
+        ]);
+
+        $this->actingAs($admin)
+            ->get('/collecte/' . $company->slug . '/active-token')
+            ->assertOk()
+            ->assertSee('"canAccess":true', false);
+    }
+
     private function createCompanyWithCollection(string $token, string $start, string $end): Company
     {
         $company = Company::create([
             'name' => 'Entreprise test',
             'email' => $token . '@example.test',
             'slug' => 'entreprise-' . $token,
+            'allowed_email_domains' => 'example.com',
         ]);
 
         DB::table('collections')->insert([

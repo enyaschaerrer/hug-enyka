@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { onBeforeUnmount, onMounted, ref } from 'vue';
 import CoBrandedHeader from '../../components/public/CoBrandedHeader.vue';
+import CoBrandedAuthGate from '../../components/public/CoBrandedAuthGate.vue';
 import CoBrandedPhoneModal from '../../components/modals/CoBrandedPhoneModal.vue';
 import SmsConversationPrototype from '../../components/sms-chat/SmsConversationPrototype.vue';
 import TinderEligibilityPrototype from '../../components/tinder-cards/TinderEligibilityPrototype.vue';
@@ -21,15 +22,24 @@ type CoBrandedCollecte = {
     collection: {
         start: string | null;
         end: string | null;
-        appointmentUrl: string;
+        appointmentUrl: string | null;
+    };
+    auth: {
+        canAccess: boolean;
+        emailPlaceholder: string;
+        accessCodeUrl: string;
+        loginUrl: string;
+        logoutUrl: string;
     };
 };
 
 type AppState = {
+    csrfToken: string;
     coBrandedCollecte?: CoBrandedCollecte | null;
 };
 
 const appState = (window as unknown as { __APP__?: AppState }).__APP__;
+const csrfToken = appState?.csrfToken ?? '';
 const coBrandedCollecte = appState?.coBrandedCollecte;
 const company = coBrandedCollecte?.company ?? {
     name: 'Entreprise',
@@ -41,6 +51,13 @@ const company = coBrandedCollecte?.company ?? {
         secondary: '#ffffff',
         third: '#ffffff',
     },
+};
+const auth = coBrandedCollecte?.auth ?? {
+    canAccess: false,
+    emailPlaceholder: 'exemple@entreprise.ch',
+    accessCodeUrl: '',
+    loginUrl: '',
+    logoutUrl: '',
 };
 
 const showPhoneModal = ref(false);
@@ -57,9 +74,17 @@ function syncPhoneModal(event?: MediaQueryListEvent) {
 }
 
 onMounted(() => {
+    if (!auth.canAccess) {
+        return;
+    }
+
     desktopMediaQuery = window.matchMedia('(min-width: 640px)');
     phoneModalTimeout = window.setTimeout(() => syncPhoneModal(), 450);
-    desktopMediaQuery.addEventListener('change', syncPhoneModal);
+    if (typeof desktopMediaQuery.addEventListener === 'function') {
+        desktopMediaQuery.addEventListener('change', syncPhoneModal);
+    } else {
+        desktopMediaQuery.addListener(syncPhoneModal);
+    }
 });
 
 onBeforeUnmount(() => {
@@ -67,58 +92,80 @@ onBeforeUnmount(() => {
         window.clearTimeout(phoneModalTimeout);
     }
 
-    desktopMediaQuery?.removeEventListener('change', syncPhoneModal);
+    if (!desktopMediaQuery) {
+        return;
+    }
+
+    if (typeof desktopMediaQuery.removeEventListener === 'function') {
+        desktopMediaQuery.removeEventListener('change', syncPhoneModal);
+    } else {
+        desktopMediaQuery.removeListener(syncPhoneModal);
+    }
 });
 </script>
 
 <template>
     <div class="min-h-screen bg-white">
-        <CoBrandedHeader :company="company" />
-
-        <TinderEligibilityPrototype />
-
-        <SmsConversationPrototype />
-
-        <InteractiveWorldMap />
-
-        <CoBrandedPhoneModal
-            :open="showPhoneModal"
-            :primary-color="company.colors.primary"
-            @close="showPhoneModal = false"
+        <CoBrandedAuthGate
+            v-if="!auth.canAccess"
+            :company="company"
+            :csrf-token="csrfToken"
+            :email-placeholder="auth.emailPlaceholder"
+            :access-code-url="auth.accessCodeUrl"
+            :login-url="auth.loginUrl"
         />
 
-        <Transition
-            enter-active-class="transition duration-200 ease-out"
-            enter-from-class="opacity-0"
-            enter-to-class="opacity-100"
-            leave-active-class="transition duration-200 ease-in"
-            leave-from-class="opacity-100"
-            leave-to-class="opacity-0"
-        >
-            <button
-                v-if="isDesktop && !showPhoneModal"
-                class="btn fixed right-8 bottom-8 z-[900] h-[60px] w-[60px] rounded-full border-none bg-white !p-0 shadow-lg transition-transform duration-200 ease-out hover:scale-110"
-                type="button"
-                title="Afficher le QR code mobile"
-                aria-label="Afficher le QR code mobile"
-                :style="{ color: company.colors.primary ?? '#111111' }"
-                @click="showPhoneModal = true"
+        <template v-else>
+            <CoBrandedHeader
+                :company="company"
+                :csrf-token="csrfToken"
+                :logout-url="auth.logoutUrl"
+            />
+
+            <TinderEligibilityPrototype />
+
+            <SmsConversationPrototype />
+
+            <InteractiveWorldMap />
+
+            <CoBrandedPhoneModal
+                :open="showPhoneModal"
+                :primary-color="company.colors.primary"
+                @close="showPhoneModal = false"
+            />
+
+            <Transition
+                enter-active-class="transition duration-200 ease-out"
+                enter-from-class="opacity-0"
+                enter-to-class="opacity-100"
+                leave-active-class="transition duration-200 ease-in"
+                leave-from-class="opacity-100"
+                leave-to-class="opacity-0"
             >
-                <svg
-                    id="Mobile_Qr_Code_24"
-                    class="h-[45px] w-[45px]"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="1"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    aria-hidden="true"
+                <button
+                    v-if="isDesktop && !showPhoneModal"
+                    class="btn fixed right-8 bottom-8 z-[900] h-[60px] w-[60px] rounded-full border-none bg-white !p-0 shadow-lg transition-transform duration-200 ease-out hover:scale-110"
+                    type="button"
+                    title="Afficher le QR code mobile"
+                    aria-label="Afficher le QR code mobile"
+                    :style="{ color: company.colors.primary ?? '#111111' }"
+                    @click="showPhoneModal = true"
                 >
-                    <g transform="matrix(0.83 0 0 0.83 12 12)">
+                    <svg
+                        id="Mobile_Qr_Code_24"
+                        class="h-[45px] w-[45px]"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        aria-hidden="true"
+                    >
+                        <g transform="matrix(0.83 0 0 0.83 12 12)">
                         <g transform="matrix(1 0 0 1 0 0)">
                             <path
                                 transform="translate(-12, -12)"
@@ -164,9 +211,10 @@ onBeforeUnmount(() => {
                         <g transform="matrix(1 0 0 1 0.13 9.5)">
                             <path transform="translate(-12.13, -21.5)" d="M 12 21.75 C 12.1381 21.75 12.25 21.6381 12.25 21.5 C 12.25 21.3619 12.1381 21.25 12 21.25" />
                         </g>
-                    </g>
-                </svg>
-            </button>
-        </Transition>
+                        </g>
+                    </svg>
+                </button>
+            </Transition>
+        </template>
     </div>
 </template>
