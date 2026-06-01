@@ -16,7 +16,6 @@ const prizeTypeOptions: { value: PrizeType; label: string }[] = [
 ];
 
 const selectedPrizeType = ref<PrizeType>('donneur');
-const isFilterOpen = ref(false);
 
 const podiumsForType = computed(() => props.initialPodiums[selectedPrizeType.value] ?? []);
 
@@ -59,7 +58,22 @@ function selectPrizeType(type: PrizeType) {
         <div class="mx-auto max-w-6xl">
             <h2 class="text-display text-martinique-950">Le podium du Prix du Coeur</h2>
 
-            <div class="relative mt-8 flex items-center gap-3">
+            <!-- Tabs type de prix -->
+            <div class="mt-8 flex flex-wrap gap-2 border-b border-martinique-200">
+                <button
+                    v-for="option in prizeTypeOptions"
+                    :key="option.value"
+                    type="button"
+                    :class="selectedPrizeType === option.value ? 'border-fuzzywuzzybrown-700 text-fuzzywuzzybrown-700' : 'border-transparent text-martinique-700 hover:text-martinique-950'"
+                    class="-mb-px border-b-2 px-4 py-3 text-body transition"
+                    @click="selectPrizeType(option.value)"
+                >
+                    {{ option.label }}
+                </button>
+            </div>
+
+            <!-- Sélecteur d'année -->
+            <div class="mt-8 flex items-center gap-3">
                 <button
                     type="button"
                     class="flex h-9 w-9 items-center justify-center rounded-full bg-martinique-100 text-martinique-700 transition hover:bg-martinique-200 disabled:opacity-40"
@@ -79,52 +93,6 @@ function selectPrizeType(type: PrizeType) {
                 >
                     <span class="material-symbols-outlined" style="font-size: 30px;" aria-hidden="true">chevron_right</span>
                 </button>
-
-                <button
-                    type="button"
-                    class="ml-4 flex h-9 w-9 items-center justify-center rounded-full bg-martinique-100 text-martinique-700 hover:bg-martinique-200"
-                    aria-label="Filtrer"
-                    @click="isFilterOpen = !isFilterOpen"
-                >
-                    <span class="material-symbols-outlined" aria-hidden="true">filter_list</span>
-                </button>
-
-                <!-- Filtre popup -->
-                <div
-                    v-if="isFilterOpen"
-                    class="absolute left-0 top-full z-30 mt-3 w-80 rounded-2xl border border-martinique-200 bg-martinique-50 p-5 shadow-lg"
-                >
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center gap-2 text-heading-t3 text-martinique-800">
-                            <span class="material-symbols-outlined" aria-hidden="true">filter_list</span>
-                            Filtrer par
-                        </div>
-                        <button
-                            type="button"
-                            class="text-martinique-800 hover:text-martinique-700"
-                            aria-label="Fermer le filtre"
-                            @click="isFilterOpen = false"
-                        >
-                            <span class="material-symbols-outlined" aria-hidden="true">close</span>
-                        </button>
-                    </div>
-
-                    <div class="mt-4 border-b border-martinique-200 pb-2 text-body text-martinique-800">Type de prix</div>
-
-                    <ul class="mt-3 flex flex-col gap-3">
-                        <li v-for="option in prizeTypeOptions" :key="option.value">
-                            <label class="flex cursor-pointer items-center gap-3 text-body text-martinique-800">
-                                <input
-                                    type="checkbox"
-                                    class="h-4 w-4 rounded border-martinique-300 text-martinique-700 focus:ring-martinique-500"
-                                    :checked="selectedPrizeType === option.value"
-                                    @change="selectPrizeType(option.value)"
-                                />
-                                {{ option.label }}
-                            </label>
-                        </li>
-                    </ul>
-                </div>
             </div>
 
             <div v-if="!currentPodium" class="mt-10 text-center text-body text-martinique-950">

@@ -24,7 +24,7 @@
 
                 {{-- Card 1 --}}
                 <article class="rounded-2xl bg-fuzzywuzzybrown-900 px-8 pb-9 pt-5 text-white shadow-sm">
-                    <div class="mb-5 w-fit rounded-full bg-fuzzywuzzybrown-50 px-5 py-1.5 text-body font-semibold text-fuzzywuzzybrown-900">
+                    <div class="mb-5 w-fit rounded-full bg-fuzzywuzzybrown-50 px-5 py-1.5 text-body font-medium text-fuzzywuzzybrown-900">
                         Prise de contact
                     </div>
                     <p class="text-body">
@@ -42,7 +42,7 @@
                         class="pointer-events-none h-48 w-auto object-contain"
                     />
                     <article class="w-full rounded-2xl bg-fuzzywuzzybrown-900 px-8 pb-9 pt-5 text-white shadow-sm">
-                        <div class="mb-5 w-fit rounded-full bg-fuzzywuzzybrown-50 px-5 py-1.5 text-body font-semibold text-fuzzywuzzybrown-900">
+                        <div class="mb-5 w-fit rounded-full bg-fuzzywuzzybrown-50 px-5 py-1.5 text-body font-medium text-fuzzywuzzybrown-900">
                             Préparation
                         </div>
                         <p class="text-body">
@@ -61,7 +61,7 @@
                 {{-- Colonne gauche : Communication + Blutly + Jour-J --}}
                 <div class="flex flex-col items-center gap-8">
                     <article class="w-full rounded-2xl bg-fuzzywuzzybrown-900 px-8 pb-9 pt-5 text-white shadow-sm">
-                        <div class="mb-5 w-fit rounded-full bg-fuzzywuzzybrown-50 px-5 py-1.5 text-body font-semibold text-fuzzywuzzybrown-900">
+                        <div class="mb-5 w-fit rounded-full bg-fuzzywuzzybrown-50 px-5 py-1.5 text-body font-medium text-fuzzywuzzybrown-900">
                             Communication
                         </div>
                         <p class="text-body">
@@ -78,7 +78,7 @@
                     />
 
                     <article class="w-full rounded-2xl bg-fuzzywuzzybrown-900 px-8 pb-9 pt-5 text-white shadow-sm">
-                        <div class="mb-5 w-fit rounded-full bg-fuzzywuzzybrown-50 px-5 py-1.5 text-body font-semibold text-fuzzywuzzybrown-900">
+                        <div class="mb-5 w-fit rounded-full bg-fuzzywuzzybrown-50 px-5 py-1.5 text-body font-medium text-fuzzywuzzybrown-900">
                             Jour J
                         </div>
                         <p class="text-body">
@@ -91,7 +91,7 @@
 
                 {{-- Colonne droite : Inscriptions, centrée verticalement --}}
                 <article class="rounded-2xl bg-fuzzywuzzybrown-900 px-8 pb-9 pt-5 text-white shadow-sm lg:self-center">
-                    <div class="mb-5 w-fit rounded-full bg-fuzzywuzzybrown-50 px-5 py-1.5 text-body font-semibold text-fuzzywuzzybrown-900">
+                    <div class="mb-5 w-fit rounded-full bg-fuzzywuzzybrown-50 px-5 py-1.5 text-body font-medium text-fuzzywuzzybrown-900">
                         Inscriptions
                     </div>
                     <p class="text-body">
@@ -103,7 +103,7 @@
 
             </div>
 
-            {{-- CTA --}}
+            <!-- {{-- CTA --}}
             <div class="mt-16 flex justify-center">
                 <a
                     href="#formulaire"
@@ -111,7 +111,7 @@
                 >
                     Mettre en place une collecte
                 </a>
-            </div>
+            </div> -->
 
         </div>
     </section>
