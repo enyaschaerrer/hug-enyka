@@ -141,7 +141,9 @@ function forgotPassword() {
             >
                 <label
                     class="tab h-14 gap-2 rounded-t-xl bg-white px-4 text-slate-700 transition-colors duration-200 ease-in-out"
-                    :style="activeTab === 'code' ? { color: primaryColor } : undefined"
+                    :style="activeTab === 'code'
+                        ? { color: primaryColor }
+                        : { '--tab-border-colors': '#0000 #0000 var(--tab-border-color) #0000' }"
                     @mouseenter="($event.currentTarget as HTMLElement).style.color = primaryColor"
                     @mouseleave="($event.currentTarget as HTMLElement).style.color = activeTab === 'code' ? primaryColor : ''"
                 >
@@ -253,7 +255,7 @@ function forgotPassword() {
 
                         <button
                             type="button"
-                            class="cooper-baseline !mt-0 w-full rounded-lg py-0.5 text-xs font-semibold text-slate-700 transition-colors duration-200 ease-in-out disabled:cursor-not-allowed disabled:opacity-50"
+                            class="cooper-baseline !mt-[-0.25rem] w-full p-0 text-center text-xs font-semibold leading-none text-slate-700 transition-colors duration-200 ease-in-out disabled:cursor-not-allowed disabled:opacity-50"
                             :disabled="loading || !loginForm.email"
                             @mouseenter="($event.currentTarget as HTMLElement).style.color = accessiblePrimaryTextColor"
                             @mouseleave="($event.currentTarget as HTMLElement).style.color = ''"
