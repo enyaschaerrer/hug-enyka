@@ -334,6 +334,7 @@ async function submit() {
                             type="text"
                             class="cooper-input-baseline input input-bordered w-full"
                             placeholder="rolex.com,rolex.ch"
+                            required
                         />
                         <p v-if="firstError('allowed_email_domains')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('allowed_email_domains') }}</p>
                     </label>
