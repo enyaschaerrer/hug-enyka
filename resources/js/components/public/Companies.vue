@@ -39,12 +39,22 @@ const availableYears = computed(() => {
 });
 
 const filtered = computed(() =>
-    props.initialCompanies.filter((c) => {
-        if (!c.name.toLowerCase().includes(search.value.toLowerCase())) return false;
-        if (selectedYears.value.size > 0 && (c.adhesionYear === null || !selectedYears.value.has(c.adhesionYear))) return false;
-        if (c.trophies < minTrophies.value) return false;
-        return true;
-    }),
+    props.initialCompanies
+        .filter((c) => {
+            if (!c.name.toLowerCase().includes(search.value.toLowerCase())) return false;
+            if (selectedYears.value.size > 0 && (c.adhesionYear === null || !selectedYears.value.has(c.adhesionYear))) return false;
+            if (c.trophies < minTrophies.value) return false;
+            return true;
+        })
+        .slice()
+        .sort((a, b) => {
+            if (props.showTrophies) {
+                // Home : tri par prix gagnés (décroissant)
+                return b.trophies - a.trophies || a.name.localeCompare(b.name);
+            }
+            // Label : tri par année d'adhésion (plus récent → plus ancien)
+            return (b.adhesionYear ?? 0) - (a.adhesionYear ?? 0) || a.name.localeCompare(b.name);
+        }),
 );
 
 const visible = computed(() => filtered.value.slice(0, visibleCount.value));
