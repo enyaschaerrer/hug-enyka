@@ -2,13 +2,14 @@
 import { useAdminRouter } from '../../composables/useAdminRouter';
 
 type AppState = {
-    auth: { user: { name: string; email: string } | null };
+    auth: { user: { name: string; email: string; role: string } | null };
     csrfToken: string;
 };
 
 const appState = (window as unknown as { __APP__?: AppState }).__APP__;
 const csrfToken = appState?.csrfToken ?? '';
 const user = appState?.auth.user ?? null;
+const isSuperAdmin = user?.role === 'superadmin';
 const { currentPath, navigate } = useAdminRouter();
 
 function navLinkClasses(active: boolean): string {
@@ -97,6 +98,15 @@ async function logout() {
                             @click="goTo('/admin/trophee', $event)"
                         >
                             <span class="cooper-baseline">Trophée</span>
+                        </a>
+                    </li>
+                    <li v-if="isSuperAdmin" class="m-0 p-0">
+                        <a
+                            href="/admin/comptes"
+                            :class="navLinkClasses(currentPath === '/admin/comptes')"
+                            @click="goTo('/admin/comptes', $event)"
+                        >
+                            <span class="cooper-baseline">Comptes</span>
                         </a>
                     </li>
                 </ul>

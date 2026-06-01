@@ -10,10 +10,13 @@
 
         @fonts
         @vite(['resources/css/app.css', 'resources/js/app.ts'])
+        @php
+            $authUser = auth()->user()?->only(['id', 'name', 'email', 'role']);
+        @endphp
         <script>
             window.__APP__ = {
                 auth: {
-                    user: @json(auth()->user()?->only(['id', 'name', 'email'])),
+                    user: @json($authUser),
                 },
                 csrfToken: @json(csrf_token()),
                 coBrandedCollecte: @json($coBrandedCollecte ?? null),
