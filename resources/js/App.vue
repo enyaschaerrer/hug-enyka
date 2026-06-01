@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import { useAdminRouter } from './composables/useAdminRouter';
-import CampagnesPage from './pages/admin/CampagnesPage.vue';
+import CollectionsPage from './pages/admin/CollectionsPage.vue';
 import CompanyCreatePage from './pages/admin/CompanyCreatePage.vue';
 import CompanyEditPage from './pages/admin/CompanyEditPage.vue';
 import DashboardPage from './pages/admin/DashboardPage.vue';
@@ -15,7 +15,7 @@ const { currentPath } = useAdminRouter();
 
 const pages = {
     '/admin': DashboardPage,
-    '/admin/campagnes': CampagnesPage,
+    '/admin/campagnes': CollectionsPage,
     '/admin/login': LoginPage,
     '/admin/companies/create': CompanyCreatePage,
     '/admin/registrations': RegistrationsPage,

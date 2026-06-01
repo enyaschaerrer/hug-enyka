@@ -3,7 +3,7 @@
 <div class="sticky top-18 mt-4 z-30 hidden h-0 lg:block">
     <aside class="absolute right-0 flex flex-col items-end gap-4">
         <a
-            href="/collecte"
+            href="/collecte#formulaire"
             class="flex min-h-20 w-44 translate-x-3 items-center rounded-l-2xl border-2 border-r-0 border-merino-800 bg-merino-200 px-5 py-4 text-body font-medium text-merino-800 transition-transform duration-200 ease-out hover:translate-x-0"
         >
             Mettre en place une collecte

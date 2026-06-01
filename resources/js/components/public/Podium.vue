@@ -62,27 +62,27 @@ function selectPrizeType(type: PrizeType) {
             <div class="relative mt-8 flex items-center gap-3">
                 <button
                     type="button"
-                    class="flex h-9 w-9 items-center justify-center rounded-full bg-chicago-200 text-martinique-950 transition hover:bg-chicago-300 disabled:opacity-40"
+                    class="flex h-9 w-9 items-center justify-center rounded-full bg-martinique-100 text-martinique-700 transition hover:bg-martinique-200 disabled:opacity-40"
                     :disabled="!availableYears.length || selectedYear === availableYears[0]"
                     aria-label="Année précédente"
                     @click="prevYear"
                 >
-                    <span class="material-symbols-outlined rotate-180" aria-hidden="true">arrow_forward_ios</span>
+                    <span class="material-symbols-outlined" style="font-size: 30px;" aria-hidden="true">chevron_left</span>
                 </button>
-                <span class="min-w-[3rem] text-center text-heading-t2 text-martinique-950">{{ selectedYear ?? '—' }}</span>
+                <span class="min-w-[3rem] text-center text-body text-martinique-700">{{ selectedYear ?? '—' }}</span>
                 <button
                     type="button"
-                    class="flex h-9 w-9 items-center justify-center rounded-full bg-chicago-200 text-martinique-950 transition hover:bg-chicago-300 disabled:opacity-40"
+                    class="flex h-9 w-9 items-center justify-center rounded-full bg-martinique-100 text-martinique-700 transition hover:bg-martinique-200 disabled:opacity-40"
                     :disabled="!availableYears.length || selectedYear === availableYears.at(-1)"
                     aria-label="Année suivante"
                     @click="nextYear"
                 >
-                    <span class="material-symbols-outlined" aria-hidden="true">arrow_forward_ios</span>
+                    <span class="material-symbols-outlined" style="font-size: 30px;" aria-hidden="true">chevron_right</span>
                 </button>
 
                 <button
                     type="button"
-                    class="ml-4 flex h-9 w-9 items-center justify-center rounded-full bg-chicago-200 text-martinique-950 hover:bg-chicago-300"
+                    class="ml-4 flex h-9 w-9 items-center justify-center rounded-full bg-martinique-100 text-martinique-700 hover:bg-martinique-200"
                     aria-label="Filtrer"
                     @click="isFilterOpen = !isFilterOpen"
                 >
