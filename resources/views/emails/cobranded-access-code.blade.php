@@ -8,7 +8,6 @@
     @php
         $company = $collection->company;
         $primary = $company->primaryColor ?: '#575656';
-        $secondary = $company->secondaryColor ?: '#f1f7f7';
         $hex = ltrim($primary, '#');
         $r = hexdec(substr($hex, 0, 2));
         $g = hexdec(substr($hex, 2, 2));
@@ -45,7 +44,7 @@
                                 Voici votre mot de passe personnel pour accéder à la page de collecte de votre entreprise.
                             </p>
 
-                            <div style="margin:0 0 22px;padding:16px;border-radius:10px;background:{{ $secondary }};">
+                            <div style="margin:0 0 22px;padding:16px;border-radius:10px;background:#ececec;">
                                 <p style="margin:0 0 6px;font-size:13px;color:#575656;">Email</p>
                                 <p style="margin:0 0 14px;font-size:16px;font-weight:700;color:#111827;">{{ $email }}</p>
                                 <p style="margin:0 0 6px;font-size:13px;color:#575656;">Mot de passe</p>

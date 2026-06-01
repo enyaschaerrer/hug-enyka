@@ -29,6 +29,7 @@ type CoBrandedCollecte = {
         emailPlaceholder: string;
         accessCodeUrl: string;
         loginUrl: string;
+        logoutUrl: string;
     };
 };
 
@@ -56,6 +57,7 @@ const auth = coBrandedCollecte?.auth ?? {
     emailPlaceholder: 'exemple@entreprise.ch',
     accessCodeUrl: '',
     loginUrl: '',
+    logoutUrl: '',
 };
 
 const showPhoneModal = ref(false);
@@ -114,7 +116,11 @@ onBeforeUnmount(() => {
         />
 
         <template v-else>
-            <CoBrandedHeader :company="company" />
+            <CoBrandedHeader
+                :company="company"
+                :csrf-token="csrfToken"
+                :logout-url="auth.logoutUrl"
+            />
 
             <TinderEligibilityPrototype />
 

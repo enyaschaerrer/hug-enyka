@@ -328,7 +328,7 @@ async function submit() {
                     </label>
 
                     <label class="flex w-full flex-col gap-2 md:col-span-2">
-                        <span class="cooper-baseline label-text">Domaines email autorisés</span>
+                        <span class="cooper-baseline label-text">Domaines email autorisés (séparés par ",")</span>
                         <input
                             v-model="form.allowed_email_domains"
                             type="text"

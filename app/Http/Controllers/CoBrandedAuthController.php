@@ -75,7 +75,7 @@ class CoBrandedAuthController extends Controller
 
         $collection = $this->collection($brand, $token);
 
-        if (! Auth::attempt(['email' => $email, 'password' => $validated['password']])) {
+        if (! Auth::attempt(['email' => $email, 'password' => Str::upper($validated['password'])])) {
             throw ValidationException::withMessages([
                 'email' => 'Identifiants invalides.',
             ]);
@@ -106,6 +106,18 @@ class CoBrandedAuthController extends Controller
 
         return response()->json([
             'message' => 'Connexion réussie.',
+            'reload' => true,
+        ]);
+    }
+
+    public function logout(Request $request, string $brand, string $token): JsonResponse
+    {
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return response()->json([
+            'message' => 'Déconnexion réussie.',
             'reload' => true,
         ]);
     }

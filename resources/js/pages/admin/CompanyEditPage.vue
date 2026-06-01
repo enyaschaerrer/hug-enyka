@@ -244,7 +244,7 @@ onMounted(fetchCompany);
                     </label>
 
                     <label class="flex w-full flex-col gap-2 md:col-span-2">
-                        <span class="cooper-baseline label-text">Domaines email autorisés</span>
+                        <span class="cooper-baseline label-text">Domaines email autorisés (séparés par ",")</span>
                         <input v-model="form.allowed_email_domains" type="text" class="cooper-input-baseline input input-bordered w-full" placeholder="rolex.com,rolex.ch" required />
                         <p v-if="firstError('allowed_email_domains')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('allowed_email_domains') }}</p>
                     </label>

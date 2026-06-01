@@ -19,6 +19,7 @@ Route::post('/collecte/inscription', [CompanyFormController::class, 'store'])->n
 Route::get('/collecte/{brand}/{token}', [CoBrandedCollecteController::class, 'show'])->name('public.collecte.cobranded');
 Route::post('/collecte/{brand}/{token}/access-code', [CoBrandedAuthController::class, 'sendAccessCode'])->name('public.collecte.cobranded.access-code');
 Route::post('/collecte/{brand}/{token}/login', [CoBrandedAuthController::class, 'login'])->name('public.collecte.cobranded.login');
+Route::post('/collecte/{brand}/{token}/logout', [CoBrandedAuthController::class, 'logout'])->name('public.collecte.cobranded.logout');
 Route::post('/prize/inscription', [CompanyFormController::class, 'storePrize']);
 
 // Admin SPA shell — login page is public

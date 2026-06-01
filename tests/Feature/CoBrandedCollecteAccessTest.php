@@ -132,6 +132,67 @@ class CoBrandedCollecteAccessTest extends TestCase
         $this->assertAuthenticatedAs($user);
     }
 
+    public function test_employee_access_password_is_case_insensitive(): void
+    {
+        $this->travelTo('2026-06-15 12:00:00');
+
+        $company = $this->createCompanyWithCollection(
+            token: 'active-token',
+            start: '2026-06-15 09:00:00',
+            end: '2026-06-15 16:30:00',
+        );
+        $collectionId = DB::table('collections')->where('access_token', 'active-token')->value('id');
+        $user = User::create([
+            'company_id' => $company->id,
+            'name' => 'Personne test',
+            'email' => 'personne@example.com',
+            'professional_email' => 'personne@example.com',
+            'password' => 'ABC123',
+            'role' => UserRole::User,
+            'email_validated' => true,
+        ]);
+        DB::table('collections_users')->insert([
+            'collection_id' => $collectionId,
+            'user_id' => $user->id,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        $this->postJson('/collecte/' . $company->slug . '/active-token/login', [
+            'email' => 'personne@example.com',
+            'password' => 'abc123',
+        ])->assertOk();
+
+        $this->assertAuthenticatedAs($user);
+    }
+
+    public function test_employee_can_logout_from_cobranded_collection(): void
+    {
+        $this->travelTo('2026-06-15 12:00:00');
+
+        $company = $this->createCompanyWithCollection(
+            token: 'active-token',
+            start: '2026-06-15 09:00:00',
+            end: '2026-06-15 16:30:00',
+        );
+        $user = User::create([
+            'company_id' => $company->id,
+            'name' => 'Personne test',
+            'email' => 'personne@example.com',
+            'professional_email' => 'personne@example.com',
+            'password' => 'ABC123',
+            'role' => UserRole::User,
+            'email_validated' => true,
+        ]);
+
+        $this->actingAs($user)
+            ->postJson('/collecte/' . $company->slug . '/active-token/logout')
+            ->assertOk()
+            ->assertJson(['reload' => true]);
+
+        $this->assertGuest();
+    }
+
     public function test_admin_can_access_cobranded_collection_without_employee_auth(): void
     {
         $this->travelTo('2026-06-15 12:00:00');

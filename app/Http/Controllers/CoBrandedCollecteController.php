@@ -44,6 +44,7 @@ class CoBrandedCollecteController extends Controller
                     'emailPlaceholder' => EmailDomainList::firstEmailExample($collection->company->allowed_email_domains),
                     'accessCodeUrl' => route('public.collecte.cobranded.access-code', ['brand' => $brand, 'token' => $token]),
                     'loginUrl' => route('public.collecte.cobranded.login', ['brand' => $brand, 'token' => $token]),
+                    'logoutUrl' => route('public.collecte.cobranded.logout', ['brand' => $brand, 'token' => $token]),
                 ],
             ],
         ]);
