@@ -28,6 +28,8 @@ const deletingId = ref<number | null>(null);
 const loadError = ref<string | null>(null);
 const flashMessage = ref<string | null>(null);
 const errors = ref<Record<string, string[]>>({});
+const showCreatePassword = ref(false);
+const showEditPassword = ref(false);
 
 const form = reactive({
     email: '',
@@ -59,6 +61,24 @@ function formatDate(iso: string | null): string {
 
 function roleLabel(role: AccountRole): string {
     return role === 'superadmin' ? 'Superadmin' : 'Admin';
+}
+
+function generatePassword(): string {
+    const alphabet = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789';
+    const bytes = new Uint8Array(12);
+    window.crypto.getRandomValues(bytes);
+
+    return Array.from(bytes, (byte) => alphabet[byte % alphabet.length]).join('');
+}
+
+function generateCreatePassword() {
+    form.password = generatePassword();
+    showCreatePassword.value = true;
+}
+
+function generateEditPassword() {
+    editForm.password = generatePassword();
+    showEditPassword.value = true;
 }
 
 async function fetchAccounts() {
@@ -108,6 +128,7 @@ async function createAccount() {
             form.email = '';
             form.password = '';
             form.role = 'admin';
+            showCreatePassword.value = false;
             flashMessage.value = data.message ?? 'Compte créé.';
             return;
         }
@@ -127,6 +148,7 @@ function startEdit(account: AccountRow) {
     editForm.email = account.email;
     editForm.password = '';
     editForm.role = account.role;
+    showEditPassword.value = false;
 }
 
 function cancelEdit() {
@@ -219,9 +241,9 @@ onMounted(fetchAccounts);
             <span class="cooper-baseline">{{ firstError('account') }}</span>
         </div>
 
-        <section class="mb-6 rounded-box border border-base-300 bg-base-100 p-5">
+        <section class="mb-6 max-w-6xl rounded-box border border-base-300 bg-base-100 p-5">
             <h2 class="cooper-text-baseline mb-4 text-lg font-semibold">Créer un compte</h2>
-            <form class="grid gap-4 md:grid-cols-[1fr_220px_160px_auto]" @submit.prevent="createAccount">
+            <form class="grid gap-4 md:grid-cols-[minmax(260px,1fr)_360px_160px_auto]" @submit.prevent="createAccount">
                 <label class="flex flex-col gap-2">
                     <span class="cooper-baseline label-text">Email</span>
                     <input
@@ -235,12 +257,41 @@ onMounted(fetchAccounts);
 
                 <label class="flex flex-col gap-2">
                     <span class="cooper-baseline label-text">Mot de passe</span>
-                    <input
-                        v-model="form.password"
-                        type="password"
-                        class="cooper-input-baseline input input-bordered w-full"
-                        required
-                    />
+                    <div class="relative">
+                        <input
+                            v-model="form.password"
+                            :type="showCreatePassword ? 'text' : 'password'"
+                            class="cooper-input-baseline input input-bordered w-full pr-24"
+                            required
+                        />
+                        <button
+                            type="button"
+                            class="absolute right-11 top-1/2 -translate-y-1/2 text-xs font-semibold text-base-content/50 transition-colors hover:text-base-content"
+                            title="Générer"
+                            aria-label="Générer un mot de passe"
+                            @click="generateCreatePassword"
+                        >
+                            <span class="cooper-baseline">Générer</span>
+                        </button>
+                        <button
+                            type="button"
+                            class="absolute right-3 top-1/2 -translate-y-1/2 text-base-content/45 transition-colors hover:text-base-content"
+                            :title="showCreatePassword ? 'Masquer' : 'Afficher'"
+                            :aria-label="showCreatePassword ? 'Masquer le mot de passe' : 'Afficher le mot de passe'"
+                            @click="showCreatePassword = !showCreatePassword"
+                        >
+                            <svg v-if="showCreatePassword" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M17.94 17.94A10.94 10.94 0 0 1 12 20C7 20 2.73 16.89 1 12a21.8 21.8 0 0 1 5.06-6.94" />
+                                <path d="M10.58 10.58A2 2 0 0 0 12 14a2 2 0 0 0 1.42-.58" />
+                                <path d="M9.9 4.24A10.7 10.7 0 0 1 12 4c5 0 9.27 3.11 11 8a21.8 21.8 0 0 1-2.16 3.19" />
+                                <path d="m1 1 22 22" />
+                            </svg>
+                            <svg v-else xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M2.06 12.35a1 1 0 0 1 0-.7C3.73 7.11 7.98 4 12 4s8.27 3.11 9.94 7.65a1 1 0 0 1 0 .7C20.27 16.89 16.02 20 12 20s-8.27-3.11-9.94-7.65Z" />
+                                <circle cx="12" cy="12" r="3" />
+                            </svg>
+                        </button>
+                    </div>
                     <span v-if="firstError('password') && editingId === null" class="cooper-text-baseline text-sm text-error">{{ firstError('password') }}</span>
                 </label>
 
@@ -265,8 +316,8 @@ onMounted(fetchAccounts);
         <div v-else-if="loadError" class="alert alert-error"><span class="cooper-baseline">{{ loadError }}</span></div>
         <p v-else-if="accounts.length === 0" class="cooper-text-baseline text-sm text-base-content/50">Aucun compte admin.</p>
 
-        <section v-else class="rounded-box border border-base-300 bg-base-100">
-            <div class="grid grid-cols-[1fr_160px_130px_220px] border-b border-base-300 px-5 py-3 text-sm font-semibold text-base-content/50">
+        <section v-else class="max-w-6xl rounded-box border border-base-300 bg-base-100">
+            <div class="grid grid-cols-[minmax(260px,1fr)_160px_130px_220px] border-b border-base-300 px-5 py-3 text-sm font-semibold text-base-content/50">
                 <span class="cooper-baseline">Email</span>
                 <span class="cooper-baseline">Rôle</span>
                 <span class="cooper-baseline">Créé le</span>
@@ -280,7 +331,7 @@ onMounted(fetchAccounts);
             >
                 <form
                     v-if="editingId === account.id"
-                    class="grid grid-cols-[1fr_160px_190px_220px] items-start gap-3"
+                    class="grid grid-cols-[minmax(260px,1fr)_160px_310px_220px] items-start gap-3"
                     @submit.prevent="updateAccount(account)"
                 >
                     <div>
@@ -295,12 +346,41 @@ onMounted(fetchAccounts);
                         <span v-if="firstError('role')" class="cooper-text-baseline mt-1 block text-sm text-error">{{ firstError('role') }}</span>
                     </div>
                     <div>
-                        <input
-                            v-model="editForm.password"
-                            type="password"
-                            class="cooper-input-baseline input input-bordered w-full"
-                            placeholder="Nouveau mot de passe"
-                        />
+                        <div class="relative">
+                            <input
+                                v-model="editForm.password"
+                                :type="showEditPassword ? 'text' : 'password'"
+                                class="cooper-input-baseline input input-bordered w-full pr-24"
+                                placeholder="Nouveau mot de passe"
+                            />
+                            <button
+                                type="button"
+                                class="absolute right-11 top-1/2 -translate-y-1/2 text-xs font-semibold text-base-content/50 transition-colors hover:text-base-content"
+                                title="Générer"
+                                aria-label="Générer un mot de passe"
+                                @click="generateEditPassword"
+                            >
+                                <span class="cooper-baseline">Générer</span>
+                            </button>
+                            <button
+                                type="button"
+                                class="absolute right-3 top-1/2 -translate-y-1/2 text-base-content/45 transition-colors hover:text-base-content"
+                                :title="showEditPassword ? 'Masquer' : 'Afficher'"
+                                :aria-label="showEditPassword ? 'Masquer le mot de passe' : 'Afficher le mot de passe'"
+                                @click="showEditPassword = !showEditPassword"
+                            >
+                                <svg v-if="showEditPassword" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <path d="M17.94 17.94A10.94 10.94 0 0 1 12 20C7 20 2.73 16.89 1 12a21.8 21.8 0 0 1 5.06-6.94" />
+                                    <path d="M10.58 10.58A2 2 0 0 0 12 14a2 2 0 0 0 1.42-.58" />
+                                    <path d="M9.9 4.24A10.7 10.7 0 0 1 12 4c5 0 9.27 3.11 11 8a21.8 21.8 0 0 1-2.16 3.19" />
+                                    <path d="m1 1 22 22" />
+                                </svg>
+                                <svg v-else xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <path d="M2.06 12.35a1 1 0 0 1 0-.7C3.73 7.11 7.98 4 12 4s8.27 3.11 9.94 7.65a1 1 0 0 1 0 .7C20.27 16.89 16.02 20 12 20s-8.27-3.11-9.94-7.65Z" />
+                                    <circle cx="12" cy="12" r="3" />
+                                </svg>
+                            </button>
+                        </div>
                         <span v-if="firstError('password')" class="cooper-text-baseline mt-1 block text-sm text-error">{{ firstError('password') }}</span>
                     </div>
                     <div class="flex justify-end gap-2">
@@ -313,7 +393,7 @@ onMounted(fetchAccounts);
                     </div>
                 </form>
 
-                <div v-else class="grid grid-cols-[1fr_160px_130px_220px] items-center gap-3">
+                <div v-else class="grid grid-cols-[minmax(260px,1fr)_160px_130px_220px] items-center gap-3">
                     <p class="cooper-text-baseline font-semibold">{{ account.email }}</p>
                     <p class="cooper-text-baseline text-sm">{{ roleLabel(account.role) }}</p>
                     <p class="cooper-text-baseline text-sm text-base-content/50">{{ formatDate(account.created_at) }}</p>
@@ -323,7 +403,7 @@ onMounted(fetchAccounts);
                         </button>
                         <button
                             type="button"
-                            class="btn btn-outline btn-sm border-red-600 font-cooper text-red-700 hover:border-red-700 hover:bg-red-700 hover:text-white"
+                            class="btn btn-outline btn-sm border-red-600 font-cooper text-red-700 hover:border-red-700 hover:bg-red-700 hover:text-white disabled:cursor-not-allowed disabled:border-red-600 disabled:bg-transparent disabled:text-red-700 disabled:opacity-35"
                             :disabled="deletingId === account.id || currentUserId === account.id"
                             @click="deleteAccount(account)"
                         >
