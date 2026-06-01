@@ -217,19 +217,21 @@ onUnmounted(() => {
                         v-for="reg in filteredRegistrations"
                         :key="reg.id"
                         class="flex items-center border-b border-base-200 px-5 py-3 hover:bg-rose-50/40"
-                        :class="[reg.treated ? 'opacity-50' : 'cursor-pointer']"
+                        :class="[!reg.treated ? 'cursor-pointer' : '']"
                         @click="!reg.treated && openDetail(reg.id)"
                     >
-                        <div class="w-1/5 truncate font-medium"><span class="cooper-baseline">{{ reg.name }}</span></div>
-                        <div class="w-1/5 truncate text-base-content/70"><span class="cooper-baseline">{{ reg.email }}</span></div>
-                        <div class="w-1/5 truncate text-sm text-base-content/50"><span class="cooper-baseline">{{ formatDate(reg.created_at) }}</span></div>
-                        <div class="w-1/5 text-center">
-                            <span
-                                class="rounded-full px-2 py-1 text-xs font-medium"
-                                :class="reg.trophy ? 'bg-emerald-50 text-emerald-700' : 'bg-stone-100 text-stone-400'"
-                            >
-                                <span class="cooper-baseline">{{ reg.trophy ? 'Oui' : 'Non' }}</span>
-                            </span>
+                        <div class="flex w-4/5 items-center" :class="reg.treated ? 'opacity-50' : ''">
+                            <div class="w-1/4 truncate font-medium"><span class="cooper-baseline">{{ reg.name }}</span></div>
+                            <div class="w-1/4 truncate text-base-content/70"><span class="cooper-baseline">{{ reg.email }}</span></div>
+                            <div class="w-1/4 truncate text-sm text-base-content/50"><span class="cooper-baseline">{{ formatDate(reg.created_at) }}</span></div>
+                            <div class="w-1/4 text-center">
+                                <span
+                                    class="rounded-full px-2 py-1 text-xs font-medium"
+                                    :class="reg.trophy ? 'bg-emerald-50 text-emerald-700' : 'bg-stone-100 text-stone-400'"
+                                >
+                                    <span class="cooper-baseline">{{ reg.trophy ? 'Oui' : 'Non' }}</span>
+                                </span>
+                            </div>
                         </div>
                         <div class="w-1/5 text-center" @click.stop>
                             <div class="inline-flex gap-2">
