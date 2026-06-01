@@ -81,5 +81,7 @@ export function readableTextColor(backgroundColor: string | null | undefined): s
         return LIGHT_TEXT;
     }
 
+    if (lightContrast >= 3.0) return LIGHT_TEXT;
+
     return darkContrast > lightContrast ? DARK_TEXT : LIGHT_TEXT;
 }
