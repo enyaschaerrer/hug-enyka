@@ -187,7 +187,7 @@ function resetFilters() {
                             v-if="company.logo"
                             :src="company.logo"
                             :alt="company.name"
-                            class="max-h-full max-w-full object-contain"
+                            class="h-12 w-auto max-w-full object-contain"
                         />
                         <span v-else class="text-heading-t3 text-martinique-950">{{ company.name }}</span>
                     </div>
