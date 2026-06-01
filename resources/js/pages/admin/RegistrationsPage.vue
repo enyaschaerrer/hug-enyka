@@ -190,7 +190,7 @@ onUnmounted(() => {
                             : 'text-base-content/50 hover:text-base-content'"
                         @click="activeTab = 'treated'"
                     >
-                        <span class="cooper-baseline">Traitées</span>
+                        <span class="cooper-baseline">Historique</span>
                         <span class="ml-1.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-stone-100 text-xs text-stone-500">
                             <span class="cooper-baseline">{{ registrations.filter(r => r.treated).length }}</span>
                         </span>
@@ -199,7 +199,7 @@ onUnmounted(() => {
 
                 <!-- Message vide -->
                 <div v-if="filteredRegistrations.length === 0" class="cooper-text-baseline text-sm text-base-content/50">
-                    Aucune inscription {{ activeTab === 'pending' ? 'en attente' : 'traitée' }} pour le moment.
+                    Aucune inscription {{ activeTab === 'pending' ? 'en attente' : 'dans l\'historique' }} pour le moment.
                 </div>
 
                 <div v-else class="border border-base-300 bg-white">
@@ -247,7 +247,7 @@ onUnmounted(() => {
                                         : 'border-emerald-200 bg-emerald-50 text-emerald-700 hover:bg-emerald-100'"
                                     @click="toggleTreated(reg)"
                                 >
-                                    <span class="cooper-baseline">{{ reg.treated ? 'Réouvrir' : 'Traité' }}</span>
+                                    <span class="cooper-baseline">{{ reg.treated ? 'Réouvrir' : 'Archiver' }}</span>
                                 </button>
                                 <button
                                     v-if="reg.treated"
