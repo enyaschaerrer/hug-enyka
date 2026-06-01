@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import CollecteForm from './CollecteForm.vue';
+import CollectionForm from './CollectionForm.vue';
 
 
 const step = ref<1 | 2 | 3>(1);

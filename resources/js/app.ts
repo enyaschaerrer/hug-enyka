@@ -2,15 +2,15 @@ import { createApp } from 'vue';
 import App from './App.vue';
 import Companies from './components/public/Companies.vue';
 import Podium from './components/public/Podium.vue';
-import CollecteForm from './components/public/CollecteForm.vue';
+import CollectionForm from './components/public/CollectionForm.vue';
 import CookieConsentModal from './components/modals/CookieConsentModal.vue';
 import PrizeForm from './components/public/PrizeForm.vue'
 
 const prizeForm = document.getElementById('prize-form')
 if (prizeForm) createApp(PrizeForm).mount(prizeForm)
 
-const el = document.getElementById('collecte-form')
-if (el) createApp(CollecteForm).mount(el)
+const el = document.getElementById('formulaire')
+if (el) createApp(CollectionForm).mount(el)
 
 const spaRoot = document.getElementById('app');
 if (spaRoot) {
