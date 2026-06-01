@@ -241,15 +241,21 @@ onMounted(fetchAccounts);
             <span class="cooper-baseline">{{ firstError('account') }}</span>
         </div>
 
-        <section class="mb-6 max-w-6xl rounded-box border border-base-300 bg-base-100 p-5">
+            <section class="mb-6 rounded-box border border-base-300 bg-base-100 p-5">
             <h2 class="cooper-text-baseline mb-4 text-lg font-semibold">Créer un compte</h2>
-            <form class="grid gap-4 md:grid-cols-[minmax(260px,1fr)_360px_160px_auto]" @submit.prevent="createAccount">
+            <form class="grid gap-4 md:grid-cols-[minmax(260px,1fr)_360px_160px_auto]" autocomplete="new-password" @submit.prevent="createAccount">
                 <label class="flex flex-col gap-2">
                     <span class="cooper-baseline label-text">Email</span>
                     <input
                         v-model="form.email"
-                        type="email"
+                        type="text"
                         class="cooper-input-baseline input input-bordered w-full"
+                        autocomplete="new-password"
+                        autocapitalize="none"
+                        autocorrect="off"
+                        spellcheck="false"
+                        inputmode="email"
+                        name="account_identifier_create"
                         required
                     />
                     <span v-if="firstError('email') && editingId === null" class="cooper-text-baseline text-sm text-error">{{ firstError('email') }}</span>
@@ -260,8 +266,16 @@ onMounted(fetchAccounts);
                     <div class="relative">
                         <input
                             v-model="form.password"
-                            :type="showCreatePassword ? 'text' : 'password'"
+                            type="text"
                             class="cooper-input-baseline input input-bordered w-full pr-24"
+                            :style="`-webkit-text-security: ${showCreatePassword ? 'none' : 'disc'}`"
+                            autocomplete="off"
+                            autocapitalize="none"
+                            autocorrect="off"
+                            spellcheck="false"
+                            data-1p-ignore="true"
+                            data-lpignore="true"
+                            name="generated_access_secret_create"
                             required
                         />
                         <button
@@ -316,7 +330,7 @@ onMounted(fetchAccounts);
         <div v-else-if="loadError" class="alert alert-error"><span class="cooper-baseline">{{ loadError }}</span></div>
         <p v-else-if="accounts.length === 0" class="cooper-text-baseline text-sm text-base-content/50">Aucun compte admin.</p>
 
-        <section v-else class="max-w-6xl rounded-box border border-base-300 bg-base-100">
+            <section v-else class="rounded-box border border-base-300 bg-base-100">
             <div class="grid grid-cols-[minmax(260px,1fr)_160px_130px_220px] border-b border-base-300 px-5 py-3 text-sm font-semibold text-base-content/50">
                 <span class="cooper-baseline">Email</span>
                 <span class="cooper-baseline">Rôle</span>
@@ -332,10 +346,22 @@ onMounted(fetchAccounts);
                 <form
                     v-if="editingId === account.id"
                     class="grid grid-cols-[minmax(260px,1fr)_160px_310px_220px] items-start gap-3"
+                    autocomplete="new-password"
                     @submit.prevent="updateAccount(account)"
                 >
                     <div>
-                        <input v-model="editForm.email" type="email" class="cooper-input-baseline input input-bordered w-full" required />
+                        <input
+                            v-model="editForm.email"
+                            type="text"
+                            class="cooper-input-baseline input input-bordered w-full"
+                            autocomplete="new-password"
+                            autocapitalize="none"
+                            autocorrect="off"
+                            spellcheck="false"
+                            inputmode="email"
+                            :name="`account_identifier_${account.id}`"
+                            required
+                        />
                         <span v-if="firstError('email')" class="cooper-text-baseline mt-1 block text-sm text-error">{{ firstError('email') }}</span>
                     </div>
                     <div>
@@ -349,9 +375,17 @@ onMounted(fetchAccounts);
                         <div class="relative">
                             <input
                                 v-model="editForm.password"
-                                :type="showEditPassword ? 'text' : 'password'"
+                                type="text"
                                 class="cooper-input-baseline input input-bordered w-full pr-24"
+                                :style="`-webkit-text-security: ${showEditPassword ? 'none' : 'disc'}`"
                                 placeholder="Nouveau mot de passe"
+                                autocomplete="off"
+                                autocapitalize="none"
+                                autocorrect="off"
+                                spellcheck="false"
+                                data-1p-ignore="true"
+                                data-lpignore="true"
+                                :name="`generated_access_secret_${account.id}`"
                             />
                             <button
                                 type="button"
@@ -403,7 +437,7 @@ onMounted(fetchAccounts);
                         </button>
                         <button
                             type="button"
-                            class="btn btn-outline btn-sm border-red-600 font-cooper text-red-700 hover:border-red-700 hover:bg-red-700 hover:text-white disabled:cursor-not-allowed disabled:border-red-600 disabled:bg-transparent disabled:text-red-700 disabled:opacity-35"
+                            class="btn btn-outline btn-sm border-red-600 font-cooper text-red-700 hover:border-red-700 hover:bg-red-700 hover:text-white disabled:pointer-events-auto disabled:cursor-not-allowed disabled:border-red-600 disabled:bg-transparent disabled:text-red-700 disabled:opacity-35"
                             :disabled="deletingId === account.id || currentUserId === account.id"
                             @click="deleteAccount(account)"
                         >
