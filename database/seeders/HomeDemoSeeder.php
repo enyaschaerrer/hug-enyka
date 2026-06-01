@@ -61,7 +61,7 @@ class HomeDemoSeeder extends Seeder
             [
                 'name' => 'Caran d\'Ache',
                 'slug' => 'caran-dache',
-                'logo' => '/img/companies/carandache_logo.jpg',
+                'logo' => '/img/companies/carandache_logo.png',
                 'short_description' => 'Maison genevoise d\'instruments d\'écriture et de beaux-arts depuis 1915.',
                 'address' => 'Chemin du Foron 19, 1226 Thônex',
                 'email' => 'demo@carandache.test',
