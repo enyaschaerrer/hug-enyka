@@ -1,7 +1,7 @@
 @extends('layouts.public')
 
 @section('title', 'Prix du Cœur — Candidature')
-@section('banner', '/img/banners/banner_home.webp')
+@section('banner', '/img/banners/banner_prix_du_coeur.webp')
 
 @push('scripts')
 <script>
@@ -12,5 +12,6 @@
 @endpush
 
 @section('content')
+
     <div id="prize-form"></div>
 @endsection

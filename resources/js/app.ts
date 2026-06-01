@@ -5,6 +5,7 @@ import Podium from './components/public/Podium.vue';
 import CollectionForm from './components/public/CollectionForm.vue';
 import CookieConsentModal from './components/modals/CookieConsentModal.vue';
 import PrizeForm from './components/public/PrizeForm.vue'
+import LoginForm from './components/admin/LoginForm.vue';
 
 const prizeForm = document.getElementById('prize-form')
 if (prizeForm) createApp(PrizeForm).mount(prizeForm)
@@ -33,6 +34,11 @@ if (companiesRoot) {
         props.showTrophies = companiesRoot.dataset.showTrophies !== 'false';
     }
     createApp(Companies, props).mount(companiesRoot);
+}
+
+const loginRoot = document.getElementById('login-form');
+if (loginRoot) {
+    createApp(LoginForm).mount(loginRoot);
 }
 
 const cookieConsentRoot = document.getElementById('cookie-consent-root');

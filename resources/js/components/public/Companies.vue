@@ -49,9 +49,14 @@ const filtered = computed(() =>
 
 const visible = computed(() => filtered.value.slice(0, visibleCount.value));
 const hasMore = computed(() => visibleCount.value < filtered.value.length);
+const isExpanded = computed(() => visibleCount.value > pageSize && !hasMore.value);
 
 function showMore() {
     visibleCount.value += pageSize;
+}
+
+function showLess() {
+    visibleCount.value = pageSize;
 }
 
 function toggleYear(year: number) {
@@ -207,13 +212,22 @@ function resetFilters() {
                 Aucune entreprise ne correspond à votre recherche.
             </div>
 
-            <div v-if="hasMore" class="mt-10 flex justify-center">
+            <div v-if="hasMore || isExpanded" class="mt-10 flex justify-center">
                 <button
+                    v-if="hasMore"
                     type="button"
                     class="rounded-full bg-martinique-700 px-8 py-3 text-body text-white transition hover:bg-martinique-800"
                     @click="showMore"
                 >
                     Voir plus
+                </button>
+                <button
+                    v-else
+                    type="button"
+                    class="rounded-full bg-martinique-700 px-8 py-3 text-body text-white transition hover:bg-martinique-800"
+                    @click="showLess"
+                >
+                    Voir moins
                 </button>
             </div>
         </div>

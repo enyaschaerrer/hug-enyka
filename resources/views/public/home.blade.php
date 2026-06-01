@@ -23,7 +23,7 @@
                     </p>
                 </div>
                 <img
-                    src="/img/mascots/blutly1.webp"
+                    src="/img/mascots/blutly_sanguy_hey.webp"
                     alt="Mascottes Blutly et Sanguy"
                     class="h-70 w-70 shrink-0 object-contain"
                 />
