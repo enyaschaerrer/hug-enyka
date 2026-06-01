@@ -35,7 +35,9 @@ const loginForm = reactive({
 });
 
 const primaryColor = props.company.colors.primary ?? '#575656';
-const codeInputTextColor = (contrastRatio(primaryColor, '#ffffff') ?? 0) >= 4.5 ? primaryColor : '#111827';
+const secondaryColor = props.company.colors.secondary ?? '#575656';
+const accessiblePrimaryTextColor = (contrastRatio(primaryColor, '#ffffff') ?? 0) >= 4.5 ? primaryColor : '#111827';
+const codeInputTextColor = (contrastRatio(secondaryColor, '#ffffff') ?? 0) >= 4.5 ? secondaryColor : '#111827';
 
 function darkenHexColor(hex: string, amount = 0.16): string {
     const normalized = /^#[0-9a-fA-F]{6}$/.test(hex) ? hex : '#575656';
@@ -251,11 +253,13 @@ function forgotPassword() {
 
                         <button
                             type="button"
-                            class="btn btn-ghost w-full text-slate-700"
+                            class="cooper-baseline !mt-0 w-full rounded-lg py-0.5 text-xs font-semibold text-slate-700 transition-colors duration-200 ease-in-out disabled:cursor-not-allowed disabled:opacity-50"
                             :disabled="loading || !loginForm.email"
+                            @mouseenter="($event.currentTarget as HTMLElement).style.color = accessiblePrimaryTextColor"
+                            @mouseleave="($event.currentTarget as HTMLElement).style.color = ''"
                             @click="forgotPassword"
                         >
-                            <span class="cooper-baseline">Mot de passe oublié</span>
+                            Mot de passe oublié
                         </button>
                     </form>
                 </div>
