@@ -9,7 +9,9 @@ use App\Models\Collection;
 use App\Models\Company;
 use App\Models\Form;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 
 class CompanyController extends Controller
 {
@@ -37,6 +39,7 @@ class CompanyController extends Controller
     public function store(StoreCompanyRequest $request): JsonResponse
     {
         $validated = $this->normalizeVisibilityFlags($request->validated());
+        $validated['logo'] = $this->storeCompanyLogo($request->file('logo'), $validated['slug'] ?? null);
         $company = Company::create(Arr::except($validated, [
             'collection_start',
             'collection_end',
@@ -54,6 +57,7 @@ class CompanyController extends Controller
     public function update(UpdateCompanyRequest $request, Company $company): JsonResponse
     {
         $validated = $this->normalizeVisibilityFlags($request->validated());
+        $validated['logo'] = $this->storeCompanyLogo($request->file('logo'), $validated['slug'] ?? $company->slug) ?? $company->logo;
         $company->update(Arr::except($validated, [
             'collection_id',
             'collection_start',
@@ -122,6 +126,21 @@ class CompanyController extends Controller
         }
 
         return $validated;
+    }
+
+    private function storeCompanyLogo(?UploadedFile $file, ?string $slug): ?string
+    {
+        if (! $file) {
+            return null;
+        }
+
+        $extension = strtolower($file->getClientOriginalExtension() ?: $file->extension() ?: 'png');
+        $filename = Str::slug($slug ?: pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME) ?: 'company-logo')
+            . '-' . now()->format('YmdHis') . '.' . $extension;
+
+        $file->move(public_path('img/companies'), $filename);
+
+        return '/img/companies/' . $filename;
     }
 
     /**

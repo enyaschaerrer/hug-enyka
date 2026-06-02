@@ -13,6 +13,26 @@ type CollectionPayload = {
     linkOneDoc: string | null;
 };
 
+type CompanyFormPayload = {
+    name: string;
+    email: string;
+    slug: string;
+    short_description: string;
+    address: string;
+    telephone: string;
+    employee_count: string | number;
+    allowed_email_domains: string;
+    source: string;
+    is_public: boolean;
+    trophy: boolean;
+    primaryColor: string;
+    secondaryColor: string;
+    thirdColor: string;
+    collection_start: string;
+    collection_end: string;
+    collection_linkOneDoc: string;
+};
+
 const appState = (window as unknown as { __APP__?: AppState }).__APP__;
 const csrfToken = appState?.csrfToken ?? '';
 const { navigate, flashMessage } = useAdminRouter();
@@ -51,6 +71,8 @@ const form = reactive({
     collection_end: '',
     collection_linkOneDoc: '',
 });
+const logoFile = ref<File | null>(null);
+const editLogoInputId = 'company-logo-upload-edit';
 
 const errors = ref<Record<string, string[]>>({});
 const submitting = ref(false);
@@ -97,6 +119,44 @@ function toDatetimeLocal(iso: string | null | undefined): string {
 function back(event: Event) {
     event.preventDefault();
     navigate('/admin/campagnes');
+}
+
+function onLogoChange(event: Event) {
+    const input = event.target as HTMLInputElement;
+    logoFile.value = input.files?.[0] ?? null;
+}
+
+function buildFormData(payload: CompanyFormPayload): FormData {
+    const formData = new FormData();
+
+    formData.append('_method', 'PATCH');
+    formData.append('name', payload.name);
+    formData.append('email', payload.email);
+    formData.append('slug', payload.slug);
+    formData.append('short_description', payload.short_description);
+    formData.append('address', payload.address);
+    formData.append('telephone', payload.telephone);
+    formData.append('employee_count', String(payload.employee_count));
+    formData.append('allowed_email_domains', payload.allowed_email_domains);
+    formData.append('source', payload.source);
+    formData.append('is_public', payload.is_public ? '1' : '0');
+    formData.append('trophy', payload.trophy ? '1' : '0');
+    formData.append('primaryColor', payload.primaryColor);
+    formData.append('secondaryColor', payload.secondaryColor);
+    formData.append('thirdColor', payload.thirdColor);
+    formData.append('collection_start', payload.collection_start);
+    formData.append('collection_end', payload.collection_end);
+    formData.append('collection_linkOneDoc', payload.collection_linkOneDoc);
+
+    if (selectedCollectionId.value !== null) {
+        formData.append('collection_id', String(selectedCollectionId.value));
+    }
+
+    if (logoFile.value) {
+        formData.append('logo', logoFile.value);
+    }
+
+    return formData;
 }
 
 async function fetchCompany() {
@@ -146,24 +206,17 @@ async function submit() {
     submitting.value = true;
     errors.value = {};
 
-    const payload: Record<string, unknown> = { ...form };
-    if (payload.employee_count === '') {
-        payload.employee_count = null;
-    }
-    if (selectedCollectionId.value !== null) {
-        payload.collection_id = selectedCollectionId.value;
-    }
+    const payload = { ...form } as CompanyFormPayload;
 
     try {
         const res = await fetch(`/admin/companies/${companyId}`, {
-            method: 'PATCH',
+            method: 'POST',
             headers: {
                 'Accept': 'application/json',
-                'Content-Type': 'application/json',
                 'X-CSRF-TOKEN': csrfToken,
                 'X-Requested-With': 'XMLHttpRequest',
             },
-            body: JSON.stringify(payload),
+            body: buildFormData(payload),
         });
 
         if (res.ok) {
@@ -212,19 +265,19 @@ onMounted(fetchCompany);
             <form v-else @submit.prevent="submit" class="space-y-6 font-cooper">
                 <section class="grid gap-x-4 gap-y-6 md:grid-cols-2">
                     <label class="flex w-full flex-col gap-2">
-                        <span class="cooper-baseline label-text">Nom *</span>
+                        <span class="cooper-baseline label-text">Nom <span style="color: #9B2F5C;">*</span></span>
                         <input v-model="form.name" type="text" class="cooper-input-baseline input input-bordered w-full" required />
                         <p v-if="firstError('name')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('name') }}</p>
                     </label>
 
                     <label class="flex w-full flex-col gap-2">
-                        <span class="cooper-baseline label-text">Email *</span>
+                        <span class="cooper-baseline label-text">Email <span style="color: #9B2F5C;">*</span></span>
                         <input v-model="form.email" type="email" class="cooper-input-baseline input input-bordered w-full" required />
                         <p v-if="firstError('email')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('email') }}</p>
                     </label>
 
                     <label class="flex w-full flex-col gap-2">
-                        <span class="cooper-baseline label-text">Slug URL *</span>
+                        <span class="cooper-baseline label-text">Slug URL <span style="color: #9B2F5C;">*</span></span>
                         <input
                             v-model="form.slug"
                             type="text"
@@ -254,20 +307,20 @@ onMounted(fetchCompany);
                 </label>
 
                 <label class="flex w-full flex-col gap-2">
-                    <span class="cooper-baseline label-text">Adresse</span>
-                    <textarea v-model="form.address" class="cooper-textarea-baseline textarea textarea-bordered w-full font-cooper" rows="2" maxlength="500"></textarea>
+                    <span class="cooper-baseline label-text">Adresse <span style="color: #9B2F5C;">*</span></span>
+                    <textarea v-model="form.address" class="cooper-textarea-baseline textarea textarea-bordered w-full font-cooper" rows="2" maxlength="500" required></textarea>
                     <p v-if="firstError('address')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('address') }}</p>
                 </label>
 
                 <section class="grid gap-x-4 gap-y-6 md:grid-cols-3">
                     <label class="flex w-full flex-col gap-2">
-                        <span class="cooper-baseline label-text">Nombre d'employés</span>
-                        <input v-model="form.employee_count" type="number" min="0" class="cooper-input-baseline input input-bordered w-full" />
+                        <span class="cooper-baseline label-text">Nombre d'employés <span style="color: #9B2F5C;">*</span></span>
+                        <input v-model="form.employee_count" type="number" min="0" class="cooper-input-baseline input input-bordered w-full" required />
                         <p v-if="firstError('employee_count')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('employee_count') }}</p>
                     </label>
 
                     <label class="flex w-full flex-col gap-2 md:col-span-2">
-                        <span class="cooper-baseline label-text">Domaines email autorisés (séparés par ",")</span>
+                        <span class="cooper-baseline label-text">Domaines email autorisés (séparés par ",") <span style="color: #9B2F5C;">*</span></span>
                         <input v-model="form.allowed_email_domains" type="text" class="cooper-input-baseline input input-bordered w-full" placeholder="rolex.com,rolex.ch" required />
                         <p v-if="firstError('allowed_email_domains')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('allowed_email_domains') }}</p>
                     </label>
@@ -275,21 +328,35 @@ onMounted(fetchCompany);
 
                 <section class="grid gap-x-4 gap-y-6 md:grid-cols-2">
                     <label class="flex w-full flex-col gap-2">
-                        <span class="cooper-baseline label-text">Source (référent)</span>
+                        <span class="cooper-baseline label-text">Où avez-vous entendu parler de nous ?</span>
                         <input v-model="form.source" type="text" class="cooper-input-baseline input input-bordered w-full" placeholder="Recommandation, salon, ..." />
                         <p v-if="firstError('source')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('source') }}</p>
                     </label>
 
                     <label class="flex w-full flex-col gap-2">
-                        <span class="cooper-baseline label-text">Chemin du logo</span>
-                        <input v-model="form.logo" type="text" class="cooper-input-baseline input input-bordered w-full" placeholder="/img/logos/exemple.png" />
-                        <span class="cooper-text-baseline mt-1 text-xs text-base-content/60">Déposer le fichier dans public/img/logos/</span>
+                        <span class="cooper-baseline label-text">Logo de l'entreprise</span>
+                        <input
+                            :id="editLogoInputId"
+                            type="file"
+                            class="hidden"
+                            accept=".png,.jpg,.jpeg,.webp,.svg,image/png,image/jpeg,image/webp,image/svg+xml"
+                            @change="onLogoChange"
+                        />
+                        <label
+                            :for="editLogoInputId"
+                            class="group cooper-input-baseline input input-bordered flex w-full cursor-pointer items-center gap-3 px-3 text-base-content/60"
+                        >
+                            <span class="material-symbols-outlined shrink-0 text-base-content/70 transition-colors duration-200 ease-in-out group-hover:text-primary" aria-hidden="true">upload</span>
+                            <span class="cooper-baseline min-w-0 truncate text-sm">
+                                {{ logoFile?.name || 'Aucun fichier sélectionné' }}
+                            </span>
+                        </label>
                         <p v-if="firstError('logo')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('logo') }}</p>
                     </label>
                 </section>
 
                 <section>
-                    <p class="cooper-text-baseline mb-3 label-text">Couleurs co-brandées</p>
+                    <p class="cooper-text-baseline mb-3 label-text">Couleurs co-brandées <span style="color: #9B2F5C;">*</span></p>
                     <div class="grid gap-x-4 gap-y-6 md:grid-cols-3">
                         <label class="flex w-full flex-col gap-2">
                             <span class="cooper-baseline label-text-alt">Primaire</span>
@@ -316,7 +383,7 @@ onMounted(fetchCompany);
                                         <path d="m2 22 .414-.414" />
                                     </svg>
                                 </span>
-                                <input v-model="form.primaryColor" type="text" class="cooper-input-baseline join-item input input-bordered h-12 w-full font-cooper" placeholder="#c81e1e" maxlength="7" />
+                                <input v-model="form.primaryColor" type="text" class="cooper-input-baseline join-item input input-bordered h-12 w-full font-cooper" placeholder="#c81e1e" maxlength="7" required />
                             </div>
                             <p v-if="firstError('primaryColor')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('primaryColor') }}</p>
                         </label>
@@ -345,7 +412,7 @@ onMounted(fetchCompany);
                                         <path d="m2 22 .414-.414" />
                                     </svg>
                                 </span>
-                                <input v-model="form.secondaryColor" type="text" class="cooper-input-baseline join-item input input-bordered h-12 w-full font-cooper" placeholder="#fecaca" maxlength="7" />
+                                <input v-model="form.secondaryColor" type="text" class="cooper-input-baseline join-item input input-bordered h-12 w-full font-cooper" placeholder="#fecaca" maxlength="7" required />
                             </div>
                             <p v-if="firstError('secondaryColor')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('secondaryColor') }}</p>
                         </label>
@@ -374,7 +441,7 @@ onMounted(fetchCompany);
                                         <path d="m2 22 .414-.414" />
                                     </svg>
                                 </span>
-                                <input v-model="form.thirdColor" type="text" class="cooper-input-baseline join-item input input-bordered h-12 w-full font-cooper" placeholder="#1f2937" maxlength="7" />
+                                <input v-model="form.thirdColor" type="text" class="cooper-input-baseline join-item input input-bordered h-12 w-full font-cooper" placeholder="#1f2937" maxlength="7" required />
                             </div>
                             <p v-if="firstError('thirdColor')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('thirdColor') }}</p>
                         </label>
@@ -389,7 +456,7 @@ onMounted(fetchCompany);
 
                     <div class="grid gap-x-4 gap-y-6 md:grid-cols-2">
                         <label class="flex w-full flex-col gap-2">
-                            <span class="cooper-baseline label-text">Début *</span>
+                            <span class="cooper-baseline label-text">Début <span style="color: #9B2F5C;">*</span></span>
                             <AdminDateTimePicker
                                 v-model="form.collection_start"
                                 label="Choisir une date de début"
@@ -400,7 +467,7 @@ onMounted(fetchCompany);
                         </label>
 
                         <label class="flex w-full flex-col gap-2">
-                            <span class="cooper-baseline label-text">Fin *</span>
+                            <span class="cooper-baseline label-text">Fin <span style="color: #9B2F5C;">*</span></span>
                             <AdminDateTimePicker
                                 v-model="form.collection_end"
                                 label="Choisir une date de fin"
@@ -435,7 +502,7 @@ onMounted(fetchCompany);
                         </label>
 
                         <label class="flex w-full flex-col gap-2 md:col-span-2">
-                            <span class="cooper-baseline label-text">Lien OneDoc *</span>
+                            <span class="cooper-baseline label-text">Lien OneDoc <span style="color: #9B2F5C;">*</span></span>
                             <input v-model="form.collection_linkOneDoc" type="text" class="cooper-input-baseline input input-bordered w-full" placeholder="https://..." required />
                             <p v-if="firstError('collection_linkOneDoc')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('collection_linkOneDoc') }}</p>
                         </label>
