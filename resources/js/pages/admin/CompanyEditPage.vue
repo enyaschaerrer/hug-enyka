@@ -463,9 +463,15 @@ onMounted(fetchCompany);
                             class="group cooper-input-baseline input input-bordered flex w-full cursor-pointer items-center gap-3 px-3 text-base-content/60"
                         >
                             <span class="material-symbols-outlined shrink-0 text-base-content/70 transition-colors duration-200 ease-in-out group-hover:text-primary" aria-hidden="true">upload</span>
-                            <span class="cooper-baseline min-w-0 truncate text-sm">
+                            <span class="cooper-baseline min-w-0 flex-1 truncate text-sm">
                                 {{ logoFile?.name || logoFilename(form.logo) || 'Aucun fichier sélectionné' }}
                             </span>
+                            <img
+                                v-if="!logoFile && form.logo"
+                                :src="form.logo"
+                                alt="Aperçu du logo"
+                                class="my-0.5 h-[calc(100%-0.25rem)] max-h-none w-auto max-w-24 shrink-0 self-stretch rounded object-contain"
+                            />
                         </label>
                         <p class="cooper-text-baseline mt-1 text-xs text-base-content/60">Formats autorisés : PNG, JPG, JPEG, WEBP, SVG. Taille maximale : 5 Mo.</p>
                         <p v-if="firstError('logo')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('logo') }}</p>
