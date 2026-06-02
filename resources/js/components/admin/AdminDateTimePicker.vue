@@ -1,16 +1,22 @@
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue';
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
 
 const props = withDefaults(defineProps<{
     modelValue: string;
     label: string;
     mode: 'start' | 'end';
+    disabled?: boolean;
     minDateTime?: string | null;
+    pairedDateTime?: string | null;
     referenceDateTime?: string | null;
+    blockedRanges?: Array<{ start: string; end: string }>;
     defaultTime?: string;
 }>(), {
+    disabled: false,
     minDateTime: null,
+    pairedDateTime: null,
     referenceDateTime: null,
+    blockedRanges: () => [],
     defaultTime: '09:00',
 });
 
@@ -34,9 +40,11 @@ const months = [
 ];
 
 const weekDays = ['Lu', 'Ma', 'Me', 'Je', 'Ve', 'Sa', 'Di'];
+const currentYear = new Date().getFullYear();
 const isOpen = ref(false);
 const hoveredDate = ref<Date | null>(null);
 const openUpward = ref(false);
+const rootRef = ref<HTMLDivElement | null>(null);
 const triggerRef = ref<HTMLButtonElement | null>(null);
 const selectedTime = ref(timeFromValue(props.modelValue) ?? props.defaultTime);
 const initialVisibleDate = parseLocalDateTime(props.modelValue) ?? new Date();
@@ -44,12 +52,29 @@ const visibleMonth = ref(initialVisibleDate.getMonth());
 const visibleYear = ref(initialVisibleDate.getFullYear());
 
 function toggleOpen() {
+    if (props.disabled) {
+        isOpen.value = false;
+        return;
+    }
+
     if (!isOpen.value && triggerRef.value) {
         const rect = triggerRef.value.getBoundingClientRect();
         openUpward.value = window.innerHeight - rect.bottom < 420;
         syncVisibleDateOnOpen();
     }
     isOpen.value = !isOpen.value;
+}
+
+function handleDocumentMouseDown(event: MouseEvent): void {
+    if (!isOpen.value || !rootRef.value) {
+        return;
+    }
+
+    const path = typeof event.composedPath === 'function' ? event.composedPath() : [];
+
+    if (!path.includes(rootRef.value)) {
+        isOpen.value = false;
+    }
 }
 
 const selectedDate = computed(() => dateOnly(props.modelValue));
@@ -92,13 +117,15 @@ const displayValue = computed(() => {
     }).format(parsed);
 });
 
+const canGoPreviousMonth = computed(() => visibleYear.value === currentYear && visibleMonth.value > 0);
+const canGoNextMonth = computed(() => visibleYear.value === currentYear && visibleMonth.value < 11);
+
 watch(() => props.modelValue, (next) => {
     selectedTime.value = timeFromValue(next) ?? selectedTime.value;
 
     const date = parseLocalDateTime(next);
     if (date) {
-        visibleMonth.value = date.getMonth();
-        visibleYear.value = date.getFullYear();
+        setVisibleDate(date);
     }
 });
 
@@ -112,6 +139,12 @@ watch(effectiveMinDateTime, (newMin) => {
 
     if (current && min && current.getTime() < min.getTime()) {
         emit('update:modelValue', '');
+    }
+});
+
+watch(() => props.disabled, (disabled) => {
+    if (disabled) {
+        isOpen.value = false;
     }
 });
 
@@ -150,8 +183,12 @@ function syncVisibleDateOnOpen(): void {
         ?? parseLocalDateTime(effectiveMinDateTime.value)
         ?? new Date();
 
-    visibleMonth.value = targetDate.getMonth();
-    visibleYear.value = targetDate.getFullYear();
+    setVisibleDate(targetDate);
+}
+
+function setVisibleDate(date: Date): void {
+    visibleMonth.value = date.getMonth();
+    visibleYear.value = currentYear;
 }
 
 function timeFromValue(value: string): string | null {
@@ -205,11 +242,60 @@ function setHovered(day: Date | null): void {
 }
 
 function isDisabled(day: Date | null): boolean {
-    if (!day || !minDate.value) {
+    if (!day) {
         return false;
     }
 
-    return day.getTime() <= minDate.value.getTime();
+    if (minDate.value && day.getTime() < minDate.value.getTime()) {
+        return true;
+    }
+
+    if (isBlockedByExistingRange(day)) {
+        return true;
+    }
+
+    return false;
+}
+
+function dayIntersectsBlockedRange(day: Date, range: { start: string; end: string }): boolean {
+    const rangeStart = dateOnly(range.start);
+    const rangeEnd = dateOnly(range.end);
+
+    if (!rangeStart || !rangeEnd) {
+        return false;
+    }
+
+    return day.getTime() >= rangeStart.getTime() && day.getTime() <= rangeEnd.getTime();
+}
+
+function selectionOverlapsBlockedRange(
+    day: Date,
+    range: { start: string; end: string },
+    anchorDate: Date | null,
+): boolean {
+    const rangeStart = dateOnly(range.start);
+    const rangeEnd = dateOnly(range.end);
+
+    if (!rangeStart || !rangeEnd) {
+        return false;
+    }
+
+    const intervalStart = anchorDate && anchorDate.getTime() < day.getTime() ? anchorDate : day;
+    const intervalEnd = anchorDate && anchorDate.getTime() > day.getTime() ? anchorDate : day;
+
+    return intervalStart.getTime() <= rangeEnd.getTime() && intervalEnd.getTime() >= rangeStart.getTime();
+}
+
+function isBlockedByExistingRange(day: Date): boolean {
+    const anchorDate = dateOnly(props.mode === 'start' ? props.pairedDateTime : props.referenceDateTime);
+
+    return props.blockedRanges.some((range) => {
+        if (!anchorDate) {
+            return dayIntersectsBlockedRange(day, range);
+        }
+
+        return selectionOverlapsBlockedRange(day, range, anchorDate);
+    });
 }
 
 function dayClasses(day: Date | null): string {
@@ -265,29 +351,24 @@ function selectDate(day: Date | null): void {
 
 
 function previousMonth(): void {
-    if (visibleMonth.value > 0) {
-        visibleMonth.value -= 1;
+    if (!canGoPreviousMonth.value) {
         return;
     }
 
-    visibleMonth.value = 11;
-    visibleYear.value -= 1;
+    visibleMonth.value -= 1;
 }
 
 function nextMonth(): void {
-    if (visibleMonth.value < 11) {
-        visibleMonth.value += 1;
+    if (!canGoNextMonth.value) {
         return;
     }
 
-    visibleMonth.value = 0;
-    visibleYear.value += 1;
+    visibleMonth.value += 1;
 }
 
 function selectToday(): void {
     const today = new Date();
-    visibleMonth.value = today.getMonth();
-    visibleYear.value = today.getFullYear();
+    setVisibleDate(today);
     selectDate(today);
 }
 
@@ -310,33 +391,66 @@ function iconPath(): string[] {
             'M8 2v4',
         ];
 }
+
+onMounted(() => {
+    document.addEventListener('mousedown', handleDocumentMouseDown);
+});
+
+onUnmounted(() => {
+    document.removeEventListener('mousedown', handleDocumentMouseDown);
+});
 </script>
 
 <template>
-    <div class="relative">
+    <div ref="rootRef" class="relative">
         <button
             ref="triggerRef"
             type="button"
-            class="cooper-datetime-baseline group input input-bordered flex w-full cursor-pointer items-center justify-between pr-3 text-left font-cooper font-medium text-sm"
+            class="cooper-datetime-baseline group input input-bordered flex w-full items-center justify-between pr-3 text-left font-cooper font-medium text-sm"
+            :class="props.disabled ? 'cursor-not-allowed border-base-300 bg-base-200/60 text-base-content/35' : 'cursor-pointer'"
+            :disabled="props.disabled"
             @click="toggleOpen"
         >
-            <span class="cooper-baseline truncate transition-colors duration-200 ease-out group-hover:text-primary" :class="displayValue ? 'text-base-content' : 'text-base-content/35'">
+            <span
+                class="cooper-baseline truncate transition-colors duration-200 ease-out"
+                :class="[
+                    displayValue ? 'text-base-content' : 'text-base-content/35',
+                    props.disabled ? '!text-base-content/35' : 'group-hover:text-primary',
+                ]"
+            >
                 {{ displayValue || label }}
             </span>
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 shrink-0 cursor-pointer text-base-content/55 transition-colors duration-200 ease-out group-hover:text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-5 w-5 shrink-0 text-base-content/55 transition-colors duration-200 ease-out"
+                :class="props.disabled ? 'cursor-not-allowed !text-base-content/35' : 'cursor-pointer group-hover:text-primary'"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+            >
                 <path v-for="path in iconPath()" :key="path" :d="path" />
             </svg>
         </button>
-
-        <div v-if="isOpen" class="fixed inset-0 z-20" @mousedown="isOpen = false"></div>
 
         <div
             v-if="isOpen"
             class="absolute left-0 z-30 w-full min-w-[22rem] border border-base-300 bg-white p-4 shadow-xl"
             :class="openUpward ? 'bottom-[calc(100%+0.5rem)]' : 'top-[calc(100%+0.5rem)]'"
+            @mousedown.stop
+            @click.stop
         >
             <div class="flex items-center gap-2">
-                <button type="button" class="btn btn-ghost btn-sm px-2" @click="previousMonth">
+                <button
+                    type="button"
+                    class="btn btn-ghost btn-sm px-2"
+                    :class="!canGoPreviousMonth ? 'cursor-not-allowed opacity-35 hover:bg-transparent hover:text-current' : ''"
+                    :disabled="!canGoPreviousMonth"
+                    @click.stop="previousMonth"
+                >
                     <span class="cooper-baseline">←</span>
                 </button>
                 <select v-model.number="visibleMonth" class="cooper-input-baseline select select-bordered select-sm min-h-9 flex-1 font-cooper font-medium text-sm">
@@ -347,7 +461,13 @@ function iconPath(): string[] {
                 <span class="cooper-baseline min-w-14 text-center text-sm font-medium text-base-content/70">
                     {{ visibleYear }}
                 </span>
-                <button type="button" class="btn btn-ghost btn-sm px-2" @click="nextMonth">
+                <button
+                    type="button"
+                    class="btn btn-ghost btn-sm px-2"
+                    :class="!canGoNextMonth ? 'cursor-not-allowed opacity-35 hover:bg-transparent hover:text-current' : ''"
+                    :disabled="!canGoNextMonth"
+                    @click.stop="nextMonth"
+                >
                     <span class="cooper-baseline">→</span>
                 </button>
             </div>
@@ -363,22 +483,23 @@ function iconPath(): string[] {
                     type="button"
                     class="btn btn-sm min-h-9 px-0 font-cooper"
                     :class="dayClasses(day)"
-                    :disabled="isDisabled(day)"
+                    :aria-disabled="isDisabled(day) || !day"
                     @mouseenter="setHovered(day)"
-                    @click="selectDate(day)"
+                    @click.stop="selectDate(day)"
+                    @mousedown.stop
                 >
                     <span class="cooper-baseline">{{ day?.getDate() }}</span>
                 </button>
             </div>
 
             <div class="mt-4 flex items-center justify-between gap-3">
-                <button v-if="mode === 'start'" type="button" class="btn btn-ghost btn-sm font-cooper" @click="selectToday">
+                <button v-if="mode === 'start'" type="button" class="btn btn-ghost btn-sm font-cooper" @click.stop="selectToday">
                     <span class="cooper-baseline">Aujourd&#39;hui</span>
                 </button>
                 <p v-if="mode === 'end' && referenceDateTime" class="cooper-text-baseline text-xs text-base-content/45">
                     Début : {{ new Intl.DateTimeFormat('fr-CH', { day: '2-digit', month: '2-digit', year: 'numeric' }).format(parseLocalDateTime(referenceDateTime) ?? new Date()) }}
                 </p>
-                <button type="button" class="btn btn-primary btn-sm font-cooper ml-auto" @click="isOpen = false">
+                <button type="button" class="btn btn-primary btn-sm font-cooper ml-auto" @click.stop="isOpen = false">
                     <span class="cooper-baseline">Valider</span>
                 </button>
             </div>

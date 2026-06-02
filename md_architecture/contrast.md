@@ -42,6 +42,14 @@ Elle compare le contraste de la couleur de fond avec :
 
 La fonction retourne la couleur qui offre le meilleur contraste.
 
+Regle actuelle :
+
+- si le contraste entre le fond et `#ffffff` est superieur ou egal a `2.35`, le texte reste blanc ;
+- en dessous, la fonction compare le blanc et `#111827` puis choisit la couleur la plus lisible.
+
+Cette valeur `2.35` est volontairement plus souple qu'un seuil plus strict.
+Le but est de conserver du texte blanc sur davantage de couleurs de marque intermediaires, et de ne passer au texte fonce que lorsque le blanc devient vraiment trop faible, notamment sur les couleurs tres claires ou pastel.
+
 ## Usage actuel
 
 La regle est appliquee au bouton principal de la popup QR co-brandee :

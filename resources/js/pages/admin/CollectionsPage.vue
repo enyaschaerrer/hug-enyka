@@ -11,6 +11,7 @@ type CollectionRow = {
     linkOneDoc: string;
     url: string;
     is_active: boolean;
+    is_upcoming: boolean;
 };
 
 type CompanyRow = {
@@ -20,11 +21,12 @@ type CompanyRow = {
     email: string;
     employee_count: number | null;
     created_at: string | null;
+    is_public: boolean;
     trophy: boolean;
     collections: CollectionRow[];
 };
 
-type CompanyFilter = 'active-first' | 'active-only' | 'created-desc' | 'created-asc';
+type CompanyFilter = 'active-first' | 'active-only' | 'incoming-only' | 'created-desc' | 'created-asc';
 
 type AppState = { csrfToken: string };
 
@@ -77,25 +79,41 @@ function goToCreate(event: Event) {
 }
 
 function activeCollections(company: CompanyRow): CollectionRow[] {
-    return company.collections.filter((collection) => collection.is_active);
+    return company.collections
+        .filter((collection) => collection.is_active)
+        .sort((left, right) => new Date(left.start).getTime() - new Date(right.start).getTime());
+}
+
+function upcomingCollections(company: CompanyRow): CollectionRow[] {
+    return company.collections
+        .filter((collection) => collection.is_upcoming)
+        .sort((left, right) => new Date(left.start).getTime() - new Date(right.start).getTime());
 }
 
 function inactiveCollections(company: CompanyRow): CollectionRow[] {
-    return company.collections.filter((collection) => !collection.is_active);
+    return company.collections
+        .filter((collection) => !collection.is_active && !collection.is_upcoming)
+        .sort((left, right) => new Date(right.start).getTime() - new Date(left.start).getTime());
 }
 
 function hasActiveCollection(company: CompanyRow): boolean {
     return activeCollections(company).length > 0;
 }
 
+function hasUpcomingCollection(company: CompanyRow): boolean {
+    return upcomingCollections(company).length > 0;
+}
+
 function companyActionPath(company: CompanyRow): string {
-    return hasActiveCollection(company)
-        ? `/admin/companies/${company.id}/edit`
-        : `/admin/companies/${company.id}/edit?newCollection=1`;
+    return `/admin/companies/${company.id}/edit?newCollection=1`;
 }
 
 function companyActionLabel(company: CompanyRow): string {
-    return hasActiveCollection(company) ? 'Modifier' : 'Nouvelle campagne';
+    return 'Nouvelle campagne';
+}
+
+function companyEditPath(company: CompanyRow): string {
+    return `/admin/companies/${company.id}/edit`;
 }
 
 function companyCreatedTimestamp(company: CompanyRow): number {
@@ -120,6 +138,10 @@ const displayedCompanies = computed(() => {
         results = results.filter(hasActiveCollection);
     }
 
+    if (companyFilter.value === 'incoming-only') {
+        results = results.filter(hasUpcomingCollection);
+    }
+
     const sortByCreatedDesc = (left: CompanyRow, right: CompanyRow) => (
         companyCreatedTimestamp(right) - companyCreatedTimestamp(left)
     );
@@ -137,11 +159,22 @@ const displayedCompanies = computed(() => {
     }
 
     return [...results].sort((left, right) => {
-        const leftActive = hasActiveCollection(left) ? 1 : 0;
-        const rightActive = hasActiveCollection(right) ? 1 : 0;
+        const companyRank = (company: CompanyRow) => {
+            if (hasActiveCollection(company)) {
+                return 0;
+            }
 
-        if (leftActive !== rightActive) {
-            return rightActive - leftActive;
+            if (hasUpcomingCollection(company)) {
+                return 1;
+            }
+
+            return 2;
+        };
+
+        const rankDiff = companyRank(left) - companyRank(right);
+
+        if (rankDiff !== 0) {
+            return rankDiff;
         }
 
         return sortByCreatedDesc(left, right);
@@ -149,7 +182,7 @@ const displayedCompanies = computed(() => {
 });
 
 function showDisabledLinkMessage() {
-    disabledLinkMessage.value = "Cette collecte est terminée. Le lien public renvoie une 404.";
+    disabledLinkMessage.value = "Cette collecte est inactive. Le lien public renvoie une 404.";
 
     if (disabledLinkTimer) {
         window.clearTimeout(disabledLinkTimer);
@@ -258,6 +291,7 @@ onMounted(fetchCompanies);
                     <select v-model="companyFilter" class="select select-bordered bg-white font-cooper">
                         <option value="active-first">Campagnes actives d'abord</option>
                         <option value="active-only">Campagnes actives uniquement</option>
+                        <option value="incoming-only">Campagnes à venir uniquement</option>
                         <option value="created-desc">Date de création · plus récentes</option>
                         <option value="created-asc">Date de création · plus anciennes</option>
                     </select>
@@ -290,14 +324,23 @@ onMounted(fetchCompanies);
                     <div class="flex shrink-0 gap-2">
                         <a
                             :href="companyActionPath(company)"
-                            class="btn btn-ghost btn-sm font-cooper"
+                            class="btn btn-ghost btn-sm border-transparent bg-transparent font-cooper font-normal text-base-content shadow-none transition-colors hover:border-transparent hover:bg-transparent hover:text-base-content"
                             @click.prevent="navigate(companyActionPath(company))"
                         >
+                            <span class="material-symbols-outlined" style="font-size: 16px;" aria-hidden="true">add</span>
                             <span class="cooper-baseline">{{ companyActionLabel(company) }}</span>
+                        </a>
+                        <a
+                            :href="companyEditPath(company)"
+                            class="btn btn-ghost btn-sm border-transparent bg-transparent font-cooper font-normal text-base-content shadow-none transition-colors hover:border-transparent hover:bg-transparent hover:text-base-content"
+                            @click.prevent="navigate(companyEditPath(company))"
+                        >
+                            <span class="material-symbols-outlined" style="font-size: 16px;" aria-hidden="true">edit</span>
+                            <span class="cooper-baseline">Modifier l'entreprise</span>
                         </a>
                         <button
                             type="button"
-                            class="btn btn-outline btn-sm border-red-600 font-cooper text-red-700 hover:border-red-700 hover:bg-red-700 hover:text-white"
+                            class="btn btn-outline btn-sm border-red-600 font-cooper font-normal text-red-700 hover:border-red-700 hover:bg-red-700 hover:text-white"
                             :disabled="deletingCompanyId === company.id"
                             @click="deleteCompany(company)"
                         >
@@ -331,9 +374,10 @@ onMounted(fetchCompanies);
                                 </a>
                             </div>
                             <div class="flex shrink-0 items-center gap-3">
-                                <span v-if="company.trophy" class="inline-flex items-center gap-1.5 rounded-full border border-emerald-100 bg-white px-3 py-1.5 text-xs font-medium text-[#5A002A]">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5"/></svg>
-                                    <span class="cooper-baseline">Participe au prix du cœur</span>
+                                <span v-if="company.trophy || !company.is_public" class="inline-flex items-center gap-1.5 rounded-full border border-emerald-100 bg-white px-3 py-1.5 text-xs font-medium text-[#5A002A]">
+                                    <svg v-if="company.trophy" xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5"/></svg>
+                                    <svg v-else xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.733 5.076A10.744 10.744 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"/><path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"/><path d="M2 2l20 20"/><path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"/></svg>
+                                    <span class="cooper-baseline">{{ company.trophy ? 'Participation au Prix du Cœur' : 'Participation anonyme' }}</span>
                                 </span>
                                 <div class="flex items-center gap-1">
                                     <button
@@ -358,6 +402,57 @@ onMounted(fetchCompanies);
                                             <circle cx="12" cy="12" r="3" />
                                         </svg>
                                     </a>
+                                    <a
+                                        :href="`/admin/companies/${company.id}/edit?collection=${col.id}`"
+                                        title="Modifier la collecte"
+                                        class="inline-flex h-9 w-9 items-center justify-center rounded-full text-emerald-700 transition-colors hover:bg-white hover:text-emerald-900"
+                                        @click.prevent="navigate(`/admin/companies/${company.id}/edit?collection=${col.id}`)"
+                                    >
+                                        <span class="material-symbols-outlined" style="font-size: 18px;" aria-hidden="true">edit</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div v-if="upcomingCollections(company).length > 0" class="mt-4">
+                        <p class="cooper-text-baseline mb-2 text-xs font-medium tracking-wider text-base-content/40 uppercase">
+                            Collecte à venir
+                        </p>
+
+                        <div class="space-y-2.5">
+                            <div
+                                v-for="col in upcomingCollections(company)"
+                                :key="col.id"
+                                class="rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm"
+                            >
+                                <div class="flex items-center justify-between gap-3">
+                                    <div class="flex min-w-0 flex-1 items-center gap-4">
+                                        <span class="cooper-baseline shrink-0 text-sm font-medium text-amber-900">
+                                            {{ formatDate(col.start) }} → {{ formatDate(col.end) }}
+                                        </span>
+                                        <span class="cooper-baseline min-w-0 truncate text-sm text-amber-800/70">
+                                            {{ col.url }}
+                                        </span>
+                                        <button type="button" class="btn btn-ghost btn-xs cursor-not-allowed border-transparent font-cooper text-amber-800/70 hover:border-transparent hover:bg-amber-100 hover:text-amber-900" @click="showDisabledLinkMessage">
+                                            <span class="cooper-baseline">Lien désactivé</span>
+                                        </button>
+                                    </div>
+                                    <div class="flex shrink-0 items-center gap-3">
+                                        <span v-if="company.trophy || !company.is_public" class="inline-flex items-center gap-1.5 rounded-full border border-amber-200 bg-white px-3 py-1.5 text-xs font-medium text-[#5A002A]">
+                                            <svg v-if="company.trophy" xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5"/></svg>
+                                            <svg v-else xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.733 5.076A10.744 10.744 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"/><path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"/><path d="M2 2l20 20"/><path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"/></svg>
+                                            <span class="cooper-baseline">{{ company.trophy ? 'Participation au Prix du Cœur' : 'Participation anonyme' }}</span>
+                                        </span>
+                                        <a
+                                            :href="`/admin/companies/${company.id}/edit?collection=${col.id}`"
+                                            title="Modifier la collecte"
+                                            class="inline-flex h-9 w-9 items-center justify-center rounded-full text-amber-700 transition-colors hover:bg-white hover:text-amber-900"
+                                            @click.prevent="navigate(`/admin/companies/${company.id}/edit?collection=${col.id}`)"
+                                        >
+                                            <span class="material-symbols-outlined" style="font-size: 18px;" aria-hidden="true">edit</span>
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
