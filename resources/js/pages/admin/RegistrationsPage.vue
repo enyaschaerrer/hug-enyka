@@ -8,6 +8,8 @@ type Registration = {
     email: string;
     phone: string | null;
     address: string | null;
+    npa: string | null;
+    localite: string | null;
     message: string | null;
     trophy: boolean;
     treated: boolean;
@@ -94,12 +96,18 @@ function formatDate(dateStr: string): string {
     });
 }
 
+function formatFullAddress(address?: string | null, npa?: string | null, localite?: string | null): string {
+    return [address, [npa, localite].filter(Boolean).join(' ')].filter(Boolean).join(', ') || '—';
+}
+
 type FormDetail = {
     id: number;
     name: string;
     email: string;
     phone: string | null;
     address: string | null;
+    npa: string | null;
+    localite: string | null;
     message: string | null;
     trophy: boolean;
     treated: boolean;
@@ -294,7 +302,7 @@ onUnmounted(() => {
                         </div>
                         <div class="flex gap-4">
                             <dt class="w-32 shrink-0 font-medium text-stone-500"><span class="cooper-baseline">Adresse</span></dt>
-                            <dd class="text-stone-900"><span class="cooper-baseline">{{ selectedForm.address ?? '—' }}</span></dd>
+                            <dd class="text-stone-900"><span class="cooper-baseline">{{ formatFullAddress(selectedForm.address, selectedForm.npa, selectedForm.localite) }}</span></dd>
                         </div>
                         <div class="flex gap-4">
                             <dt class="w-32 shrink-0 font-medium text-stone-500"><span class="cooper-baseline">Trophée</span></dt>

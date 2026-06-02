@@ -11,6 +11,8 @@ type PendingForm = {
     email: string;
     phone: string | null;
     address: string | null;
+    npa: string | null;
+    localite: string | null;
     message: string | null;
     trophy: boolean;
 };
@@ -25,6 +27,8 @@ type CompanyFormPayload = {
     slug: string;
     short_description: string;
     address: string;
+    npa: string;
+    localite: string;
     telephone: string;
     employee_count: string | number;
     allowed_email_domains: string;
@@ -59,6 +63,8 @@ const form = reactive({
     slug: '',
     short_description: '',
     address: '',
+    npa: '',
+    localite: '',
     telephone: '',
     employee_count: '' as string | number,
     allowed_email_domains: '',
@@ -114,6 +120,8 @@ function selectPendingForm(pending: PendingForm) {
     form.email = pending.email;
     form.telephone = pending.phone ?? '';
     form.address = pending.address ?? '';
+    form.npa = pending.npa ?? '';
+    form.localite = pending.localite ?? '';
     form.trophy = pending.trophy;
     slugTouched.value = false;
 }
@@ -181,6 +189,8 @@ function buildFormData(payload: CompanyFormPayload): FormData {
     formData.append('slug', payload.slug);
     formData.append('short_description', payload.short_description);
     formData.append('address', payload.address);
+    formData.append('npa', payload.npa);
+    formData.append('localite', payload.localite);
     formData.append('telephone', payload.telephone);
     formData.append('employee_count', String(payload.employee_count));
     formData.append('allowed_email_domains', payload.allowed_email_domains);
@@ -371,19 +381,43 @@ async function submit() {
                     <p v-if="firstError('short_description')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('short_description') }}</p>
                 </label>
 
-                <label class="flex w-full flex-col gap-2">
-                    <span class="cooper-baseline label-text">Adresse <span style="color: #9B2F5C;">*</span></span>
-                    <textarea
-                        v-model="form.address"
-                        class="cooper-textarea-baseline textarea textarea-bordered w-full font-cooper"
-                        rows="2"
-                        maxlength="500"
-                        required
-                    ></textarea>
-                    <p v-if="firstError('address')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('address') }}</p>
-                </label>
-
                 <section class="grid gap-x-4 gap-y-6 md:grid-cols-3">
+                    <label class="flex w-full flex-col gap-2 md:col-span-2">
+                        <span class="cooper-baseline label-text">Adresse <span style="color: #9B2F5C;">*</span></span>
+                        <input
+                            v-model="form.address"
+                            type="text"
+                            class="cooper-input-baseline input input-bordered w-full"
+                            maxlength="500"
+                            required
+                        />
+                        <p v-if="firstError('address')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('address') }}</p>
+                    </label>
+
+                    <label class="flex w-full flex-col gap-2">
+                        <span class="cooper-baseline label-text">NPA <span style="color: #9B2F5C;">*</span></span>
+                        <input
+                            v-model="form.npa"
+                            type="text"
+                            class="cooper-input-baseline input input-bordered w-full"
+                            maxlength="10"
+                            required
+                        />
+                        <p v-if="firstError('npa')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('npa') }}</p>
+                    </label>
+
+                    <label class="flex w-full flex-col gap-2 md:col-span-2">
+                        <span class="cooper-baseline label-text">Ville <span style="color: #9B2F5C;">*</span></span>
+                        <input
+                            v-model="form.localite"
+                            type="text"
+                            class="cooper-input-baseline input input-bordered w-full"
+                            maxlength="100"
+                            required
+                        />
+                        <p v-if="firstError('localite')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('localite') }}</p>
+                    </label>
+
                     <label class="flex w-full flex-col gap-2">
                         <span class="cooper-baseline label-text">Nombre d'employés <span style="color: #9B2F5C;">*</span></span>
                         <input

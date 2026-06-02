@@ -187,7 +187,7 @@ class CompanyController extends Controller
     {
         $registrations = Form::query()
             ->latest()
-            ->get(['id', 'name', 'email', 'phone', 'address', 'message', 'trophy', 'treated', 'created_at']);
+            ->get(['id', 'name', 'email', 'phone', 'address', 'npa', 'localite', 'message', 'trophy', 'treated', 'created_at']);
 
         return response()->json($registrations);
     }
@@ -197,7 +197,7 @@ class CompanyController extends Controller
         $registrations = Form::query()
             ->where('treated', false)
             ->latest()
-            ->get(['id', 'name', 'email', 'phone', 'address', 'message', 'trophy', 'treated', 'created_at']);
+            ->get(['id', 'name', 'email', 'phone', 'address', 'npa', 'localite', 'message', 'trophy', 'treated', 'created_at']);
 
         return response()->json($registrations);
     }
