@@ -253,7 +253,7 @@ async function submit() {
                     </ul>
                 </div>
                 <p v-if="selectedFormId !== null" class="cooper-text-baseline mt-2 text-xs text-amber-700">
-                    Champs pré-remplis. L&#39;inscription sera marquée comme traitée lors de la création.
+                    Champs pré-remplis. L&#39;inscription sera archivée à la création de la campagne.
                 </p>
             </div>
 
