@@ -404,11 +404,11 @@ onMounted(fetchCompanies);
                                     </a>
                                     <a
                                         :href="`/admin/companies/${company.id}/edit?collection=${col.id}`"
-                                        class="btn btn-ghost btn-sm border-transparent bg-transparent font-cooper font-normal text-base-content shadow-none transition-colors hover:border-transparent hover:bg-transparent hover:text-base-content"
+                                        title="Modifier la collecte"
+                                        class="inline-flex h-9 w-9 items-center justify-center rounded-full text-emerald-700 transition-colors hover:bg-white hover:text-emerald-900"
                                         @click.prevent="navigate(`/admin/companies/${company.id}/edit?collection=${col.id}`)"
                                     >
-                                        <span class="material-symbols-outlined" style="font-size: 16px;" aria-hidden="true">edit</span>
-                                        <span class="cooper-baseline">Modifier la collecte</span>
+                                        <span class="material-symbols-outlined" style="font-size: 18px;" aria-hidden="true">edit</span>
                                     </a>
                                 </div>
                             </div>
@@ -446,11 +446,11 @@ onMounted(fetchCompanies);
                                         </span>
                                         <a
                                             :href="`/admin/companies/${company.id}/edit?collection=${col.id}`"
-                                            class="btn btn-ghost btn-sm border-transparent bg-transparent font-cooper font-normal text-base-content shadow-none transition-colors hover:border-transparent hover:bg-transparent hover:text-base-content"
+                                            title="Modifier la collecte"
+                                            class="inline-flex h-9 w-9 items-center justify-center rounded-full text-amber-700 transition-colors hover:bg-white hover:text-amber-900"
                                             @click.prevent="navigate(`/admin/companies/${company.id}/edit?collection=${col.id}`)"
                                         >
-                                            <span class="material-symbols-outlined" style="font-size: 16px;" aria-hidden="true">edit</span>
-                                            <span class="cooper-baseline">Modifier la collecte</span>
+                                            <span class="material-symbols-outlined" style="font-size: 18px;" aria-hidden="true">edit</span>
                                         </a>
                                     </div>
                                 </div>
