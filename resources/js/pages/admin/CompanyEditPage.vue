@@ -229,7 +229,7 @@ async function fetchCompany() {
             form.collection_start = toDatetimeLocal(collection?.start);
             form.collection_end = toDatetimeLocal(collection?.end);
             form.collection_linkOneDoc = collection?.linkOneDoc ?? '';
-            slugTouched.value = true;
+            slugTouched.value = false;
         } else if (res.status === 401) {
             window.location.href = '/admin/login';
         } else {
