@@ -11,6 +11,9 @@ type CollectionPayload = {
     start: string | null;
     end: string | null;
     linkOneDoc: string | null;
+    url: string;
+    is_active: boolean;
+    is_upcoming: boolean;
 };
 
 type CompanyFormPayload = {
@@ -119,6 +122,13 @@ function toDatetimeLocal(iso: string | null | undefined): string {
     return iso ? iso.slice(0, 16) : '';
 }
 
+function formatDate(iso: string): string {
+    return new Date(iso).toLocaleString('fr-CH', {
+        day: '2-digit', month: '2-digit', year: 'numeric',
+        hour: '2-digit', minute: '2-digit',
+    });
+}
+
 function back(event: Event) {
     event.preventDefault();
     navigate('/admin/campagnes');
@@ -222,6 +232,14 @@ const blockedRanges = computed(() => collectionRanges.value
         end: collection.end as string,
     })));
 
+const editedCollection = computed(() => {
+    if (!isCollectionMode || shouldCreateNewCollection || selectedCollectionId.value === null) {
+        return null;
+    }
+
+    return collectionRanges.value.find((collection) => collection.id === selectedCollectionId.value) ?? null;
+});
+
 async function submit() {
     submitting.value = true;
     errors.value = {};
@@ -279,8 +297,47 @@ onMounted(fetchCompany);
                     <span class="cooper-baseline">Retour</span>
                 </a>
                 <h1 class="cooper-text-baseline text-2xl font-semibold">
-                    {{ isCollectionMode ? (shouldCreateNewCollection ? 'Nouvelle campagne' : 'Modifier la collecte') : 'Modifier l’entreprise' }}
+                    {{ isCollectionMode ? (shouldCreateNewCollection ? 'Nouvelle campagne' : 'Modifier la collecte') : `Modifier l’entreprise : ${form.name}` }}
                 </h1>
+                <div
+                    v-if="editedCollection"
+                    class="mt-4 rounded-lg border px-4 py-3 text-sm"
+                    :class="editedCollection.is_active
+                        ? 'border-emerald-100 bg-emerald-50'
+                        : 'border-amber-200 bg-amber-50'"
+                >
+                    <p
+                        class="cooper-text-baseline mb-2 text-xs font-medium tracking-wider uppercase"
+                        :class="editedCollection.is_active ? 'text-emerald-700/70' : 'text-amber-800/65'"
+                    >
+                        {{ editedCollection.is_active ? 'Collecte active' : 'Collecte à venir' }}
+                    </p>
+                    <div class="flex items-center justify-between gap-3">
+                        <div class="flex min-w-0 flex-1 items-center gap-4">
+                            <span
+                                v-if="editedCollection.start && editedCollection.end"
+                                class="cooper-baseline shrink-0 text-sm font-medium"
+                                :class="editedCollection.is_active ? 'text-emerald-800' : 'text-amber-900'"
+                            >
+                                {{ formatDate(editedCollection.start) }} → {{ formatDate(editedCollection.end) }}
+                            </span>
+                            <a
+                                v-if="editedCollection.is_active"
+                                :href="editedCollection.url"
+                                target="_blank"
+                                class="link link-primary min-w-0 truncate text-sm"
+                            >
+                                <span class="cooper-baseline">{{ editedCollection.url }}</span>
+                            </a>
+                            <span
+                                v-else
+                                class="cooper-baseline min-w-0 truncate text-sm text-amber-800/70"
+                            >
+                                {{ editedCollection.url }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div v-if="loading" class="cooper-text-baseline text-sm text-base-content/60">Chargement...</div>
