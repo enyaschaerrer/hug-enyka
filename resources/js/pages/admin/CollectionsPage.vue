@@ -79,6 +79,20 @@ function inactiveCollections(company: CompanyRow): CollectionRow[] {
     return company.collections.filter((collection) => !collection.is_active);
 }
 
+function hasActiveCollection(company: CompanyRow): boolean {
+    return activeCollections(company).length > 0;
+}
+
+function companyActionPath(company: CompanyRow): string {
+    return hasActiveCollection(company)
+        ? `/admin/companies/${company.id}/edit`
+        : `/admin/companies/${company.id}/edit?newCollection=1`;
+}
+
+function companyActionLabel(company: CompanyRow): string {
+    return hasActiveCollection(company) ? 'Modifier' : 'Nouvelle campagne';
+}
+
 function showDisabledLinkMessage() {
     disabledLinkMessage.value = "Cette collecte est terminée. Le lien public renvoie une 404.";
 
@@ -194,12 +208,11 @@ onMounted(fetchCompanies);
                     </div>
                     <div class="flex shrink-0 gap-2">
                         <a
-                            v-if="activeCollections(company).length > 0"
-                            :href="`/admin/companies/${company.id}/edit`"
+                            :href="companyActionPath(company)"
                             class="btn btn-ghost btn-sm font-cooper"
-                            @click.prevent="navigate(`/admin/companies/${company.id}/edit`)"
+                            @click.prevent="navigate(companyActionPath(company))"
                         >
-                            <span class="cooper-baseline">Modifier</span>
+                            <span class="cooper-baseline">{{ companyActionLabel(company) }}</span>
                         </a>
                         <button
                             type="button"

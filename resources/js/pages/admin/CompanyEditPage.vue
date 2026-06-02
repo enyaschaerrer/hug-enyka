@@ -18,6 +18,8 @@ const csrfToken = appState?.csrfToken ?? '';
 const { navigate, flashMessage } = useAdminRouter();
 
 const companyId = window.location.pathname.split('/')[3];
+const searchParams = new URLSearchParams(window.location.search);
+const shouldCreateNewCollection = searchParams.get('newCollection') === '1';
 
 function slugify(input: string): string {
     return input
@@ -55,7 +57,7 @@ const loading = ref(true);
 const loadError = ref<string | null>(null);
 const slugTouched = ref(false);
 const selectedCollectionId = ref<number | null>(
-    Number(new URLSearchParams(window.location.search).get('collection')) || null,
+    Number(searchParams.get('collection')) || null,
 );
 
 watch(() => form.name, (next) => {
@@ -103,8 +105,10 @@ async function fetchCompany() {
             form.secondaryColor = data.secondaryColor ?? '#fecaca';
             form.thirdColor = data.thirdColor ?? '#1f2937';
             const collections = (data.collections ?? []) as CollectionPayload[];
-            const collection = collections.find((item) => item.id === selectedCollectionId.value) ?? collections[0] ?? null;
-            selectedCollectionId.value = collection?.id ?? null;
+            const collection = shouldCreateNewCollection
+                ? null
+                : collections.find((item) => item.id === selectedCollectionId.value) ?? collections[0] ?? null;
+            selectedCollectionId.value = shouldCreateNewCollection ? null : collection?.id ?? null;
             form.collection_start = toDatetimeLocal(collection?.start);
             form.collection_end = toDatetimeLocal(collection?.end);
             form.collection_linkOneDoc = collection?.linkOneDoc ?? '';
@@ -146,7 +150,7 @@ async function submit() {
         });
 
         if (res.ok) {
-            flashMessage.value = 'Campagne mise à jour.';
+            flashMessage.value = shouldCreateNewCollection ? 'Nouvelle campagne créée.' : 'Campagne mise à jour.';
             navigate('/admin/campagnes');
             return;
         }
@@ -180,7 +184,9 @@ onMounted(fetchCompany);
                     </svg>
                     <span class="cooper-baseline">Retour</span>
                 </a>
-                <h1 class="cooper-text-baseline text-2xl font-semibold">Modifier la campagne</h1>
+                <h1 class="cooper-text-baseline text-2xl font-semibold">
+                    {{ shouldCreateNewCollection ? 'Nouvelle campagne' : 'Modifier la campagne' }}
+                </h1>
             </div>
 
             <div v-if="loading" class="cooper-text-baseline text-sm text-base-content/60">Chargement...</div>
