@@ -21,7 +21,7 @@ Cette regle permet de respecter la couleur de marque sans rendre les boutons ill
 
 ## Implementation
 
-Le calcul est centralise dans :
+Le calcul est centralisé dans :
 
 ```text
 resources/js/utils/contrast.ts

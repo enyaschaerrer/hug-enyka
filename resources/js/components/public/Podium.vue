@@ -116,21 +116,21 @@ function selectPrizeType(type: PrizeType) {
                             <div class="mb-2 flex h-12 w-20 items-center justify-center p-2 lg:h-16 lg:w-24">
                                 <img v-if="currentPodium.third.logo" :src="currentPodium.third.logo" :alt="currentPodium.third.name ?? ''" class="max-h-full max-w-full object-contain" />
                             </div>
-                            <div class="flex h-24 w-20 items-center justify-center rounded-t-lg bg-martinique-500 text-display text-white lg:h-32 lg:w-28">3</div>
+                            <div :key="`bar-3-${selectedYear}-${selectedPrizeType}`" class="podium-bar podium-bar-3 flex h-24 w-20 items-center justify-center rounded-t-lg bg-martinique-500 text-display text-white lg:h-32 lg:w-28">3</div>
                         </div>
                         <!-- 1er -->
                         <div class="flex flex-col items-center">
                             <div class="mb-2 flex h-12 w-20 items-center justify-center p-2 lg:h-16 lg:w-24">
                                 <img v-if="currentPodium.first.logo" :src="currentPodium.first.logo" :alt="currentPodium.first.name ?? ''" class="max-h-full max-w-full object-contain" />
                             </div>
-                            <div class="flex h-36 w-20 items-center justify-center rounded-t-lg bg-merino-300 text-display text-white lg:h-48 lg:w-28">1</div>
+                            <div :key="`bar-1-${selectedYear}-${selectedPrizeType}`" class="podium-bar podium-bar-1 flex h-36 w-20 items-center justify-center rounded-t-lg bg-merino-300 text-display text-white lg:h-48 lg:w-28">1</div>
                         </div>
                         <!-- 2e -->
                         <div class="flex flex-col items-center">
                             <div class="mb-2 flex h-12 w-20 items-center justify-center p-2 lg:h-16 lg:w-24">
                                 <img v-if="currentPodium.second.logo" :src="currentPodium.second.logo" :alt="currentPodium.second.name ?? ''" class="max-h-full max-w-full object-contain" />
                             </div>
-                            <div class="flex h-28 w-20 items-center justify-center rounded-t-lg bg-fuzzywuzzybrown-400 text-display text-white lg:h-40 lg:w-28">2</div>
+                            <div :key="`bar-2-${selectedYear}-${selectedPrizeType}`" class="podium-bar podium-bar-2 flex h-28 w-20 items-center justify-center rounded-t-lg bg-fuzzywuzzybrown-400 text-display text-white lg:h-40 lg:w-28">2</div>
                         </div>
                     </div>
 
@@ -166,3 +166,19 @@ function selectPrizeType(type: PrizeType) {
         </div>
     </section>
 </template>
+
+<style>
+@keyframes podiumGrow {
+    from { transform: scaleY(0); }
+    to { transform: scaleY(1); }
+}
+
+.podium-bar {
+    transform-origin: bottom;
+    animation: podiumGrow 0.35s ease-out both;
+}
+
+.podium-bar-1 { animation-delay: 0s; }
+.podium-bar-2 { animation-delay: 0.30s; }
+.podium-bar-3 { animation-delay: 0.60s; }
+</style>
