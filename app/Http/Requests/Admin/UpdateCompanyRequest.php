@@ -41,6 +41,8 @@ class UpdateCompanyRequest extends FormRequest
             'employee_count' => ['required', 'integer', 'min:0'],
             'allowed_email_domains' => ['required', 'string', 'max:255', new EmailDomainListRule()],
             'source' => ['nullable', 'string', 'max:255'],
+            'is_public' => ['boolean'],
+            'trophy' => ['boolean'],
             'logo' => ['nullable', File::types(['png', 'jpg', 'jpeg', 'webp', 'svg'])->max(5 * 1024)],
             'primaryColor' => ['required', 'string', 'regex:/^#[0-9a-fA-F]{6}$/'],
             'secondaryColor' => ['required', 'string', 'regex:/^#[0-9a-fA-F]{6}$/'],

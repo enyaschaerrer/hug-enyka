@@ -26,6 +26,8 @@ class CompanyController extends Controller
             'email' => $company->email,
             'employee_count' => $company->employee_count,
             'created_at' => $company->created_at?->toIso8601String(),
+            'is_public' => (bool) $company->is_public,
+            'trophy' => (bool) $company->trophy,
             'collections' => $company->collections->map(fn ($col) => $this->collectionPayload($company, $col)),
         ]));
     }
@@ -37,14 +39,12 @@ class CompanyController extends Controller
 
     public function store(StoreCompanyRequest $request): JsonResponse
     {
-        $validated = $request->validated();
+        $validated = $this->normalizeVisibilityFlags($request->validated());
         $validated['logo'] = $this->storeCompanyLogo($request->file('logo'), $validated['slug'] ?? null);
         $company = Company::create(Arr::except($validated, [
             'collection_start',
             'collection_end',
             'collection_linkOneDoc',
-            'is_public',
-            'trophy',
         ]));
 
         $this->saveCollection($company, $validated);
@@ -57,7 +57,7 @@ class CompanyController extends Controller
 
     public function update(UpdateCompanyRequest $request, Company $company): JsonResponse
     {
-        $validated = $request->validated();
+        $validated = $this->normalizeVisibilityFlags($request->validated());
 
         if ($request->isCollectionMode()) {
             $this->saveCollection($company, $validated);
@@ -102,13 +102,7 @@ class CompanyController extends Controller
             'start' => $validated['collection_start'],
             'end' => $validated['collection_end'],
             'linkOneDoc' => $validated['collection_linkOneDoc'],
-            'is_public' => (bool) ($validated['is_public'] ?? true),
-            'trophy' => (bool) ($validated['trophy'] ?? false),
         ];
-
-        if (! $payload['is_public']) {
-            $payload['trophy'] = false;
-        }
 
         if ($collection) {
             $collection->update($payload);
@@ -135,6 +129,26 @@ class CompanyController extends Controller
         $file->move(public_path('img/companies'), $filename);
 
         return '/img/companies/' . $filename;
+    }
+
+    /**
+     * @param array<string, mixed> $validated
+     * @return array<string, mixed>
+     */
+    private function normalizeVisibilityFlags(array $validated): array
+    {
+        if (! array_key_exists('is_public', $validated)) {
+            return $validated;
+        }
+
+        $validated['is_public'] = (bool) $validated['is_public'];
+        $validated['trophy'] = (bool) ($validated['trophy'] ?? false);
+
+        if (! $validated['is_public']) {
+            $validated['trophy'] = false;
+        }
+
+        return $validated;
     }
 
     /**

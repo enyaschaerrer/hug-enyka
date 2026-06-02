@@ -324,7 +324,7 @@ onMounted(fetchCompanies);
                     <div class="flex shrink-0 gap-2">
                         <a
                             :href="companyActionPath(company)"
-                            class="btn btn-ghost btn-sm border-transparent bg-transparent font-cooper font-normal text-base-content shadow-none transition-colors hover:border-transparent hover:bg-emerald-700 hover:text-white"
+                            class="btn btn-ghost btn-sm border-transparent bg-transparent font-cooper font-normal text-base-content shadow-none transition-colors hover:border-transparent hover:bg-transparent hover:text-base-content"
                             @click.prevent="navigate(companyActionPath(company))"
                         >
                             <span class="material-symbols-outlined" style="font-size: 16px;" aria-hidden="true">add</span>
@@ -332,7 +332,7 @@ onMounted(fetchCompanies);
                         </a>
                         <a
                             :href="companyEditPath(company)"
-                            class="btn btn-ghost btn-sm border-transparent bg-transparent font-cooper font-normal text-base-content shadow-none transition-colors hover:border-transparent hover:bg-amber-600 hover:text-white"
+                            class="btn btn-ghost btn-sm border-transparent bg-transparent font-cooper font-normal text-base-content shadow-none transition-colors hover:border-transparent hover:bg-transparent hover:text-base-content"
                             @click.prevent="navigate(companyEditPath(company))"
                         >
                             <span class="material-symbols-outlined" style="font-size: 16px;" aria-hidden="true">edit</span>
@@ -404,7 +404,7 @@ onMounted(fetchCompanies);
                                     </a>
                                     <a
                                         :href="`/admin/companies/${company.id}/edit?collection=${col.id}`"
-                                        class="btn btn-ghost btn-sm border-transparent bg-transparent font-cooper font-normal text-base-content shadow-none transition-colors hover:border-transparent hover:bg-amber-600 hover:text-white"
+                                        class="btn btn-ghost btn-sm border-transparent bg-transparent font-cooper font-normal text-base-content shadow-none transition-colors hover:border-transparent hover:bg-transparent hover:text-base-content"
                                         @click.prevent="navigate(`/admin/companies/${company.id}/edit?collection=${col.id}`)"
                                     >
                                         <span class="material-symbols-outlined" style="font-size: 16px;" aria-hidden="true">edit</span>
@@ -446,7 +446,7 @@ onMounted(fetchCompanies);
                                         </span>
                                         <a
                                             :href="`/admin/companies/${company.id}/edit?collection=${col.id}`"
-                                            class="btn btn-ghost btn-sm border-transparent bg-transparent font-cooper font-normal text-base-content shadow-none transition-colors hover:border-transparent hover:bg-amber-600 hover:text-white"
+                                            class="btn btn-ghost btn-sm border-transparent bg-transparent font-cooper font-normal text-base-content shadow-none transition-colors hover:border-transparent hover:bg-transparent hover:text-base-content"
                                             @click.prevent="navigate(`/admin/companies/${company.id}/edit?collection=${col.id}`)"
                                         >
                                             <span class="material-symbols-outlined" style="font-size: 16px;" aria-hidden="true">edit</span>

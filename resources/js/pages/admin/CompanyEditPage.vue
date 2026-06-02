@@ -142,6 +142,8 @@ function buildFormData(payload: CompanyFormPayload): FormData {
     formData.append('employee_count', String(payload.employee_count));
     formData.append('allowed_email_domains', payload.allowed_email_domains);
     formData.append('source', payload.source);
+    formData.append('is_public', payload.is_public ? '1' : '0');
+    formData.append('trophy', payload.trophy ? '1' : '0');
     formData.append('primaryColor', payload.primaryColor);
     formData.append('secondaryColor', payload.secondaryColor);
     formData.append('thirdColor', payload.thirdColor);
