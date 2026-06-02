@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue';
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
 
 const props = withDefaults(defineProps<{
     modelValue: string;
@@ -37,6 +37,7 @@ const weekDays = ['Lu', 'Ma', 'Me', 'Je', 'Ve', 'Sa', 'Di'];
 const isOpen = ref(false);
 const hoveredDate = ref<Date | null>(null);
 const openUpward = ref(false);
+const rootRef = ref<HTMLDivElement | null>(null);
 const triggerRef = ref<HTMLButtonElement | null>(null);
 const selectedTime = ref(timeFromValue(props.modelValue) ?? props.defaultTime);
 const initialVisibleDate = parseLocalDateTime(props.modelValue) ?? new Date();
@@ -50,6 +51,18 @@ function toggleOpen() {
         syncVisibleDateOnOpen();
     }
     isOpen.value = !isOpen.value;
+}
+
+function handleDocumentMouseDown(event: MouseEvent): void {
+    if (!isOpen.value || !rootRef.value) {
+        return;
+    }
+
+    const path = typeof event.composedPath === 'function' ? event.composedPath() : [];
+
+    if (!path.includes(rootRef.value)) {
+        isOpen.value = false;
+    }
 }
 
 const selectedDate = computed(() => dateOnly(props.modelValue));
@@ -310,10 +323,18 @@ function iconPath(): string[] {
             'M8 2v4',
         ];
 }
+
+onMounted(() => {
+    document.addEventListener('mousedown', handleDocumentMouseDown);
+});
+
+onUnmounted(() => {
+    document.removeEventListener('mousedown', handleDocumentMouseDown);
+});
 </script>
 
 <template>
-    <div class="relative">
+    <div ref="rootRef" class="relative">
         <button
             ref="triggerRef"
             type="button"
@@ -328,15 +349,15 @@ function iconPath(): string[] {
             </svg>
         </button>
 
-        <div v-if="isOpen" class="fixed inset-0 z-20" @mousedown="isOpen = false"></div>
-
         <div
             v-if="isOpen"
             class="absolute left-0 z-30 w-full min-w-[22rem] border border-base-300 bg-white p-4 shadow-xl"
             :class="openUpward ? 'bottom-[calc(100%+0.5rem)]' : 'top-[calc(100%+0.5rem)]'"
+            @mousedown.stop
+            @click.stop
         >
             <div class="flex items-center gap-2">
-                <button type="button" class="btn btn-ghost btn-sm px-2" @click="previousMonth">
+                <button type="button" class="btn btn-ghost btn-sm px-2" @click.stop="previousMonth">
                     <span class="cooper-baseline">←</span>
                 </button>
                 <select v-model.number="visibleMonth" class="cooper-input-baseline select select-bordered select-sm min-h-9 flex-1 font-cooper font-medium text-sm">
@@ -347,7 +368,7 @@ function iconPath(): string[] {
                 <span class="cooper-baseline min-w-14 text-center text-sm font-medium text-base-content/70">
                     {{ visibleYear }}
                 </span>
-                <button type="button" class="btn btn-ghost btn-sm px-2" @click="nextMonth">
+                <button type="button" class="btn btn-ghost btn-sm px-2" @click.stop="nextMonth">
                     <span class="cooper-baseline">→</span>
                 </button>
             </div>
@@ -363,22 +384,23 @@ function iconPath(): string[] {
                     type="button"
                     class="btn btn-sm min-h-9 px-0 font-cooper"
                     :class="dayClasses(day)"
-                    :disabled="isDisabled(day)"
+                    :aria-disabled="isDisabled(day) || !day"
                     @mouseenter="setHovered(day)"
-                    @click="selectDate(day)"
+                    @click.stop="selectDate(day)"
+                    @mousedown.stop
                 >
                     <span class="cooper-baseline">{{ day?.getDate() }}</span>
                 </button>
             </div>
 
             <div class="mt-4 flex items-center justify-between gap-3">
-                <button v-if="mode === 'start'" type="button" class="btn btn-ghost btn-sm font-cooper" @click="selectToday">
+                <button v-if="mode === 'start'" type="button" class="btn btn-ghost btn-sm font-cooper" @click.stop="selectToday">
                     <span class="cooper-baseline">Aujourd&#39;hui</span>
                 </button>
                 <p v-if="mode === 'end' && referenceDateTime" class="cooper-text-baseline text-xs text-base-content/45">
                     Début : {{ new Intl.DateTimeFormat('fr-CH', { day: '2-digit', month: '2-digit', year: 'numeric' }).format(parseLocalDateTime(referenceDateTime) ?? new Date()) }}
                 </p>
-                <button type="button" class="btn btn-primary btn-sm font-cooper ml-auto" @click="isOpen = false">
+                <button type="button" class="btn btn-primary btn-sm font-cooper ml-auto" @click.stop="isOpen = false">
                     <span class="cooper-baseline">Valider</span>
                 </button>
             </div>

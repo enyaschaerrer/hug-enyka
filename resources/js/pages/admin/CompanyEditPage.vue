@@ -455,7 +455,7 @@ onMounted(fetchCompany);
                     </div>
 
                     <div class="grid gap-x-4 gap-y-6 md:grid-cols-2">
-                        <label class="flex w-full flex-col gap-2">
+                        <div class="flex w-full flex-col gap-2">
                             <span class="cooper-baseline label-text">Début <span style="color: #9B2F5C;">*</span></span>
                             <AdminDateTimePicker
                                 v-model="form.collection_start"
@@ -464,9 +464,9 @@ onMounted(fetchCompany);
                                 default-time="09:00"
                             />
                             <p v-if="firstError('collection_start')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('collection_start') }}</p>
-                        </label>
+                        </div>
 
-                        <label class="flex w-full flex-col gap-2">
+                        <div class="flex w-full flex-col gap-2">
                             <span class="cooper-baseline label-text">Fin <span style="color: #9B2F5C;">*</span></span>
                             <AdminDateTimePicker
                                 v-model="form.collection_end"
@@ -477,7 +477,7 @@ onMounted(fetchCompany);
                                 default-time="17:00"
                             />
                             <p v-if="firstError('collection_end')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('collection_end') }}</p>
-                        </label>
+                        </div>
 
                         <label class="flex items-center gap-3 md:col-span-2">
                             <input

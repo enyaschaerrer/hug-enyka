@@ -21,6 +21,7 @@ type CompanyRow = {
     email: string;
     employee_count: number | null;
     created_at: string | null;
+    is_public: boolean;
     trophy: boolean;
     collections: CollectionRow[];
 };
