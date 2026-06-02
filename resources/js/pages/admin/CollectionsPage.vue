@@ -249,7 +249,7 @@ onMounted(fetchCompanies);
                         v-model="searchQuery"
                         type="text"
                         class="cooper-input-baseline w-full font-cooper"
-                        placeholder="Rechercher par entreprise, email ou slug"
+                        placeholder="Rechercher par entreprise ou email"
                     />
                 </label>
 
