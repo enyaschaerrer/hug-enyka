@@ -297,7 +297,7 @@ onMounted(fetchCompany);
                     <span class="cooper-baseline">Retour</span>
                 </a>
                 <h1 class="cooper-text-baseline text-2xl font-semibold">
-                    {{ isCollectionMode ? (shouldCreateNewCollection ? 'Nouvelle campagne' : 'Modifier la collecte') : `Modifier l’entreprise : ${form.name}` }}
+                    {{ isCollectionMode ? (shouldCreateNewCollection ? 'Nouvelle campagne' : `Modifier la collecte : ${form.name}`) : `Modifier l’entreprise : ${form.name}` }}
                 </h1>
                 <div
                     v-if="editedCollection"
