@@ -65,6 +65,12 @@ class UpdateCompanyRequest extends FormRequest
             }
 
             if (! $this->isCollectionMode()) {
+                $company = $this->route('company');
+
+                if (! $this->hasFile('logo') && empty($company?->logo)) {
+                    $validator->errors()->add('logo', 'Le logo de l’entreprise est obligatoire.');
+                }
+
                 return;
             }
 

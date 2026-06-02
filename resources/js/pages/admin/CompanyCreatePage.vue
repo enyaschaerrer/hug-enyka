@@ -410,19 +410,8 @@ async function submit() {
                 </section>
 
                 <section class="grid gap-x-4 gap-y-6 md:grid-cols-2">
-                    <label class="flex w-full flex-col gap-2">
-                        <span class="cooper-baseline label-text">Où avez-vous entendu parler de nous ?</span>
-                        <input
-                            v-model="form.source"
-                            type="text"
-                            class="cooper-input-baseline input input-bordered w-full"
-                            placeholder="Recommandation, salon, ..."
-                        />
-                        <p v-if="firstError('source')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('source') }}</p>
-                    </label>
-
-                    <label class="flex w-full flex-col gap-2">
-                        <span class="cooper-baseline label-text">Logo de l'entreprise</span>
+                    <div class="flex w-full flex-col gap-2">
+                        <span class="cooper-baseline label-text">Logo de l'entreprise <span style="color: #9B2F5C;">*</span></span>
                         <input
                             :id="createLogoInputId"
                             type="file"
@@ -439,7 +428,19 @@ async function submit() {
                                 {{ logoFile?.name || 'Aucun fichier sélectionné' }}
                             </span>
                         </label>
+                        <p class="cooper-text-baseline mt-1 text-xs text-base-content/60">Formats autorisés : PNG, JPG, JPEG, WEBP, SVG. Taille maximale : 5 Mo.</p>
                         <p v-if="firstError('logo')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('logo') }}</p>
+                    </div>
+
+                    <label class="flex w-full flex-col gap-2">
+                        <span class="cooper-baseline label-text">Où avez-vous entendu parler de nous ?</span>
+                        <input
+                            v-model="form.source"
+                            type="text"
+                            class="cooper-input-baseline input input-bordered w-full"
+                            placeholder="Recommandation, salon, ..."
+                        />
+                        <p v-if="firstError('source')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('source') }}</p>
                     </label>
                 </section>
 

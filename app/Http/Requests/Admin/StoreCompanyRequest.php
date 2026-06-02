@@ -30,7 +30,7 @@ class StoreCompanyRequest extends FormRequest
             'source' => ['nullable', 'string', 'max:255'],
             'is_public' => ['boolean'],
             'trophy' => ['boolean'],
-            'logo' => ['nullable', File::types(['png', 'jpg', 'jpeg', 'webp', 'svg'])->max(5 * 1024)],
+            'logo' => ['required', File::types(['png', 'jpg', 'jpeg', 'webp', 'svg'])->max(5 * 1024)],
             'primaryColor' => ['required', 'string', 'regex:/^#[0-9a-fA-F]{6}$/'],
             'secondaryColor' => ['required', 'string', 'regex:/^#[0-9a-fA-F]{6}$/'],
             'thirdColor' => ['required', 'string', 'regex:/^#[0-9a-fA-F]{6}$/'],

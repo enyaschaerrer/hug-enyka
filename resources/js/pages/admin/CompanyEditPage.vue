@@ -409,14 +409,8 @@ onMounted(fetchCompany);
                 </section>
 
                 <section class="grid gap-x-4 gap-y-6 md:grid-cols-2">
-                    <label class="flex w-full flex-col gap-2">
-                        <span class="cooper-baseline label-text">Où avez-vous entendu parler de nous ?</span>
-                        <input v-model="form.source" type="text" class="cooper-input-baseline input input-bordered w-full" placeholder="Recommandation, salon, ..." />
-                        <p v-if="firstError('source')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('source') }}</p>
-                    </label>
-
-                    <label class="flex w-full flex-col gap-2">
-                        <span class="cooper-baseline label-text">Logo de l'entreprise</span>
+                    <div class="flex w-full flex-col gap-2">
+                        <span class="cooper-baseline label-text">Logo de l'entreprise <span style="color: #9B2F5C;">*</span></span>
                         <input
                             :id="editLogoInputId"
                             type="file"
@@ -430,10 +424,17 @@ onMounted(fetchCompany);
                         >
                             <span class="material-symbols-outlined shrink-0 text-base-content/70 transition-colors duration-200 ease-in-out group-hover:text-primary" aria-hidden="true">upload</span>
                             <span class="cooper-baseline min-w-0 truncate text-sm">
-                                {{ logoFile?.name || 'Aucun fichier sélectionné' }}
+                                {{ logoFile?.name || form.logo || 'Aucun fichier sélectionné' }}
                             </span>
                         </label>
+                        <p class="cooper-text-baseline mt-1 text-xs text-base-content/60">Formats autorisés : PNG, JPG, JPEG, WEBP, SVG. Taille maximale : 5 Mo.</p>
                         <p v-if="firstError('logo')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('logo') }}</p>
+                    </div>
+
+                    <label class="flex w-full flex-col gap-2">
+                        <span class="cooper-baseline label-text">Où avez-vous entendu parler de nous ?</span>
+                        <input v-model="form.source" type="text" class="cooper-input-baseline input input-bordered w-full" placeholder="Recommandation, salon, ..." />
+                        <p v-if="firstError('source')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('source') }}</p>
                     </label>
                 </section>
 
@@ -530,7 +531,7 @@ onMounted(fetchCompany);
                     </div>
                 </section>
 
-                <section class="space-y-4 border-t border-base-300 pt-6">
+                <section class="space-y-4 pt-3">
                     <label class="flex items-center gap-3">
                         <input
                             v-model="anonymousParticipation"
@@ -556,11 +557,6 @@ onMounted(fetchCompany);
                 </template>
 
                 <section v-if="isCollectionMode" class="space-y-4">
-                    <div>
-                        <h2 class="cooper-text-baseline text-lg font-semibold">Collecte</h2>
-                        <p class="cooper-text-baseline mt-1 text-sm text-base-content/60">Dates de la collecte et lien de prise de rendez-vous OneDoc.</p>
-                    </div>
-
                     <div class="grid gap-x-4 gap-y-6 md:grid-cols-2">
                         <div class="flex w-full flex-col gap-2">
                             <span class="cooper-baseline label-text">Début <span style="color: #9B2F5C;">*</span></span>
