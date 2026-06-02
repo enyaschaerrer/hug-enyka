@@ -222,7 +222,7 @@ function isDisabled(day: Date | null): boolean {
         return false;
     }
 
-    return day.getTime() <= minDate.value.getTime();
+    return day.getTime() < minDate.value.getTime();
 }
 
 function dayClasses(day: Date | null): string {
