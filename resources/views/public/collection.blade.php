@@ -14,7 +14,7 @@
 @section('content')
     @include('partials.public-side-cta')
 
-    <section class="relative overflow-hidden px-12 py-16">
+    <section class="relative overflow-hidden px-6 py-8 lg:px-12 lg:py-16">
         <div class="mx-auto max-w-6xl">
             <h1 class="text-left text-display text-martinique-950">
                 Comment organiser une collecte ?
@@ -24,7 +24,7 @@
 
                 {{-- Card 1 --}}
                 <article class="rounded-2xl bg-fuzzywuzzybrown-900 px-8 pb-9 pt-5 text-white shadow-sm">
-                    <div class="mb-5 w-fit rounded-full bg-fuzzywuzzybrown-50 px-5 py-1.5 text-body font-semibold text-fuzzywuzzybrown-900">
+                    <div class="mb-5 w-fit rounded-full bg-fuzzywuzzybrown-50 px-5 py-1.5 text-body font-medium text-fuzzywuzzybrown-900">
                         Prise de contact
                     </div>
                     <p class="text-body">
@@ -39,10 +39,10 @@
                     <img
                         src="/img/mascots/sanguy_satisfied.webp"
                         alt=""
-                        class="pointer-events-none h-48 w-auto object-contain"
+                        class="pointer-events-none -my-4 h-48 w-auto object-contain"
                     />
                     <article class="w-full rounded-2xl bg-fuzzywuzzybrown-900 px-8 pb-9 pt-5 text-white shadow-sm">
-                        <div class="mb-5 w-fit rounded-full bg-fuzzywuzzybrown-50 px-5 py-1.5 text-body font-semibold text-fuzzywuzzybrown-900">
+                        <div class="mb-5 w-fit rounded-full bg-fuzzywuzzybrown-50 px-5 py-1.5 text-body font-medium text-fuzzywuzzybrown-900">
                             Préparation
                         </div>
                         <p class="text-body">
@@ -61,7 +61,7 @@
                 {{-- Colonne gauche : Communication + Blutly + Jour-J --}}
                 <div class="flex flex-col items-center gap-8">
                     <article class="w-full rounded-2xl bg-fuzzywuzzybrown-900 px-8 pb-9 pt-5 text-white shadow-sm">
-                        <div class="mb-5 w-fit rounded-full bg-fuzzywuzzybrown-50 px-5 py-1.5 text-body font-semibold text-fuzzywuzzybrown-900">
+                        <div class="mb-5 w-fit rounded-full bg-fuzzywuzzybrown-50 px-5 py-1.5 text-body font-medium text-fuzzywuzzybrown-900">
                             Communication
                         </div>
                         <p class="text-body">
@@ -74,11 +74,11 @@
                     <img
                         src="/img/mascots/blutly_hero.webp"
                         alt=""
-                        class="pointer-events-none h-48 w-auto object-contain"
+                        class="pointer-events-none -my-4 h-48 w-auto object-contain"
                     />
 
                     <article class="w-full rounded-2xl bg-fuzzywuzzybrown-900 px-8 pb-9 pt-5 text-white shadow-sm">
-                        <div class="mb-5 w-fit rounded-full bg-fuzzywuzzybrown-50 px-5 py-1.5 text-body font-semibold text-fuzzywuzzybrown-900">
+                        <div class="mb-5 w-fit rounded-full bg-fuzzywuzzybrown-50 px-5 py-1.5 text-body font-medium text-fuzzywuzzybrown-900">
                             Jour J
                         </div>
                         <p class="text-body">
@@ -91,7 +91,7 @@
 
                 {{-- Colonne droite : Inscriptions, centrée verticalement --}}
                 <article class="rounded-2xl bg-fuzzywuzzybrown-900 px-8 pb-9 pt-5 text-white shadow-sm lg:self-center">
-                    <div class="mb-5 w-fit rounded-full bg-fuzzywuzzybrown-50 px-5 py-1.5 text-body font-semibold text-fuzzywuzzybrown-900">
+                    <div class="mb-5 w-fit rounded-full bg-fuzzywuzzybrown-50 px-5 py-1.5 text-body font-medium text-fuzzywuzzybrown-900">
                         Inscriptions
                     </div>
                     <p class="text-body">
@@ -103,7 +103,7 @@
 
             </div>
 
-            {{-- CTA --}}
+            <!-- {{-- CTA --}}
             <div class="mt-16 flex justify-center">
                 <a
                     href="#formulaire"
@@ -111,12 +111,12 @@
                 >
                     Mettre en place une collecte
                 </a>
-            </div>
+            </div> -->
 
         </div>
     </section>
 
-    <div class="mx-auto max-w-2xl px-4">
+    <div class="mx-auto max-w-2xl px-6">
         <h3 class="mt-24 text-display text-martinique-950">
             Envie d'organiser une collecte ?
         </h3>

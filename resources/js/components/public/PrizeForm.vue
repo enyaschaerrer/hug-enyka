@@ -30,7 +30,7 @@ async function handleSubmit() {
     loading.value = true;
 
     try {
-        const res = await fetch('/prize/inscription', {
+        const res = await fetch('/prix/inscription', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -60,7 +60,7 @@ async function handleSubmit() {
 </script>
 
 <template>
-    <section class="mx-auto max-w-2xl px-4 py-16">
+    <section class="mx-auto max-w-2xl px-6 py-8 lg:py-16">
 
         <!-- État de succès -->
         <div v-if="submitted" class="text-center">

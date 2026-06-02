@@ -6,7 +6,7 @@
 @section('content')
     @include('partials.public-side-cta')
 
-    <section class="relative overflow-hidden px-12 py-16">
+    <section class="relative overflow-hidden px-6 py-8 lg:px-12 lg:py-16">
 
         <div class="mx-auto max-w-6xl">
             <h1 class="text-left text-display text-martinique-950">
@@ -56,8 +56,8 @@
                 </div>
 
                 <div class="mt-10 flex items-end justify-between gap-6 lg:hidden">
-                    <img src="/img/mascots/blutly_happy.png" alt="" class="h-36 w-auto object-contain" />
-                    <img src="/img/mascots/sanguy_happy.png" alt="" class="h-36 w-auto object-contain" />
+                    <img src="/img/mascots/blutly_hero.webp" alt="" class="h-36 w-auto object-contain" />
+                    <img src="/img/mascots/sanguy_thumbs_up.webp" alt="" class="h-36 w-auto object-contain" />
                 </div>
             </div>
         </div>
