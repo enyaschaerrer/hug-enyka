@@ -52,8 +52,7 @@ function slugify(input: string): string {
         .normalize('NFD')
         .replace(/[̀-ͯ]/g, '')
         .toLowerCase()
-        .replace(/[^a-z0-9]+/g, '-')
-        .replace(/^-+|-+$/g, '')
+        .replace(/[^a-z0-9]/g, '')
         .slice(0, 20);
 }
 
@@ -163,8 +162,12 @@ watch(() => form.is_public, (isPublic) => {
     }
 });
 
-function onSlugInput() {
+function onSlugInput(event: Event) {
     slugTouched.value = true;
+    const input = event.target as HTMLInputElement;
+    const sanitized = slugify(input.value);
+    form.slug = sanitized;
+    input.value = sanitized;
 }
 
 function firstError(field: string): string | null {
@@ -179,6 +182,13 @@ function back(event: Event) {
 function onLogoChange(event: Event) {
     const input = event.target as HTMLInputElement;
     logoFile.value = input.files?.[0] ?? null;
+}
+
+function onNpaInput(event: Event) {
+    const input = event.target as HTMLInputElement;
+    const sanitized = input.value.replace(/\D/g, '').slice(0, 4);
+    form.npa = sanitized;
+    input.value = sanitized;
 }
 
 function buildFormData(payload: CompanyFormPayload): FormData {
@@ -349,7 +359,7 @@ async function submit() {
                             type="text"
                             class="cooper-input-baseline input input-bordered w-full"
                             maxlength="20"
-                            pattern="[A-Za-z0-9_-]+"
+                            pattern="[A-Za-z0-9]+"
                             @input="onSlugInput"
                             required
                         />
@@ -400,14 +410,17 @@ async function submit() {
                             v-model="form.npa"
                             type="text"
                             class="cooper-input-baseline input input-bordered w-full"
-                            maxlength="10"
+                            inputmode="numeric"
+                            pattern="[0-9]{4}"
+                            maxlength="4"
+                            @input="onNpaInput"
                             required
                         />
                         <p v-if="firstError('npa')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('npa') }}</p>
                     </label>
 
-                    <label class="flex w-full flex-col gap-2 md:col-span-2">
-                        <span class="cooper-baseline label-text">Ville <span style="color: #9B2F5C;">*</span></span>
+                    <label class="flex w-full flex-col gap-2 md:col-span-3">
+                        <span class="cooper-baseline label-text">Localité <span style="color: #9B2F5C;">*</span></span>
                         <input
                             v-model="form.localite"
                             type="text"
@@ -417,7 +430,9 @@ async function submit() {
                         />
                         <p v-if="firstError('localite')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('localite') }}</p>
                     </label>
+                </section>
 
+                <section class="grid gap-x-4 gap-y-6 md:grid-cols-2">
                     <label class="flex w-full flex-col gap-2">
                         <span class="cooper-baseline label-text">Nombre d'employés <span style="color: #9B2F5C;">*</span></span>
                         <input
@@ -430,7 +445,7 @@ async function submit() {
                         <p v-if="firstError('employee_count')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('employee_count') }}</p>
                     </label>
 
-                    <label class="flex w-full flex-col gap-2 md:col-span-2">
+                    <label class="flex w-full flex-col gap-2">
                         <span class="cooper-baseline label-text">Domaines email autorisés (séparés par ",") <span style="color: #9B2F5C;">*</span></span>
                         <input
                             v-model="form.allowed_email_domains"
@@ -443,7 +458,7 @@ async function submit() {
                     </label>
                 </section>
 
-                <section class="grid gap-x-4 gap-y-6 md:grid-cols-2">
+                <section class="space-y-6">
                     <div class="flex w-full flex-col gap-2">
                         <span class="cooper-baseline label-text">Logo de l'entreprise <span style="color: #9B2F5C;">*</span></span>
                         <input
@@ -607,6 +622,30 @@ async function submit() {
                     </div>
                 </section>
 
+                <section class="space-y-4">
+                    <label class="flex items-center gap-3">
+                        <input
+                            v-model="anonymousParticipation"
+                            type="checkbox"
+                            class="checkbox checked:[--input-color:var(--color-primary)] checked:[color:var(--color-primary-content)]"
+                        />
+                        <span class="cooper-baseline text-sm font-medium text-base-content/75">Participation anonyme</span>
+                    </label>
+
+                    <label
+                        class="flex items-center gap-3"
+                        :class="{ 'cursor-not-allowed opacity-45': !form.is_public }"
+                    >
+                        <input
+                            v-model="form.trophy"
+                            type="checkbox"
+                            class="checkbox checked:[--input-color:var(--color-primary)] checked:[color:var(--color-primary-content)]"
+                            :disabled="!form.is_public"
+                        />
+                        <span class="cooper-baseline text-sm font-medium text-base-content/75">Participation au Prix du Cœur</span>
+                    </label>
+                </section>
+
                 <section class="space-y-4 border-t border-base-300 pt-6">
                     <div>
                         <h2 class="cooper-text-baseline text-lg font-semibold">Collecte</h2>
@@ -639,35 +678,14 @@ async function submit() {
                             <p v-if="firstError('collection_end')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('collection_end') }}</p>
                         </div>
 
-                        <label class="flex items-center gap-3 md:col-span-2">
-                            <input
-                                v-model="anonymousParticipation"
-                                type="checkbox"
-                                class="checkbox checked:[--input-color:var(--color-primary)] checked:[color:var(--color-primary-content)]"
-                            />
-                            <span class="cooper-baseline text-sm font-medium text-base-content/75">Participation anonyme</span>
-                        </label>
-
-                        <label
-                            class="flex items-center gap-3 md:col-span-2"
-                            :class="{ 'cursor-not-allowed opacity-45': !form.is_public }"
-                        >
-                            <input
-                                v-model="form.trophy"
-                                type="checkbox"
-                                class="checkbox checked:[--input-color:var(--color-primary)] checked:[color:var(--color-primary-content)]"
-                                :disabled="!form.is_public"
-                            />
-                            <span class="cooper-baseline text-sm font-medium text-base-content/75">Participation au prix du cœur</span>
-                        </label>
-
                         <label class="flex w-full flex-col gap-2 md:col-span-2">
                             <span class="cooper-baseline label-text">Lien OneDoc <span style="color: #9B2F5C;">*</span></span>
                             <input
                                 v-model="form.collection_linkOneDoc"
                                 type="text"
                                 class="cooper-input-baseline input input-bordered w-full"
-                                placeholder="https://..."
+                                placeholder="https://www.onedoc.ch/..."
+                                pattern="https://www\.onedoc\.ch/.*"
                                 required
                             />
                             <p v-if="firstError('collection_linkOneDoc')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('collection_linkOneDoc') }}</p>
