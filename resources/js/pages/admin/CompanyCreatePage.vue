@@ -410,19 +410,8 @@ async function submit() {
                 </section>
 
                 <section class="grid gap-x-4 gap-y-6 md:grid-cols-2">
-                    <label class="flex w-full flex-col gap-2">
-                        <span class="cooper-baseline label-text">Où avez-vous entendu parler de nous ?</span>
-                        <input
-                            v-model="form.source"
-                            type="text"
-                            class="cooper-input-baseline input input-bordered w-full"
-                            placeholder="Recommandation, salon, ..."
-                        />
-                        <p v-if="firstError('source')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('source') }}</p>
-                    </label>
-
-                    <label class="flex w-full flex-col gap-2">
-                        <span class="cooper-baseline label-text">Logo de l'entreprise</span>
+                    <div class="flex w-full flex-col gap-2">
+                        <span class="cooper-baseline label-text">Logo de l'entreprise <span style="color: #9B2F5C;">*</span></span>
                         <input
                             :id="createLogoInputId"
                             type="file"
@@ -439,7 +428,19 @@ async function submit() {
                                 {{ logoFile?.name || 'Aucun fichier sélectionné' }}
                             </span>
                         </label>
+                        <p class="cooper-text-baseline mt-1 text-xs text-base-content/60">Formats autorisés : PNG, JPG, JPEG, WEBP, SVG. Taille maximale : 5 Mo.</p>
                         <p v-if="firstError('logo')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('logo') }}</p>
+                    </div>
+
+                    <label class="flex w-full flex-col gap-2">
+                        <span class="cooper-baseline label-text">Où avez-vous entendu parler de nous ?</span>
+                        <input
+                            v-model="form.source"
+                            type="text"
+                            class="cooper-input-baseline input input-bordered w-full"
+                            placeholder="Recommandation, salon, ..."
+                        />
+                        <p v-if="firstError('source')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('source') }}</p>
                     </label>
                 </section>
 
@@ -579,7 +580,7 @@ async function submit() {
                     </div>
 
                     <div class="grid gap-x-4 gap-y-6 md:grid-cols-2">
-                        <label class="flex w-full flex-col gap-2">
+                        <div class="flex w-full flex-col gap-2">
                             <span class="cooper-baseline label-text">Début <span style="color: #9B2F5C;">*</span></span>
                             <AdminDateTimePicker
                                 v-model="form.collection_start"
@@ -588,20 +589,21 @@ async function submit() {
                                 default-time="09:00"
                             />
                             <p v-if="firstError('collection_start')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('collection_start') }}</p>
-                        </label>
+                        </div>
 
-                        <label class="flex w-full flex-col gap-2">
+                        <div class="flex w-full flex-col gap-2">
                             <span class="cooper-baseline label-text">Fin <span style="color: #9B2F5C;">*</span></span>
                             <AdminDateTimePicker
                                 v-model="form.collection_end"
                                 label="Choisir une date de fin"
                                 mode="end"
+                                :disabled="!form.collection_start"
                                 :min-date-time="form.collection_start || null"
                                 :reference-date-time="form.collection_start || null"
                                 default-time="17:00"
                             />
                             <p v-if="firstError('collection_end')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('collection_end') }}</p>
-                        </label>
+                        </div>
 
                         <label class="flex items-center gap-3 md:col-span-2">
                             <input

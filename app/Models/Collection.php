@@ -15,6 +15,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
     'end',
     'access_token',
     'linkOneDoc',
+    'is_public',
+    'trophy',
 ])]
 class Collection extends Model
 {
@@ -25,6 +27,8 @@ class Collection extends Model
         return [
             'start' => 'datetime',
             'end' => 'datetime',
+            'is_public' => 'boolean',
+            'trophy' => 'boolean',
         ];
     }
 
@@ -42,6 +46,16 @@ class Collection extends Model
     {
         $now ??= now();
 
-        return $this->end !== null && $this->end->greaterThanOrEqualTo($now);
+        return $this->start !== null
+            && $this->end !== null
+            && $this->start->lessThanOrEqualTo($now)
+            && $this->end->greaterThanOrEqualTo($now);
+    }
+
+    public function isUpcoming(?CarbonInterface $now = null): bool
+    {
+        $now ??= now();
+
+        return $this->start !== null && $this->start->greaterThan($now);
     }
 }

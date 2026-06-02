@@ -58,18 +58,21 @@ class CompanyController extends Controller
     public function update(UpdateCompanyRequest $request, Company $company): JsonResponse
     {
         $validated = $this->normalizeVisibilityFlags($request->validated());
-        $validated['logo'] = $this->storeCompanyLogo($request->file('logo'), $validated['slug'] ?? $company->slug) ?? $company->logo;
-        $company->update(Arr::except($validated, [
-            'collection_id',
-            'collection_start',
-            'collection_end',
-            'collection_linkOneDoc',
-        ]));
 
-        $this->saveCollection($company, $validated);
+        if ($request->isCollectionMode()) {
+            $this->saveCollection($company, $validated);
+
+            return response()->json([
+                'message' => isset($validated['collection_id']) ? 'Collecte mise à jour.' : 'Nouvelle collecte créée.',
+                'company' => $this->companyPayload($company->load('collections')),
+            ]);
+        }
+
+        $validated['logo'] = $this->storeCompanyLogo($request->file('logo'), $validated['slug'] ?? $company->slug) ?? $company->logo;
+        $company->update($validated);
 
         return response()->json([
-            'message' => 'Campagne mise à jour.',
+            'message' => 'Entreprise mise à jour.',
             'company' => $this->companyPayload($company->load('collections')),
         ]);
     }
@@ -90,7 +93,7 @@ class CompanyController extends Controller
     {
         $collection = isset($validated['collection_id'])
             ? $company->collections()->whereKey($validated['collection_id'])->first()
-            : $company->collections()->oldest('id')->first();
+            : null;
 
         if (isset($validated['collection_id']) && ! $collection) {
             abort(404);
@@ -113,22 +116,6 @@ class CompanyController extends Controller
         ]);
     }
 
-    /**
-     * @param array<string, mixed> $validated
-     * @return array<string, mixed>
-     */
-    private function normalizeVisibilityFlags(array $validated): array
-    {
-        $isPublic = array_key_exists('is_public', $validated) ? (bool) $validated['is_public'] : true;
-        $validated['is_public'] = $isPublic;
-
-        if (! $isPublic) {
-            $validated['trophy'] = false;
-        }
-
-        return $validated;
-    }
-
     private function storeCompanyLogo(?UploadedFile $file, ?string $slug): ?string
     {
         if (! $file) {
@@ -142,6 +129,26 @@ class CompanyController extends Controller
         $file->move(public_path('img/companies'), $filename);
 
         return '/img/companies/' . $filename;
+    }
+
+    /**
+     * @param array<string, mixed> $validated
+     * @return array<string, mixed>
+     */
+    private function normalizeVisibilityFlags(array $validated): array
+    {
+        if (! array_key_exists('is_public', $validated)) {
+            return $validated;
+        }
+
+        $validated['is_public'] = (bool) $validated['is_public'];
+        $validated['trophy'] = (bool) ($validated['trophy'] ?? false);
+
+        if (! $validated['is_public']) {
+            $validated['trophy'] = false;
+        }
+
+        return $validated;
     }
 
     /**
@@ -170,6 +177,9 @@ class CompanyController extends Controller
             'linkOneDoc' => $collection->linkOneDoc,
             'url' => '/collecte/' . $company->slug . '/' . $collection->access_token,
             'is_active' => $collection->isActive(),
+            'is_upcoming' => $collection->isUpcoming(),
+            'is_public' => (bool) $collection->is_public,
+            'trophy' => (bool) $collection->trophy,
         ];
     }
 

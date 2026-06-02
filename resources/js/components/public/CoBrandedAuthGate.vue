@@ -36,8 +36,8 @@ const loginForm = reactive({
 
 const primaryColor = props.company.colors.primary ?? '#575656';
 const secondaryColor = props.company.colors.secondary ?? '#575656';
-const accessiblePrimaryTextColor = (contrastRatio(primaryColor, '#ffffff') ?? 0) >= 4.5 ? primaryColor : '#111827';
-const codeInputTextColor = (contrastRatio(secondaryColor, '#ffffff') ?? 0) >= 4.5 ? secondaryColor : '#111827';
+const accessiblePrimaryTextColor = (contrastRatio(primaryColor, '#ffffff') ?? 0) >= 2.35 ? primaryColor : '#111827';
+const codeInputTextColor = (contrastRatio(secondaryColor, '#ffffff') ?? 0) >= 2.35 ? secondaryColor : '#111827';
 
 function darkenHexColor(hex: string, amount = 0.16): string {
     const normalized = /^#[0-9a-fA-F]{6}$/.test(hex) ? hex : '#575656';

@@ -11,6 +11,9 @@ type CollectionPayload = {
     start: string | null;
     end: string | null;
     linkOneDoc: string | null;
+    url: string;
+    is_active: boolean;
+    is_upcoming: boolean;
 };
 
 type CompanyFormPayload = {
@@ -40,6 +43,8 @@ const { navigate, flashMessage } = useAdminRouter();
 const companyId = window.location.pathname.split('/')[3];
 const searchParams = new URLSearchParams(window.location.search);
 const shouldCreateNewCollection = searchParams.get('newCollection') === '1';
+const requestedCollectionId = Number(searchParams.get('collection')) || null;
+const isCollectionMode = shouldCreateNewCollection || requestedCollectionId !== null;
 
 function slugify(input: string): string {
     return input
@@ -80,7 +85,7 @@ const loading = ref(true);
 const loadError = ref<string | null>(null);
 const slugTouched = ref(false);
 const selectedCollectionId = ref<number | null>(
-    Number(searchParams.get('collection')) || null,
+    requestedCollectionId,
 );
 const anonymousParticipation = computed({
     get: () => !form.is_public,
@@ -91,6 +96,7 @@ const anonymousParticipation = computed({
         }
     },
 });
+const collectionRanges = ref<CollectionPayload[]>([]);
 
 watch(() => form.name, (next) => {
     if (!slugTouched.value) {
@@ -114,6 +120,13 @@ function firstError(field: string): string | null {
 
 function toDatetimeLocal(iso: string | null | undefined): string {
     return iso ? iso.slice(0, 16) : '';
+}
+
+function formatDate(iso: string): string {
+    return new Date(iso).toLocaleString('fr-CH', {
+        day: '2-digit', month: '2-digit', year: 'numeric',
+        hour: '2-digit', minute: '2-digit',
+    });
 }
 
 function back(event: Event) {
@@ -144,16 +157,24 @@ function buildFormData(payload: CompanyFormPayload): FormData {
     formData.append('primaryColor', payload.primaryColor);
     formData.append('secondaryColor', payload.secondaryColor);
     formData.append('thirdColor', payload.thirdColor);
+
+    if (logoFile.value) {
+        formData.append('logo', logoFile.value);
+    }
+
+    return formData;
+}
+
+function buildCollectionFormData(payload: CompanyFormPayload): FormData {
+    const formData = new FormData();
+
+    formData.append('_method', 'PATCH');
     formData.append('collection_start', payload.collection_start);
     formData.append('collection_end', payload.collection_end);
     formData.append('collection_linkOneDoc', payload.collection_linkOneDoc);
 
     if (selectedCollectionId.value !== null) {
         formData.append('collection_id', String(selectedCollectionId.value));
-    }
-
-    if (logoFile.value) {
-        formData.append('logo', logoFile.value);
     }
 
     return formData;
@@ -175,17 +196,18 @@ async function fetchCompany() {
             form.employee_count = data.employee_count ?? '';
             form.allowed_email_domains = data.allowed_email_domains ?? '';
             form.source = data.source ?? '';
-            form.is_public = data.is_public !== false;
+            form.is_public = Boolean(data.is_public);
             form.trophy = Boolean(data.trophy);
             form.logo = data.logo ?? '';
             form.primaryColor = data.primaryColor ?? '#c81e1e';
             form.secondaryColor = data.secondaryColor ?? '#fecaca';
             form.thirdColor = data.thirdColor ?? '#1f2937';
             const collections = (data.collections ?? []) as CollectionPayload[];
+            collectionRanges.value = collections;
             const collection = shouldCreateNewCollection
                 ? null
-                : collections.find((item) => item.id === selectedCollectionId.value) ?? collections[0] ?? null;
-            selectedCollectionId.value = shouldCreateNewCollection ? null : collection?.id ?? null;
+                : collections.find((item) => item.id === selectedCollectionId.value) ?? null;
+            selectedCollectionId.value = shouldCreateNewCollection ? null : collection?.id ?? requestedCollectionId;
             form.collection_start = toDatetimeLocal(collection?.start);
             form.collection_end = toDatetimeLocal(collection?.end);
             form.collection_linkOneDoc = collection?.linkOneDoc ?? '';
@@ -202,6 +224,22 @@ async function fetchCompany() {
     }
 }
 
+const blockedRanges = computed(() => collectionRanges.value
+    .filter((collection) => collection.id !== selectedCollectionId.value)
+    .filter((collection) => collection.start && collection.end)
+    .map((collection) => ({
+        start: collection.start as string,
+        end: collection.end as string,
+    })));
+
+const editedCollection = computed(() => {
+    if (!isCollectionMode || shouldCreateNewCollection || selectedCollectionId.value === null) {
+        return null;
+    }
+
+    return collectionRanges.value.find((collection) => collection.id === selectedCollectionId.value) ?? null;
+});
+
 async function submit() {
     submitting.value = true;
     errors.value = {};
@@ -209,18 +247,22 @@ async function submit() {
     const payload = { ...form } as CompanyFormPayload;
 
     try {
-        const res = await fetch(`/admin/companies/${companyId}`, {
+        const res = await fetch(`/admin/companies/${companyId}${window.location.search}`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
                 'X-CSRF-TOKEN': csrfToken,
                 'X-Requested-With': 'XMLHttpRequest',
             },
-            body: buildFormData(payload),
+            body: isCollectionMode ? buildCollectionFormData(payload) : buildFormData(payload),
         });
 
         if (res.ok) {
-            flashMessage.value = shouldCreateNewCollection ? 'Nouvelle campagne créée.' : 'Campagne mise à jour.';
+            if (isCollectionMode) {
+                flashMessage.value = shouldCreateNewCollection ? 'Nouvelle campagne créée.' : 'Collecte mise à jour.';
+            } else {
+                flashMessage.value = 'Entreprise mise à jour.';
+            }
             navigate('/admin/campagnes');
             return;
         }
@@ -255,14 +297,54 @@ onMounted(fetchCompany);
                     <span class="cooper-baseline">Retour</span>
                 </a>
                 <h1 class="cooper-text-baseline text-2xl font-semibold">
-                    {{ shouldCreateNewCollection ? 'Nouvelle campagne' : 'Modifier la campagne' }}
+                    {{ isCollectionMode ? (shouldCreateNewCollection ? 'Nouvelle campagne' : 'Modifier la collecte') : `Modifier l’entreprise : ${form.name}` }}
                 </h1>
+                <div
+                    v-if="editedCollection"
+                    class="mt-4 rounded-lg border px-4 py-3 text-sm"
+                    :class="editedCollection.is_active
+                        ? 'border-emerald-100 bg-emerald-50'
+                        : 'border-amber-200 bg-amber-50'"
+                >
+                    <p
+                        class="cooper-text-baseline mb-2 text-xs font-medium tracking-wider uppercase"
+                        :class="editedCollection.is_active ? 'text-emerald-700/70' : 'text-amber-800/65'"
+                    >
+                        {{ editedCollection.is_active ? 'Collecte active' : 'Collecte à venir' }}
+                    </p>
+                    <div class="flex items-center justify-between gap-3">
+                        <div class="flex min-w-0 flex-1 items-center gap-4">
+                            <span
+                                v-if="editedCollection.start && editedCollection.end"
+                                class="cooper-baseline shrink-0 text-sm font-medium"
+                                :class="editedCollection.is_active ? 'text-emerald-800' : 'text-amber-900'"
+                            >
+                                {{ formatDate(editedCollection.start) }} → {{ formatDate(editedCollection.end) }}
+                            </span>
+                            <a
+                                v-if="editedCollection.is_active"
+                                :href="editedCollection.url"
+                                target="_blank"
+                                class="link link-primary min-w-0 truncate text-sm"
+                            >
+                                <span class="cooper-baseline">{{ editedCollection.url }}</span>
+                            </a>
+                            <span
+                                v-else
+                                class="cooper-baseline min-w-0 truncate text-sm text-amber-800/70"
+                            >
+                                {{ editedCollection.url }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div v-if="loading" class="cooper-text-baseline text-sm text-base-content/60">Chargement...</div>
             <div v-else-if="loadError" class="alert alert-error"><span class="cooper-baseline">{{ loadError }}</span></div>
 
             <form v-else @submit.prevent="submit" class="space-y-6 font-cooper">
+                <template v-if="!isCollectionMode">
                 <section class="grid gap-x-4 gap-y-6 md:grid-cols-2">
                     <label class="flex w-full flex-col gap-2">
                         <span class="cooper-baseline label-text">Nom <span style="color: #9B2F5C;">*</span></span>
@@ -327,14 +409,8 @@ onMounted(fetchCompany);
                 </section>
 
                 <section class="grid gap-x-4 gap-y-6 md:grid-cols-2">
-                    <label class="flex w-full flex-col gap-2">
-                        <span class="cooper-baseline label-text">Où avez-vous entendu parler de nous ?</span>
-                        <input v-model="form.source" type="text" class="cooper-input-baseline input input-bordered w-full" placeholder="Recommandation, salon, ..." />
-                        <p v-if="firstError('source')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('source') }}</p>
-                    </label>
-
-                    <label class="flex w-full flex-col gap-2">
-                        <span class="cooper-baseline label-text">Logo de l'entreprise</span>
+                    <div class="flex w-full flex-col gap-2">
+                        <span class="cooper-baseline label-text">Logo de l'entreprise <span style="color: #9B2F5C;">*</span></span>
                         <input
                             :id="editLogoInputId"
                             type="file"
@@ -348,10 +424,17 @@ onMounted(fetchCompany);
                         >
                             <span class="material-symbols-outlined shrink-0 text-base-content/70 transition-colors duration-200 ease-in-out group-hover:text-primary" aria-hidden="true">upload</span>
                             <span class="cooper-baseline min-w-0 truncate text-sm">
-                                {{ logoFile?.name || 'Aucun fichier sélectionné' }}
+                                {{ logoFile?.name || form.logo || 'Aucun fichier sélectionné' }}
                             </span>
                         </label>
+                        <p class="cooper-text-baseline mt-1 text-xs text-base-content/60">Formats autorisés : PNG, JPG, JPEG, WEBP, SVG. Taille maximale : 5 Mo.</p>
                         <p v-if="firstError('logo')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('logo') }}</p>
+                    </div>
+
+                    <label class="flex w-full flex-col gap-2">
+                        <span class="cooper-baseline label-text">Où avez-vous entendu parler de nous ?</span>
+                        <input v-model="form.source" type="text" class="cooper-input-baseline input input-bordered w-full" placeholder="Recommandation, salon, ..." />
+                        <p v-if="firstError('source')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('source') }}</p>
                     </label>
                 </section>
 
@@ -448,58 +531,61 @@ onMounted(fetchCompany);
                     </div>
                 </section>
 
-                <section class="space-y-4 border-t border-base-300 pt-6">
-                    <div>
-                        <h2 class="cooper-text-baseline text-lg font-semibold">Collecte</h2>
-                        <p class="cooper-text-baseline mt-1 text-sm text-base-content/60">Dates de la collecte et lien de prise de rendez-vous OneDoc.</p>
-                    </div>
+                <section class="space-y-4 pt-3">
+                    <label class="flex items-center gap-3">
+                        <input
+                            v-model="anonymousParticipation"
+                            type="checkbox"
+                            class="checkbox checked:[--input-color:var(--color-primary)] checked:[color:var(--color-primary-content)]"
+                        />
+                        <span class="cooper-baseline text-sm font-medium text-base-content/75">Participation anonyme</span>
+                    </label>
 
+                    <label
+                        class="flex items-center gap-3"
+                        :class="{ 'cursor-not-allowed opacity-45': !form.is_public }"
+                    >
+                        <input
+                            v-model="form.trophy"
+                            type="checkbox"
+                            class="checkbox checked:[--input-color:var(--color-primary)] checked:[color:var(--color-primary-content)]"
+                            :disabled="!form.is_public"
+                        />
+                        <span class="cooper-baseline text-sm font-medium text-base-content/75">Participation au prix du cœur</span>
+                    </label>
+                </section>
+                </template>
+
+                <section v-if="isCollectionMode" class="space-y-4">
                     <div class="grid gap-x-4 gap-y-6 md:grid-cols-2">
-                        <label class="flex w-full flex-col gap-2">
+                        <div class="flex w-full flex-col gap-2">
                             <span class="cooper-baseline label-text">Début <span style="color: #9B2F5C;">*</span></span>
                             <AdminDateTimePicker
                                 v-model="form.collection_start"
                                 label="Choisir une date de début"
                                 mode="start"
+                                :paired-date-time="form.collection_end || null"
+                                :blocked-ranges="blockedRanges"
                                 default-time="09:00"
                             />
                             <p v-if="firstError('collection_start')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('collection_start') }}</p>
-                        </label>
+                        </div>
 
-                        <label class="flex w-full flex-col gap-2">
+                        <div class="flex w-full flex-col gap-2">
                             <span class="cooper-baseline label-text">Fin <span style="color: #9B2F5C;">*</span></span>
                             <AdminDateTimePicker
                                 v-model="form.collection_end"
                                 label="Choisir une date de fin"
                                 mode="end"
+                                :disabled="!form.collection_start"
                                 :min-date-time="form.collection_start || null"
+                                :paired-date-time="form.collection_start || null"
                                 :reference-date-time="form.collection_start || null"
+                                :blocked-ranges="blockedRanges"
                                 default-time="17:00"
                             />
                             <p v-if="firstError('collection_end')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('collection_end') }}</p>
-                        </label>
-
-                        <label class="flex items-center gap-3 md:col-span-2">
-                            <input
-                                v-model="anonymousParticipation"
-                                type="checkbox"
-                                class="checkbox checked:[--input-color:var(--color-primary)] checked:[color:var(--color-primary-content)]"
-                            />
-                            <span class="cooper-baseline text-sm font-medium text-base-content/75">Participation anonyme</span>
-                        </label>
-
-                        <label
-                            class="flex items-center gap-3 md:col-span-2"
-                            :class="{ 'cursor-not-allowed opacity-45': !form.is_public }"
-                        >
-                            <input
-                                v-model="form.trophy"
-                                type="checkbox"
-                                class="checkbox checked:[--input-color:var(--color-primary)] checked:[color:var(--color-primary-content)]"
-                                :disabled="!form.is_public"
-                            />
-                            <span class="cooper-baseline text-sm font-medium text-base-content/75">Participation au prix du cœur</span>
-                        </label>
+                        </div>
 
                         <label class="flex w-full flex-col gap-2 md:col-span-2">
                             <span class="cooper-baseline label-text">Lien OneDoc <span style="color: #9B2F5C;">*</span></span>
