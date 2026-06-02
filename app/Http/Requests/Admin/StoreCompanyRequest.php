@@ -24,6 +24,8 @@ class StoreCompanyRequest extends FormRequest
             'slug' => ['required', 'string', 'max:20', 'alpha_dash', 'unique:companies,slug'],
             'short_description' => ['nullable', 'string', 'max:500'],
             'address' => ['required', 'string', 'max:500'],
+            'npa' => ['required', 'string', 'max:10'],
+            'localite' => ['required', 'string', 'max:100'],
             'telephone' => ['nullable', 'string', 'max:50'],
             'employee_count' => ['required', 'integer', 'min:0'],
             'allowed_email_domains' => ['required', 'string', 'max:255', new EmailDomainListRule()],

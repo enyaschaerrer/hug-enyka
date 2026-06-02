@@ -65,7 +65,7 @@ async function handleSubmit() {
                     <!-- Nom de l'entreprise -->
                     <div>
                         <label class="mb-1.5 block text-body text-martinique-800">
-                            Nom de l'entreprise
+                            Nom de l'entreprise *
                         </label>
                         <input
                             v-model="form.companyName"
@@ -79,7 +79,7 @@ async function handleSubmit() {
                     <!-- Email -->
                     <div>
                         <label class="mb-1.5 block text-body text-martinique-800">
-                            Adresse e-mail professionnelle
+                            Adresse e-mail professionnelle *
                         </label>
                         <input
                             v-model="form.email"
@@ -106,7 +106,7 @@ async function handleSubmit() {
                     <!-- NPA / Localité -->
                     <div class="grid grid-cols-[120px_1fr] gap-4">
                         <div>
-                            <label class="mb-1.5 block text-body text-martinique-800">NPA</label>
+                            <label class="mb-1.5 block text-body text-martinique-800">NPA *</label>
                             <input
                                 v-model="form.npa"
                                 type="text"
@@ -116,7 +116,7 @@ async function handleSubmit() {
                             />
                         </div>
                         <div>
-                            <label class="mb-1.5 block text-body text-martinique-800">Localité</label>
+                            <label class="mb-1.5 block text-body text-martinique-800">Localité *</label>
                             <input
                                 v-model="form.locality"
                                 type="text"
@@ -129,7 +129,7 @@ async function handleSubmit() {
                     <!-- Message -->
                     <div>
                         <label class="mb-1.5 block text-body text-martinique-800">
-                            Message
+                            Message *
                         </label>
                         <textarea
                             v-model="form.message"
