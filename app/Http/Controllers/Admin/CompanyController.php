@@ -23,6 +23,7 @@ class CompanyController extends Controller
             'slug' => $company->slug,
             'email' => $company->email,
             'employee_count' => $company->employee_count,
+            'is_public' => (bool) $company->is_public,
             'trophy' => (bool) $company->trophy,
             'collections' => $company->collections->map(fn ($col) => $this->collectionPayload($company, $col)),
         ]));
@@ -35,7 +36,7 @@ class CompanyController extends Controller
 
     public function store(StoreCompanyRequest $request): JsonResponse
     {
-        $validated = $request->validated();
+        $validated = $this->normalizeVisibilityFlags($request->validated());
         $company = Company::create(Arr::except($validated, [
             'collection_start',
             'collection_end',
@@ -52,7 +53,7 @@ class CompanyController extends Controller
 
     public function update(UpdateCompanyRequest $request, Company $company): JsonResponse
     {
-        $validated = $request->validated();
+        $validated = $this->normalizeVisibilityFlags($request->validated());
         $company->update(Arr::except($validated, [
             'collection_id',
             'collection_start',
@@ -105,6 +106,22 @@ class CompanyController extends Controller
             'company_id' => $company->id,
             'access_token' => bin2hex(random_bytes(8)),
         ]);
+    }
+
+    /**
+     * @param array<string, mixed> $validated
+     * @return array<string, mixed>
+     */
+    private function normalizeVisibilityFlags(array $validated): array
+    {
+        $isPublic = array_key_exists('is_public', $validated) ? (bool) $validated['is_public'] : true;
+        $validated['is_public'] = $isPublic;
+
+        if (! $isPublic) {
+            $validated['trophy'] = false;
+        }
+
+        return $validated;
     }
 
     /**

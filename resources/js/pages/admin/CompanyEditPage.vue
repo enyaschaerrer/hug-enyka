@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, reactive, ref, watch } from 'vue';
+import { computed, onMounted, reactive, ref, watch } from 'vue';
 import { useAdminRouter } from '../../composables/useAdminRouter';
 import AdminDateTimePicker from '../../components/admin/AdminDateTimePicker.vue';
 import AdminLayout from '../../components/layout/AdminLayout.vue';
@@ -41,6 +41,7 @@ const form = reactive({
     employee_count: '' as string | number,
     allowed_email_domains: '',
     source: '',
+    is_public: true,
     trophy: false,
     logo: '',
     primaryColor: '#c81e1e',
@@ -59,10 +60,25 @@ const slugTouched = ref(false);
 const selectedCollectionId = ref<number | null>(
     Number(searchParams.get('collection')) || null,
 );
+const anonymousParticipation = computed({
+    get: () => !form.is_public,
+    set: (value: boolean) => {
+        form.is_public = !value;
+        if (value) {
+            form.trophy = false;
+        }
+    },
+});
 
 watch(() => form.name, (next) => {
     if (!slugTouched.value) {
         form.slug = slugify(next);
+    }
+});
+
+watch(() => form.is_public, (isPublic) => {
+    if (!isPublic) {
+        form.trophy = false;
     }
 });
 
@@ -99,6 +115,7 @@ async function fetchCompany() {
             form.employee_count = data.employee_count ?? '';
             form.allowed_email_domains = data.allowed_email_domains ?? '';
             form.source = data.source ?? '';
+            form.is_public = data.is_public !== false;
             form.trophy = Boolean(data.trophy);
             form.logo = data.logo ?? '';
             form.primaryColor = data.primaryColor ?? '#c81e1e';
@@ -397,9 +414,22 @@ onMounted(fetchCompany);
 
                         <label class="flex items-center gap-3 md:col-span-2">
                             <input
+                                v-model="anonymousParticipation"
+                                type="checkbox"
+                                class="checkbox checked:[--input-color:var(--color-primary)] checked:[color:var(--color-primary-content)]"
+                            />
+                            <span class="cooper-baseline text-sm font-medium text-base-content/75">Participation anonyme</span>
+                        </label>
+
+                        <label
+                            class="flex items-center gap-3 md:col-span-2"
+                            :class="{ 'cursor-not-allowed opacity-45': !form.is_public }"
+                        >
+                            <input
                                 v-model="form.trophy"
                                 type="checkbox"
                                 class="checkbox checked:[--input-color:var(--color-primary)] checked:[color:var(--color-primary-content)]"
+                                :disabled="!form.is_public"
                             />
                             <span class="cooper-baseline text-sm font-medium text-base-content/75">Participation au prix du cœur</span>
                         </label>

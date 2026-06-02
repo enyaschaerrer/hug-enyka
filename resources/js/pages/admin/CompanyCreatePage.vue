@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, reactive, ref, watch } from 'vue';
+import { computed, onMounted, reactive, ref, watch } from 'vue';
 import { useAdminRouter } from '../../composables/useAdminRouter';
 import AdminDateTimePicker from '../../components/admin/AdminDateTimePicker.vue';
 import AdminLayout from '../../components/layout/AdminLayout.vue';
@@ -43,6 +43,7 @@ const form = reactive({
     employee_count: '' as string | number,
     allowed_email_domains: '',
     source: '',
+    is_public: true,
     trophy: false,
     logo: '',
     primaryColor: '#c81e1e',
@@ -59,6 +60,15 @@ const pendingOpen = ref(false);
 const selectedFormId = ref<number | null>(null);
 
 const filteredPending = ref<PendingForm[]>([]);
+const anonymousParticipation = computed({
+    get: () => !form.is_public,
+    set: (value: boolean) => {
+        form.is_public = !value;
+        if (value) {
+            form.trophy = false;
+        }
+    },
+});
 
 watch(pendingSearch, (query) => {
     const q = query.toLowerCase().trim();
@@ -114,6 +124,12 @@ onMounted(fetchPendingForms);
 watch(() => form.name, (next) => {
     if (!slugTouched.value) {
         form.slug = slugify(next);
+    }
+});
+
+watch(() => form.is_public, (isPublic) => {
+    if (!isPublic) {
+        form.trophy = false;
     }
 });
 
@@ -526,9 +542,22 @@ async function submit() {
 
                         <label class="flex items-center gap-3 md:col-span-2">
                             <input
+                                v-model="anonymousParticipation"
+                                type="checkbox"
+                                class="checkbox checked:[--input-color:var(--color-primary)] checked:[color:var(--color-primary-content)]"
+                            />
+                            <span class="cooper-baseline text-sm font-medium text-base-content/75">Participation anonyme</span>
+                        </label>
+
+                        <label
+                            class="flex items-center gap-3 md:col-span-2"
+                            :class="{ 'cursor-not-allowed opacity-45': !form.is_public }"
+                        >
+                            <input
                                 v-model="form.trophy"
                                 type="checkbox"
                                 class="checkbox checked:[--input-color:var(--color-primary)] checked:[color:var(--color-primary-content)]"
+                                :disabled="!form.is_public"
                             />
                             <span class="cooper-baseline text-sm font-medium text-base-content/75">Participation au prix du cœur</span>
                         </label>
