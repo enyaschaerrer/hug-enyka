@@ -324,21 +324,23 @@ onMounted(fetchCompanies);
                     <div class="flex shrink-0 gap-2">
                         <a
                             :href="companyActionPath(company)"
-                            class="btn btn-ghost btn-sm border-transparent bg-transparent font-cooper text-base-content shadow-none transition-colors hover:border-transparent hover:bg-emerald-700 hover:text-white"
+                            class="btn btn-ghost btn-sm border-transparent bg-transparent font-cooper font-normal text-base-content shadow-none transition-colors hover:border-transparent hover:bg-emerald-700 hover:text-white"
                             @click.prevent="navigate(companyActionPath(company))"
                         >
+                            <span class="material-symbols-outlined" style="font-size: 16px;" aria-hidden="true">add</span>
                             <span class="cooper-baseline">{{ companyActionLabel(company) }}</span>
                         </a>
                         <a
                             :href="companyEditPath(company)"
-                            class="btn btn-ghost btn-sm border-transparent bg-transparent font-cooper text-base-content shadow-none transition-colors hover:border-transparent hover:bg-amber-600 hover:text-white"
+                            class="btn btn-ghost btn-sm border-transparent bg-transparent font-cooper font-normal text-base-content shadow-none transition-colors hover:border-transparent hover:bg-amber-600 hover:text-white"
                             @click.prevent="navigate(companyEditPath(company))"
                         >
+                            <span class="material-symbols-outlined" style="font-size: 16px;" aria-hidden="true">edit</span>
                             <span class="cooper-baseline">Modifier l'entreprise</span>
                         </a>
                         <button
                             type="button"
-                            class="btn btn-outline btn-sm border-red-600 font-cooper text-red-700 hover:border-red-700 hover:bg-red-700 hover:text-white"
+                            class="btn btn-outline btn-sm border-red-600 font-cooper font-normal text-red-700 hover:border-red-700 hover:bg-red-700 hover:text-white"
                             :disabled="deletingCompanyId === company.id"
                             @click="deleteCompany(company)"
                         >
@@ -402,9 +404,10 @@ onMounted(fetchCompanies);
                                     </a>
                                     <a
                                         :href="`/admin/companies/${company.id}/edit?collection=${col.id}`"
-                                        class="btn btn-ghost btn-sm border-transparent bg-transparent font-cooper text-base-content shadow-none transition-colors hover:border-transparent hover:bg-amber-600 hover:text-white"
+                                        class="btn btn-ghost btn-sm border-transparent bg-transparent font-cooper font-normal text-base-content shadow-none transition-colors hover:border-transparent hover:bg-amber-600 hover:text-white"
                                         @click.prevent="navigate(`/admin/companies/${company.id}/edit?collection=${col.id}`)"
                                     >
+                                        <span class="material-symbols-outlined" style="font-size: 16px;" aria-hidden="true">edit</span>
                                         <span class="cooper-baseline">Modifier la collecte</span>
                                     </a>
                                 </div>
@@ -440,9 +443,10 @@ onMounted(fetchCompanies);
                                         </span>
                                         <a
                                             :href="`/admin/companies/${company.id}/edit?collection=${col.id}`"
-                                            class="btn btn-ghost btn-sm border-transparent bg-transparent font-cooper text-base-content shadow-none transition-colors hover:border-transparent hover:bg-amber-600 hover:text-white"
+                                            class="btn btn-ghost btn-sm border-transparent bg-transparent font-cooper font-normal text-base-content shadow-none transition-colors hover:border-transparent hover:bg-amber-600 hover:text-white"
                                             @click.prevent="navigate(`/admin/companies/${company.id}/edit?collection=${col.id}`)"
                                         >
+                                            <span class="material-symbols-outlined" style="font-size: 16px;" aria-hidden="true">edit</span>
                                             <span class="cooper-baseline">Modifier la collecte</span>
                                         </a>
                                     </div>
