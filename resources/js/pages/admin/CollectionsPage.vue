@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { useAdminRouter } from '../../composables/useAdminRouter';
 import AdminLayout from '../../components/layout/AdminLayout.vue';
 
@@ -19,9 +19,12 @@ type CompanyRow = {
     slug: string;
     email: string;
     employee_count: number | null;
+    created_at: string | null;
     trophy: boolean;
     collections: CollectionRow[];
 };
+
+type CompanyFilter = 'active-first' | 'active-only' | 'created-desc' | 'created-asc';
 
 type AppState = { csrfToken: string };
 
@@ -32,6 +35,8 @@ const { navigate, flashMessage } = useAdminRouter();
 const companies = ref<CompanyRow[]>([]);
 const loadingCompanies = ref(true);
 const loadError = ref<string | null>(null);
+const searchQuery = ref('');
+const companyFilter = ref<CompanyFilter>('active-first');
 const deletingCompanyId = ref<number | null>(null);
 const disabledLinkMessage = ref<string | null>(null);
 const copyMessage = ref<string | null>(null);
@@ -78,6 +83,70 @@ function activeCollections(company: CompanyRow): CollectionRow[] {
 function inactiveCollections(company: CompanyRow): CollectionRow[] {
     return company.collections.filter((collection) => !collection.is_active);
 }
+
+function hasActiveCollection(company: CompanyRow): boolean {
+    return activeCollections(company).length > 0;
+}
+
+function companyActionPath(company: CompanyRow): string {
+    return hasActiveCollection(company)
+        ? `/admin/companies/${company.id}/edit`
+        : `/admin/companies/${company.id}/edit?newCollection=1`;
+}
+
+function companyActionLabel(company: CompanyRow): string {
+    return hasActiveCollection(company) ? 'Modifier' : 'Nouvelle campagne';
+}
+
+function companyCreatedTimestamp(company: CompanyRow): number {
+    return company.created_at ? new Date(company.created_at).getTime() : 0;
+}
+
+const displayedCompanies = computed(() => {
+    const query = searchQuery.value.trim().toLowerCase();
+    let results = companies.value.filter((company) => {
+        if (!query) {
+            return true;
+        }
+
+        return [
+            company.name,
+            company.email,
+            company.slug,
+        ].some((value) => value.toLowerCase().includes(query));
+    });
+
+    if (companyFilter.value === 'active-only') {
+        results = results.filter(hasActiveCollection);
+    }
+
+    const sortByCreatedDesc = (left: CompanyRow, right: CompanyRow) => (
+        companyCreatedTimestamp(right) - companyCreatedTimestamp(left)
+    );
+
+    const sortByCreatedAsc = (left: CompanyRow, right: CompanyRow) => (
+        companyCreatedTimestamp(left) - companyCreatedTimestamp(right)
+    );
+
+    if (companyFilter.value === 'created-desc') {
+        return [...results].sort(sortByCreatedDesc);
+    }
+
+    if (companyFilter.value === 'created-asc') {
+        return [...results].sort(sortByCreatedAsc);
+    }
+
+    return [...results].sort((left, right) => {
+        const leftActive = hasActiveCollection(left) ? 1 : 0;
+        const rightActive = hasActiveCollection(right) ? 1 : 0;
+
+        if (leftActive !== rightActive) {
+            return rightActive - leftActive;
+        }
+
+        return sortByCreatedDesc(left, right);
+    });
+});
 
 function showDisabledLinkMessage() {
     disabledLinkMessage.value = "Cette collecte est terminée. Le lien public renvoie une 404.";
@@ -164,21 +233,47 @@ onMounted(fetchCompanies);
             </div>
         </div>
 
-        <div class="mb-6 flex items-center justify-between">
+        <div class="mb-4 flex items-center justify-between">
             <h1 class="cooper-text-baseline text-2xl font-semibold">Campagnes</h1>
             <a href="/admin/companies/create" class="btn btn-primary btn-sm font-cooper" @click="goToCreate">
+                <span class="material-symbols-outlined" style="font-size: 18px;" aria-hidden="true">add</span>
                 <span class="cooper-baseline">Créer une nouvelle campagne</span>
             </a>
         </div>
+
+        <section class="mb-6 rounded-box border border-base-300 bg-base-200/35 p-4">
+            <div class="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+                <label class="input input-bordered flex w-full max-w-xl items-center gap-3 bg-white">
+                    <span class="material-symbols-outlined text-base-content/45" aria-hidden="true">search</span>
+                    <input
+                        v-model="searchQuery"
+                        type="text"
+                        class="cooper-input-baseline w-full font-cooper"
+                        placeholder="Rechercher par entreprise ou email"
+                    />
+                </label>
+
+                <label class="flex items-center gap-3 self-start lg:self-auto">
+                    <span class="cooper-baseline text-sm font-medium text-base-content/55">Filtrer</span>
+                    <select v-model="companyFilter" class="select select-bordered bg-white font-cooper">
+                        <option value="active-first">Campagnes actives d'abord</option>
+                        <option value="active-only">Campagnes actives uniquement</option>
+                        <option value="created-desc">Date de création · plus récentes</option>
+                        <option value="created-asc">Date de création · plus anciennes</option>
+                    </select>
+                </label>
+            </div>
+        </section>
 
         <!-- List -->
         <div v-if="loadingCompanies" class="cooper-text-baseline text-sm text-base-content/50">Chargement...</div>
         <div v-else-if="loadError" class="alert alert-error"><span class="cooper-baseline">{{ loadError }}</span></div>
         <p v-else-if="companies.length === 0" class="cooper-text-baseline text-sm text-base-content/50">Aucune campagne. Créez-en une.</p>
+        <p v-else-if="displayedCompanies.length === 0" class="cooper-text-baseline text-sm text-base-content/50">Aucun résultat pour ce filtre.</p>
 
         <div v-else class="space-y-4">
             <div
-                v-for="company in companies"
+                v-for="company in displayedCompanies"
                 :key="company.id"
                 class="rounded-box border border-base-300 bg-base-100 p-5"
             >
@@ -194,12 +289,11 @@ onMounted(fetchCompanies);
                     </div>
                     <div class="flex shrink-0 gap-2">
                         <a
-                            v-if="activeCollections(company).length > 0"
-                            :href="`/admin/companies/${company.id}/edit`"
+                            :href="companyActionPath(company)"
                             class="btn btn-ghost btn-sm font-cooper"
-                            @click.prevent="navigate(`/admin/companies/${company.id}/edit`)"
+                            @click.prevent="navigate(companyActionPath(company))"
                         >
-                            <span class="cooper-baseline">Modifier</span>
+                            <span class="cooper-baseline">{{ companyActionLabel(company) }}</span>
                         </a>
                         <button
                             type="button"

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, reactive, ref, watch } from 'vue';
+import { computed, onMounted, reactive, ref, watch } from 'vue';
 import { useAdminRouter } from '../../composables/useAdminRouter';
 import AdminDateTimePicker from '../../components/admin/AdminDateTimePicker.vue';
 import AdminLayout from '../../components/layout/AdminLayout.vue';
@@ -17,6 +17,26 @@ type PendingForm = {
 
 type AppState = {
     csrfToken: string;
+};
+
+type CompanyFormPayload = {
+    name: string;
+    email: string;
+    slug: string;
+    short_description: string;
+    address: string;
+    telephone: string;
+    employee_count: string | number;
+    allowed_email_domains: string;
+    source: string;
+    is_public: boolean;
+    trophy: boolean;
+    primaryColor: string;
+    secondaryColor: string;
+    thirdColor: string;
+    collection_start: string;
+    collection_end: string;
+    collection_linkOneDoc: string;
 };
 
 const appState = (window as unknown as { __APP__?: AppState }).__APP__;
@@ -43,6 +63,7 @@ const form = reactive({
     employee_count: '' as string | number,
     allowed_email_domains: '',
     source: '',
+    is_public: true,
     trophy: false,
     logo: '',
     primaryColor: '#c81e1e',
@@ -52,6 +73,8 @@ const form = reactive({
     collection_end: '',
     collection_linkOneDoc: '',
 });
+const logoFile = ref<File | null>(null);
+const createLogoInputId = 'company-logo-upload-create';
 
 const pendingForms = ref<PendingForm[]>([]);
 const pendingSearch = ref('');
@@ -59,6 +82,15 @@ const pendingOpen = ref(false);
 const selectedFormId = ref<number | null>(null);
 
 const filteredPending = ref<PendingForm[]>([]);
+const anonymousParticipation = computed({
+    get: () => !form.is_public,
+    set: (value: boolean) => {
+        form.is_public = !value;
+        if (value) {
+            form.trophy = false;
+        }
+    },
+});
 
 watch(pendingSearch, (query) => {
     const q = query.toLowerCase().trim();
@@ -117,6 +149,12 @@ watch(() => form.name, (next) => {
     }
 });
 
+watch(() => form.is_public, (isPublic) => {
+    if (!isPublic) {
+        form.trophy = false;
+    }
+});
+
 function onSlugInput() {
     slugTouched.value = true;
 }
@@ -130,25 +168,54 @@ function back(event: Event) {
     navigate('/admin/campagnes');
 }
 
+function onLogoChange(event: Event) {
+    const input = event.target as HTMLInputElement;
+    logoFile.value = input.files?.[0] ?? null;
+}
+
+function buildFormData(payload: CompanyFormPayload): FormData {
+    const formData = new FormData();
+
+    formData.append('name', payload.name);
+    formData.append('email', payload.email);
+    formData.append('slug', payload.slug);
+    formData.append('short_description', payload.short_description);
+    formData.append('address', payload.address);
+    formData.append('telephone', payload.telephone);
+    formData.append('employee_count', String(payload.employee_count));
+    formData.append('allowed_email_domains', payload.allowed_email_domains);
+    formData.append('source', payload.source);
+    formData.append('is_public', payload.is_public ? '1' : '0');
+    formData.append('trophy', payload.trophy ? '1' : '0');
+    formData.append('primaryColor', payload.primaryColor);
+    formData.append('secondaryColor', payload.secondaryColor);
+    formData.append('thirdColor', payload.thirdColor);
+    formData.append('collection_start', payload.collection_start);
+    formData.append('collection_end', payload.collection_end);
+    formData.append('collection_linkOneDoc', payload.collection_linkOneDoc);
+
+    if (logoFile.value) {
+        formData.append('logo', logoFile.value);
+    }
+
+    return formData;
+}
+
 async function submit() {
     submitting.value = true;
     errors.value = {};
 
-    const payload: Record<string, unknown> = { ...form };
-    if (payload.employee_count === '') {
-        payload.employee_count = null;
-    }
+    const payload = { ...form } as CompanyFormPayload;
 
     try {
         const res = await fetch('/admin/companies', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
-                'Content-Type': 'application/json',
                 'X-CSRF-TOKEN': csrfToken,
                 'X-Requested-With': 'XMLHttpRequest',
             },
-            body: JSON.stringify(payload),
+            body: buildFormData(payload),
         });
 
         if (res.ok) {
@@ -237,14 +304,14 @@ async function submit() {
                     </ul>
                 </div>
                 <p v-if="selectedFormId !== null" class="cooper-text-baseline mt-2 text-xs text-amber-700">
-                    Champs pré-remplis. L&#39;inscription sera marquée comme traitée lors de la création.
+                    Champs pré-remplis. L&#39;inscription sera archivée à la création de la campagne.
                 </p>
             </div>
 
             <form @submit.prevent="submit" class="space-y-6 font-cooper">
                 <section class="grid gap-x-4 gap-y-6 md:grid-cols-2">
                     <label class="flex w-full flex-col gap-2">
-                        <span class="cooper-baseline label-text">Nom *</span>
+                        <span class="cooper-baseline label-text">Nom <span style="color: #9B2F5C;">*</span></span>
                         <input
                             v-model="form.name"
                             type="text"
@@ -255,7 +322,7 @@ async function submit() {
                     </label>
 
                     <label class="flex w-full flex-col gap-2">
-                        <span class="cooper-baseline label-text">Email *</span>
+                        <span class="cooper-baseline label-text">Email <span style="color: #9B2F5C;">*</span></span>
                         <input
                             v-model="form.email"
                             type="email"
@@ -266,7 +333,7 @@ async function submit() {
                     </label>
 
                     <label class="flex w-full flex-col gap-2">
-                        <span class="cooper-baseline label-text">Slug URL *</span>
+                        <span class="cooper-baseline label-text">Slug URL <span style="color: #9B2F5C;">*</span></span>
                         <input
                             v-model="form.slug"
                             type="text"
@@ -305,30 +372,32 @@ async function submit() {
                 </label>
 
                 <label class="flex w-full flex-col gap-2">
-                    <span class="cooper-baseline label-text">Adresse</span>
+                    <span class="cooper-baseline label-text">Adresse <span style="color: #9B2F5C;">*</span></span>
                     <textarea
                         v-model="form.address"
                         class="cooper-textarea-baseline textarea textarea-bordered w-full font-cooper"
                         rows="2"
                         maxlength="500"
+                        required
                     ></textarea>
                     <p v-if="firstError('address')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('address') }}</p>
                 </label>
 
                 <section class="grid gap-x-4 gap-y-6 md:grid-cols-3">
                     <label class="flex w-full flex-col gap-2">
-                        <span class="cooper-baseline label-text">Nombre d'employés</span>
+                        <span class="cooper-baseline label-text">Nombre d'employés <span style="color: #9B2F5C;">*</span></span>
                         <input
                             v-model="form.employee_count"
                             type="number"
                             min="0"
                             class="cooper-input-baseline input input-bordered w-full"
+                            required
                         />
                         <p v-if="firstError('employee_count')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('employee_count') }}</p>
                     </label>
 
                     <label class="flex w-full flex-col gap-2 md:col-span-2">
-                        <span class="cooper-baseline label-text">Domaines email autorisés (séparés par ",")</span>
+                        <span class="cooper-baseline label-text">Domaines email autorisés (séparés par ",") <span style="color: #9B2F5C;">*</span></span>
                         <input
                             v-model="form.allowed_email_domains"
                             type="text"
@@ -342,7 +411,7 @@ async function submit() {
 
                 <section class="grid gap-x-4 gap-y-6 md:grid-cols-2">
                     <label class="flex w-full flex-col gap-2">
-                        <span class="cooper-baseline label-text">Source (référent)</span>
+                        <span class="cooper-baseline label-text">Où avez-vous entendu parler de nous ?</span>
                         <input
                             v-model="form.source"
                             type="text"
@@ -353,22 +422,29 @@ async function submit() {
                     </label>
 
                     <label class="flex w-full flex-col gap-2">
-                        <span class="cooper-baseline label-text">Chemin du logo</span>
+                        <span class="cooper-baseline label-text">Logo de l'entreprise</span>
                         <input
-                            v-model="form.logo"
-                            type="text"
-                            class="cooper-input-baseline input input-bordered w-full"
-                            placeholder="/img/logos/exemple.png"
+                            :id="createLogoInputId"
+                            type="file"
+                            class="hidden"
+                            accept=".png,.jpg,.jpeg,.webp,.svg,image/png,image/jpeg,image/webp,image/svg+xml"
+                            @change="onLogoChange"
                         />
-                        <span class="cooper-text-baseline mt-1 text-xs text-base-content/60">
-                            Déposer le fichier dans public/img/logos/ et renseigner ici le chemin
-                        </span>
+                        <label
+                            :for="createLogoInputId"
+                            class="group cooper-input-baseline input input-bordered flex w-full cursor-pointer items-center gap-3 px-3 text-base-content/60"
+                        >
+                            <span class="material-symbols-outlined shrink-0 text-base-content/70 transition-colors duration-200 ease-in-out group-hover:text-primary" aria-hidden="true">upload</span>
+                            <span class="cooper-baseline min-w-0 truncate text-sm">
+                                {{ logoFile?.name || 'Aucun fichier sélectionné' }}
+                            </span>
+                        </label>
                         <p v-if="firstError('logo')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('logo') }}</p>
                     </label>
                 </section>
 
                 <section>
-                    <p class="cooper-text-baseline mb-3 label-text">Couleurs co-brandées</p>
+                    <p class="cooper-text-baseline mb-3 label-text">Couleurs co-brandées <span style="color: #9B2F5C;">*</span></p>
                     <div class="grid gap-x-4 gap-y-6 md:grid-cols-3">
                         <label class="flex w-full flex-col gap-2">
                             <span class="cooper-baseline label-text-alt">Primaire</span>
@@ -406,6 +482,7 @@ async function submit() {
                                     class="cooper-input-baseline join-item input input-bordered h-12 w-full font-cooper"
                                     placeholder="#c81e1e"
                                     maxlength="7"
+                                    required
                                 />
                             </div>
                             <p v-if="firstError('primaryColor')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('primaryColor') }}</p>
@@ -446,6 +523,7 @@ async function submit() {
                                     class="cooper-input-baseline join-item input input-bordered h-12 w-full font-cooper"
                                     placeholder="#fecaca"
                                     maxlength="7"
+                                    required
                                 />
                             </div>
                             <p v-if="firstError('secondaryColor')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('secondaryColor') }}</p>
@@ -486,6 +564,7 @@ async function submit() {
                                     class="cooper-input-baseline join-item input input-bordered h-12 w-full font-cooper"
                                     placeholder="#1f2937"
                                     maxlength="7"
+                                    required
                                 />
                             </div>
                             <p v-if="firstError('thirdColor')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('thirdColor') }}</p>
@@ -501,7 +580,7 @@ async function submit() {
 
                     <div class="grid gap-x-4 gap-y-6 md:grid-cols-2">
                         <label class="flex w-full flex-col gap-2">
-                            <span class="cooper-baseline label-text">Début *</span>
+                            <span class="cooper-baseline label-text">Début <span style="color: #9B2F5C;">*</span></span>
                             <AdminDateTimePicker
                                 v-model="form.collection_start"
                                 label="Choisir une date de début"
@@ -512,7 +591,7 @@ async function submit() {
                         </label>
 
                         <label class="flex w-full flex-col gap-2">
-                            <span class="cooper-baseline label-text">Fin *</span>
+                            <span class="cooper-baseline label-text">Fin <span style="color: #9B2F5C;">*</span></span>
                             <AdminDateTimePicker
                                 v-model="form.collection_end"
                                 label="Choisir une date de fin"
@@ -526,15 +605,28 @@ async function submit() {
 
                         <label class="flex items-center gap-3 md:col-span-2">
                             <input
+                                v-model="anonymousParticipation"
+                                type="checkbox"
+                                class="checkbox checked:[--input-color:var(--color-primary)] checked:[color:var(--color-primary-content)]"
+                            />
+                            <span class="cooper-baseline text-sm font-medium text-base-content/75">Participation anonyme</span>
+                        </label>
+
+                        <label
+                            class="flex items-center gap-3 md:col-span-2"
+                            :class="{ 'cursor-not-allowed opacity-45': !form.is_public }"
+                        >
+                            <input
                                 v-model="form.trophy"
                                 type="checkbox"
                                 class="checkbox checked:[--input-color:var(--color-primary)] checked:[color:var(--color-primary-content)]"
+                                :disabled="!form.is_public"
                             />
                             <span class="cooper-baseline text-sm font-medium text-base-content/75">Participation au prix du cœur</span>
                         </label>
 
                         <label class="flex w-full flex-col gap-2 md:col-span-2">
-                            <span class="cooper-baseline label-text">Lien OneDoc *</span>
+                            <span class="cooper-baseline label-text">Lien OneDoc <span style="color: #9B2F5C;">*</span></span>
                             <input
                                 v-model="form.collection_linkOneDoc"
                                 type="text"

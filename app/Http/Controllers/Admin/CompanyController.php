@@ -9,7 +9,9 @@ use App\Models\Collection;
 use App\Models\Company;
 use App\Models\Form;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 
 class CompanyController extends Controller
 {
@@ -23,6 +25,8 @@ class CompanyController extends Controller
             'slug' => $company->slug,
             'email' => $company->email,
             'employee_count' => $company->employee_count,
+            'created_at' => $company->created_at?->toIso8601String(),
+            'is_public' => (bool) $company->is_public,
             'trophy' => (bool) $company->trophy,
             'collections' => $company->collections->map(fn ($col) => $this->collectionPayload($company, $col)),
         ]));
@@ -35,7 +39,8 @@ class CompanyController extends Controller
 
     public function store(StoreCompanyRequest $request): JsonResponse
     {
-        $validated = $request->validated();
+        $validated = $this->normalizeVisibilityFlags($request->validated());
+        $validated['logo'] = $this->storeCompanyLogo($request->file('logo'), $validated['slug'] ?? null);
         $company = Company::create(Arr::except($validated, [
             'collection_start',
             'collection_end',
@@ -52,7 +57,8 @@ class CompanyController extends Controller
 
     public function update(UpdateCompanyRequest $request, Company $company): JsonResponse
     {
-        $validated = $request->validated();
+        $validated = $this->normalizeVisibilityFlags($request->validated());
+        $validated['logo'] = $this->storeCompanyLogo($request->file('logo'), $validated['slug'] ?? $company->slug) ?? $company->logo;
         $company->update(Arr::except($validated, [
             'collection_id',
             'collection_start',
@@ -105,6 +111,37 @@ class CompanyController extends Controller
             'company_id' => $company->id,
             'access_token' => bin2hex(random_bytes(8)),
         ]);
+    }
+
+    /**
+     * @param array<string, mixed> $validated
+     * @return array<string, mixed>
+     */
+    private function normalizeVisibilityFlags(array $validated): array
+    {
+        $isPublic = array_key_exists('is_public', $validated) ? (bool) $validated['is_public'] : true;
+        $validated['is_public'] = $isPublic;
+
+        if (! $isPublic) {
+            $validated['trophy'] = false;
+        }
+
+        return $validated;
+    }
+
+    private function storeCompanyLogo(?UploadedFile $file, ?string $slug): ?string
+    {
+        if (! $file) {
+            return null;
+        }
+
+        $extension = strtolower($file->getClientOriginalExtension() ?: $file->extension() ?: 'png');
+        $filename = Str::slug($slug ?: pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME) ?: 'company-logo')
+            . '-' . now()->format('YmdHis') . '.' . $extension;
+
+        $file->move(public_path('img/companies'), $filename);
+
+        return '/img/companies/' . $filename;
     }
 
     /**

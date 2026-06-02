@@ -153,10 +153,7 @@ function forgotPassword() {
                         name="cobranded_auth_tabs"
                         value="code"
                     />
-                    <svg xmlns="http://www.w3.org/2000/svg" class="size-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                        <rect width="20" height="16" x="2" y="4" rx="2" />
-                        <path d="m22 7-8.97 5.7a2 2 0 0 1-2.06 0L2 7" />
-                    </svg>
+                    <span class="material-symbols-outlined shrink-0" style="font-size: 18px;" aria-hidden="true">mail</span>
                     <span class="cooper-baseline whitespace-nowrap text-sm font-semibold">Recevoir un code</span>
                 </label>
                 <div class="tab-content rounded-b-xl border-slate-200 bg-white p-5">
@@ -204,11 +201,7 @@ function forgotPassword() {
                         name="cobranded_auth_tabs"
                         value="login"
                     />
-                    <svg xmlns="http://www.w3.org/2000/svg" class="size-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                        <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
-                        <path d="m10 17 5-5-5-5" />
-                        <path d="M15 12H3" />
-                    </svg>
+                    <span class="material-symbols-outlined shrink-0" style="font-size: 18px;" aria-hidden="true">login</span>
                     <span class="cooper-baseline whitespace-nowrap text-sm font-semibold">Se connecter</span>
                 </label>
                 <div class="tab-content rounded-b-xl border-slate-200 bg-white p-5">

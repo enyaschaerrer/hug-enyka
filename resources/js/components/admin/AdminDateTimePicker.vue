@@ -38,17 +38,19 @@ const isOpen = ref(false);
 const hoveredDate = ref<Date | null>(null);
 const openUpward = ref(false);
 const triggerRef = ref<HTMLButtonElement | null>(null);
+const selectedTime = ref(timeFromValue(props.modelValue) ?? props.defaultTime);
+const initialVisibleDate = parseLocalDateTime(props.modelValue) ?? new Date();
+const visibleMonth = ref(initialVisibleDate.getMonth());
+const visibleYear = ref(initialVisibleDate.getFullYear());
 
 function toggleOpen() {
     if (!isOpen.value && triggerRef.value) {
         const rect = triggerRef.value.getBoundingClientRect();
         openUpward.value = window.innerHeight - rect.bottom < 420;
+        syncVisibleDateOnOpen();
     }
     isOpen.value = !isOpen.value;
 }
-const selectedTime = ref(timeFromValue(props.modelValue) ?? props.defaultTime);
-const visibleMonth = ref(monthFromValue(props.modelValue) ?? new Date().getMonth());
-const visibleYear = new Date().getFullYear();
 
 const selectedDate = computed(() => dateOnly(props.modelValue));
 const effectiveMinDateTime = computed(() => props.minDateTime ?? (props.mode === 'start' ? todayStartValue() : null));
@@ -56,9 +58,9 @@ const minDate = computed(() => dateOnly(effectiveMinDateTime.value));
 const referenceDate = computed(() => dateOnly(props.referenceDateTime));
 
 const calendarDays = computed(() => {
-    const firstDay = new Date(visibleYear, visibleMonth.value, 1);
+    const firstDay = new Date(visibleYear.value, visibleMonth.value, 1);
     const firstWeekday = (firstDay.getDay() + 6) % 7;
-    const daysInMonth = new Date(visibleYear, visibleMonth.value + 1, 0).getDate();
+    const daysInMonth = new Date(visibleYear.value, visibleMonth.value + 1, 0).getDate();
     const days: Array<Date | null> = [];
 
     for (let index = 0; index < firstWeekday; index += 1) {
@@ -66,7 +68,7 @@ const calendarDays = computed(() => {
     }
 
     for (let day = 1; day <= daysInMonth; day += 1) {
-        days.push(new Date(visibleYear, visibleMonth.value, day));
+        days.push(new Date(visibleYear.value, visibleMonth.value, day));
     }
 
     while (days.length % 7 !== 0) {
@@ -96,6 +98,7 @@ watch(() => props.modelValue, (next) => {
     const date = parseLocalDateTime(next);
     if (date) {
         visibleMonth.value = date.getMonth();
+        visibleYear.value = date.getFullYear();
     }
 });
 
@@ -139,6 +142,16 @@ function dateOnly(value: string | null | undefined): Date | null {
 
 function monthFromValue(value: string): number | null {
     return parseLocalDateTime(value)?.getMonth() ?? null;
+}
+
+function syncVisibleDateOnOpen(): void {
+    const targetDate = parseLocalDateTime(props.modelValue)
+        ?? parseLocalDateTime(props.referenceDateTime)
+        ?? parseLocalDateTime(effectiveMinDateTime.value)
+        ?? new Date();
+
+    visibleMonth.value = targetDate.getMonth();
+    visibleYear.value = targetDate.getFullYear();
 }
 
 function timeFromValue(value: string): string | null {
@@ -254,18 +267,27 @@ function selectDate(day: Date | null): void {
 function previousMonth(): void {
     if (visibleMonth.value > 0) {
         visibleMonth.value -= 1;
+        return;
     }
+
+    visibleMonth.value = 11;
+    visibleYear.value -= 1;
 }
 
 function nextMonth(): void {
     if (visibleMonth.value < 11) {
         visibleMonth.value += 1;
+        return;
     }
+
+    visibleMonth.value = 0;
+    visibleYear.value += 1;
 }
 
 function selectToday(): void {
     const today = new Date();
     visibleMonth.value = today.getMonth();
+    visibleYear.value = today.getFullYear();
     selectDate(today);
 }
 
@@ -322,6 +344,9 @@ function iconPath(): string[] {
                         {{ month }}
                     </option>
                 </select>
+                <span class="cooper-baseline min-w-14 text-center text-sm font-medium text-base-content/70">
+                    {{ visibleYear }}
+                </span>
                 <button type="button" class="btn btn-ghost btn-sm px-2" @click="nextMonth">
                     <span class="cooper-baseline">→</span>
                 </button>
