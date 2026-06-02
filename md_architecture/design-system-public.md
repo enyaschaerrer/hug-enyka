@@ -16,7 +16,52 @@ Police principale : **Cooper Hewitt**
 
 ---
 
-## Icones
+## Iconographie
+
+Police d'icônes utilisée : **Google Material Symbols Outlined** (variable font)
+
+### Setup
+Fichier : `resources/fonts/material-symbols/material-symbols-outlined.woff2`
+Déclarée dans `app.css` via `@font-face`, exposée par la classe utilitaire `.material-symbols-outlined`.
+
+### Utilisation
+```html
+<span class="material-symbols-outlined">favorite</span>
+<span class="material-symbols-outlined">account_circle</span>
+<span class="material-symbols-outlined">filter_list</span>
+```
+Le mot à l'intérieur du `<span>` est le **ligature name** de l'icône. Catalogue complet : https://fonts.google.com/icons
+
+### Personnalisation
+La police est une variable font, donc tu peux ajuster :
+
+| Axe | Valeurs | Effet |
+|-----|---------|-------|
+| `FILL` | 0 → 1 | Outlined → rempli |
+| `wght` | 100 → 700 | Épaisseur du trait |
+| `GRAD` | -50 → 200 | Accentuation/contraste |
+| `opsz` | 20 → 48 | Taille optique (rendu adapté à la taille) |
+
+Via inline style :
+```html
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">favorite</span>
+```
+
+### Taille et couleur
+Style inline ou Tailwind :
+```html
+<!-- Taille spécifique -->
+<span class="material-symbols-outlined" style="font-size: 32px;">person</span>
+
+<!-- Couleur (hérite de currentColor) -->
+<span class="material-symbols-outlined text-fuzzywuzzybrown-700">favorite</span>
+```
+
+### Note prod
+Le fichier `.woff2` complet fait ~3.7 MB (tous les icônes). En production, on pourra le subset avec `fontTools` pour ne garder que les glyphes utilisés (généralement <100 KB final).
+
+---
+
 
 ## Couleurs principales site Coeur d'Honneur
 Martinique 500 - `#757ABC` 

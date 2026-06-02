@@ -22,23 +22,22 @@ class PublicSiteController extends Controller
             ->select(['te.year', 'p.rank', 'p.type', 'c.id as company_id', 'c.name as company_name', 'c.logo as company_logo'])
             ->get();
 
-        // Nombre de prix cumulés par (entreprise, année, type) : prizes où l'édition est <= année.
-        $trophyCountAt = fn (int $companyId, int $year, string $type) => $podiumRows
+        // Nombre de prix cumulés par (entreprise, année) — toutes catégories confondues.
+        $trophyCountAt = fn (int $companyId, int $year) => $podiumRows
             ->where('company_id', $companyId)
-            ->where('type', $type)
             ->where('year', '<=', $year)
             ->count();
 
         $buildPodiumsForType = fn (string $type) => $podiumRows
             ->where('type', $type)
             ->groupBy('year')
-            ->map(function ($rows, $year) use ($trophyCountAt, $type) {
+            ->map(function ($rows, $year) use ($trophyCountAt) {
                 $year = (int) $year;
                 $byRank = $rows->keyBy('rank');
                 $entry = fn ($r) => [
                     'name' => $r?->company_name,
                     'logo' => $r?->company_logo,
-                    'trophies' => $r ? $trophyCountAt($r->company_id, $year, $type) : 0,
+                    'trophies' => $r ? $trophyCountAt($r->company_id, $year) : 0,
                 ];
                 return [
                     'year' => $year,

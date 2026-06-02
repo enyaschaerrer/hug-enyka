@@ -253,22 +253,40 @@ class HomeDemoSeeder extends Seeder
         $edition2024 = DB::table('trophy_editions')->where('year', 2024)->value('id');
         $edition2025 = DB::table('trophy_editions')->where('year', 2025)->value('id');
 
-        // ----- prizes (podiums, type 'donneur') -----
+        // ----- prizes (podiums par type et par édition) -----
         $prizesData = [
+            // ----- Type 'donneur' -----
             // 2023
-            ['trophy_edition_id' => $edition2023, 'company_id' => $patek,     'rank' => 1, 'type' => 'donneur'],
-            ['trophy_edition_id' => $edition2023, 'company_id' => $richemont, 'rank' => 2, 'type' => 'donneur'],
-            ['trophy_edition_id' => $edition2023, 'company_id' => $bcge,      'rank' => 3, 'type' => 'donneur'],
-
+            ['trophy_edition_id' => $edition2023, 'company_id' => $patek,      'rank' => 1, 'type' => 'donneur'],
+            ['trophy_edition_id' => $edition2023, 'company_id' => $richemont,  'rank' => 2, 'type' => 'donneur'],
+            ['trophy_edition_id' => $edition2023, 'company_id' => $bcge,       'rank' => 3, 'type' => 'donneur'],
             // 2024
-            ['trophy_edition_id' => $edition2024, 'company_id' => $rolex,     'rank' => 1, 'type' => 'donneur'],
-            ['trophy_edition_id' => $edition2024, 'company_id' => $firmenich, 'rank' => 2, 'type' => 'donneur'],
-            ['trophy_edition_id' => $edition2024, 'company_id' => $pictet,    'rank' => 3, 'type' => 'donneur'],
-
+            ['trophy_edition_id' => $edition2024, 'company_id' => $rolex,      'rank' => 1, 'type' => 'donneur'],
+            ['trophy_edition_id' => $edition2024, 'company_id' => $firmenich,  'rank' => 2, 'type' => 'donneur'],
+            ['trophy_edition_id' => $edition2024, 'company_id' => $pictet,     'rank' => 3, 'type' => 'donneur'],
             // 2025
-            ['trophy_edition_id' => $edition2025, 'company_id' => $pictet, 'rank' => 1, 'type' => 'donneur'],
-            ['trophy_edition_id' => $edition2025, 'company_id' => $rolex,  'rank' => 2, 'type' => 'donneur'],
-            ['trophy_edition_id' => $edition2025, 'company_id' => $patek,  'rank' => 3, 'type' => 'donneur'],
+            ['trophy_edition_id' => $edition2025, 'company_id' => $pictet,     'rank' => 1, 'type' => 'donneur'],
+            ['trophy_edition_id' => $edition2025, 'company_id' => $rolex,      'rank' => 2, 'type' => 'donneur'],
+            ['trophy_edition_id' => $edition2025, 'company_id' => $patek,      'rank' => 3, 'type' => 'donneur'],
+
+            // ----- Type 'ambassadeur' -----
+            // 2023
+            ['trophy_edition_id' => $edition2023, 'company_id' => $logitech,   'rank' => 1, 'type' => 'ambassadeur'],
+            ['trophy_edition_id' => $edition2023, 'company_id' => $oms,        'rank' => 2, 'type' => 'ambassadeur'],
+            ['trophy_edition_id' => $edition2023, 'company_id' => $carandache, 'rank' => 3, 'type' => 'ambassadeur'],
+            // 2024
+            ['trophy_edition_id' => $edition2024, 'company_id' => $bcge,       'rank' => 1, 'type' => 'ambassadeur'],
+            ['trophy_edition_id' => $edition2024, 'company_id' => $omc,        'rank' => 2, 'type' => 'ambassadeur'],
+            ['trophy_edition_id' => $edition2024, 'company_id' => $firmenich,  'rank' => 3, 'type' => 'ambassadeur'],
+            // 2025
+            ['trophy_edition_id' => $edition2025, 'company_id' => $carandache, 'rank' => 1, 'type' => 'ambassadeur'],
+            ['trophy_edition_id' => $edition2025, 'company_id' => $logitech,   'rank' => 2, 'type' => 'ambassadeur'],
+            ['trophy_edition_id' => $edition2025, 'company_id' => $oms,        'rank' => 3, 'type' => 'ambassadeur'],
+
+            // ----- Type 'prixJury' (Coup de cœur du jury — 1 seul lauréat par année) -----
+            ['trophy_edition_id' => $edition2023, 'company_id' => $omc,       'rank' => 1, 'type' => 'prixJury'],
+            ['trophy_edition_id' => $edition2024, 'company_id' => $patek,     'rank' => 1, 'type' => 'prixJury'],
+            ['trophy_edition_id' => $edition2025, 'company_id' => $firmenich, 'rank' => 1, 'type' => 'prixJury'],
         ];
 
         foreach ($prizesData as $row) {
