@@ -12,6 +12,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
     'logo',
     'short_description',
     'address',
+    'npa',
+    'localite',
     'email',
     'contact_message',
     'telephone',
