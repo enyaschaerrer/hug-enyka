@@ -40,6 +40,7 @@ const months = [
 ];
 
 const weekDays = ['Lu', 'Ma', 'Me', 'Je', 'Ve', 'Sa', 'Di'];
+const currentYear = new Date().getFullYear();
 const isOpen = ref(false);
 const hoveredDate = ref<Date | null>(null);
 const openUpward = ref(false);
@@ -116,13 +117,15 @@ const displayValue = computed(() => {
     }).format(parsed);
 });
 
+const canGoPreviousMonth = computed(() => visibleYear.value === currentYear && visibleMonth.value > 0);
+const canGoNextMonth = computed(() => visibleYear.value === currentYear && visibleMonth.value < 11);
+
 watch(() => props.modelValue, (next) => {
     selectedTime.value = timeFromValue(next) ?? selectedTime.value;
 
     const date = parseLocalDateTime(next);
     if (date) {
-        visibleMonth.value = date.getMonth();
-        visibleYear.value = date.getFullYear();
+        setVisibleDate(date);
     }
 });
 
@@ -180,8 +183,12 @@ function syncVisibleDateOnOpen(): void {
         ?? parseLocalDateTime(effectiveMinDateTime.value)
         ?? new Date();
 
-    visibleMonth.value = targetDate.getMonth();
-    visibleYear.value = targetDate.getFullYear();
+    setVisibleDate(targetDate);
+}
+
+function setVisibleDate(date: Date): void {
+    visibleMonth.value = date.getMonth();
+    visibleYear.value = currentYear;
 }
 
 function timeFromValue(value: string): string | null {
@@ -344,29 +351,24 @@ function selectDate(day: Date | null): void {
 
 
 function previousMonth(): void {
-    if (visibleMonth.value > 0) {
-        visibleMonth.value -= 1;
+    if (!canGoPreviousMonth.value) {
         return;
     }
 
-    visibleMonth.value = 11;
-    visibleYear.value -= 1;
+    visibleMonth.value -= 1;
 }
 
 function nextMonth(): void {
-    if (visibleMonth.value < 11) {
-        visibleMonth.value += 1;
+    if (!canGoNextMonth.value) {
         return;
     }
 
-    visibleMonth.value = 0;
-    visibleYear.value += 1;
+    visibleMonth.value += 1;
 }
 
 function selectToday(): void {
     const today = new Date();
-    visibleMonth.value = today.getMonth();
-    visibleYear.value = today.getFullYear();
+    setVisibleDate(today);
     selectDate(today);
 }
 
@@ -442,7 +444,13 @@ onUnmounted(() => {
             @click.stop
         >
             <div class="flex items-center gap-2">
-                <button type="button" class="btn btn-ghost btn-sm px-2" @click.stop="previousMonth">
+                <button
+                    type="button"
+                    class="btn btn-ghost btn-sm px-2"
+                    :class="!canGoPreviousMonth ? 'cursor-not-allowed opacity-35 hover:bg-transparent hover:text-current' : ''"
+                    :disabled="!canGoPreviousMonth"
+                    @click.stop="previousMonth"
+                >
                     <span class="cooper-baseline">←</span>
                 </button>
                 <select v-model.number="visibleMonth" class="cooper-input-baseline select select-bordered select-sm min-h-9 flex-1 font-cooper font-medium text-sm">
@@ -453,7 +461,13 @@ onUnmounted(() => {
                 <span class="cooper-baseline min-w-14 text-center text-sm font-medium text-base-content/70">
                     {{ visibleYear }}
                 </span>
-                <button type="button" class="btn btn-ghost btn-sm px-2" @click.stop="nextMonth">
+                <button
+                    type="button"
+                    class="btn btn-ghost btn-sm px-2"
+                    :class="!canGoNextMonth ? 'cursor-not-allowed opacity-35 hover:bg-transparent hover:text-current' : ''"
+                    :disabled="!canGoNextMonth"
+                    @click.stop="nextMonth"
+                >
                     <span class="cooper-baseline">→</span>
                 </button>
             </div>
