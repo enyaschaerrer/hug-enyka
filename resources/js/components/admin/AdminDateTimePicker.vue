@@ -5,12 +5,14 @@ const props = withDefaults(defineProps<{
     modelValue: string;
     label: string;
     mode: 'start' | 'end';
+    disabled?: boolean;
     minDateTime?: string | null;
     pairedDateTime?: string | null;
     referenceDateTime?: string | null;
     blockedRanges?: Array<{ start: string; end: string }>;
     defaultTime?: string;
 }>(), {
+    disabled: false,
     minDateTime: null,
     pairedDateTime: null,
     referenceDateTime: null,
@@ -49,6 +51,11 @@ const visibleMonth = ref(initialVisibleDate.getMonth());
 const visibleYear = ref(initialVisibleDate.getFullYear());
 
 function toggleOpen() {
+    if (props.disabled) {
+        isOpen.value = false;
+        return;
+    }
+
     if (!isOpen.value && triggerRef.value) {
         const rect = triggerRef.value.getBoundingClientRect();
         openUpward.value = window.innerHeight - rect.bottom < 420;
@@ -129,6 +136,12 @@ watch(effectiveMinDateTime, (newMin) => {
 
     if (current && min && current.getTime() < min.getTime()) {
         emit('update:modelValue', '');
+    }
+});
+
+watch(() => props.disabled, (disabled) => {
+    if (disabled) {
+        isOpen.value = false;
     }
 });
 
@@ -391,13 +404,32 @@ onUnmounted(() => {
         <button
             ref="triggerRef"
             type="button"
-            class="cooper-datetime-baseline group input input-bordered flex w-full cursor-pointer items-center justify-between pr-3 text-left font-cooper font-medium text-sm"
+            class="cooper-datetime-baseline group input input-bordered flex w-full items-center justify-between pr-3 text-left font-cooper font-medium text-sm"
+            :class="props.disabled ? 'cursor-not-allowed border-base-300 bg-base-200/60 text-base-content/35' : 'cursor-pointer'"
+            :disabled="props.disabled"
             @click="toggleOpen"
         >
-            <span class="cooper-baseline truncate transition-colors duration-200 ease-out group-hover:text-primary" :class="displayValue ? 'text-base-content' : 'text-base-content/35'">
+            <span
+                class="cooper-baseline truncate transition-colors duration-200 ease-out"
+                :class="[
+                    displayValue ? 'text-base-content' : 'text-base-content/35',
+                    props.disabled ? '!text-base-content/35' : 'group-hover:text-primary',
+                ]"
+            >
                 {{ displayValue || label }}
             </span>
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 shrink-0 cursor-pointer text-base-content/55 transition-colors duration-200 ease-out group-hover:text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-5 w-5 shrink-0 text-base-content/55 transition-colors duration-200 ease-out"
+                :class="props.disabled ? 'cursor-not-allowed !text-base-content/35' : 'cursor-pointer group-hover:text-primary'"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+            >
                 <path v-for="path in iconPath()" :key="path" :d="path" />
             </svg>
         </button>

@@ -597,6 +597,7 @@ async function submit() {
                                 v-model="form.collection_end"
                                 label="Choisir une date de fin"
                                 mode="end"
+                                :disabled="!form.collection_start"
                                 :min-date-time="form.collection_start || null"
                                 :reference-date-time="form.collection_start || null"
                                 default-time="17:00"
