@@ -101,34 +101,45 @@ function selectPrizeType(type: PrizeType) {
 
             <template v-else>
                 <div class="mt-13 grid grid-cols-1 gap-12 lg:grid-cols-2">
-                    <!-- Podium 3 marches : 3e à gauche, 1er au centre, 2e à droite. Pour prixJury : 1 seule marche. -->
-                    <div class="flex items-end justify-center gap-2 lg:gap-3">
+                    <!-- Podium : 3 marches pour donneur/ambassadeur, gros logo seul pour prixJury -->
+                    <div v-if="selectedPrizeType === 'prixJury'" class="flex items-center justify-center">
+                        <img
+                            v-if="currentPodium.first.logo"
+                            :src="currentPodium.first.logo"
+                            :alt="currentPodium.first.name ?? ''"
+                            class="h-28 max-w-full object-contain lg:h-32"
+                        />
+                    </div>
+                    <div v-else class="flex items-end justify-center gap-2 lg:gap-3">
                         <!-- 3e -->
-                        <div v-if="selectedPrizeType !== 'prixJury'" class="flex flex-col items-center">
+                        <div class="flex flex-col items-center">
                             <div class="mb-2 flex h-12 w-20 items-center justify-center p-2 lg:h-16 lg:w-24">
                                 <img v-if="currentPodium.third.logo" :src="currentPodium.third.logo" :alt="currentPodium.third.name ?? ''" class="max-h-full max-w-full object-contain" />
                             </div>
-                            <div class="flex h-24 w-20 items-center justify-center rounded-t-lg bg-martinique-500 text-display text-white lg:h-32 lg:w-28">3</div>
+                            <div :key="`bar-3-${selectedYear}-${selectedPrizeType}`" class="podium-bar podium-bar-3 flex h-24 w-20 items-center justify-center rounded-t-lg bg-martinique-500 text-display text-white lg:h-32 lg:w-28">3</div>
                         </div>
                         <!-- 1er -->
                         <div class="flex flex-col items-center">
                             <div class="mb-2 flex h-12 w-20 items-center justify-center p-2 lg:h-16 lg:w-24">
                                 <img v-if="currentPodium.first.logo" :src="currentPodium.first.logo" :alt="currentPodium.first.name ?? ''" class="max-h-full max-w-full object-contain" />
                             </div>
-                            <div class="flex h-36 w-20 items-center justify-center rounded-t-lg bg-merino-300 text-display text-white lg:h-48 lg:w-28">1</div>
+                            <div :key="`bar-1-${selectedYear}-${selectedPrizeType}`" class="podium-bar podium-bar-1 flex h-36 w-20 items-center justify-center rounded-t-lg bg-merino-300 text-display text-white lg:h-48 lg:w-28">1</div>
                         </div>
                         <!-- 2e -->
-                        <div v-if="selectedPrizeType !== 'prixJury'" class="flex flex-col items-center">
+                        <div class="flex flex-col items-center">
                             <div class="mb-2 flex h-12 w-20 items-center justify-center p-2 lg:h-16 lg:w-24">
                                 <img v-if="currentPodium.second.logo" :src="currentPodium.second.logo" :alt="currentPodium.second.name ?? ''" class="max-h-full max-w-full object-contain" />
                             </div>
-                            <div class="flex h-28 w-20 items-center justify-center rounded-t-lg bg-fuzzywuzzybrown-400 text-display text-white lg:h-40 lg:w-28">2</div>
+                            <div :key="`bar-2-${selectedYear}-${selectedPrizeType}`" class="podium-bar podium-bar-2 flex h-28 w-20 items-center justify-center rounded-t-lg bg-fuzzywuzzybrown-400 text-display text-white lg:h-40 lg:w-28">2</div>
                         </div>
                     </div>
 
                     <!-- Classement à droite -->
                     <ul class="flex flex-col justify-center gap-6">
-                        <li class="flex items-center gap-4 border-b border-merino-300 pb-3">
+                        <li
+                            class="flex items-center gap-4"
+                            :class="selectedPrizeType !== 'prixJury' ? 'border-b border-merino-300 pb-3' : ''"
+                        >
                             <span class="flex h-10 w-10 items-center justify-center rounded-full border-2 border-merino-300 text-merino-300">›</span>
                             <div>
                                 <div class="text-heading-t3 text-martinique-950">{{ currentPodium.first.name ?? '—' }}<template v-if="selectedPrizeType !== 'prixJury'"> — 1ère place</template></div>
@@ -155,3 +166,19 @@ function selectPrizeType(type: PrizeType) {
         </div>
     </section>
 </template>
+
+<style>
+@keyframes podiumGrow {
+    from { transform: scaleY(0); }
+    to { transform: scaleY(1); }
+}
+
+.podium-bar {
+    transform-origin: bottom;
+    animation: podiumGrow 0.35s ease-out both;
+}
+
+.podium-bar-1 { animation-delay: 0s; }
+.podium-bar-2 { animation-delay: 0.30s; }
+.podium-bar-3 { animation-delay: 0.60s; }
+</style>

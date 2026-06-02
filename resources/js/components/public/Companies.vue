@@ -190,7 +190,7 @@ function resetFilters() {
                     </div>
                 </div>
 
-            <div class="mt-6 grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-3 lg:mt-16 lg:grid-cols-4">
+            <div class="mt-6 grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-3 lg:mt-10 lg:grid-cols-4">
                 <article v-for="company in visible" :key="company.name" class="flex flex-col">
                     <div class="flex h-24 items-center justify-center rounded bg-white p-3">
                         <img

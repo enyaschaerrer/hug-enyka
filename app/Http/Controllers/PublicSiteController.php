@@ -17,6 +17,7 @@ class PublicSiteController extends Controller
         $podiumRows = DB::table('prizes as p')
             ->join('trophy_editions as te', 'te.id', '=', 'p.trophy_edition_id')
             ->join('companies as c', 'c.id', '=', 'p.company_id')
+            ->where('c.is_public', true)
             ->orderBy('te.year')
             ->orderBy('p.rank')
             ->select(['te.year', 'p.rank', 'p.type', 'c.id as company_id', 'c.name as company_name', 'c.logo as company_logo'])
@@ -92,6 +93,7 @@ class PublicSiteController extends Controller
         // Entreprises participantes : année d'adhésion = MIN(year(start)) des collectes,
         // nb de trophées = count des prizes liés.
         $companies = Company::query()
+            ->where('is_public', true)
             ->withMin('collections', 'start')
             ->orderBy('name')
             ->get();
