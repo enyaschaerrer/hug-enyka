@@ -146,6 +146,14 @@ function onLogoChange(event: Event) {
     logoFile.value = input.files?.[0] ?? null;
 }
 
+function logoFilename(path: string | null | undefined): string {
+    if (!path) {
+        return '';
+    }
+
+    return path.split('/').filter(Boolean).pop() ?? path;
+}
+
 function onNpaInput(event: Event) {
     const input = event.target as HTMLInputElement;
     const sanitized = input.value.replace(/\D/g, '').slice(0, 4);
@@ -456,7 +464,7 @@ onMounted(fetchCompany);
                         >
                             <span class="material-symbols-outlined shrink-0 text-base-content/70 transition-colors duration-200 ease-in-out group-hover:text-primary" aria-hidden="true">upload</span>
                             <span class="cooper-baseline min-w-0 truncate text-sm">
-                                {{ logoFile?.name || form.logo || 'Aucun fichier sélectionné' }}
+                                {{ logoFile?.name || logoFilename(form.logo) || 'Aucun fichier sélectionné' }}
                             </span>
                         </label>
                         <p class="cooper-text-baseline mt-1 text-xs text-base-content/60">Formats autorisés : PNG, JPG, JPEG, WEBP, SVG. Taille maximale : 5 Mo.</p>
