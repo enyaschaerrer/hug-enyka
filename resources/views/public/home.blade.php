@@ -7,9 +7,9 @@
     @include('partials.public-side-cta')
 
     {{-- Section 1 : Le Prix du Coeur --}}
-    <section class="px-12 py-16">
+    <section class="px-6 py-8 lg:px-12 lg:py-16">
         <div class="mx-auto max-w-6xl">
-            <div class="flex items-start justify-between gap-12">
+            <div class="flex flex-col items-center gap-8 lg:flex-row lg:items-start lg:justify-between lg:gap-12">
                 <div class="max-w-2xl">
                     <h2 class="text-display text-martinique-950">Le Prix du Coeur</h2>
                     <p class="mt-10 text-body text-martinique-900">

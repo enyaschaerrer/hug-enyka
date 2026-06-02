@@ -2,7 +2,7 @@
 const navItems = [
     { label: 'Home', href: '/' },
     { label: 'Collecte', href: '/collecte' },
-    { label: 'Prix', href: '/prize' },
+    { label: 'Prix', href: '/prix' },
     { label: 'Label', href: '/label' },
     { label: 'Contact', href: '/contact' },
 ];

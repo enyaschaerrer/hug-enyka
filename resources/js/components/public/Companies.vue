@@ -91,7 +91,7 @@ function resetFilters() {
 </script>
 
 <template>
-    <section class="px-12 py-16">
+    <section class="px-6 py-8 lg:px-12 lg:py-16">
         <div class="mx-auto max-w-6xl">
             <div>
                 <h2 class="text-display text-martinique-950">{{ props.title }}</h2>
@@ -190,7 +190,7 @@ function resetFilters() {
                     </div>
                 </div>
 
-            <div class="mt-16 grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-3 lg:grid-cols-4">
+            <div class="mt-6 grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-3 lg:mt-16 lg:grid-cols-4">
                 <article v-for="company in visible" :key="company.name" class="flex flex-col">
                     <div class="flex h-24 items-center justify-center rounded bg-white p-3">
                         <img

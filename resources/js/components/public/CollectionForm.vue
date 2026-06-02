@@ -57,7 +57,7 @@ async function handleSubmit() {
 </script>
 
 <template>
-    <section class="mx-auto max-w-2xl px-4 py-16">
+    <section class="mx-auto max-w-2xl px-6 py-8 lg:py-16">
         <div v-if="!submitted">
 
             <form @submit.prevent="handleSubmit">
@@ -193,27 +193,15 @@ async function handleSubmit() {
         </div>
 
         <!-- État de succès -->
-        <div v-else class="py-16 text-center">
-            <div class="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-fuzzywuzzybrown-50">
-                <svg
-                    class="h-8 w-8 text-fuzzywuzzybrown-700"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                >
-                    <path
-                        d="M5 13l4 4L19 7"
-                        stroke="currentColor"
-                        stroke-width="2.5"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                    />
-                </svg>
-            </div>
-            <h2 class="text-display text-martinique-950">
-                Demande envoyée !
-            </h2>
-            <p class="mt-3 text-body text-martinique-700">
-                Nous avons bien reçu votre inscription et reviendrons vers vous rapidement.
+        <div v-else class="text-center">
+            <h2 class="text-heading-t1 text-martinique-950">Merci pour votre demande !</h2>
+            <img
+                :src="'/img/mascots/blutly_sanguy_love.webp'"
+                alt=""
+                class="mx-auto my-8 h-48 w-auto object-contain"
+            />
+            <p class="text-body text-martinique-700">
+                Nous avons bien reçu votre message et reviendrons vers vous rapidement.
             </p>
         </div>
     </section>

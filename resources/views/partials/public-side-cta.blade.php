@@ -9,7 +9,7 @@
             Mettre en place une collecte
         </a>
         <a
-            href="/prize"
+            href="/prix"
             class="flex min-h-20 w-36 translate-x-3 items-center rounded-l-2xl border-2 border-r-0 border-merino-800 bg-merino-200 px-5 py-4 text-body font-medium text-merino-800 transition-transform duration-200 ease-out hover:translate-x-0"
         >
             S’inscrire au Prix du Cœur
