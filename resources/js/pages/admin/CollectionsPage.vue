@@ -182,7 +182,7 @@ const displayedCompanies = computed(() => {
 });
 
 function showDisabledLinkMessage() {
-    disabledLinkMessage.value = "Cette collecte est terminée. Le lien public renvoie une 404.";
+    disabledLinkMessage.value = "Cette collecte est inactive. Le lien public renvoie une 404.";
 
     if (disabledLinkTimer) {
         window.clearTimeout(disabledLinkTimer);
@@ -434,6 +434,9 @@ onMounted(fetchCompanies);
                                         <span class="cooper-baseline min-w-0 truncate text-sm text-amber-800/70">
                                             {{ col.url }}
                                         </span>
+                                        <button type="button" class="btn btn-ghost btn-xs cursor-not-allowed border-transparent font-cooper text-amber-800/70 hover:border-transparent hover:bg-amber-100 hover:text-amber-900" @click="showDisabledLinkMessage">
+                                            <span class="cooper-baseline">Lien désactivé</span>
+                                        </button>
                                     </div>
                                     <div class="flex shrink-0 items-center gap-3">
                                         <span v-if="company.trophy || !company.is_public" class="inline-flex items-center gap-1.5 rounded-full border border-amber-200 bg-white px-3 py-1.5 text-xs font-medium text-[#5A002A]">
