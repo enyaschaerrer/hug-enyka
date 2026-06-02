@@ -81,7 +81,9 @@ export function readableTextColor(backgroundColor: string | null | undefined): s
         return LIGHT_TEXT;
     }
 
-    if (lightContrast >= 3.0) return LIGHT_TEXT;
+    // Keep white text for more mid-tone brand colors and only switch to dark
+    // text when white becomes genuinely weak.
+    if (lightContrast >= 2.35) return LIGHT_TEXT;
 
     return darkContrast > lightContrast ? DARK_TEXT : LIGHT_TEXT;
 }
