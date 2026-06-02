@@ -8,7 +8,7 @@ class Form extends Model
 {
     protected $fillable = [
         'company_id', 'name', 'email', 'phone',
-        'address', 'message', 'trophy', 'treated',
+        'address', 'npa', 'localite', 'message', 'trophy', 'treated',
     ];
 
     protected $casts = [
