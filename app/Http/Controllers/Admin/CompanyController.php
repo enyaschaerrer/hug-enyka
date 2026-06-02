@@ -25,6 +25,7 @@ class CompanyController extends Controller
             'slug' => $company->slug,
             'email' => $company->email,
             'employee_count' => $company->employee_count,
+            'created_at' => $company->created_at?->toIso8601String(),
             'is_public' => (bool) $company->is_public,
             'trophy' => (bool) $company->trophy,
             'collections' => $company->collections->map(fn ($col) => $this->collectionPayload($company, $col)),
