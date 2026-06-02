@@ -104,22 +104,12 @@ function hasUpcomingCollection(company: CompanyRow): boolean {
     return upcomingCollections(company).length > 0;
 }
 
-function primaryEditableCollection(company: CompanyRow): CollectionRow | null {
-    return activeCollections(company)[0] ?? upcomingCollections(company)[0] ?? null;
-}
-
 function companyActionPath(company: CompanyRow): string {
-    const editableCollection = primaryEditableCollection(company);
-
-    if (editableCollection) {
-        return `/admin/companies/${company.id}/edit?collection=${editableCollection.id}`;
-    }
-
     return `/admin/companies/${company.id}/edit?newCollection=1`;
 }
 
 function companyActionLabel(company: CompanyRow): string {
-    return primaryEditableCollection(company) ? 'Modifier' : 'Nouvelle campagne';
+    return 'Nouvelle campagne';
 }
 
 function companyCreatedTimestamp(company: CompanyRow): number {
@@ -398,6 +388,13 @@ onMounted(fetchCompanies);
                                             <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z" />
                                             <circle cx="12" cy="12" r="3" />
                                         </svg>
+                                    </a>
+                                    <a
+                                        :href="`/admin/companies/${company.id}/edit?collection=${col.id}`"
+                                        class="btn btn-ghost btn-sm font-cooper text-emerald-900 hover:bg-white"
+                                        @click.prevent="navigate(`/admin/companies/${company.id}/edit?collection=${col.id}`)"
+                                    >
+                                        <span class="cooper-baseline">Modifier</span>
                                     </a>
                                 </div>
                             </div>

@@ -175,7 +175,7 @@ async function fetchCompany() {
             form.employee_count = data.employee_count ?? '';
             form.allowed_email_domains = data.allowed_email_domains ?? '';
             form.source = data.source ?? '';
-            form.is_public = data.is_public !== false;
+            form.is_public = Boolean(data.is_public);
             form.trophy = Boolean(data.trophy);
             form.logo = data.logo ?? '';
             form.primaryColor = data.primaryColor ?? '#c81e1e';
