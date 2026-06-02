@@ -26,8 +26,6 @@ class CompanyController extends Controller
             'email' => $company->email,
             'employee_count' => $company->employee_count,
             'created_at' => $company->created_at?->toIso8601String(),
-            'is_public' => (bool) $company->is_public,
-            'trophy' => (bool) $company->trophy,
             'collections' => $company->collections->map(fn ($col) => $this->collectionPayload($company, $col)),
         ]));
     }
@@ -39,12 +37,14 @@ class CompanyController extends Controller
 
     public function store(StoreCompanyRequest $request): JsonResponse
     {
-        $validated = $this->normalizeVisibilityFlags($request->validated());
+        $validated = $request->validated();
         $validated['logo'] = $this->storeCompanyLogo($request->file('logo'), $validated['slug'] ?? null);
         $company = Company::create(Arr::except($validated, [
             'collection_start',
             'collection_end',
             'collection_linkOneDoc',
+            'is_public',
+            'trophy',
         ]));
 
         $this->saveCollection($company, $validated);
@@ -57,19 +57,22 @@ class CompanyController extends Controller
 
     public function update(UpdateCompanyRequest $request, Company $company): JsonResponse
     {
-        $validated = $this->normalizeVisibilityFlags($request->validated());
-        $validated['logo'] = $this->storeCompanyLogo($request->file('logo'), $validated['slug'] ?? $company->slug) ?? $company->logo;
-        $company->update(Arr::except($validated, [
-            'collection_id',
-            'collection_start',
-            'collection_end',
-            'collection_linkOneDoc',
-        ]));
+        $validated = $request->validated();
 
-        $this->saveCollection($company, $validated);
+        if ($request->isCollectionMode()) {
+            $this->saveCollection($company, $validated);
+
+            return response()->json([
+                'message' => isset($validated['collection_id']) ? 'Collecte mise à jour.' : 'Nouvelle collecte créée.',
+                'company' => $this->companyPayload($company->load('collections')),
+            ]);
+        }
+
+        $validated['logo'] = $this->storeCompanyLogo($request->file('logo'), $validated['slug'] ?? $company->slug) ?? $company->logo;
+        $company->update($validated);
 
         return response()->json([
-            'message' => 'Campagne mise à jour.',
+            'message' => 'Entreprise mise à jour.',
             'company' => $this->companyPayload($company->load('collections')),
         ]);
     }
@@ -99,7 +102,13 @@ class CompanyController extends Controller
             'start' => $validated['collection_start'],
             'end' => $validated['collection_end'],
             'linkOneDoc' => $validated['collection_linkOneDoc'],
+            'is_public' => (bool) ($validated['is_public'] ?? true),
+            'trophy' => (bool) ($validated['trophy'] ?? false),
         ];
+
+        if (! $payload['is_public']) {
+            $payload['trophy'] = false;
+        }
 
         if ($collection) {
             $collection->update($payload);
@@ -111,22 +120,6 @@ class CompanyController extends Controller
             'company_id' => $company->id,
             'access_token' => bin2hex(random_bytes(8)),
         ]);
-    }
-
-    /**
-     * @param array<string, mixed> $validated
-     * @return array<string, mixed>
-     */
-    private function normalizeVisibilityFlags(array $validated): array
-    {
-        $isPublic = array_key_exists('is_public', $validated) ? (bool) $validated['is_public'] : true;
-        $validated['is_public'] = $isPublic;
-
-        if (! $isPublic) {
-            $validated['trophy'] = false;
-        }
-
-        return $validated;
     }
 
     private function storeCompanyLogo(?UploadedFile $file, ?string $slug): ?string
@@ -171,6 +164,8 @@ class CompanyController extends Controller
             'url' => '/collecte/' . $company->slug . '/' . $collection->access_token,
             'is_active' => $collection->isActive(),
             'is_upcoming' => $collection->isUpcoming(),
+            'is_public' => (bool) $collection->is_public,
+            'trophy' => (bool) $collection->trophy,
         ];
     }
 

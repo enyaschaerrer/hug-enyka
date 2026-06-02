@@ -19,8 +19,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
     'slug',
     'allowed_email_domains',
     'source',
-    'is_public',
-    'trophy',
     'primaryColor',
     'secondaryColor',
     'thirdColor',

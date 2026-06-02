@@ -15,6 +15,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
     'end',
     'access_token',
     'linkOneDoc',
+    'is_public',
+    'trophy',
 ])]
 class Collection extends Model
 {
@@ -25,6 +27,8 @@ class Collection extends Model
         return [
             'start' => 'datetime',
             'end' => 'datetime',
+            'is_public' => 'boolean',
+            'trophy' => 'boolean',
         ];
     }
 

@@ -22,6 +22,15 @@ class UpdateCompanyRequest extends FormRequest
     {
         $companyId = $this->route('company')->id;
 
+        if ($this->isCollectionMode()) {
+            return [
+                'collection_id' => ['nullable', 'integer'],
+                'collection_start' => ['required', 'date'],
+                'collection_end' => ['required', 'date', 'after:collection_start'],
+                'collection_linkOneDoc' => ['required', 'string', 'max:500'],
+            ];
+        }
+
         return [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'unique:companies,email,' . $companyId],
@@ -32,23 +41,28 @@ class UpdateCompanyRequest extends FormRequest
             'employee_count' => ['required', 'integer', 'min:0'],
             'allowed_email_domains' => ['required', 'string', 'max:255', new EmailDomainListRule()],
             'source' => ['nullable', 'string', 'max:255'],
-            'is_public' => ['boolean'],
-            'trophy' => ['boolean'],
             'logo' => ['nullable', File::types(['png', 'jpg', 'jpeg', 'webp', 'svg'])->max(5 * 1024)],
             'primaryColor' => ['required', 'string', 'regex:/^#[0-9a-fA-F]{6}$/'],
             'secondaryColor' => ['required', 'string', 'regex:/^#[0-9a-fA-F]{6}$/'],
             'thirdColor' => ['required', 'string', 'regex:/^#[0-9a-fA-F]{6}$/'],
-            'collection_id' => ['nullable', 'integer'],
-            'collection_start' => ['required', 'date'],
-            'collection_end' => ['required', 'date', 'after:collection_start'],
-            'collection_linkOneDoc' => ['required', 'string', 'max:500'],
         ];
+    }
+
+    public function isCollectionMode(): bool
+    {
+        return $this->query('newCollection') === '1'
+            || $this->query->has('collection')
+            || $this->filled('collection_id');
     }
 
     public function withValidator(Validator $validator): void
     {
         $validator->after(function (Validator $validator) {
             if ($validator->errors()->isNotEmpty()) {
+                return;
+            }
+
+            if (! $this->isCollectionMode()) {
                 return;
             }
 

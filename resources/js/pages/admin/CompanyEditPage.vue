@@ -40,6 +40,8 @@ const { navigate, flashMessage } = useAdminRouter();
 const companyId = window.location.pathname.split('/')[3];
 const searchParams = new URLSearchParams(window.location.search);
 const shouldCreateNewCollection = searchParams.get('newCollection') === '1';
+const requestedCollectionId = Number(searchParams.get('collection')) || null;
+const isCollectionMode = shouldCreateNewCollection || requestedCollectionId !== null;
 
 function slugify(input: string): string {
     return input
@@ -80,7 +82,7 @@ const loading = ref(true);
 const loadError = ref<string | null>(null);
 const slugTouched = ref(false);
 const selectedCollectionId = ref<number | null>(
-    Number(searchParams.get('collection')) || null,
+    requestedCollectionId,
 );
 const anonymousParticipation = computed({
     get: () => !form.is_public,
@@ -140,21 +142,27 @@ function buildFormData(payload: CompanyFormPayload): FormData {
     formData.append('employee_count', String(payload.employee_count));
     formData.append('allowed_email_domains', payload.allowed_email_domains);
     formData.append('source', payload.source);
-    formData.append('is_public', payload.is_public ? '1' : '0');
-    formData.append('trophy', payload.trophy ? '1' : '0');
     formData.append('primaryColor', payload.primaryColor);
     formData.append('secondaryColor', payload.secondaryColor);
     formData.append('thirdColor', payload.thirdColor);
+
+    if (logoFile.value) {
+        formData.append('logo', logoFile.value);
+    }
+
+    return formData;
+}
+
+function buildCollectionFormData(payload: CompanyFormPayload): FormData {
+    const formData = new FormData();
+
+    formData.append('_method', 'PATCH');
     formData.append('collection_start', payload.collection_start);
     formData.append('collection_end', payload.collection_end);
     formData.append('collection_linkOneDoc', payload.collection_linkOneDoc);
 
     if (selectedCollectionId.value !== null) {
         formData.append('collection_id', String(selectedCollectionId.value));
-    }
-
-    if (logoFile.value) {
-        formData.append('logo', logoFile.value);
     }
 
     return formData;
@@ -186,8 +194,8 @@ async function fetchCompany() {
             collectionRanges.value = collections;
             const collection = shouldCreateNewCollection
                 ? null
-                : collections.find((item) => item.id === selectedCollectionId.value) ?? collections[0] ?? null;
-            selectedCollectionId.value = shouldCreateNewCollection ? null : collection?.id ?? null;
+                : collections.find((item) => item.id === selectedCollectionId.value) ?? null;
+            selectedCollectionId.value = shouldCreateNewCollection ? null : collection?.id ?? requestedCollectionId;
             form.collection_start = toDatetimeLocal(collection?.start);
             form.collection_end = toDatetimeLocal(collection?.end);
             form.collection_linkOneDoc = collection?.linkOneDoc ?? '';
@@ -219,18 +227,22 @@ async function submit() {
     const payload = { ...form } as CompanyFormPayload;
 
     try {
-        const res = await fetch(`/admin/companies/${companyId}`, {
+        const res = await fetch(`/admin/companies/${companyId}${window.location.search}`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
                 'X-CSRF-TOKEN': csrfToken,
                 'X-Requested-With': 'XMLHttpRequest',
             },
-            body: buildFormData(payload),
+            body: isCollectionMode ? buildCollectionFormData(payload) : buildFormData(payload),
         });
 
         if (res.ok) {
-            flashMessage.value = shouldCreateNewCollection ? 'Nouvelle campagne créée.' : 'Campagne mise à jour.';
+            if (isCollectionMode) {
+                flashMessage.value = shouldCreateNewCollection ? 'Nouvelle campagne créée.' : 'Collecte mise à jour.';
+            } else {
+                flashMessage.value = 'Entreprise mise à jour.';
+            }
             navigate('/admin/campagnes');
             return;
         }
@@ -265,7 +277,7 @@ onMounted(fetchCompany);
                     <span class="cooper-baseline">Retour</span>
                 </a>
                 <h1 class="cooper-text-baseline text-2xl font-semibold">
-                    {{ shouldCreateNewCollection ? 'Nouvelle campagne' : 'Modifier la campagne' }}
+                    {{ isCollectionMode ? (shouldCreateNewCollection ? 'Nouvelle campagne' : 'Modifier la collecte') : 'Modifier l’entreprise' }}
                 </h1>
             </div>
 
@@ -273,6 +285,7 @@ onMounted(fetchCompany);
             <div v-else-if="loadError" class="alert alert-error"><span class="cooper-baseline">{{ loadError }}</span></div>
 
             <form v-else @submit.prevent="submit" class="space-y-6 font-cooper">
+                <template v-if="!isCollectionMode">
                 <section class="grid gap-x-4 gap-y-6 md:grid-cols-2">
                     <label class="flex w-full flex-col gap-2">
                         <span class="cooper-baseline label-text">Nom <span style="color: #9B2F5C;">*</span></span>
@@ -459,6 +472,31 @@ onMounted(fetchCompany);
                 </section>
 
                 <section class="space-y-4 border-t border-base-300 pt-6">
+                    <label class="flex items-center gap-3">
+                        <input
+                            v-model="anonymousParticipation"
+                            type="checkbox"
+                            class="checkbox checked:[--input-color:var(--color-primary)] checked:[color:var(--color-primary-content)]"
+                        />
+                        <span class="cooper-baseline text-sm font-medium text-base-content/75">Participation anonyme</span>
+                    </label>
+
+                    <label
+                        class="flex items-center gap-3"
+                        :class="{ 'cursor-not-allowed opacity-45': !form.is_public }"
+                    >
+                        <input
+                            v-model="form.trophy"
+                            type="checkbox"
+                            class="checkbox checked:[--input-color:var(--color-primary)] checked:[color:var(--color-primary-content)]"
+                            :disabled="!form.is_public"
+                        />
+                        <span class="cooper-baseline text-sm font-medium text-base-content/75">Participation au prix du cœur</span>
+                    </label>
+                </section>
+                </template>
+
+                <section v-if="isCollectionMode" class="space-y-4">
                     <div>
                         <h2 class="cooper-text-baseline text-lg font-semibold">Collecte</h2>
                         <p class="cooper-text-baseline mt-1 text-sm text-base-content/60">Dates de la collecte et lien de prise de rendez-vous OneDoc.</p>
@@ -492,28 +530,6 @@ onMounted(fetchCompany);
                             />
                             <p v-if="firstError('collection_end')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('collection_end') }}</p>
                         </div>
-
-                        <label class="flex items-center gap-3 md:col-span-2">
-                            <input
-                                v-model="anonymousParticipation"
-                                type="checkbox"
-                                class="checkbox checked:[--input-color:var(--color-primary)] checked:[color:var(--color-primary-content)]"
-                            />
-                            <span class="cooper-baseline text-sm font-medium text-base-content/75">Participation anonyme</span>
-                        </label>
-
-                        <label
-                            class="flex items-center gap-3 md:col-span-2"
-                            :class="{ 'cursor-not-allowed opacity-45': !form.is_public }"
-                        >
-                            <input
-                                v-model="form.trophy"
-                                type="checkbox"
-                                class="checkbox checked:[--input-color:var(--color-primary)] checked:[color:var(--color-primary-content)]"
-                                :disabled="!form.is_public"
-                            />
-                            <span class="cooper-baseline text-sm font-medium text-base-content/75">Participation au prix du cœur</span>
-                        </label>
 
                         <label class="flex w-full flex-col gap-2 md:col-span-2">
                             <span class="cooper-baseline label-text">Lien OneDoc <span style="color: #9B2F5C;">*</span></span>

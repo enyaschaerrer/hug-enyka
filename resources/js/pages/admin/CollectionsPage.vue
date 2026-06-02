@@ -112,6 +112,10 @@ function companyActionLabel(company: CompanyRow): string {
     return 'Nouvelle campagne';
 }
 
+function companyEditPath(company: CompanyRow): string {
+    return `/admin/companies/${company.id}/edit`;
+}
+
 function companyCreatedTimestamp(company: CompanyRow): number {
     return company.created_at ? new Date(company.created_at).getTime() : 0;
 }
@@ -320,10 +324,17 @@ onMounted(fetchCompanies);
                     <div class="flex shrink-0 gap-2">
                         <a
                             :href="companyActionPath(company)"
-                            class="btn btn-ghost btn-sm font-cooper"
+                            class="btn btn-ghost btn-sm border-transparent bg-transparent font-cooper text-base-content shadow-none transition-colors hover:border-transparent hover:bg-emerald-700 hover:text-white"
                             @click.prevent="navigate(companyActionPath(company))"
                         >
                             <span class="cooper-baseline">{{ companyActionLabel(company) }}</span>
+                        </a>
+                        <a
+                            :href="companyEditPath(company)"
+                            class="btn btn-ghost btn-sm border-transparent bg-transparent font-cooper text-base-content shadow-none transition-colors hover:border-transparent hover:bg-amber-600 hover:text-white"
+                            @click.prevent="navigate(companyEditPath(company))"
+                        >
+                            <span class="cooper-baseline">Modifier l'entreprise</span>
                         </a>
                         <button
                             type="button"
@@ -391,10 +402,10 @@ onMounted(fetchCompanies);
                                     </a>
                                     <a
                                         :href="`/admin/companies/${company.id}/edit?collection=${col.id}`"
-                                        class="btn btn-ghost btn-sm font-cooper text-emerald-900 hover:bg-white"
+                                        class="btn btn-ghost btn-sm border-transparent bg-transparent font-cooper text-base-content shadow-none transition-colors hover:border-transparent hover:bg-amber-600 hover:text-white"
                                         @click.prevent="navigate(`/admin/companies/${company.id}/edit?collection=${col.id}`)"
                                     >
-                                        <span class="cooper-baseline">Modifier</span>
+                                        <span class="cooper-baseline">Modifier la collecte</span>
                                     </a>
                                 </div>
                             </div>
@@ -429,10 +440,10 @@ onMounted(fetchCompanies);
                                         </span>
                                         <a
                                             :href="`/admin/companies/${company.id}/edit?collection=${col.id}`"
-                                            class="btn btn-ghost btn-sm font-cooper text-amber-900 hover:bg-white"
+                                            class="btn btn-ghost btn-sm border-transparent bg-transparent font-cooper text-base-content shadow-none transition-colors hover:border-transparent hover:bg-amber-600 hover:text-white"
                                             @click.prevent="navigate(`/admin/companies/${company.id}/edit?collection=${col.id}`)"
                                         >
-                                            <span class="cooper-baseline">Modifier</span>
+                                            <span class="cooper-baseline">Modifier la collecte</span>
                                         </a>
                                     </div>
                                 </div>
