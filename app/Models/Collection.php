@@ -42,6 +42,16 @@ class Collection extends Model
     {
         $now ??= now();
 
-        return $this->end !== null && $this->end->greaterThanOrEqualTo($now);
+        return $this->start !== null
+            && $this->end !== null
+            && $this->start->lessThanOrEqualTo($now)
+            && $this->end->greaterThanOrEqualTo($now);
+    }
+
+    public function isUpcoming(?CarbonInterface $now = null): bool
+    {
+        $now ??= now();
+
+        return $this->start !== null && $this->start->greaterThan($now);
     }
 }

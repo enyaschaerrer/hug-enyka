@@ -170,6 +170,7 @@ class CompanyController extends Controller
             'linkOneDoc' => $collection->linkOneDoc,
             'url' => '/collecte/' . $company->slug . '/' . $collection->access_token,
             'is_active' => $collection->isActive(),
+            'is_upcoming' => $collection->isUpcoming(),
         ];
     }
 
