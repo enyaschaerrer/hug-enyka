@@ -91,6 +91,7 @@ const anonymousParticipation = computed({
         }
     },
 });
+const collectionRanges = ref<CollectionPayload[]>([]);
 
 watch(() => form.name, (next) => {
     if (!slugTouched.value) {
@@ -182,6 +183,7 @@ async function fetchCompany() {
             form.secondaryColor = data.secondaryColor ?? '#fecaca';
             form.thirdColor = data.thirdColor ?? '#1f2937';
             const collections = (data.collections ?? []) as CollectionPayload[];
+            collectionRanges.value = collections;
             const collection = shouldCreateNewCollection
                 ? null
                 : collections.find((item) => item.id === selectedCollectionId.value) ?? collections[0] ?? null;
@@ -201,6 +203,14 @@ async function fetchCompany() {
         loading.value = false;
     }
 }
+
+const blockedRanges = computed(() => collectionRanges.value
+    .filter((collection) => collection.id !== selectedCollectionId.value)
+    .filter((collection) => collection.start && collection.end)
+    .map((collection) => ({
+        start: collection.start as string,
+        end: collection.end as string,
+    })));
 
 async function submit() {
     submitting.value = true;
@@ -461,6 +471,8 @@ onMounted(fetchCompany);
                                 v-model="form.collection_start"
                                 label="Choisir une date de début"
                                 mode="start"
+                                :paired-date-time="form.collection_end || null"
+                                :blocked-ranges="blockedRanges"
                                 default-time="09:00"
                             />
                             <p v-if="firstError('collection_start')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('collection_start') }}</p>
@@ -473,7 +485,9 @@ onMounted(fetchCompany);
                                 label="Choisir une date de fin"
                                 mode="end"
                                 :min-date-time="form.collection_start || null"
+                                :paired-date-time="form.collection_start || null"
                                 :reference-date-time="form.collection_start || null"
+                                :blocked-ranges="blockedRanges"
                                 default-time="17:00"
                             />
                             <p v-if="firstError('collection_end')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('collection_end') }}</p>

@@ -90,7 +90,7 @@ class CompanyController extends Controller
     {
         $collection = isset($validated['collection_id'])
             ? $company->collections()->whereKey($validated['collection_id'])->first()
-            : $company->collections()->oldest('id')->first();
+            : null;
 
         if (isset($validated['collection_id']) && ! $collection) {
             abort(404);

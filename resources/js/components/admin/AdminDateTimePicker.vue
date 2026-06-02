@@ -6,11 +6,15 @@ const props = withDefaults(defineProps<{
     label: string;
     mode: 'start' | 'end';
     minDateTime?: string | null;
+    pairedDateTime?: string | null;
     referenceDateTime?: string | null;
+    blockedRanges?: Array<{ start: string; end: string }>;
     defaultTime?: string;
 }>(), {
     minDateTime: null,
+    pairedDateTime: null,
     referenceDateTime: null,
+    blockedRanges: () => [],
     defaultTime: '09:00',
 });
 
@@ -218,11 +222,60 @@ function setHovered(day: Date | null): void {
 }
 
 function isDisabled(day: Date | null): boolean {
-    if (!day || !minDate.value) {
+    if (!day) {
         return false;
     }
 
-    return day.getTime() < minDate.value.getTime();
+    if (minDate.value && day.getTime() < minDate.value.getTime()) {
+        return true;
+    }
+
+    if (isBlockedByExistingRange(day)) {
+        return true;
+    }
+
+    return false;
+}
+
+function dayIntersectsBlockedRange(day: Date, range: { start: string; end: string }): boolean {
+    const rangeStart = dateOnly(range.start);
+    const rangeEnd = dateOnly(range.end);
+
+    if (!rangeStart || !rangeEnd) {
+        return false;
+    }
+
+    return day.getTime() >= rangeStart.getTime() && day.getTime() <= rangeEnd.getTime();
+}
+
+function selectionOverlapsBlockedRange(
+    day: Date,
+    range: { start: string; end: string },
+    anchorDate: Date | null,
+): boolean {
+    const rangeStart = dateOnly(range.start);
+    const rangeEnd = dateOnly(range.end);
+
+    if (!rangeStart || !rangeEnd) {
+        return false;
+    }
+
+    const intervalStart = anchorDate && anchorDate.getTime() < day.getTime() ? anchorDate : day;
+    const intervalEnd = anchorDate && anchorDate.getTime() > day.getTime() ? anchorDate : day;
+
+    return intervalStart.getTime() <= rangeEnd.getTime() && intervalEnd.getTime() >= rangeStart.getTime();
+}
+
+function isBlockedByExistingRange(day: Date): boolean {
+    const anchorDate = dateOnly(props.mode === 'start' ? props.pairedDateTime : props.referenceDateTime);
+
+    return props.blockedRanges.some((range) => {
+        if (!anchorDate) {
+            return dayIntersectsBlockedRange(day, range);
+        }
+
+        return selectionOverlapsBlockedRange(day, range, anchorDate);
+    });
 }
 
 function dayClasses(day: Date | null): string {

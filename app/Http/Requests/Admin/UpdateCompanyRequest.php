@@ -3,8 +3,10 @@
 namespace App\Http\Requests\Admin;
 
 use App\Rules\EmailDomainListRule;
+use Carbon\Carbon;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules\File;
+use Illuminate\Validation\Validator;
 
 class UpdateCompanyRequest extends FormRequest
 {
@@ -41,5 +43,29 @@ class UpdateCompanyRequest extends FormRequest
             'collection_end' => ['required', 'date', 'after:collection_start'],
             'collection_linkOneDoc' => ['required', 'string', 'max:500'],
         ];
+    }
+
+    public function withValidator(Validator $validator): void
+    {
+        $validator->after(function (Validator $validator) {
+            if ($validator->errors()->isNotEmpty()) {
+                return;
+            }
+
+            $company = $this->route('company');
+            $collectionId = $this->input('collection_id');
+            $start = Carbon::parse((string) $this->input('collection_start'));
+            $end = Carbon::parse((string) $this->input('collection_end'));
+
+            $hasOverlap = $company->collections()
+                ->when($collectionId, fn ($query) => $query->whereKeyNot($collectionId))
+                ->where('start', '<=', $end)
+                ->where('end', '>=', $start)
+                ->exists();
+
+            if ($hasOverlap) {
+                $validator->errors()->add('collection_start', 'Cette collecte chevauche une collecte existante.');
+            }
+        });
     }
 }
