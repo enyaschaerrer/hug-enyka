@@ -18,8 +18,8 @@ class CompanyFormController extends Controller
             'email'    => 'required|email|max:255',
             'phone'    => 'nullable|string|max:20',
             'address'  => 'required|string|max:255',
-            'npa'      => ['required', 'string', 'regex:/^\d{4}$/'],
-            'localite' => 'required|string|max:100',
+            'zip_code' => ['required', 'string', 'regex:/^\d{4}$/'],
+            'locality' => 'required|string|max:100',
             'message'  => 'required|string',
             'trophy'   => 'boolean',
         ]);
@@ -29,8 +29,8 @@ class CompanyFormController extends Controller
             'email'    => $validated['email'],
             'phone'    => $validated['phone'] ?? null,
             'address'  => $validated['address'],
-            'npa'      => $validated['npa'],
-            'localite' => $validated['localite'],
+            'zip_code' => $validated['zip_code'],
+            'locality' => $validated['locality'],
             'message'  => $validated['message'],
             'trophy'   => $validated['trophy'] ?? false,
         ]);

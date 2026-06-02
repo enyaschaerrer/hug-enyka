@@ -6,7 +6,7 @@ const form = ref({
     email: '',
     phone: '',
     address: '',
-    npa: '',
+    zipCode: '',
     locality: '',
     referredBy: '',
     message: '',
@@ -35,8 +35,8 @@ async function handleSubmit() {
                 email:    form.value.email,
                 phone:    form.value.phone,
                 address:  form.value.address,
-                npa:      form.value.npa,
-                localite: form.value.locality,
+                zip_code: form.value.zipCode,
+                locality: form.value.locality,
                 message:  form.value.message,
                 trophy:   form.value.participatePrixCoeur,
             }),
@@ -123,7 +123,7 @@ async function handleSubmit() {
                         <div>
                             <label class="mb-1.5 block text-body text-martinique-800">NPA *</label>
                             <input
-                                v-model="form.npa"
+                                v-model="form.zipCode"
                                 type="text"
                                 required
                                 placeholder="1400"
