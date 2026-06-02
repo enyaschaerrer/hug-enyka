@@ -22,6 +22,8 @@ type CompanyFormPayload = {
     slug: string;
     short_description: string;
     address: string;
+    npa: string;
+    localite: string;
     telephone: string;
     employee_count: string | number;
     allowed_email_domains: string;
@@ -51,8 +53,7 @@ function slugify(input: string): string {
         .normalize('NFD')
         .replace(/[̀-ͯ]/g, '')
         .toLowerCase()
-        .replace(/[^a-z0-9]+/g, '-')
-        .replace(/^-+|-+$/g, '')
+        .replace(/[^a-z0-9]/g, '')
         .slice(0, 20);
 }
 
@@ -62,6 +63,8 @@ const form = reactive({
     slug: '',
     short_description: '',
     address: '',
+    npa: '',
+    localite: '',
     telephone: '',
     employee_count: '' as string | number,
     allowed_email_domains: '',
@@ -110,8 +113,12 @@ watch(() => form.is_public, (isPublic) => {
     }
 });
 
-function onSlugInput() {
+function onSlugInput(event: Event) {
     slugTouched.value = true;
+    const input = event.target as HTMLInputElement;
+    const sanitized = slugify(input.value);
+    form.slug = sanitized;
+    input.value = sanitized;
 }
 
 function firstError(field: string): string | null {
@@ -139,6 +146,13 @@ function onLogoChange(event: Event) {
     logoFile.value = input.files?.[0] ?? null;
 }
 
+function onNpaInput(event: Event) {
+    const input = event.target as HTMLInputElement;
+    const sanitized = input.value.replace(/\D/g, '').slice(0, 4);
+    form.npa = sanitized;
+    input.value = sanitized;
+}
+
 function buildFormData(payload: CompanyFormPayload): FormData {
     const formData = new FormData();
 
@@ -148,6 +162,8 @@ function buildFormData(payload: CompanyFormPayload): FormData {
     formData.append('slug', payload.slug);
     formData.append('short_description', payload.short_description);
     formData.append('address', payload.address);
+    formData.append('npa', payload.npa);
+    formData.append('localite', payload.localite);
     formData.append('telephone', payload.telephone);
     formData.append('employee_count', String(payload.employee_count));
     formData.append('allowed_email_domains', payload.allowed_email_domains);
@@ -192,6 +208,8 @@ async function fetchCompany() {
             form.slug = data.slug ?? '';
             form.short_description = data.short_description ?? '';
             form.address = data.address ?? '';
+            form.npa = data.npa ?? '';
+            form.localite = data.localite ?? '';
             form.telephone = data.telephone ?? '';
             form.employee_count = data.employee_count ?? '';
             form.allowed_email_domains = data.allowed_email_domains ?? '';
@@ -211,7 +229,7 @@ async function fetchCompany() {
             form.collection_start = toDatetimeLocal(collection?.start);
             form.collection_end = toDatetimeLocal(collection?.end);
             form.collection_linkOneDoc = collection?.linkOneDoc ?? '';
-            slugTouched.value = true;
+            slugTouched.value = false;
         } else if (res.status === 401) {
             window.location.href = '/admin/login';
         } else {
@@ -297,7 +315,7 @@ onMounted(fetchCompany);
                     <span class="cooper-baseline">Retour</span>
                 </a>
                 <h1 class="cooper-text-baseline text-2xl font-semibold">
-                    {{ isCollectionMode ? (shouldCreateNewCollection ? 'Nouvelle campagne' : `Modifier la collecte : ${form.name}`) : `Modifier l’entreprise : ${form.name}` }}
+                    {{ isCollectionMode ? (shouldCreateNewCollection ? `Nouvelle campagne : ${form.name}` : `Modifier la collecte : ${form.name}`) : `Modifier l’entreprise : ${form.name}` }}
                 </h1>
                 <div
                     v-if="editedCollection"
@@ -365,7 +383,7 @@ onMounted(fetchCompany);
                             type="text"
                             class="cooper-input-baseline input input-bordered w-full"
                             maxlength="20"
-                            pattern="[A-Za-z0-9_-]+"
+                            pattern="[A-Za-z0-9]+"
                             @input="onSlugInput"
                             required
                         />
@@ -388,27 +406,41 @@ onMounted(fetchCompany);
                     <p v-if="firstError('short_description')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('short_description') }}</p>
                 </label>
 
-                <label class="flex w-full flex-col gap-2">
-                    <span class="cooper-baseline label-text">Adresse <span style="color: #9B2F5C;">*</span></span>
-                    <textarea v-model="form.address" class="cooper-textarea-baseline textarea textarea-bordered w-full font-cooper" rows="2" maxlength="500" required></textarea>
-                    <p v-if="firstError('address')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('address') }}</p>
-                </label>
-
                 <section class="grid gap-x-4 gap-y-6 md:grid-cols-3">
+                    <label class="flex w-full flex-col gap-2 md:col-span-2">
+                        <span class="cooper-baseline label-text">Adresse <span style="color: #9B2F5C;">*</span></span>
+                        <input v-model="form.address" type="text" class="cooper-input-baseline input input-bordered w-full" maxlength="500" required />
+                        <p v-if="firstError('address')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('address') }}</p>
+                    </label>
+
+                    <label class="flex w-full flex-col gap-2">
+                        <span class="cooper-baseline label-text">NPA <span style="color: #9B2F5C;">*</span></span>
+                        <input v-model="form.npa" type="text" class="cooper-input-baseline input input-bordered w-full" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" @input="onNpaInput" required />
+                        <p v-if="firstError('npa')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('npa') }}</p>
+                    </label>
+
+                    <label class="flex w-full flex-col gap-2 md:col-span-3">
+                        <span class="cooper-baseline label-text">Localité <span style="color: #9B2F5C;">*</span></span>
+                        <input v-model="form.localite" type="text" class="cooper-input-baseline input input-bordered w-full" maxlength="100" required />
+                        <p v-if="firstError('localite')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('localite') }}</p>
+                    </label>
+                </section>
+
+                <section class="grid gap-x-4 gap-y-6 md:grid-cols-2">
                     <label class="flex w-full flex-col gap-2">
                         <span class="cooper-baseline label-text">Nombre d'employés <span style="color: #9B2F5C;">*</span></span>
                         <input v-model="form.employee_count" type="number" min="0" class="cooper-input-baseline input input-bordered w-full" required />
                         <p v-if="firstError('employee_count')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('employee_count') }}</p>
                     </label>
 
-                    <label class="flex w-full flex-col gap-2 md:col-span-2">
+                    <label class="flex w-full flex-col gap-2">
                         <span class="cooper-baseline label-text">Domaines email autorisés (séparés par ",") <span style="color: #9B2F5C;">*</span></span>
                         <input v-model="form.allowed_email_domains" type="text" class="cooper-input-baseline input input-bordered w-full" placeholder="rolex.com,rolex.ch" required />
                         <p v-if="firstError('allowed_email_domains')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('allowed_email_domains') }}</p>
                     </label>
                 </section>
 
-                <section class="grid gap-x-4 gap-y-6 md:grid-cols-2">
+                <section class="space-y-6">
                     <div class="flex w-full flex-col gap-2">
                         <span class="cooper-baseline label-text">Logo de l'entreprise <span style="color: #9B2F5C;">*</span></span>
                         <input
@@ -551,7 +583,7 @@ onMounted(fetchCompany);
                             class="checkbox checked:[--input-color:var(--color-primary)] checked:[color:var(--color-primary-content)]"
                             :disabled="!form.is_public"
                         />
-                        <span class="cooper-baseline text-sm font-medium text-base-content/75">Participation au prix du cœur</span>
+                        <span class="cooper-baseline text-sm font-medium text-base-content/75">Participation au Prix du Cœur</span>
                     </label>
                 </section>
                 </template>
@@ -589,7 +621,7 @@ onMounted(fetchCompany);
 
                         <label class="flex w-full flex-col gap-2 md:col-span-2">
                             <span class="cooper-baseline label-text">Lien OneDoc <span style="color: #9B2F5C;">*</span></span>
-                            <input v-model="form.collection_linkOneDoc" type="text" class="cooper-input-baseline input input-bordered w-full" placeholder="https://..." required />
+                            <input v-model="form.collection_linkOneDoc" type="text" class="cooper-input-baseline input input-bordered w-full" placeholder="https://www.onedoc.ch/..." pattern="https://www\.onedoc\.ch/.*" required />
                             <p v-if="firstError('collection_linkOneDoc')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('collection_linkOneDoc') }}</p>
                         </label>
                     </div>
