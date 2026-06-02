@@ -43,7 +43,19 @@ function getCountry(id?: string | number): Country | null {
     return countryById.get(Number(id)) ?? null;
 }
 
-// Heatmap : riskScore 0 = blanc, 100 = rouge saturé
+// Score déterministe par durée d'attente : même durée = même couleur
+const WAIT_TIME_SCORES: Record<string, number> = {
+    '28 jours': 20,
+    '4 mois': 60,
+    '6 mois': 100,
+};
+
+function waitTimeScore(waitTime: string | null): number {
+    if (waitTime === null) return 0;
+    return WAIT_TIME_SCORES[waitTime] ?? 0;
+}
+
+// Heatmap : score 0 = blanc, 100 = rouge saturé
 function riskColor(score: number, darken = 0): string {
     const base = 255 - darken;
     const v = Math.round(base * (1 - score / 100));
@@ -54,8 +66,7 @@ function getFill(f: { id?: string | number }): string {
     const country = getCountry(f.id);
     if (!country) return '#e5e7eb';
 
-    // Un pays safe (waitTime null) est toujours blanc sur la heatmap.
-    const score = country.waitTime === null ? 0 : country.riskScore;
+    const score = waitTimeScore(country.waitTime);
 
     const isSelected = selected.value?.numericId === country.numericId;
     const isHovered = !isSelected && hoveredId.value === country.numericId;
@@ -279,12 +290,27 @@ function onBlur() {
                     ></span>
                     <span class="cooper-baseline font-semibold text-sm text-gray-800">{{ selected.name }}</span>
                 </div>
-                <div v-if="selected.waitTime" class="text-sm font-medium text-red-500">
-                    <span class="cooper-baseline">Attendre {{ selected.waitTime }}</span>
-                </div>
-                <div v-else class="text-sm font-medium text-emerald-500">
-                    <span class="cooper-baseline">Aucun délai</span>
-                </div>
+                <template v-if="selected.waitTimeDetailed">
+                    <div class="mt-1 space-y-1 text-xs">
+                        <div class="flex justify-between gap-2">
+                            <span v-if="selected.waitTimeDetailed.labelOutdoor" class="cooper-text-baseline text-gray-500 leading-snug">{{ selected.waitTimeDetailed.labelOutdoor }}</span>
+                            <span v-else class="cooper-text-baseline text-gray-500 leading-snug">Plein air / précaire /<br>durée &gt; 6 mois</span>
+                            <span class="cooper-baseline font-semibold text-red-500 shrink-0">{{ selected.waitTimeDetailed.outdoor }}</span>
+                        </div>
+                        <div class="flex justify-between gap-2">
+                            <span class="cooper-text-baseline text-gray-500 leading-snug">{{ selected.waitTimeDetailed.labelOther ?? 'Autre type de séjour' }}</span>
+                            <span class="cooper-baseline font-semibold text-red-400 shrink-0">{{ selected.waitTimeDetailed.other }}</span>
+                        </div>
+                    </div>
+                </template>
+                <template v-else>
+                    <div v-if="selected.waitTime" class="text-sm font-medium text-red-500">
+                        <span class="cooper-baseline">Attendre {{ selected.waitTime }}</span>
+                    </div>
+                    <div v-else class="text-sm font-medium text-emerald-500">
+                        <span class="cooper-baseline">Aucun délai</span>
+                    </div>
+                </template>
                 <p v-if="selected.description" class="cooper-text-baseline mt-1.5 text-xs font-normal text-gray-400 leading-snug">
                     {{ selected.description }}
                 </p>
@@ -298,7 +324,7 @@ function onBlur() {
                 class="w-16 h-2 rounded"
                 style="background: linear-gradient(to right, rgb(255,255,255), rgb(255,0,0)); border: 1px solid #e5e7eb;"
             ></div>
-            <span class="cooper-baseline text-gray-500">12 mois</span>
+            <span class="cooper-baseline text-gray-500">6 mois</span>
         </div>
     </section>
 </template>

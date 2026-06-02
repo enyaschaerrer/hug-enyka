@@ -190,7 +190,7 @@ onUnmounted(() => {
                             : 'text-base-content/50 hover:text-base-content'"
                         @click="activeTab = 'treated'"
                     >
-                        <span class="cooper-baseline">Traitées</span>
+                        <span class="cooper-baseline">Historique</span>
                         <span class="ml-1.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-stone-100 text-xs text-stone-500">
                             <span class="cooper-baseline">{{ registrations.filter(r => r.treated).length }}</span>
                         </span>
@@ -199,7 +199,7 @@ onUnmounted(() => {
 
                 <!-- Message vide -->
                 <div v-if="filteredRegistrations.length === 0" class="cooper-text-baseline text-sm text-base-content/50">
-                    Aucune inscription {{ activeTab === 'pending' ? 'en attente' : 'traitée' }} pour le moment.
+                    Aucune inscription {{ activeTab === 'pending' ? 'en attente' : 'dans l\'historique' }} pour le moment.
                 </div>
 
                 <div v-else class="border border-base-300 bg-white">
@@ -217,19 +217,21 @@ onUnmounted(() => {
                         v-for="reg in filteredRegistrations"
                         :key="reg.id"
                         class="flex items-center border-b border-base-200 px-5 py-3 hover:bg-rose-50/40"
-                        :class="[reg.treated ? 'opacity-50' : 'cursor-pointer']"
+                        :class="[!reg.treated ? 'cursor-pointer' : '']"
                         @click="!reg.treated && openDetail(reg.id)"
                     >
-                        <div class="w-1/5 truncate font-medium"><span class="cooper-baseline">{{ reg.name }}</span></div>
-                        <div class="w-1/5 truncate text-base-content/70"><span class="cooper-baseline">{{ reg.email }}</span></div>
-                        <div class="w-1/5 truncate text-sm text-base-content/50"><span class="cooper-baseline">{{ formatDate(reg.created_at) }}</span></div>
-                        <div class="w-1/5 text-center">
-                            <span
-                                class="rounded-full px-2 py-1 text-xs font-medium"
-                                :class="reg.trophy ? 'bg-emerald-50 text-emerald-700' : 'bg-stone-100 text-stone-400'"
-                            >
-                                <span class="cooper-baseline">{{ reg.trophy ? 'Oui' : 'Non' }}</span>
-                            </span>
+                        <div class="flex w-4/5 items-center" :class="reg.treated ? 'opacity-50' : ''">
+                            <div class="w-1/4 truncate font-medium"><span class="cooper-baseline">{{ reg.name }}</span></div>
+                            <div class="w-1/4 truncate text-base-content/70"><span class="cooper-baseline">{{ reg.email }}</span></div>
+                            <div class="w-1/4 truncate text-sm text-base-content/50"><span class="cooper-baseline">{{ formatDate(reg.created_at) }}</span></div>
+                            <div class="w-1/4 text-center">
+                                <span
+                                    class="rounded-full px-2 py-1 text-xs font-medium"
+                                    :class="reg.trophy ? 'bg-emerald-50 text-emerald-700' : 'bg-stone-100 text-stone-400'"
+                                >
+                                    <span class="cooper-baseline">{{ reg.trophy ? 'Oui' : 'Non' }}</span>
+                                </span>
+                            </div>
                         </div>
                         <div class="w-1/5 text-center" @click.stop>
                             <div class="inline-flex gap-2">
@@ -247,7 +249,7 @@ onUnmounted(() => {
                                         : 'border-emerald-200 bg-emerald-50 text-emerald-700 hover:bg-emerald-100'"
                                     @click="toggleTreated(reg)"
                                 >
-                                    <span class="cooper-baseline">{{ reg.treated ? 'Réouvrir' : 'Traité' }}</span>
+                                    <span class="cooper-baseline">{{ reg.treated ? 'Réouvrir' : 'Archiver' }}</span>
                                 </button>
                                 <button
                                     v-if="reg.treated"
