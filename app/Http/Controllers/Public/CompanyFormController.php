@@ -14,21 +14,25 @@ class CompanyFormController extends Controller
     public function store(Request $request): JsonResponse
     {
         $validated = $request->validate([
-            'name'    => 'required|string|max:255',
-            'email'   => 'required|email|max:255',
-            'phone'   => 'nullable|string|max:20',
-            'address' => 'nullable|string|max:255',
-            'message' => 'nullable|string',
-            'trophy'  => 'boolean',
+            'name'     => 'required|string|max:255',
+            'email'    => 'required|email|max:255',
+            'phone'    => 'nullable|string|max:20',
+            'address'  => 'required|string|max:255',
+            'npa'      => ['required', 'string', 'regex:/^\d{4}$/'],
+            'localite' => 'required|string|max:100',
+            'message'  => 'required|string',
+            'trophy'   => 'boolean',
         ]);
 
         $form = Form::create([
-            'name'    => $validated['name'],
-            'email'   => $validated['email'],
-            'phone'   => $validated['phone'] ?? null,
-            'address' => $validated['address'] ?? null,
-            'message' => $validated['message'] ?? null,
-            'trophy'  => $validated['trophy'] ?? false,
+            'name'     => $validated['name'],
+            'email'    => $validated['email'],
+            'phone'    => $validated['phone'] ?? null,
+            'address'  => $validated['address'],
+            'npa'      => $validated['npa'],
+            'localite' => $validated['localite'],
+            'message'  => $validated['message'],
+            'trophy'   => $validated['trophy'] ?? false,
         ]);
 
         Mail::send(new CompanyRegistrationMail($form));
@@ -42,14 +46,12 @@ class CompanyFormController extends Controller
             'labelled' => 'required|boolean',
             'name'     => 'required|string|max:255',
             'email'    => 'required|email|max:255',
-            'message'  => 'nullable|string',
         ]);
 
         $form = Form::create([
-            'name'    => $validated['name'],
-            'email'   => $validated['email'],
-            'message' => $validated['message'] ?? null,
-            'trophy'  => true,
+            'name'   => $validated['name'],
+            'email'  => $validated['email'],
+            'trophy' => true,
         ]);
 
         Mail::send(new CompanyRegistrationMail($form));

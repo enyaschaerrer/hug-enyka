@@ -82,7 +82,7 @@ async function handleSubmit() {
             <template v-if="step === 1">
                 <div class="mt-10 rounded-2xl bg-martinique-100 p-8">
                     <p class="text-center text-body text-martinique-800">
-                        Êtes-vous une entreprise déjà labellisée "Cœur d'Honneur" ?
+                        Êtes-vous une entreprise déjà labellisée "Cœur d'Honneur" ? *
                     </p>
 
                     <div class="mt-6 flex justify-center gap-4">
@@ -129,22 +129,24 @@ async function handleSubmit() {
             <div v-if="step === 2">
                 <div class="mt-10 space-y-6 rounded-2xl bg-martinique-100 p-8">
                     <div>
-                        <label class="mb-1.5 block text-body text-martinique-800">Nom de l'entreprise</label>
+                        <label class="mb-1.5 block text-body text-martinique-800">Nom de l'entreprise *</label>
                         <input
                             v-model="form.name"
                             type="text"
                             required
+                            maxlength="255"
                             placeholder="Entreprise SA"
                             class="w-full rounded-xl border-2 border-martinique-300 bg-white px-4 py-3 text-body text-martinique-950 placeholder-martinique-400 outline-none transition focus:border-martinique-500 focus:ring-2 focus:ring-martinique-200"
                         />
                     </div>
 
                     <div>
-                        <label class="mb-1.5 block text-body text-martinique-800">Adresse e-mail</label>
+                        <label class="mb-1.5 block text-body text-martinique-800">Adresse e-mail *</label>
                         <input
                             v-model="form.email"
                             type="email"
                             required
+                            maxlength="255"
                             placeholder="contact@entreprise.ch"
                             class="w-full rounded-xl border-2 border-martinique-300 bg-white px-4 py-3 text-body text-martinique-950 placeholder-martinique-400 outline-none transition focus:border-martinique-500 focus:ring-2 focus:ring-martinique-200"
                         />

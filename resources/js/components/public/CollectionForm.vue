@@ -5,6 +5,7 @@ const form = ref({
     companyName: '',
     email: '',
     phone: '',
+    address: '',
     npa: '',
     locality: '',
     referredBy: '',
@@ -30,12 +31,14 @@ async function handleSubmit() {
                 'X-Requested-With': 'XMLHttpRequest',
             },
             body: JSON.stringify({
-                name:    form.value.companyName,
-                email:   form.value.email,
-                phone:   form.value.phone,
-                address: `${form.value.npa} ${form.value.locality}`.trim(),
-                message: form.value.message,
-                trophy:  form.value.participatePrixCoeur,
+                name:     form.value.companyName,
+                email:    form.value.email,
+                phone:    form.value.phone,
+                address:  form.value.address,
+                npa:      form.value.npa,
+                localite: form.value.locality,
+                message:  form.value.message,
+                trophy:   form.value.participatePrixCoeur,
             }),
         });
 
@@ -103,6 +106,18 @@ async function handleSubmit() {
                         />
                     </div>
 
+                    <!-- Adresse -->
+                    <div>
+                        <label class="mb-1.5 block text-body text-martinique-800">Adresse *</label>
+                        <input
+                            v-model="form.address"
+                            type="text"
+                            required
+                            placeholder="Rue de la République 12"
+                            class="w-full rounded-xl border-2 border-martinique-300 bg-white px-4 py-3 text-body text-martinique-950 placeholder-martinique-400 outline-none transition focus:border-martinique-500 focus:ring-2 focus:ring-martinique-200"
+                        />
+                    </div>
+
                     <!-- NPA / Localité -->
                     <div class="grid grid-cols-[120px_1fr] gap-4">
                         <div>
@@ -110,8 +125,12 @@ async function handleSubmit() {
                             <input
                                 v-model="form.npa"
                                 type="text"
+                                required
                                 placeholder="1400"
                                 maxlength="4"
+                                pattern="\d{4}"
+                                inputmode="numeric"
+                                title="4 chiffres"
                                 class="w-full rounded-xl border-2 border-martinique-300 bg-white px-4 py-3 text-body text-martinique-950 placeholder-martinique-400 outline-none transition focus:border-martinique-500 focus:ring-2 focus:ring-martinique-200"
                             />
                         </div>
@@ -120,6 +139,7 @@ async function handleSubmit() {
                             <input
                                 v-model="form.locality"
                                 type="text"
+                                required
                                 placeholder="Yverdon-les-Bains"
                                 class="w-full rounded-xl border-2 border-martinique-300 bg-white px-4 py-3 text-body text-martinique-950 placeholder-martinique-400 outline-none transition focus:border-martinique-500 focus:ring-2 focus:ring-martinique-200"
                             />
@@ -134,12 +154,13 @@ async function handleSubmit() {
                         <textarea
                             v-model="form.message"
                             rows="4"
+                            required
                             placeholder="Décrivez votre projet de collecte, vos besoins..."
                             class="w-full rounded-xl border-2 border-martinique-300 bg-white px-4 py-3 text-body text-martinique-950 placeholder-martinique-400 outline-none transition focus:border-martinique-500 focus:ring-2 focus:ring-martinique-200"
                         ></textarea>
                     </div>
 
-                    <!-- Prix du Cœur -->
+                    <!-- Prix du Coeur -->
                     <label class="flex cursor-pointer items-start gap-4 rounded-2xl border-2 border-martinique-300 bg-white p-5 transition hover:border-martinique-400 hover:bg-martinique-50">
                         <div class="relative mt-0.5 flex-shrink-0">
                             <input
