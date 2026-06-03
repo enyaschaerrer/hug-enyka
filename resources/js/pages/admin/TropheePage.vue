@@ -332,43 +332,45 @@ onMounted(fetchOverview);
 
                 <div
                     v-else-if="currentTabData.mode === 'single'"
-                    class="mb-5 rounded-box border border-amber-200 bg-white px-5 py-5"
+                    class="mb-5 rounded-box border px-5 py-4"
+                    :class="rankCardClass(1)"
                 >
-                    <div class="flex items-center justify-between gap-4">
-                        <div class="flex items-center gap-4">
-                            <div class="flex h-16 w-16 items-center justify-center overflow-hidden rounded-full border border-amber-200 bg-amber-50 p-3">
-                                <img
-                                    v-if="currentTabData.current_winners[0]?.logo"
-                                    :src="currentTabData.current_winners[0].logo || undefined"
-                                    :alt="currentTabData.current_winners[0].name"
-                                    class="max-h-full max-w-full object-contain"
-                                />
-                                <span
-                                    v-else
-                                    class="cooper-baseline text-lg font-semibold"
-                                    :style="{
-                                        color: readableTextColor(currentTabData.current_winners[0].primaryColor || '#FEF3C7'),
-                                        backgroundColor: currentTabData.current_winners[0].primaryColor || '#FEF3C7',
-                                    }"
-                                >
-                                    {{ companyBadgeLabel(currentTabData.current_winners[0].name) }}
-                                </span>
+                    <div class="flex items-center justify-between gap-3">
+                        <div class="flex items-center gap-3">
+                            <img
+                                v-if="currentTabData.current_winners[0]?.logo"
+                                :src="currentTabData.current_winners[0].logo || undefined"
+                                :alt="currentTabData.current_winners[0].name"
+                                class="h-10 w-auto max-w-[5rem] object-contain"
+                            />
+                            <div
+                                v-else
+                                class="flex h-10 w-10 items-center justify-center rounded-full text-sm font-semibold"
+                                :style="{
+                                    backgroundColor: currentTabData.current_winners[0].primaryColor || '#FEF3C7',
+                                    color: readableTextColor(currentTabData.current_winners[0].primaryColor || '#FEF3C7'),
+                                }"
+                            >
+                                <span class="cooper-baseline">{{ companyBadgeLabel(currentTabData.current_winners[0].name) }}</span>
                             </div>
+                            <div class="w-px -my-4 mx-3 self-stretch" :style="{ backgroundColor: rankDividerColor(1) }"></div>
                             <div>
-                                <p class="cooper-text-baseline text-xs font-semibold uppercase tracking-wider text-amber-800/65">Lauréat</p>
-                                <p class="cooper-text-baseline text-lg font-semibold text-base-content">{{ currentTabData.current_winners[0].name }}</p>
-                                <p class="cooper-text-baseline text-sm text-base-content/55">
-                                    {{ formatFullAddress(currentTabData.current_winners[0].address, currentTabData.current_winners[0].npa, currentTabData.current_winners[0].localite) }}
-                                </p>
+                                <p class="cooper-text-baseline text-xs font-semibold uppercase tracking-wider" :class="rankAccentClass(1)">Coup de cœur du jury</p>
+                                <p class="cooper-text-baseline font-semibold text-base-content -mb-[5px]">{{ currentTabData.current_winners[0].name }}</p>
                             </div>
                         </div>
                         <button
                             type="button"
-                            class="cursor-pointer rounded border border-red-200 bg-red-50 px-3 py-1 text-xs font-medium text-red-600 transition hover:bg-red-100 font-cooper"
+                            class="cursor-pointer rounded p-1 transition-colors duration-200 ease-in-out hover:text-red-500"
+                            :class="rankAccentClass(1)"
                             :disabled="submittingKey === `${currentTabType}-remove-1`"
                             @click="removePrize(1)"
                         >
-                            <span class="cooper-baseline">{{ submittingKey === `${currentTabType}-remove-1` ? '...' : 'Annuler' }}</span>
+                            <span v-if="submittingKey === `${currentTabType}-remove-1`" class="text-xs leading-none">…</span>
+                            <svg v-else xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <line x1="18" y1="6" x2="6" y2="18" />
+                                <line x1="6" y1="6" x2="18" y2="18" />
+                            </svg>
                         </button>
                     </div>
                 </div>
@@ -409,7 +411,7 @@ onMounted(fetchOverview);
                                         <p class="cooper-text-baseline text-xs font-semibold uppercase tracking-wider" :class="rankAccentClass(rank)">
                                             {{ rankLabel(rank, currentTabType) }}
                                         </p>
-                                        <p class="cooper-text-baseline font-semibold text-base-content">{{ winnerForRank(rank)?.name }}</p>
+                                        <p class="cooper-text-baseline font-semibold text-base-content -mb-[5px]">{{ winnerForRank(rank)?.name }}</p>
                                     </div>
                                 </div>
                                 <button
