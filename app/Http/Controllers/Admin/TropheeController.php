@@ -39,6 +39,7 @@ class TropheeController extends Controller
                 'companies.id',
                 'companies.name',
                 'companies.email',
+                'companies.created_at',
                 'companies.primaryColor',
                 'companies.employee_count',
                 'companies.address',
