@@ -12,6 +12,7 @@ class PublicSiteController extends Controller
     public function home(): View
     {
         $companiesData = $this->companiesData();
+        $currentYear = now()->year;
 
         // Podiums par type ('donneur' / 'ambassadeur' / 'prixJury') et par édition.
         $podiumRows = DB::table('prizes as p')
@@ -32,6 +33,19 @@ class PublicSiteController extends Controller
         $buildPodiumsForType = fn (string $type) => $podiumRows
             ->where('type', $type)
             ->groupBy('year')
+            ->filter(function ($rows, $year) use ($type, $currentYear) {
+                $year = (int) $year;
+
+                if ($year !== $currentYear) {
+                    return true;
+                }
+
+                if (in_array($type, ['donneur', 'ambassadeur'], true)) {
+                    return $rows->pluck('rank')->intersect([1, 2, 3])->count() === 3;
+                }
+
+                return true;
+            })
             ->map(function ($rows, $year) use ($trophyCountAt) {
                 $year = (int) $year;
                 $byRank = $rows->keyBy('rank');
