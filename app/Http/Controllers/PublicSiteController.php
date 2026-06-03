@@ -94,6 +94,7 @@ class PublicSiteController extends Controller
         // nb de trophées = count des prizes liés.
         $companies = Company::query()
             ->where('is_public', true)
+            ->whereHas('collections')
             ->withMin('collections', 'start')
             ->orderBy('name')
             ->get();
