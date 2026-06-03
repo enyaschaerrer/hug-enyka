@@ -253,6 +253,12 @@ textarea {
     font-family: var(--font-cooper);
 }
 
+button:not(:disabled),
+[role="button"]:not(:disabled),
+a {
+    cursor: pointer;
+}
+
 input[type='color'] {
     background: transparent;
     overflow: hidden;
