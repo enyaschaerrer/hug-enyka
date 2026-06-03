@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import AdminLayout from '../../components/layout/AdminLayout.vue';
 import { readableTextColor } from '../../utils/contrast';
 
@@ -17,15 +17,13 @@ type DonorCandidate = {
     donor_trophies_won: number;
 };
 
-type TrophyTab = 'donneur' | 'ambassadeur' | 'jury' | 'winners' | 'history';
+type TrophyTab = 'donneur' | 'ambassadeur' | 'jury';
 
 const activeTab = ref<TrophyTab>('donneur');
 const donorCandidates = ref<DonorCandidate[]>([]);
 const loading = ref(true);
 const loadError = ref<string | null>(null);
 const currentEditionYear = new Date().getFullYear();
-
-const donorLabel = computed(() => `Meilleur donneur (${donorCandidates.value.length})`);
 
 function formatFullAddress(address?: string | null, npa?: string | null, localite?: string | null): string {
     return [address, [npa, localite].filter(Boolean).join(' ')].filter(Boolean).join(', ') || '—';
@@ -108,7 +106,7 @@ onMounted(fetchDonorCandidates);
                         : 'text-base-content/50 hover:text-base-content'"
                     @click="activeTab = 'donneur'"
                 >
-                    <span class="cooper-baseline">{{ donorLabel }}</span>
+                    <span class="cooper-baseline">Meilleur donneur</span>
                 </button>
                 <button
                     class="cursor-pointer px-5 py-2.5 text-sm font-medium transition font-cooper"
@@ -127,24 +125,6 @@ onMounted(fetchDonorCandidates);
                     @click="activeTab = 'jury'"
                 >
                     <span class="cooper-baseline">Coup de cœur du jury</span>
-                </button>
-                <button
-                    class="cursor-pointer px-5 py-2.5 text-sm font-medium transition font-cooper"
-                    :class="activeTab === 'winners'
-                        ? 'border-b-2 border-[#5a002a] text-[#5a002a]'
-                        : 'text-base-content/50 hover:text-base-content'"
-                    @click="activeTab = 'winners'"
-                >
-                    <span class="cooper-baseline">Liste des gagnants {{ currentEditionYear }}</span>
-                </button>
-                <button
-                    class="cursor-pointer px-5 py-2.5 text-sm font-medium transition font-cooper"
-                    :class="activeTab === 'history'
-                        ? 'border-b-2 border-[#5a002a] text-[#5a002a]'
-                        : 'text-base-content/50 hover:text-base-content'"
-                    @click="activeTab = 'history'"
-                >
-                    <span class="cooper-baseline">Historique des gagnants</span>
                 </button>
             </div>
 
@@ -200,22 +180,18 @@ onMounted(fetchDonorCandidates);
                                 <span class="cooper-baseline">{{ company.employee_count ?? '—' }}</span>
                             </div>
 
-                            <div class="w-[14%] pr-4">
-                                <span class="inline-flex rounded-full bg-amber-50 px-3 py-1 text-xs font-medium text-amber-700">
-                                    <span class="cooper-baseline">{{ formatCollections(company.collections_count) }}</span>
-                                </span>
+                            <div class="w-[14%] pr-4 text-sm text-base-content/70">
+                                <span class="cooper-baseline">{{ formatCollections(company.collections_count) }}</span>
                             </div>
 
-                            <div class="w-[14%] pr-4">
-                                <span class="inline-flex rounded-full bg-emerald-50 px-3 py-1 text-xs font-medium text-emerald-700">
-                                    <span class="cooper-baseline">{{ formatTrophies(company.donor_trophies_won) }}</span>
-                                </span>
+                            <div class="w-[14%] pr-4 text-sm text-base-content/70">
+                                <span class="cooper-baseline">{{ formatTrophies(company.donor_trophies_won) }}</span>
                             </div>
 
                             <div class="w-[10%]">
                                 <button
                                     type="button"
-                                    class="cursor-pointer rounded border border-stone-200 bg-stone-50 px-3 py-1 text-xs font-medium text-stone-600 transition hover:bg-stone-100 font-cooper"
+                                    class="cursor-pointer rounded border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-medium text-emerald-700 transition hover:bg-emerald-100 font-cooper"
                                 >
                                     <span class="cooper-baseline">Attribuer le prix</span>
                                 </button>
