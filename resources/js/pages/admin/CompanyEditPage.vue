@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, reactive, ref, watch } from 'vue';
+import { computed, nextTick, onMounted, reactive, ref, watch } from 'vue';
 import { useAdminRouter } from '../../composables/useAdminRouter';
 import AdminDateTimePicker from '../../components/admin/AdminDateTimePicker.vue';
 import AdminLayout from '../../components/layout/AdminLayout.vue';
@@ -238,6 +238,7 @@ async function fetchCompany() {
             form.collection_end = toDatetimeLocal(collection?.end);
             form.collection_linkOneDoc = collection?.linkOneDoc ?? '';
             slugTouched.value = false;
+            await scrollToParticipationSettings();
         } else if (res.status === 401) {
             window.location.href = '/admin/login';
         } else {
@@ -265,6 +266,30 @@ const editedCollection = computed(() => {
 
     return collectionRanges.value.find((collection) => collection.id === selectedCollectionId.value) ?? null;
 });
+
+async function scrollToParticipationSettings(): Promise<void> {
+    if (window.location.hash !== '#participation-settings') {
+        return;
+    }
+
+    await nextTick();
+    await new Promise((resolve) => window.requestAnimationFrame(() => resolve(null)));
+
+    const scrollContainer = document.querySelector('main');
+
+    if (scrollContainer instanceof HTMLElement) {
+        scrollContainer.scrollTo({
+            top: scrollContainer.scrollHeight,
+            behavior: 'smooth',
+        });
+        return;
+    }
+
+    window.scrollTo({
+        top: document.documentElement.scrollHeight,
+        behavior: 'smooth',
+    });
+}
 
 async function submit() {
     submitting.value = true;
@@ -309,6 +334,12 @@ async function submit() {
 }
 
 onMounted(fetchCompany);
+
+watch(loading, async (isLoading) => {
+    if (!isLoading) {
+        await scrollToParticipationSettings();
+    }
+});
 </script>
 
 <template>
@@ -577,7 +608,7 @@ onMounted(fetchCompany);
                     </div>
                 </section>
 
-                <section class="space-y-4 pt-3">
+                <section id="participation-settings" class="space-y-4 pt-3">
                     <label class="flex items-center gap-3">
                         <input
                             v-model="anonymousParticipation"

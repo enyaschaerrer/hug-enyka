@@ -6,11 +6,15 @@ const flashMessage = ref<string | null>(null);
 function navigate(path: string): void {
     const nextUrl = new URL(path, window.location.origin);
 
-    if (nextUrl.pathname === currentPath.value && nextUrl.search === window.location.search) {
+    if (
+        nextUrl.pathname === currentPath.value
+        && nextUrl.search === window.location.search
+        && nextUrl.hash === window.location.hash
+    ) {
         return;
     }
 
-    window.history.pushState({}, '', `${nextUrl.pathname}${nextUrl.search}`);
+    window.history.pushState({}, '', `${nextUrl.pathname}${nextUrl.search}${nextUrl.hash}`);
     currentPath.value = nextUrl.pathname;
 }
 
