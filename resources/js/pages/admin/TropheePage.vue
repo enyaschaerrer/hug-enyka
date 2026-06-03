@@ -130,9 +130,9 @@ function rankLabel(rank: number, type: ApiTrophyType): string {
         return 'Lauréat';
     }
 
-    if (rank === 1) return '1re place';
-    if (rank === 2) return '2e place';
-    return '3e place';
+    if (rank === 1) return '1ère place';
+    if (rank === 2) return '2ème place';
+    return '3ème place';
 }
 
 function rankButtonClass(rank: number, isSelected: boolean): string {
@@ -159,6 +159,11 @@ function rankCardClass(rank: number): string {
     } as const;
 
     return styles[rank as keyof typeof styles] ?? styles[3];
+}
+
+function rankDividerColor(rank: number): string {
+    const colors = { 1: '#d7ccb0', 2: '#c48772', 3: '#56627e' } as const;
+    return colors[rank as keyof typeof colors] ?? colors[3];
 }
 
 function rankAccentClass(rank: number): string {
@@ -381,26 +386,25 @@ onMounted(fetchOverview);
                             : 'border-dashed border-base-300 bg-base-100/60'"
                     >
                         <template v-if="winnerForRank(rank)">
-                            <div class="flex items-start justify-between gap-3">
+                            <div class="flex items-center justify-between gap-3">
                                 <div class="flex items-center gap-3">
-                                    <div class="flex h-14 w-14 items-center justify-center overflow-hidden rounded-full border border-emerald-200 bg-emerald-50 p-2">
-                                        <img
-                                            v-if="winnerForRank(rank)?.logo"
-                                            :src="winnerForRank(rank)?.logo || undefined"
-                                            :alt="winnerForRank(rank)?.name || ''"
-                                            class="max-h-full max-w-full object-contain"
-                                        />
-                                        <div
-                                            v-else
-                                            class="flex h-full w-full items-center justify-center rounded-full text-sm font-semibold"
-                                            :style="{
-                                                backgroundColor: winnerForRank(rank)?.primaryColor || '#E5E7EB',
-                                                color: readableTextColor(winnerForRank(rank)?.primaryColor || '#E5E7EB'),
-                                            }"
-                                        >
-                                            <span class="cooper-baseline">{{ companyBadgeLabel(winnerForRank(rank)?.name || '') }}</span>
-                                        </div>
+                                    <img
+                                        v-if="winnerForRank(rank)?.logo"
+                                        :src="winnerForRank(rank)?.logo || undefined"
+                                        :alt="winnerForRank(rank)?.name || ''"
+                                        class="h-10 w-auto max-w-[5rem] object-contain"
+                                    />
+                                    <div
+                                        v-else
+                                        class="flex h-16 w-16 items-center justify-center rounded-full text-lg font-semibold"
+                                        :style="{
+                                            backgroundColor: winnerForRank(rank)?.primaryColor || '#E5E7EB',
+                                            color: readableTextColor(winnerForRank(rank)?.primaryColor || '#E5E7EB'),
+                                        }"
+                                    >
+                                        <span class="cooper-baseline">{{ companyBadgeLabel(winnerForRank(rank)?.name || '') }}</span>
                                     </div>
+                                    <div class="w-px -my-4 mx-3 self-stretch" :style="{ backgroundColor: rankDividerColor(rank) }"></div>
                                     <div>
                                         <p class="cooper-text-baseline text-xs font-semibold uppercase tracking-wider" :class="rankAccentClass(rank)">
                                             {{ rankLabel(rank, currentTabType) }}
@@ -410,11 +414,16 @@ onMounted(fetchOverview);
                                 </div>
                                 <button
                                     type="button"
-                                    class="cursor-pointer rounded border border-red-200 bg-red-50 px-3 py-1 text-xs font-medium text-red-600 transition hover:bg-red-100 font-cooper"
+                                    class="cursor-pointer rounded p-1 transition-colors duration-200 ease-in-out hover:text-red-500"
+                                    :class="rankAccentClass(rank)"
                                     :disabled="submittingKey === `${currentTabType}-remove-${rank}`"
                                     @click="removePrize(rank)"
                                 >
-                                    <span class="cooper-baseline">{{ submittingKey === `${currentTabType}-remove-${rank}` ? '...' : 'Annuler' }}</span>
+                                    <span v-if="submittingKey === `${currentTabType}-remove-${rank}`" class="text-xs leading-none">…</span>
+                                    <svg v-else xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                        <line x1="18" y1="6" x2="6" y2="18" />
+                                        <line x1="6" y1="6" x2="18" y2="18" />
+                                    </svg>
                                 </button>
                             </div>
                         </template>
