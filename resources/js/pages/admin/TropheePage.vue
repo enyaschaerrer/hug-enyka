@@ -152,7 +152,7 @@ onMounted(fetchDonorCandidates);
             <div v-else-if="loadError" class="alert alert-error"><span class="cooper-baseline">{{ loadError }}</span></div>
 
             <template v-else>
-                <div v-if="activeTab === 'donneur'">
+                <div v-if="activeTab === 'donneur' || activeTab === 'ambassadeur' || activeTab === 'jury'">
                     <div v-if="donorCandidates.length === 0" class="cooper-text-baseline text-sm text-base-content/50">
                         Aucune entreprise éligible pour le moment.
                     </div>

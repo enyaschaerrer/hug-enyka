@@ -24,6 +24,7 @@ class CompanyController extends Controller
             'name' => $company->name,
             'slug' => $company->slug,
             'email' => $company->email,
+            'primaryColor' => $company->primaryColor,
             'employee_count' => $company->employee_count,
             'created_at' => $company->created_at?->toIso8601String(),
             'is_public' => (bool) $company->is_public,

@@ -2,6 +2,7 @@
 import { computed, onMounted, ref } from 'vue';
 import { useAdminRouter } from '../../composables/useAdminRouter';
 import AdminLayout from '../../components/layout/AdminLayout.vue';
+import { readableTextColor } from '../../utils/contrast';
 
 type CollectionRow = {
     id: number;
@@ -19,6 +20,7 @@ type CompanyRow = {
     name: string;
     slug: string;
     email: string;
+    primaryColor: string | null;
     employee_count: number | null;
     created_at: string | null;
     is_public: boolean;
@@ -50,6 +52,19 @@ function formatDate(iso: string): string {
         day: '2-digit', month: '2-digit', year: 'numeric',
         hour: '2-digit', minute: '2-digit',
     });
+}
+
+function companyBadgeLabel(name: string): string {
+    const sanitized = name.replace(/[^a-zA-Z0-9]/g, '');
+
+    if (!sanitized) {
+        return '—';
+    }
+
+    const first = sanitized[0]?.toUpperCase() ?? '';
+    const second = sanitized[1] ? sanitized[1].toUpperCase() : '';
+
+    return `${first}${second}`;
 }
 
 async function fetchCompanies() {
@@ -317,13 +332,24 @@ onMounted(fetchCompanies);
             >
                 <!-- Company row -->
                 <div class="flex items-start justify-between gap-4">
-                    <div>
-                        <p class="cooper-text-baseline font-semibold">{{ company.name }}</p>
-                        <p class="cooper-text-baseline mt-0.5 text-sm text-base-content/50">
-                            <span>{{ company.slug }}</span>
-                            · {{ company.email }}
-                            <span v-if="company.employee_count"> · {{ company.employee_count }} employés</span>
-                        </p>
+                    <div class="flex items-start gap-3">
+                        <div
+                            class="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-full border border-base-200 text-sm font-semibold"
+                            :style="{
+                                backgroundColor: company.primaryColor || '#E5E7EB',
+                                color: readableTextColor(company.primaryColor || '#E5E7EB'),
+                            }"
+                        >
+                            <span class="cooper-baseline">{{ companyBadgeLabel(company.name) }}</span>
+                        </div>
+                        <div>
+                            <p class="cooper-text-baseline font-semibold">{{ company.name }}</p>
+                            <p class="cooper-text-baseline mt-0.5 text-sm text-base-content/50">
+                                <span>{{ company.slug }}</span>
+                                · {{ company.email }}
+                                <span v-if="company.employee_count"> · {{ company.employee_count }} employés</span>
+                            </p>
+                        </div>
                     </div>
                     <div class="flex shrink-0 gap-2">
                         <a
