@@ -135,6 +135,22 @@ function rankLabel(rank: number, type: ApiTrophyType): string {
     return '3e place';
 }
 
+function rankButtonClass(rank: number, isSelected: boolean): string {
+    const styles = {
+        1: isSelected
+            ? 'border-[#d7ccb0] bg-[#d7ccb0] text-white'
+            : 'border-[#d7ccb0] bg-[#f4efe3] text-[#8b7a52] hover:bg-[#e7dcc2]',
+        2: isSelected
+            ? 'border-[#c48772] bg-[#c48772] text-white'
+            : 'border-[#c48772] bg-[#f4e2db] text-[#9e5f4d] hover:bg-[#ebd2c8]',
+        3: isSelected
+            ? 'border-[#56627e] bg-[#56627e] text-white'
+            : 'border-[#56627e] bg-[#e4e8f0] text-[#44506b] hover:bg-[#d6dce8]',
+    } as const;
+
+    return styles[rank as keyof typeof styles] ?? styles[3];
+}
+
 function winnerForRank(rank: number): TrophyWinner | null {
     return currentTabData.value?.current_winners.find((winner) => winner.rank === rank) ?? null;
 }
@@ -516,9 +532,7 @@ onMounted(fetchOverview);
                                         :key="`${company.id}-${rank}`"
                                         type="button"
                                         class="cursor-pointer rounded border px-2.5 py-1 text-xs font-medium transition font-cooper"
-                                        :class="company.current_rank === rank
-                                            ? 'border-emerald-300 bg-emerald-100 text-emerald-800'
-                                            : 'border-emerald-200 bg-emerald-50 text-emerald-700 hover:bg-emerald-100'"
+                                        :class="rankButtonClass(rank, company.current_rank === rank)"
                                         :disabled="submittingKey === `${currentTabType}-${company.id}-${rank}`"
                                         @click="assignPrize(company.id, rank)"
                                     >
