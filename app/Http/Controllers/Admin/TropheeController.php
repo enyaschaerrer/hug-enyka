@@ -33,8 +33,8 @@ class TropheeController extends Controller
             ->get([
                 'companies.id',
                 'companies.name',
-                'companies.logo',
                 'companies.email',
+                'companies.primaryColor',
                 'companies.employee_count',
                 'companies.address',
                 'companies.npa',

@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue';
 import AdminLayout from '../../components/layout/AdminLayout.vue';
+import { readableTextColor } from '../../utils/contrast';
 
 type DonorCandidate = {
     id: number;
     name: string;
-    logo: string | null;
     email: string;
+    primaryColor: string | null;
     employee_count: number | null;
     address: string | null;
     npa: string | null;
@@ -35,6 +36,19 @@ function formatTrophies(count: number): string {
 
 function formatCollections(count: number): string {
     return `${count} campagne${count > 1 ? 's' : ''}`;
+}
+
+function companyBadgeLabel(name: string): string {
+    const sanitized = name.replace(/[^a-zA-Z0-9]/g, '');
+
+    if (!sanitized) {
+        return '—';
+    }
+
+    const first = sanitized[0]?.toUpperCase() ?? '';
+    const second = sanitized[1] ? sanitized[1].toUpperCase() : '';
+
+    return `${first}${second}`;
 }
 
 async function fetchDonorCandidates() {
@@ -136,14 +150,14 @@ onMounted(fetchDonorCandidates);
                             class="flex items-center border-b border-base-200 px-5 py-3 last:border-b-0"
                         >
                             <div class="flex w-[34%] items-center gap-3 pr-4">
-                                <div class="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-full border border-base-200 bg-white">
-                                    <img
-                                        v-if="company.logo"
-                                        :src="company.logo"
-                                        :alt="`Logo ${company.name}`"
-                                        class="h-8 w-8 object-contain"
-                                    />
-                                    <span v-else class="cooper-baseline text-xs text-base-content/35">—</span>
+                                <div
+                                    class="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-full border border-base-200 text-sm font-semibold"
+                                    :style="{
+                                        backgroundColor: company.primaryColor || '#E5E7EB',
+                                        color: readableTextColor(company.primaryColor || '#E5E7EB'),
+                                    }"
+                                >
+                                    <span class="cooper-baseline">{{ companyBadgeLabel(company.name) }}</span>
                                 </div>
                                 <div class="min-w-0">
                                     <div class="cooper-baseline truncate font-medium text-base-content">{{ company.name }}</div>
