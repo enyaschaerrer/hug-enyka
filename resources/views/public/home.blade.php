@@ -89,7 +89,7 @@
 
                 {{-- Carte : Meilleur ambassadeur (top-right sur lg) --}}
                 <article class="flex w-72 shrink-0 snap-center flex-col gap-3 rounded-2xl bg-white p-4 lg:col-start-2 lg:row-start-1 lg:mt-0 lg:w-auto lg:shrink lg:snap-align-none lg:grid lg:grid-cols-[1fr_auto] lg:grid-rows-[auto_1fr] lg:gap-x-4 lg:gap-y-3">
-                    <div class="w-fit rounded-full bg-fuzzywuzzybrown-700 px-4 py-1 text-caption font-semibold text-white lg:col-start-1 lg:row-start-1">
+                    <div class="w-fit rounded-full bg-fuzzywuzzybrown-700 px-4 py-1 text-body font-medium text-white lg:col-start-1 lg:row-start-1">
                         Meilleur ambassadeur
                     </div>
                     <div class="relative shrink-0 lg:col-start-2 lg:row-span-2 lg:self-center">
@@ -117,7 +117,7 @@
 
                 {{-- Carte : Coup de cœur du jury (bottom-left sur lg) --}}
                 <article class="flex w-72 shrink-0 snap-center flex-col gap-3 rounded-2xl bg-white p-4 lg:col-start-1 lg:row-start-2 lg:mt-0 lg:w-auto lg:shrink lg:snap-align-none lg:grid lg:grid-cols-[1fr_auto] lg:grid-rows-[auto_1fr] lg:gap-x-4 lg:gap-y-3">
-                    <div class="w-fit rounded-full bg-fuzzywuzzybrown-700 px-4 py-1 text-caption font-semibold text-white lg:col-start-1 lg:row-start-1">
+                    <div class="w-fit rounded-full bg-fuzzywuzzybrown-700 px-4 py-1 text-body font-medium text-white lg:col-start-1 lg:row-start-1">
                         Coup de cœur du jury
                     </div>
                     <div class="relative shrink-0 lg:col-start-2 lg:row-span-2 lg:self-center">
@@ -145,7 +145,7 @@
 
                 {{-- Carte : Meilleur donneur (bottom-right sur lg) --}}
                 <article class="flex w-72 shrink-0 snap-center flex-col gap-3 rounded-2xl bg-white p-4 lg:col-start-2 lg:row-start-2 lg:mt-0 lg:w-auto lg:shrink lg:snap-align-none lg:grid lg:grid-cols-[1fr_auto] lg:grid-rows-[auto_1fr] lg:gap-x-4 lg:gap-y-3">
-                    <div class="w-fit rounded-full bg-fuzzywuzzybrown-700 px-4 py-1 text-caption font-semibold text-white lg:col-start-1 lg:row-start-1">
+                    <div class="w-fit rounded-full bg-fuzzywuzzybrown-700 px-4 py-1 text-body font-medium text-white lg:col-start-1 lg:row-start-1">
                         Meilleur donneur
                     </div>
                     <div class="relative shrink-0 lg:col-start-2 lg:row-span-2 lg:self-center">

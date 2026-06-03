@@ -88,16 +88,22 @@ async function handleSubmit() {
                     <div class="mt-6 flex justify-center gap-4">
                         <button
                             type="button"
-                            :class="form.labelled === true ? 'border-martinique-800 bg-martinique-400 text-white' : 'border-martinique-300 bg-white text-martinique-800 hover:bg-martinique-50'"
-                            class="rounded-xl border-2 px-10 py-3 text-body transition"
+                            :disabled="form.labelled === false"
+                            :class="form.labelled === true
+                                ? 'border-martinique-800 bg-martinique-400 text-white'
+                                : form.labelled === false
+                                    ? 'border-martinique-200 bg-martinique-50 text-martinique-300'
+                                    : 'border-martinique-300 bg-white text-martinique-800 hover:bg-martinique-50'"
+                            class="rounded-xl border-2 px-10 py-3 text-body transition disabled:cursor-not-allowed"
                             @click="selectLabelled(true)"
                         >
                             Oui
                         </button>
                         <button
                             type="button"
+                            :disabled="form.labelled === false"
                             :class="form.labelled === false ? 'border-martinique-800 bg-martinique-400 text-white' : 'border-martinique-300 bg-white text-martinique-800 hover:bg-martinique-50'"
-                            class="rounded-xl border-2 px-10 py-3 text-body transition"
+                            class="rounded-xl border-2 px-10 py-3 text-body transition disabled:cursor-not-allowed"
                             @click="selectLabelled(false)"
                         >
                             Non

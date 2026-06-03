@@ -14,7 +14,7 @@
     <body class="bg-merino-50">
         @include('partials.public-header')
 
-        <main class="pb-24">
+        <main class="lg:pb-24">
             @yield('content')
         </main>
 
