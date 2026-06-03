@@ -2,6 +2,7 @@
 import { computed, onMounted, ref } from 'vue';
 import { useAdminRouter } from '../../composables/useAdminRouter';
 import AdminLayout from '../../components/layout/AdminLayout.vue';
+import { readableTextColor } from '../../utils/contrast';
 
 type CollectionRow = {
     id: number;
@@ -19,6 +20,7 @@ type CompanyRow = {
     name: string;
     slug: string;
     email: string;
+    primaryColor: string | null;
     employee_count: number | null;
     created_at: string | null;
     is_public: boolean;
@@ -50,6 +52,19 @@ function formatDate(iso: string): string {
         day: '2-digit', month: '2-digit', year: 'numeric',
         hour: '2-digit', minute: '2-digit',
     });
+}
+
+function companyBadgeLabel(name: string): string {
+    const sanitized = name.replace(/[^a-zA-Z0-9]/g, '');
+
+    if (!sanitized) {
+        return '—';
+    }
+
+    const first = sanitized[0]?.toUpperCase() ?? '';
+    const second = sanitized[1] ? sanitized[1].toUpperCase() : '';
+
+    return `${first}${second}`;
 }
 
 async function fetchCompanies() {
@@ -114,6 +129,10 @@ function companyActionLabel(company: CompanyRow): string {
 
 function companyEditPath(company: CompanyRow): string {
     return `/admin/companies/${company.id}/edit`;
+}
+
+function companyParticipationPath(company: CompanyRow): string {
+    return `/admin/companies/${company.id}/edit#participation-settings`;
 }
 
 function companyCreatedTimestamp(company: CompanyRow): number {
@@ -313,13 +332,24 @@ onMounted(fetchCompanies);
             >
                 <!-- Company row -->
                 <div class="flex items-start justify-between gap-4">
-                    <div>
-                        <p class="cooper-text-baseline font-semibold">{{ company.name }}</p>
-                        <p class="cooper-text-baseline mt-0.5 text-sm text-base-content/50">
-                            <span>{{ company.slug }}</span>
-                            · {{ company.email }}
-                            <span v-if="company.employee_count"> · {{ company.employee_count }} employés</span>
-                        </p>
+                    <div class="flex items-start gap-3">
+                        <div
+                            class="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-full border border-base-200 text-sm font-semibold"
+                            :style="{
+                                backgroundColor: company.primaryColor || '#E5E7EB',
+                                color: readableTextColor(company.primaryColor || '#E5E7EB'),
+                            }"
+                        >
+                            <span class="cooper-baseline">{{ companyBadgeLabel(company.name) }}</span>
+                        </div>
+                        <div>
+                            <p class="cooper-text-baseline font-semibold">{{ company.name }}</p>
+                            <p class="cooper-text-baseline mt-0.5 text-sm text-base-content/50">
+                                <span>{{ company.slug }}</span>
+                                · {{ company.email }}
+                                <span v-if="company.employee_count"> · {{ company.employee_count }} employés</span>
+                            </p>
+                        </div>
                     </div>
                     <div class="flex shrink-0 gap-2">
                         <a
@@ -374,11 +404,16 @@ onMounted(fetchCompanies);
                                 </a>
                             </div>
                             <div class="flex shrink-0 items-center gap-3">
-                                <span v-if="company.trophy || !company.is_public" class="inline-flex items-center gap-1.5 rounded-full border border-emerald-100 bg-white px-3 py-1.5 text-xs font-medium text-[#5A002A]">
+                                <a
+                                    v-if="company.trophy || !company.is_public"
+                                    :href="companyParticipationPath(company)"
+                                    class="inline-flex items-center gap-1.5 rounded-full border border-emerald-100 bg-white px-3 py-1.5 text-xs font-medium text-[#5A002A] transition-colors hover:border-emerald-200 hover:bg-emerald-100/70"
+                                    @click.prevent="navigate(companyParticipationPath(company))"
+                                >
                                     <svg v-if="company.trophy" xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5"/></svg>
                                     <svg v-else xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.733 5.076A10.744 10.744 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"/><path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"/><path d="M2 2l20 20"/><path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"/></svg>
                                     <span class="cooper-baseline">{{ company.trophy ? 'Participation au Prix du Cœur' : 'Participation anonyme' }}</span>
-                                </span>
+                                </a>
                                 <div class="flex items-center gap-1">
                                     <button
                                         type="button"

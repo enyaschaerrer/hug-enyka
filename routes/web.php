@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\AccountController;
 use App\Http\Controllers\Admin\CollectionController;
 use App\Http\Controllers\Admin\CompanyController;
 use App\Http\Controllers\Admin\KpiController;
+use App\Http\Controllers\Admin\TropheeController;
 use App\Http\Controllers\CoBrandedAuthController;
 use App\Http\Controllers\CoBrandedCollecteController;
 use App\Http\Controllers\Public\CompanyFormController;
@@ -38,6 +39,9 @@ Route::middleware(['auth', 'role:superadmin,admin'])->group(function () {
         Route::delete('/admin/accounts/{user}', [AccountController::class, 'destroy'])->name('admin.accounts.destroy');
     });
     Route::get('/admin/api/kpis', [KpiController::class, 'index'])->name('admin.kpis.index');
+    Route::get('/admin/api/trophee', [TropheeController::class, 'overview'])->name('admin.trophee.overview');
+    Route::post('/admin/api/trophee/assign', [TropheeController::class, 'assign'])->name('admin.trophee.assign');
+    Route::delete('/admin/api/trophee/assign', [TropheeController::class, 'remove'])->name('admin.trophee.remove');
     Route::get('/admin/api/companies', [CompanyController::class, 'index'])->name('admin.companies.index');
     Route::get('/admin/api/companies/{company}', [CompanyController::class, 'show'])->name('admin.companies.show');
     Route::post('/admin/companies', [CompanyController::class, 'store'])->name('admin.companies.store');

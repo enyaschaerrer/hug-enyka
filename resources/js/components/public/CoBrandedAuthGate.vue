@@ -220,7 +220,7 @@ function forgotPassword() {
                         </label>
 
                         <label class="flex flex-col gap-2">
-                            <span class="cooper-baseline label-text text-slate-800">Mot de passe</span>
+                            <span class="cooper-baseline label-text text-slate-800">Code</span>
                             <input
                                 v-model="loginForm.password"
                                 type="password"
@@ -254,7 +254,7 @@ function forgotPassword() {
                             @mouseleave="($event.currentTarget as HTMLElement).style.color = ''"
                             @click="forgotPassword"
                         >
-                            Mot de passe oublié
+                            Code oublié
                         </button>
                     </form>
                 </div>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, reactive, ref, watch } from 'vue';
+import { computed, nextTick, onMounted, reactive, ref, watch } from 'vue';
 import { useAdminRouter } from '../../composables/useAdminRouter';
 import AdminDateTimePicker from '../../components/admin/AdminDateTimePicker.vue';
 import AdminLayout from '../../components/layout/AdminLayout.vue';
@@ -37,6 +37,8 @@ type CompanyFormPayload = {
     collection_end: string;
     collection_linkOneDoc: string;
 };
+
+const ONEDOC_PREFIX = 'https://www.onedoc.ch/';
 
 const appState = (window as unknown as { __APP__?: AppState }).__APP__;
 const csrfToken = appState?.csrfToken ?? '';
@@ -77,7 +79,7 @@ const form = reactive({
     thirdColor: '#1f2937',
     collection_start: '',
     collection_end: '',
-    collection_linkOneDoc: '',
+    collection_linkOneDoc: ONEDOC_PREFIX,
 });
 const logoFile = ref<File | null>(null);
 const editLogoInputId = 'company-logo-upload-edit';
@@ -236,8 +238,9 @@ async function fetchCompany() {
             selectedCollectionId.value = shouldCreateNewCollection ? null : collection?.id ?? requestedCollectionId;
             form.collection_start = toDatetimeLocal(collection?.start);
             form.collection_end = toDatetimeLocal(collection?.end);
-            form.collection_linkOneDoc = collection?.linkOneDoc ?? '';
+            form.collection_linkOneDoc = collection?.linkOneDoc ?? ONEDOC_PREFIX;
             slugTouched.value = false;
+            await scrollToParticipationSettings();
         } else if (res.status === 401) {
             window.location.href = '/admin/login';
         } else {
@@ -265,6 +268,30 @@ const editedCollection = computed(() => {
 
     return collectionRanges.value.find((collection) => collection.id === selectedCollectionId.value) ?? null;
 });
+
+async function scrollToParticipationSettings(): Promise<void> {
+    if (window.location.hash !== '#participation-settings') {
+        return;
+    }
+
+    await nextTick();
+    await new Promise((resolve) => window.requestAnimationFrame(() => resolve(null)));
+
+    const scrollContainer = document.querySelector('main');
+
+    if (scrollContainer instanceof HTMLElement) {
+        scrollContainer.scrollTo({
+            top: scrollContainer.scrollHeight,
+            behavior: 'smooth',
+        });
+        return;
+    }
+
+    window.scrollTo({
+        top: document.documentElement.scrollHeight,
+        behavior: 'smooth',
+    });
+}
 
 async function submit() {
     submitting.value = true;
@@ -309,6 +336,12 @@ async function submit() {
 }
 
 onMounted(fetchCompany);
+
+watch(loading, async (isLoading) => {
+    if (!isLoading) {
+        await scrollToParticipationSettings();
+    }
+});
 </script>
 
 <template>
@@ -577,7 +610,7 @@ onMounted(fetchCompany);
                     </div>
                 </section>
 
-                <section class="space-y-4 pt-3">
+                <section id="participation-settings" class="space-y-4 pt-3">
                     <label class="flex items-center gap-3">
                         <input
                             v-model="anonymousParticipation"
@@ -635,7 +668,7 @@ onMounted(fetchCompany);
 
                         <label class="flex w-full flex-col gap-2 md:col-span-2">
                             <span class="cooper-baseline label-text">Lien OneDoc <span style="color: #9B2F5C;">*</span></span>
-                            <input v-model="form.collection_linkOneDoc" type="text" class="cooper-input-baseline input input-bordered w-full" placeholder="https://www.onedoc.ch/..." pattern="https://www\.onedoc\.ch/.*" required />
+                            <input v-model="form.collection_linkOneDoc" type="text" class="cooper-input-baseline input input-bordered w-full" placeholder="https://www.onedoc.ch/..." pattern="https://(www\.)?onedoc\.ch/.*" required />
                             <p v-if="firstError('collection_linkOneDoc')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('collection_linkOneDoc') }}</p>
                         </label>
                     </div>

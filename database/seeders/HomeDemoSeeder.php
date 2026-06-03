@@ -185,6 +185,12 @@ class HomeDemoSeeder extends Seeder
             ],
         ];
 
+        $companiesData = array_map(static fn (array $row) => [
+            ...$row,
+            'is_public' => true,
+            'trophy' => true,
+        ], $companiesData);
+
         foreach ($companiesData as $row) {
             Company::updateOrCreate(['email' => $row['email']], $row);
         }
@@ -260,6 +266,7 @@ class HomeDemoSeeder extends Seeder
             ['year' => 2023],
             ['year' => 2024],
             ['year' => 2025],
+            ['year' => now()->year],
         ];
 
         foreach ($trophyEditionsData as $row) {
