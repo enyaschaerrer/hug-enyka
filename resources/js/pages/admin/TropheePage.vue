@@ -440,9 +440,12 @@ onMounted(fetchOverview);
                     </div>
                 </div>
 
-                <details v-if="currentTabData.history.length > 0" class="collapse-arrow collapse mb-3">
-                    <summary class="collapse-title min-h-8 px-0 pt-1 pb-3 text-sm font-medium text-base-content/60">
+                <details v-if="currentTabData.history.length > 0" class="collapse mb-3">
+                    <summary class="collapse-title flex cursor-pointer list-none items-center gap-1.5 px-0 pt-1 pb-3 text-sm font-medium text-base-content/60 [&::-webkit-details-marker]:hidden">
                         <span class="cooper-baseline">Historique des gagnants ({{ currentTabData.history.length }})</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 transition-transform duration-200 [[open]_&]:rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <polyline points="6 9 12 15 18 9" />
+                        </svg>
                     </summary>
                     <div class="collapse-content px-0 pb-0">
                         <div
