@@ -151,6 +151,26 @@ function rankButtonClass(rank: number, isSelected: boolean): string {
     return styles[rank as keyof typeof styles] ?? styles[3];
 }
 
+function rankCardClass(rank: number): string {
+    const styles = {
+        1: 'border-[#d7ccb0] bg-[#fbf8f0]',
+        2: 'border-[#c48772] bg-[#fbf1ec]',
+        3: 'border-[#56627e] bg-[#f2f4f8]',
+    } as const;
+
+    return styles[rank as keyof typeof styles] ?? styles[3];
+}
+
+function rankAccentClass(rank: number): string {
+    const styles = {
+        1: 'text-[#8b7a52]',
+        2: 'text-[#9e5f4d]',
+        3: 'text-[#44506b]',
+    } as const;
+
+    return styles[rank as keyof typeof styles] ?? styles[3];
+}
+
 function winnerForRank(rank: number): TrophyWinner | null {
     return currentTabData.value?.current_winners.find((winner) => winner.rank === rank) ?? null;
 }
@@ -305,7 +325,7 @@ onMounted(fetchOverview);
                     <span class="cooper-baseline">{{ actionError }}</span>
                 </div>
 
-                <div v-if="currentTabData.current_winners.length === 0" class="mb-5 rounded-box border border-base-300 bg-white px-5 py-4">
+                <div v-if="currentTabData.current_winners.length === 0" class="mb-5">
                     <p class="cooper-text-baseline text-sm text-base-content/55">Aucun vainqueur pour le moment.</p>
                 </div>
 
@@ -361,7 +381,7 @@ onMounted(fetchOverview);
                         :key="rank"
                         class="rounded-box border px-5 py-4"
                         :class="winnerForRank(rank)
-                            ? 'border-emerald-200 bg-white'
+                            ? rankCardClass(rank)
                             : 'border-dashed border-base-300 bg-base-100/60'"
                     >
                         <template v-if="winnerForRank(rank)">
@@ -386,7 +406,7 @@ onMounted(fetchOverview);
                                         </div>
                                     </div>
                                     <div>
-                                        <p class="cooper-text-baseline text-xs font-semibold uppercase tracking-wider text-emerald-700/70">
+                                        <p class="cooper-text-baseline text-xs font-semibold uppercase tracking-wider" :class="rankAccentClass(rank)">
                                             {{ rankLabel(rank, currentTabType) }}
                                         </p>
                                         <p class="cooper-text-baseline font-semibold text-base-content">{{ winnerForRank(rank)?.name }}</p>
