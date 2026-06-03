@@ -396,7 +396,7 @@ onMounted(fetchOverview);
                                     />
                                     <div
                                         v-else
-                                        class="flex h-16 w-16 items-center justify-center rounded-full text-lg font-semibold"
+                                        class="flex h-10 w-10 items-center justify-center rounded-full text-sm font-semibold"
                                         :style="{
                                             backgroundColor: winnerForRank(rank)?.primaryColor || '#E5E7EB',
                                             color: readableTextColor(winnerForRank(rank)?.primaryColor || '#E5E7EB'),
@@ -428,10 +428,12 @@ onMounted(fetchOverview);
                             </div>
                         </template>
                         <template v-else>
-                            <p class="cooper-text-baseline text-xs font-semibold uppercase tracking-wider text-base-content/45">
-                                {{ rankLabel(rank, currentTabType) }}
-                            </p>
-                            <p class="cooper-text-baseline mt-2 text-sm text-base-content/45">Aucun gagnant attribué pour le moment.</p>
+                            <div class="flex min-h-10 items-center gap-3">
+                                <p class="cooper-text-baseline text-xs font-semibold uppercase tracking-wider text-base-content/45">
+                                    {{ rankLabel(rank, currentTabType) }}
+                                </p>
+                                <p class="cooper-text-baseline text-sm text-base-content/45">Aucun gagnant attribué pour le moment.</p>
+                            </div>
                         </template>
                     </div>
                 </div>
