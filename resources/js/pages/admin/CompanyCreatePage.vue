@@ -43,6 +43,8 @@ type CompanyFormPayload = {
     collection_linkOneDoc: string;
 };
 
+const ONEDOC_PREFIX = 'https://www.onedoc.ch/';
+
 const appState = (window as unknown as { __APP__?: AppState }).__APP__;
 const csrfToken = appState?.csrfToken ?? '';
 const { navigate, flashMessage } = useAdminRouter();
@@ -76,7 +78,7 @@ const form = reactive({
     thirdColor: '#1f2937',
     collection_start: '',
     collection_end: '',
-    collection_linkOneDoc: '',
+    collection_linkOneDoc: ONEDOC_PREFIX,
 });
 const logoFile = ref<File | null>(null);
 const createLogoInputId = 'company-logo-upload-create';
@@ -685,7 +687,7 @@ async function submit() {
                                 type="text"
                                 class="cooper-input-baseline input input-bordered w-full"
                                 placeholder="https://www.onedoc.ch/..."
-                                pattern="https://www\.onedoc\.ch/.*"
+                                pattern="https://(?:www\\.)?onedoc\\.ch/.*"
                                 required
                             />
                             <p v-if="firstError('collection_linkOneDoc')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('collection_linkOneDoc') }}</p>

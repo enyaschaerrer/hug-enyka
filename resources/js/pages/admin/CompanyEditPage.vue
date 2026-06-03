@@ -38,6 +38,8 @@ type CompanyFormPayload = {
     collection_linkOneDoc: string;
 };
 
+const ONEDOC_PREFIX = 'https://www.onedoc.ch/';
+
 const appState = (window as unknown as { __APP__?: AppState }).__APP__;
 const csrfToken = appState?.csrfToken ?? '';
 const { navigate, flashMessage } = useAdminRouter();
@@ -77,7 +79,7 @@ const form = reactive({
     thirdColor: '#1f2937',
     collection_start: '',
     collection_end: '',
-    collection_linkOneDoc: '',
+    collection_linkOneDoc: ONEDOC_PREFIX,
 });
 const logoFile = ref<File | null>(null);
 const editLogoInputId = 'company-logo-upload-edit';
@@ -236,7 +238,7 @@ async function fetchCompany() {
             selectedCollectionId.value = shouldCreateNewCollection ? null : collection?.id ?? requestedCollectionId;
             form.collection_start = toDatetimeLocal(collection?.start);
             form.collection_end = toDatetimeLocal(collection?.end);
-            form.collection_linkOneDoc = collection?.linkOneDoc ?? '';
+            form.collection_linkOneDoc = collection?.linkOneDoc ?? ONEDOC_PREFIX;
             slugTouched.value = false;
             await scrollToParticipationSettings();
         } else if (res.status === 401) {
@@ -666,7 +668,7 @@ watch(loading, async (isLoading) => {
 
                         <label class="flex w-full flex-col gap-2 md:col-span-2">
                             <span class="cooper-baseline label-text">Lien OneDoc <span style="color: #9B2F5C;">*</span></span>
-                            <input v-model="form.collection_linkOneDoc" type="text" class="cooper-input-baseline input input-bordered w-full" placeholder="https://www.onedoc.ch/..." pattern="https://www\.onedoc\.ch/.*" required />
+                            <input v-model="form.collection_linkOneDoc" type="text" class="cooper-input-baseline input input-bordered w-full" placeholder="https://www.onedoc.ch/..." pattern="https://(?:www\\.)?onedoc\\.ch/.*" required />
                             <p v-if="firstError('collection_linkOneDoc')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('collection_linkOneDoc') }}</p>
                         </label>
                     </div>

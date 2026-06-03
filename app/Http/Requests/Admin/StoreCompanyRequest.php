@@ -24,8 +24,8 @@ class StoreCompanyRequest extends FormRequest
             'slug' => ['required', 'string', 'max:20', 'alpha_num', 'unique:companies,slug'],
             'short_description' => ['nullable', 'string', 'max:500'],
             'address' => ['required', 'string', 'max:500'],
-            'zip_code' => ['required', 'string', 'max:10'],
-            'locality' => ['required', 'string', 'max:100'],
+            'npa' => ['required', 'string', 'regex:/^\d{4}$/'],
+            'localite' => ['required', 'string', 'max:100'],
             'telephone' => ['nullable', 'string', 'max:50'],
             'employee_count' => ['required', 'integer', 'min:0'],
             'allowed_email_domains' => ['required', 'string', 'max:255', new EmailDomainListRule()],
@@ -38,22 +38,24 @@ class StoreCompanyRequest extends FormRequest
             'thirdColor' => ['required', 'string', 'regex:/^#[0-9a-fA-F]{6}$/'],
             'collection_start' => ['required', 'date'],
             'collection_end' => ['required', 'date', 'after:collection_start'],
-            'collection_linkOneDoc' => ['required', 'string', 'max:500', 'starts_with:https://www.onedoc.ch/'],
+            'collection_linkOneDoc' => ['required', 'string', 'max:500', 'regex:/^https:\/\/(?:www\.)?onedoc\.ch\/.*$/'],
         ];
     }
 
     protected function prepareForValidation(): void
     {
-        if (! $this->has('slug')) {
-            return;
+        $payload = [];
+
+        if ($this->has('slug')) {
+            $slug = (string) $this->input('slug');
+            $slug = strtolower($slug);
+            $slug = preg_replace('/[^a-z0-9]/', '', $slug) ?? '';
+
+            $payload['slug'] = substr($slug, 0, 20);
         }
 
-        $slug = (string) $this->input('slug');
-        $slug = strtolower($slug);
-        $slug = preg_replace('/[^a-z0-9]/', '', $slug) ?? '';
-
-        $this->merge([
-            'slug' => substr($slug, 0, 20),
-        ]);
+        if ($payload !== []) {
+            $this->merge($payload);
+        }
     }
 }
