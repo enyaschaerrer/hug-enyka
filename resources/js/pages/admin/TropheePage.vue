@@ -25,6 +25,12 @@ const loading = ref(true);
 const loadError = ref<string | null>(null);
 const currentEditionYear = new Date().getFullYear();
 
+const currentTrophyTitle: Record<TrophyTab, string> = {
+    donneur: 'Meilleur donneur',
+    ambassadeur: 'Meilleur ambassadeur',
+    jury: 'Coup de cœur du jury',
+};
+
 function formatFullAddress(address?: string | null, npa?: string | null, localite?: string | null): string {
     return [address, [npa, localite].filter(Boolean).join(' ')].filter(Boolean).join(', ') || '—';
 }
@@ -133,11 +139,22 @@ onMounted(fetchDonorCandidates);
 
             <template v-else>
                 <div v-if="activeTab === 'donneur' || activeTab === 'ambassadeur' || activeTab === 'jury'">
+                    <div class="mb-5">
+                        <h2 class="cooper-text-baseline text-xl font-semibold text-[#5a002a]">
+                            Attribution du prix : {{ currentTrophyTitle[activeTab] }}
+                        </h2>
+                    </div>
+
                     <div v-if="donorCandidates.length === 0" class="cooper-text-baseline text-sm text-base-content/50">
                         Aucune entreprise éligible pour le moment.
                     </div>
 
-                    <div v-else class="border border-base-300 bg-white">
+                    <div v-else>
+                        <h3 class="cooper-text-baseline mb-3 text-xl font-semibold text-[#5a002a]">
+                            Liste des concurrents
+                        </h3>
+
+                        <div class="border border-base-300 bg-white">
                         <div class="flex border-b border-base-300 bg-[#f8e7ee] px-5 py-3 text-xs font-semibold uppercase tracking-wide text-[#5a002a]">
                             <div class="w-[16%] pr-4"><span class="cooper-baseline">Entreprise</span></div>
                             <div class="w-[12%] pr-4"><span class="cooper-baseline">Inscription</span></div>
@@ -197,6 +214,7 @@ onMounted(fetchDonorCandidates);
                                 </button>
                             </div>
                         </div>
+                    </div>
                     </div>
                 </div>
 
