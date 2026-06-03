@@ -47,6 +47,7 @@ const openUpward = ref(false);
 const rootRef = ref<HTMLDivElement | null>(null);
 const triggerRef = ref<HTMLButtonElement | null>(null);
 const selectedTime = ref(timeFromValue(props.modelValue) ?? props.defaultTime);
+const selectedHour = ref(parseInt(selectedTime.value.split(':')[0], 10));
 const initialVisibleDate = parseLocalDateTime(props.modelValue) ?? new Date();
 const visibleMonth = ref(initialVisibleDate.getMonth());
 const visibleYear = ref(initialVisibleDate.getFullYear());
@@ -110,22 +111,36 @@ const displayValue = computed(() => {
         return '';
     }
 
-    return new Intl.DateTimeFormat('fr-CH', {
+    const date = new Intl.DateTimeFormat('fr-CH', {
         day: '2-digit',
         month: '2-digit',
         year: 'numeric',
     }).format(parsed);
+
+    return `${date} : ${String(parsed.getHours()).padStart(2, '0')}h00`;
 });
 
 const canGoPreviousMonth = computed(() => visibleYear.value === currentYear && visibleMonth.value > 0);
 const canGoNextMonth = computed(() => visibleYear.value === currentYear && visibleMonth.value < 11);
 
 watch(() => props.modelValue, (next) => {
-    selectedTime.value = timeFromValue(next) ?? selectedTime.value;
+    const time = timeFromValue(next) ?? selectedTime.value;
+    selectedTime.value = time;
+    selectedHour.value = parseInt(time.split(':')[0], 10);
 
     const date = parseLocalDateTime(next);
     if (date) {
         setVisibleDate(date);
+    }
+});
+
+watch(selectedHour, (hour) => {
+    selectedTime.value = `${String(hour).padStart(2, '0')}:00`;
+    if (props.modelValue) {
+        const date = parseLocalDateTime(props.modelValue);
+        if (date) {
+            emit('update:modelValue', toDateTimeValue(date, selectedTime.value));
+        }
     }
 });
 
@@ -499,7 +514,17 @@ onUnmounted(() => {
                 <p v-if="mode === 'end' && referenceDateTime" class="cooper-text-baseline text-xs text-base-content/45">
                     Début : {{ new Intl.DateTimeFormat('fr-CH', { day: '2-digit', month: '2-digit', year: 'numeric' }).format(parseLocalDateTime(referenceDateTime) ?? new Date()) }}
                 </p>
-                <button type="button" class="btn btn-primary btn-sm font-cooper ml-auto" @click.stop="isOpen = false">
+                <select
+                    v-model.number="selectedHour"
+                    class="cooper-input-baseline select select-bordered select-sm font-cooper font-medium text-sm mx-auto"
+                    @click.stop
+                    @mousedown.stop
+                >
+                    <option v-for="h in 24" :key="h - 1" :value="h - 1">
+                        {{ String(h - 1).padStart(2, '0') }}h00
+                    </option>
+                </select>
+                <button type="button" class="btn btn-primary btn-sm font-cooper" @click.stop="isOpen = false">
                     <span class="cooper-baseline">Valider</span>
                 </button>
             </div>
