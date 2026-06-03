@@ -16,7 +16,7 @@ type DonorCandidate = {
     donor_trophies_won: number;
 };
 
-type TrophyTab = 'donneur' | 'ambassadeur' | 'jury' | 'winners';
+type TrophyTab = 'donneur' | 'ambassadeur' | 'jury' | 'winners' | 'history';
 
 const activeTab = ref<TrophyTab>('donneur');
 const donorCandidates = ref<DonorCandidate[]>([]);
@@ -122,7 +122,16 @@ onMounted(fetchDonorCandidates);
                         : 'text-base-content/50 hover:text-base-content'"
                     @click="activeTab = 'winners'"
                 >
-                    <span class="cooper-baseline">Liste des gagnants</span>
+                    <span class="cooper-baseline">Liste des gagnants {{ currentEditionYear }}</span>
+                </button>
+                <button
+                    class="cursor-pointer px-5 py-2.5 text-sm font-medium transition font-cooper"
+                    :class="activeTab === 'history'
+                        ? 'border-b-2 border-[#5a002a] text-[#5a002a]'
+                        : 'text-base-content/50 hover:text-base-content'"
+                    @click="activeTab = 'history'"
+                >
+                    <span class="cooper-baseline">Historique des gagnants</span>
                 </button>
             </div>
 
@@ -160,8 +169,7 @@ onMounted(fetchDonorCandidates);
                                     <span class="cooper-baseline">{{ companyBadgeLabel(company.name) }}</span>
                                 </div>
                                 <div class="min-w-0">
-                                    <div class="cooper-baseline truncate font-medium text-base-content">{{ company.name }}</div>
-                                    <div class="cooper-baseline truncate text-sm text-base-content/55">{{ company.email }}</div>
+                                    <div class="cooper-text-baseline truncate font-medium text-base-content">{{ company.name }}</div>
                                 </div>
                             </div>
 
