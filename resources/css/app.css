@@ -270,6 +270,8 @@ input[type='color']::-moz-color-swatch {
     border: 0;
 }
 
+/*
+
 .cooper-baseline {
     display: inline-block;
     transform: translateY(0.12em);
@@ -304,3 +306,5 @@ input[type='color']::-moz-color-swatch {
     padding-top: calc(0.625rem + 0.08em);
     padding-bottom: calc(0.625rem - 0.08em);
 }
+
+*/
