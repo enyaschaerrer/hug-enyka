@@ -40,7 +40,9 @@ class CompanyController extends Controller
 
     public function store(StoreCompanyRequest $request): JsonResponse
     {
-        $validated = $this->normalizeVisibilityFlags($request->validated());
+        $validated = $this->normalizeCompanyPayload(
+            $this->normalizeVisibilityFlags($request->validated())
+        );
         $validated['logo'] = $this->storeCompanyLogo($request->file('logo'), $validated['slug'] ?? null);
         $company = Company::create(Arr::except($validated, [
             'collection_start',
@@ -58,7 +60,9 @@ class CompanyController extends Controller
 
     public function update(UpdateCompanyRequest $request, Company $company): JsonResponse
     {
-        $validated = $this->normalizeVisibilityFlags($request->validated());
+        $validated = $this->normalizeCompanyPayload(
+            $this->normalizeVisibilityFlags($request->validated())
+        );
 
         if ($request->isCollectionMode()) {
             $this->saveCollection($company, $validated);
@@ -159,6 +163,8 @@ class CompanyController extends Controller
     {
         return [
             ...$company->toArray(),
+            'npa' => $company->zip_code,
+            'localite' => $company->locality,
             'collections' => $company->collections
                 ->map(fn ($col) => $this->collectionPayload($company, $col))
                 ->values(),
@@ -188,7 +194,19 @@ class CompanyController extends Controller
     {
         $registrations = Form::query()
             ->latest()
-            ->get(['id', 'name', 'email', 'phone', 'address', 'npa', 'localite', 'message', 'trophy', 'treated', 'created_at']);
+            ->get([
+                'id',
+                'name',
+                'email',
+                'phone',
+                'address',
+                'zip_code as npa',
+                'locality as localite',
+                'message',
+                'trophy',
+                'treated',
+                'created_at',
+            ]);
 
         return response()->json($registrations);
     }
@@ -198,7 +216,19 @@ class CompanyController extends Controller
         $registrations = Form::query()
             ->where('treated', false)
             ->latest()
-            ->get(['id', 'name', 'email', 'phone', 'address', 'npa', 'localite', 'message', 'trophy', 'treated', 'created_at']);
+            ->get([
+                'id',
+                'name',
+                'email',
+                'phone',
+                'address',
+                'zip_code as npa',
+                'locality as localite',
+                'message',
+                'trophy',
+                'treated',
+                'created_at',
+            ]);
 
         return response()->json($registrations);
     }
@@ -247,8 +277,31 @@ class CompanyController extends Controller
             ->values();
 
         return response()->json([
-            'form'              => $form,
+            'form'              => [
+                ...$form->toArray(),
+                'npa' => $form->zip_code,
+                'localite' => $form->locality,
+            ],
             'matchingCompanies' => $matchingCompanies,
         ]);
+    }
+
+    /**
+     * @param array<string, mixed> $validated
+     * @return array<string, mixed>
+     */
+    private function normalizeCompanyPayload(array $validated): array
+    {
+        if (array_key_exists('npa', $validated)) {
+            $validated['zip_code'] = $validated['npa'];
+            unset($validated['npa']);
+        }
+
+        if (array_key_exists('localite', $validated)) {
+            $validated['locality'] = $validated['localite'];
+            unset($validated['localite']);
+        }
+
+        return $validated;
     }
 }
