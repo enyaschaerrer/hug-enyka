@@ -687,7 +687,7 @@ async function submit() {
                                 type="text"
                                 class="cooper-input-baseline input input-bordered w-full"
                                 placeholder="https://www.onedoc.ch/..."
-                                pattern="https://(?:www\\.)?onedoc\\.ch/.*"
+                                pattern="https://(www\.)?onedoc\.ch/.*"
                                 required
                             />
                             <p v-if="firstError('collection_linkOneDoc')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('collection_linkOneDoc') }}</p>

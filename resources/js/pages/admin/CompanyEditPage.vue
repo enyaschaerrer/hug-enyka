@@ -668,7 +668,7 @@ watch(loading, async (isLoading) => {
 
                         <label class="flex w-full flex-col gap-2 md:col-span-2">
                             <span class="cooper-baseline label-text">Lien OneDoc <span style="color: #9B2F5C;">*</span></span>
-                            <input v-model="form.collection_linkOneDoc" type="text" class="cooper-input-baseline input input-bordered w-full" placeholder="https://www.onedoc.ch/..." pattern="https://(?:www\\.)?onedoc\\.ch/.*" required />
+                            <input v-model="form.collection_linkOneDoc" type="text" class="cooper-input-baseline input input-bordered w-full" placeholder="https://www.onedoc.ch/..." pattern="https://(www\.)?onedoc\.ch/.*" required />
                             <p v-if="firstError('collection_linkOneDoc')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('collection_linkOneDoc') }}</p>
                         </label>
                     </div>
