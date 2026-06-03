@@ -159,13 +159,13 @@ onMounted(fetchDonorCandidates);
 
                     <div v-else class="border border-base-300 bg-white">
                         <div class="flex border-b border-base-300 bg-[#f8e7ee] px-5 py-3 text-xs font-semibold uppercase tracking-wide text-[#5a002a]">
-                            <div class="w-[24%]"><span class="cooper-baseline">Entreprise</span></div>
-                            <div class="w-[12%] text-center"><span class="cooper-baseline">Inscription</span></div>
-                            <div class="w-[22%]"><span class="cooper-baseline">Adresse</span></div>
-                            <div class="w-[10%] text-center"><span class="cooper-baseline">Employés</span></div>
-                            <div class="w-[12%] text-center"><span class="cooper-baseline">Campagnes en {{ currentEditionYear }}</span></div>
-                            <div class="w-[10%] text-right"><span class="cooper-baseline">Trophées obtenus</span></div>
-                            <div class="w-[10%] text-right"><span class="cooper-baseline">Action</span></div>
+                            <div class="w-[16%] pr-4"><span class="cooper-baseline">Entreprise</span></div>
+                            <div class="w-[12%] pr-4"><span class="cooper-baseline">Inscription</span></div>
+                            <div class="w-[24%] pr-4"><span class="cooper-baseline">Adresse</span></div>
+                            <div class="w-[10%] pr-4"><span class="cooper-baseline">Employés</span></div>
+                            <div class="w-[14%] pr-4"><span class="cooper-baseline">Campagnes en {{ currentEditionYear }}</span></div>
+                            <div class="w-[14%] pr-4"><span class="cooper-baseline whitespace-nowrap">Trophées obtenus</span></div>
+                            <div class="w-[10%]"><span class="cooper-baseline">Action</span></div>
                         </div>
 
                         <div
@@ -173,7 +173,7 @@ onMounted(fetchDonorCandidates);
                             :key="company.id"
                             class="flex items-center border-b border-base-200 px-5 py-3 last:border-b-0"
                         >
-                            <div class="flex w-[24%] items-center gap-3 pr-4">
+                            <div class="flex w-[16%] items-center gap-3 pr-4">
                                 <div
                                     class="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-full border border-base-200 text-sm font-semibold"
                                     :style="{
@@ -188,31 +188,31 @@ onMounted(fetchDonorCandidates);
                                 </div>
                             </div>
 
-                            <div class="w-[12%] text-center text-sm text-base-content/70">
+                            <div class="w-[12%] pr-4 text-sm text-base-content/70">
                                 <span class="cooper-baseline">{{ formatRegistrationDate(company.created_at) }}</span>
                             </div>
 
-                            <div class="w-[22%] pr-4 text-sm text-base-content/70">
+                            <div class="w-[24%] pr-4 text-sm text-base-content/70">
                                 <span class="cooper-baseline">{{ formatFullAddress(company.address, company.npa, company.localite) }}</span>
                             </div>
 
-                            <div class="w-[10%] text-center text-base-content/70">
+                            <div class="w-[10%] pr-4 text-base-content/70">
                                 <span class="cooper-baseline">{{ company.employee_count ?? '—' }}</span>
                             </div>
 
-                            <div class="w-[12%] text-center">
+                            <div class="w-[14%] pr-4">
                                 <span class="inline-flex rounded-full bg-amber-50 px-3 py-1 text-xs font-medium text-amber-700">
                                     <span class="cooper-baseline">{{ formatCollections(company.collections_count) }}</span>
                                 </span>
                             </div>
 
-                            <div class="w-[10%] text-right">
+                            <div class="w-[14%] pr-4">
                                 <span class="inline-flex rounded-full bg-emerald-50 px-3 py-1 text-xs font-medium text-emerald-700">
                                     <span class="cooper-baseline">{{ formatTrophies(company.donor_trophies_won) }}</span>
                                 </span>
                             </div>
 
-                            <div class="w-[10%] text-right">
+                            <div class="w-[10%]">
                                 <button
                                     type="button"
                                     class="cursor-pointer rounded border border-stone-200 bg-stone-50 px-3 py-1 text-xs font-medium text-stone-600 transition hover:bg-stone-100 font-cooper"
