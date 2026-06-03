@@ -176,11 +176,7 @@ function winnerForRank(rank: number): TrophyWinner | null {
 }
 
 function historySummary(edition: TrophyHistoryEdition, type: ApiTrophyType): string {
-    if (type === 'prixJury') {
-        return `${edition.year} · ${edition.winners[0]?.name ?? '—'}`;
-    }
-
-    return `${edition.year} · ${edition.winners.length} gagnants`;
+    return `Année ${edition.year}`;
 }
 
 async function fetchOverview() {
@@ -431,7 +427,7 @@ onMounted(fetchOverview);
                     </div>
                 </div>
 
-                <details v-if="currentTabData.history.length > 0" class="collapse-arrow collapse mb-5 bg-base-200">
+                <details v-if="currentTabData.history.length > 0" class="collapse-arrow collapse mb-5 bg-white">
                     <summary class="collapse-title min-h-11 px-4 py-3 text-sm font-medium text-base-content/60">
                         <span class="cooper-baseline">Historique des gagnants ({{ currentTabData.history.length }})</span>
                     </summary>
@@ -439,7 +435,7 @@ onMounted(fetchOverview);
                         <div
                             v-for="edition in currentTabData.history"
                             :key="edition.year"
-                            class="border-t border-base-300 py-4 first:border-t-0"
+                            class="py-4"
                         >
                             <p class="cooper-text-baseline mb-3 text-sm font-semibold text-base-content/65">
                                 {{ historySummary(edition, currentTabType) }}
