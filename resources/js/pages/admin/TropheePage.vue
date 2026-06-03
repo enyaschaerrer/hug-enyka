@@ -440,15 +440,15 @@ onMounted(fetchOverview);
                     </div>
                 </div>
 
-                <details v-if="currentTabData.history.length > 0" class="collapse-arrow collapse mb-5 bg-white">
-                    <summary class="collapse-title min-h-11 px-4 py-3 text-sm font-medium text-base-content/60">
+                <details v-if="currentTabData.history.length > 0" class="collapse-arrow collapse mb-3">
+                    <summary class="collapse-title min-h-8 px-0 pt-1 pb-3 text-sm font-medium text-base-content/60">
                         <span class="cooper-baseline">Historique des gagnants ({{ currentTabData.history.length }})</span>
                     </summary>
-                    <div class="collapse-content px-4 pb-4">
+                    <div class="collapse-content px-0 pb-0">
                         <div
                             v-for="edition in currentTabData.history"
                             :key="edition.year"
-                            class="py-2"
+                            class="py-1"
                         >
                             <p class="cooper-text-baseline mb-3 text-sm font-semibold text-base-content/65">
                                 {{ historySummary(edition, currentTabType) }}
@@ -457,32 +457,31 @@ onMounted(fetchOverview);
                                 <div
                                     v-for="winner in edition.winners"
                                     :key="`${edition.year}-${winner.rank}-${winner.id}`"
-                                    class="rounded-lg border border-base-300 bg-white px-4 py-3"
+                                    class="rounded-box border border-base-content/20 bg-base-200/60 px-4 py-3"
                                 >
                                     <div class="flex items-center gap-3">
-                                        <div class="flex h-11 w-11 items-center justify-center overflow-hidden rounded-full border border-base-200 bg-base-100 p-2">
-                                            <img
-                                                v-if="winner.logo"
-                                                :src="winner.logo"
-                                                :alt="winner.name"
-                                                class="max-h-full max-w-full object-contain"
-                                            />
-                                            <div
-                                                v-else
-                                                class="flex h-full w-full items-center justify-center rounded-full text-xs font-semibold"
-                                                :style="{
-                                                    backgroundColor: winner.primaryColor || '#E5E7EB',
-                                                    color: readableTextColor(winner.primaryColor || '#E5E7EB'),
-                                                }"
-                                            >
-                                                <span class="cooper-baseline">{{ companyBadgeLabel(winner.name) }}</span>
-                                            </div>
+                                        <img
+                                            v-if="winner.logo"
+                                            :src="winner.logo"
+                                            :alt="winner.name"
+                                            class="h-10 w-auto max-w-[5rem] object-contain"
+                                        />
+                                        <div
+                                            v-else
+                                            class="flex h-10 w-10 items-center justify-center rounded-full text-sm font-semibold"
+                                            :style="{
+                                                backgroundColor: winner.primaryColor || '#E5E7EB',
+                                                color: readableTextColor(winner.primaryColor || '#E5E7EB'),
+                                            }"
+                                        >
+                                            <span class="cooper-baseline">{{ companyBadgeLabel(winner.name) }}</span>
                                         </div>
+                                        <div class="w-px -my-3 mx-3 self-stretch bg-base-300"></div>
                                         <div>
                                             <p class="cooper-text-baseline text-xs font-semibold uppercase tracking-wider text-base-content/45">
                                                 {{ rankLabel(winner.rank, currentTabType) }}
                                             </p>
-                                            <p class="cooper-text-baseline text-sm font-medium text-base-content">{{ winner.name }}</p>
+                                            <p class="cooper-text-baseline font-semibold text-base-content -mb-[5px]">{{ winner.name }}</p>
                                         </div>
                                     </div>
                                 </div>
