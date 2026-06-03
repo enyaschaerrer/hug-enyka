@@ -47,8 +47,16 @@ const copyMessage = ref<string | null>(null);
 let disabledLinkTimer: number | undefined;
 let copyMessageTimer: number | undefined;
 
+function parseLocalDate(iso: string): Date {
+    const normalized = iso.replace(' ', 'T').replace(/Z$/, '').replace(/\.\d+$/, '');
+    const [datePart, timePart = '00:00'] = normalized.split('T');
+    const [year, month, day] = datePart.split('-').map(Number);
+    const [hours, minutes] = timePart.split(':').map(Number);
+    return new Date(year, month - 1, day, hours, minutes);
+}
+
 function formatDate(iso: string): string {
-    return new Date(iso).toLocaleString('fr-CH', {
+    return parseLocalDate(iso).toLocaleString('fr-CH', {
         day: '2-digit', month: '2-digit', year: 'numeric',
         hour: '2-digit', minute: '2-digit',
     });
