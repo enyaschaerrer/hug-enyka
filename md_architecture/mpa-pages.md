@@ -1,160 +1,194 @@
 # Pages publiques MPA et ilots Vue
 
-Ce document explique l'architecture des pages publiques classiques du site, c'est-a-dire les pages rendues par Blade avec des composants Vue montes ponctuellement dans la page.
+Ce document decrit l'etat reel des pages publiques rendues par Blade, avec enrichissements Vue ponctuels.
 
 ## Scope
 
-Ce document concerne les pages publiques MPA du site principal.
+Ce document concerne uniquement les pages publiques du site principal.
 
 Il ne concerne pas :
 
-- le back-office `/admin`, qui fonctionne comme une SPA Vue servie par `resources/views/app.blade.php` ;
-- les pages co-brandees `/collecte/{brand}/{token}`, qui passent aussi par la SPA Vue et recoivent leurs donnees via `window.__APP__.coBrandedCollecte` ;
-- les endpoints JSON de l'admin.
+- le back-office `/admin`, qui passe par la SPA Vue servie via `resources/views/app.blade.php` ;
+- les pages co-brandees `/collecte/{brand}/{token}`, qui passent aussi par la SPA Vue ;
+- les endpoints JSON admin.
 
 ## Principe general
 
-Les pages MPA sont rendues par Laravel/Blade. Le HTML principal vient du serveur, puis Vue est utilise uniquement pour enrichir certaines zones de la page.
+Le site public melange :
 
-Le fichier d'entree front reste unique :
+- des pages Blade purement server-rendered ;
+- des pages Blade avec ilots Vue ;
+- des pages publiques qui passent par la SPA quand le besoin fonctionnel est plus riche.
+
+Le point d'entree front public reste :
 
 ```text
 resources/js/app.ts
 ```
 
-Ce fichier detecte la presence de points de montage dans le DOM et monte seulement les composants Vue necessaires.
+Ce fichier detecte les points de montage existants dans le DOM et monte uniquement les composants necessaires.
 
 ## Layout public
 
-Le layout principal des pages MPA est :
+Le layout public partage est :
 
 ```text
 resources/views/layouts/public.blade.php
 ```
 
-Il inclut :
+Il inclut notamment :
 
-- les metas HTML communes ;
-- les assets Vite `resources/css/app.css` et `resources/js/app.ts` ;
-- le header public `resources/views/partials/public-header.blade.php` ;
-- le contenu de page via `@yield('content')` ;
-- le footer public `resources/views/partials/public-footer.blade.php` ;
-- le point de montage Vue `#cookie-consent-root` pour la popup cookies.
+- les assets Vite ;
+- le header public ;
+- le footer public ;
+- le point de montage `#cookie-consent-root`.
 
-## Header et footer
+## Pages publiques actuelles
 
-Le header public est dans :
+### `/`
 
-```text
-resources/views/partials/public-header.blade.php
-```
-
-Il gere la navigation publique et l'etat actif du lien selon `request()->path()`.
-
-Le footer public est dans :
-
-```text
-resources/views/partials/public-footer.blade.php
-```
-
-Il est partage par les pages qui etendent le layout public.
-
-## Accueil
-
-La route `/` utilise :
+Route :
 
 ```text
 App\Http\Controllers\PublicSiteController@home
+```
+
+Vue Blade :
+
+```text
 resources/views/public/home.blade.php
 ```
 
-Le controller prepare les donnees serveur :
+Cette page est une page Blade enrichie par plusieurs ilots Vue.
 
-- entreprises participantes ;
-- podiums par edition ;
-- jury.
+Points de montage actuellement utilises via `resources/js/app.ts` :
 
-La vue Blade rend le contenu principal et injecte certaines donnees JSON dans des attributs `data-*`.
+- `#podium`
+- `#companies`
+- `#cookie-consent-root`
 
-Exemple :
+## `/collecte`
 
-```blade
-<div id="podium" data-podiums='@json($podiums)'></div>
-<div id="companies" data-companies='@json($companies)'></div>
-```
-
-Puis `resources/js/app.ts` lit ces attributs et monte les composants Vue correspondants :
-
-```ts
-createApp(Podium, { initialPodiums }).mount(podiumRoot);
-createApp(Companies, { initialCompanies }).mount(companiesRoot);
-```
-
-## Page collecte publique simple
-
-La route `/collecte` utilise :
+Route :
 
 ```text
 resources/views/public/collection.blade.php
 ```
 
-Cette page est encore une page Blade autonome. Elle inclut le header public, charge Vite et expose le point de montage :
+Cette page reste une page Blade publique.
+
+Le formulaire Vue de demande de collecte est monte sur :
 
 ```html
-<div id="collecte-form"></div>
+<div id="formulaire"></div>
 ```
 
-`resources/js/app.ts` monte ensuite :
+Le composant monte est :
 
-```ts
-createApp(CollecteForm).mount(el);
+```text
+resources/js/components/public/CollectionForm.vue
 ```
 
-Cette page est differente des pages co-brandees tokenisees.
+Important : l'ancien point de montage `#collecte-form` n'est plus la reference.
 
-## Popup cookies
+## `/prix`
 
-Les pages MPA affichent la popup cookies via :
+Route :
+
+```text
+resources/views/public/prize.blade.php
+```
+
+Le formulaire Vue est monte via :
 
 ```html
-<div id="cookie-consent-root"></div>
+<div id="prize-form"></div>
 ```
 
-Quand ce noeud existe, `resources/js/app.ts` monte :
-
-```ts
-createApp(CookieConsentModal).mount(cookieConsentRoot);
-```
-
-Le composant garde sa propre logique de consentement dans :
+Composant :
 
 ```text
-resources/js/components/modals/CookieConsentModal.vue
-resources/js/services/cookieConsent.ts
+resources/js/components/public/PrizeForm.vue
 ```
 
-Important : ce montage est dedie aux pages MPA. La SPA admin/co-brandee ne doit pas dependre de ce point de montage.
+## `/label`
 
-## Routes publiques actuelles
-
-Etat actuel a verifier dans `routes/web.php` :
+Route :
 
 ```text
-/                         MPA Blade via PublicSiteController@home
-/collecte                 page Blade autonome avec ilot Vue CollecteForm
-/collecte/{brand}/{token} page co-brandee SPA, hors scope de ce document
-/admin                    SPA admin, hors scope de ce document
+App\Http\Controllers\PublicSiteController@label
 ```
 
-Certaines routes publiques comme `/label`, `/trophee` ou `/contact` peuvent encore pointer vers `resources/views/app.blade.php` selon l'etat du chantier. Tant qu'elles passent par `app.blade.php`, elles ne suivent pas completement le pattern MPA decrit ici.
+Vue Blade :
+
+```text
+resources/views/public/label.blade.php
+```
+
+Cette page est publique et ne depend pas du shell SPA admin.
+
+## `/contact`
+
+La route existe dans `routes/web.php`, mais la vue correspondante n'est pas presente dans `resources/views/public/`.
+
+Conclusion :
+
+- la route est actuellement incoherente avec le code disponible ;
+- il ne faut pas considerer `/contact` comme une page publique fonctionnelle tant que la vue n'existe pas.
+
+## Pages co-brandees
+
+La route :
+
+```text
+/collecte/{brand}/{token}
+```
+
+ne suit pas le modele MPA documente ici.
+
+Elle passe par :
+
+```text
+App\Http\Controllers\CoBrandedCollecteController@show
+resources/views/app.blade.php
+resources/js/App.vue
+```
+
+et injecte ses donnees dans `window.__APP__`.
+
+## Admin
+
+Toutes les pages `/admin/...` hors login passent par le shell SPA :
+
+```text
+resources/views/app.blade.php
+resources/js/App.vue
+```
+
+Le login admin reste separe :
+
+```text
+resources/views/admin/login.blade.php
+```
+
+## Points de montage Vue actuellement utilises
+
+Dans `resources/js/app.ts`, les points de montage publics reels sont :
+
+- `#formulaire`
+- `#prize-form`
+- `#podium`
+- `#companies`
+- `#login-form`
+- `#cookie-consent-root`
+- `#app` pour les zones SPA
 
 ## Regle de contribution
 
-Pour une nouvelle page publique MPA :
+Pour ajouter une nouvelle page publique :
 
-1. creer ou reutiliser une vue Blade dans `resources/views/public/` ;
-2. etendre `layouts.public` quand c'est possible ;
-3. preparer les donnees cote Laravel dans un controller public ;
-4. injecter les donnees dans Blade via variables serveur ou attributs `data-*` ;
-5. monter un composant Vue seulement si la page a besoin d'interactivite locale ;
-6. ne pas melanger cette logique avec les routes `/admin` ou co-brandees.
+1. determiner si elle doit etre une page Blade simple, une page Blade avec ilot Vue, ou une vraie page SPA ;
+2. si c'est une page publique classique, privilegier `resources/views/public/...` ;
+3. n'ajouter un point de montage Vue que si l'interaction le justifie ;
+4. verifier `resources/js/app.ts` avant de documenter ou creer un nouvel id de montage ;
+5. ne pas documenter `/contact` comme fonctionnel tant que sa vue n'existe pas.
