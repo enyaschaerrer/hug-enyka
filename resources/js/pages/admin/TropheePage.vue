@@ -435,7 +435,7 @@ onMounted(fetchOverview);
                         <div
                             v-for="edition in currentTabData.history"
                             :key="edition.year"
-                            class="py-4"
+                            class="py-2"
                         >
                             <p class="cooper-text-baseline mb-3 text-sm font-semibold text-base-content/65">
                                 {{ historySummary(edition, currentTabType) }}
