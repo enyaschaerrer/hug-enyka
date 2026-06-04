@@ -3,6 +3,7 @@ import { computed, nextTick, onMounted, reactive, ref, watch } from 'vue';
 import { useAdminRouter } from '../../composables/useAdminRouter';
 import AdminDateTimePicker from '../../components/admin/AdminDateTimePicker.vue';
 import AdminLayout from '../../components/layout/AdminLayout.vue';
+import { buildBrandPalette } from '../../utils/brandPalette';
 import { readableTextColor } from '../../utils/contrast';
 
 type AppState = { csrfToken: string };
@@ -61,25 +62,6 @@ function slugify(input: string): string {
 
 function isHexColor(value: string): boolean {
     return /^#[0-9a-fA-F]{6}$/.test(value.trim());
-}
-
-function mixHexWithWhite(hex: string, ratio: number): string {
-    const normalized = hex.trim();
-    const red = Number.parseInt(normalized.slice(1, 3), 16);
-    const green = Number.parseInt(normalized.slice(3, 5), 16);
-    const blue = Number.parseInt(normalized.slice(5, 7), 16);
-    const mix = (channel: number) => Math.round(channel + (255 - channel) * ratio);
-
-    return `#${[mix(red), mix(green), mix(blue)]
-        .map((channel) => channel.toString(16).padStart(2, '0'))
-        .join('')}`;
-}
-
-function deriveBrandColors(primaryColor: string) {
-    return {
-        secondaryColor: mixHexWithWhite(primaryColor, 0.45),
-        thirdColor: mixHexWithWhite(primaryColor, 0.72),
-    };
 }
 
 const form = reactive({
@@ -144,10 +126,10 @@ watch(sourceColor, (baseColor) => {
         return;
     }
 
-    form.primaryColor = baseColor;
-    const derived = deriveBrandColors(baseColor);
-    form.secondaryColor = derived.secondaryColor;
-    form.thirdColor = derived.thirdColor;
+    const palette = buildBrandPalette(baseColor);
+    form.primaryColor = palette.primaryColor;
+    form.secondaryColor = palette.secondaryColor;
+    form.thirdColor = palette.thirdColor;
 }, { immediate: true });
 
 function onSlugInput(event: Event) {
