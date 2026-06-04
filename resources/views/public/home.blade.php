@@ -3,10 +3,10 @@
 @section('title', 'Accueil — Coeur d\'Honneur')
 @section('banner', '/img/banners/banni_re_home.webp')
 @section('banner_content')
-    <h1 class="text-heading-t1 leading-none text-white lg:text-[2.5rem] lg:leading-[1.1]">
+    <h1 class="text-[1rem] font-semibold leading-none text-white lg:text-[2.5rem] lg:leading-[1.1]">
         Donnez, sauvez des vies.
     </h1>
-    <p class="mt-2 max-w-xl text-[0.82rem] leading-[1.12] font-semibold text-white lg:mt-4 lg:max-w-none lg:text-[1.13rem] lg:leading-snug lg:whitespace-nowrap">
+    <p class="mt-2 max-w-xl text-[0.5rem] leading-[1.12] text-white hidden lg:block lg:mt-4 lg:max-w-none lg:text-[1.13rem] lg:font-semibold lg:leading-snug lg:whitespace-nowrap">
         Le Prix du Cœur récompense les entreprises engagées dans le don du sang.
     </p>
 @endsection
@@ -19,11 +19,11 @@
         <div class="mx-auto max-w-6xl">
             <div class="flex flex-col items-center gap-8 lg:flex-row lg:items-start lg:justify-between lg:gap-12">
                 <div class="max-w-2xl">
-                    <h2 class="text-display text-martinique-950">Le Prix du Cœur</h2>
+                    <h2 class="text-[1.5rem] font-semibold text-martinique-950 lg:text-display">Le Prix du Cœur</h2>
                     <p class="mt-10 text-body text-martinique-900 text-justify">
                         Chaque année, le Prix du Cœur met à l'honneur les entreprises de la région
                         qui s'engagent activement dans le don du sang aux côtés du CTS (Centre de Transfusion
-                        Sanguine) des HUG. À travers ces collectes, les salariés et employeurs se rassemblent autour d'un même geste : sauver des vies.
+                        Sanguine) des HUG. À travers ces collectes, les salariés et employeurs se rassemblent autour d'un même geste : sauver des vies.<br><br>
                         Trois récompenses sont décernées par un jury composé par les membres de l'HUG afin de saluer la mobilisation et la fidélité
                         des entreprises participantes.
                     </p>
@@ -47,7 +47,7 @@
                                 class="h-24 w-24 shrink-0 rounded-md object-cover object-top"
                             />
                             <div>
-                                <div class="text-heading-t2 text-martinique-950">{{ $member['name'] }}</div>
+                                <div class="text-heading-t4 font-semibold text-martinique-950 lg:text-heading-t2">{{ $member['name'] }}</div>
                                 <p class="mt-1 text-body">{{ $member['bio'] }}</p>
                             </div>
                         </article>
@@ -57,15 +57,12 @@
         </div>
     </section>
 
-    {{-- Section 2 : Podium (îlot Vue) --}}
-    <div id="podium" data-podiums='@json($podiums)'></div>
-
-    {{-- Section 3 : Mettre en lumière les entreprises engagées --}}
+    {{-- Section 2 : Mettre en lumière les entreprises engagées --}}
     <section class="px-6 py-8 lg:px-12 lg:py-16">
         <div class="mx-auto max-w-6xl lg:grid lg:grid-cols-2 lg:gap-x-8 lg:gap-y-8">
             {{-- Bloc intro (top-left sur lg) --}}
             <div class="lg:col-start-1 lg:row-start-1">
-                    <h2 class="text-display text-martinique-950">Mettre en lumière les entreprises engagées</h2>
+                    <h2 class="text-[1.5rem] font-semibold text-martinique-950 lg:text-display">Mettre en lumière les entreprises engagées</h2>
                     <p class="mt-6 text-body text-martinique-950">
                         Le Prix du Cœur célèbre trois engagements distincts. Chaque récompense honore une
                         manière différente de contribuer au don du sang : la générosité des dons, l'effort de
@@ -182,6 +179,9 @@
         </div>
     </section>
 
+    {{-- Section 3 : Podium (îlot Vue) --}}
+    <div id="podium" data-podiums='@json($podiums)'></div>
+    
     {{-- Modale d'agrandissement des photos de prix --}}
     <dialog
         id="prize-modal"

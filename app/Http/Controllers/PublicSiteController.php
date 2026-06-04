@@ -74,7 +74,7 @@ class PublicSiteController extends Controller
             [
                 'name' => 'Antoine Geissbühler',
                 'photo' => '/img/jury/antoinegeissbuhler_photo.jpg',
-                'bio' => 'Directeur du Centre de l\'innovation des HUG et médecin-chef du Service de cybersanté et télémédecine.',
+                'bio' => 'Directeur du Centre de l\'innovation des HUG.',
             ],
             [
                 'name' => 'François Freitas',

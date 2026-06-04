@@ -94,7 +94,7 @@ function resetFilters() {
     <section class="px-6 py-8 lg:px-12 lg:py-16">
         <div class="mx-auto max-w-6xl">
             <div>
-                <h2 class="text-display text-martinique-950">{{ props.title }}</h2>
+                <h2 class="text-[1.5rem] font-semibold text-martinique-950 lg:text-display">{{ props.title }}</h2>
                 <p class="mt-2 text-body text-martinique-950">{{ props.description }}</p>
             </div>
 
@@ -190,32 +190,40 @@ function resetFilters() {
                     </div>
                 </div>
 
-            <div class="mt-6 grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-3 lg:mt-10 lg:grid-cols-4">
-                <article v-for="company in visible" :key="company.name" class="flex flex-col">
-                    <div class="flex h-24 items-center justify-center rounded bg-white p-3">
-                        <img
-                            v-if="company.logo"
-                            :src="company.logo"
-                            :alt="company.name"
-                            class="h-12 w-auto max-w-full object-contain"
-                        />
-                        <span v-else class="text-heading-t3 text-martinique-950">{{ company.name }}</span>
-                    </div>
-                    <div class="mt-3 flex items-end justify-between">
-                        <div>
-                            <div class="text-heading-t3 uppercase text-martinique-950">{{ company.name }}</div>
-                            <div class="mt-1 text-caption text-martinique-950">
-                                Année d'adhésion <span class="ml-1 font-semibold">{{ company.adhesionYear ?? '—' }}</span>
-                            </div>
-                            <div v-if="props.showTrophies" class="text-caption text-martinique-950">
-                                Prix gagnés
-                                <span class="ml-1 inline-flex h-5 min-w-[1.25rem] items-center justify-center rounded-full bg-razzmatazz-900 px-1 text-caption font-medium text-white">
-                                    {{ company.trophies }}
-                                </span>
+            <div class="relative">
+                <div class="mt-6 grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-3 lg:mt-10 lg:grid-cols-4">
+                    <article v-for="company in visible" :key="company.name" class="flex flex-col">
+                        <div class="flex h-24 items-center justify-center rounded bg-white p-3">
+                            <img
+                                v-if="company.logo"
+                                :src="company.logo"
+                                :alt="company.name"
+                                class="h-12 w-auto max-w-full object-contain"
+                            />
+                            <span v-else class="text-[1rem] text-martinique-950 lg:text-heading-t3">{{ company.name }}</span>
+                        </div>
+                        <div class="mt-3 flex items-end justify-between">
+                            <div>
+                                <div class="text-[1rem] uppercase text-martinique-950 lg:text-heading-t3">{{ company.name }}</div>
+                                <div class="mt-1 text-caption text-martinique-950">
+                                    Année d'adhésion <span class="lg:ml-1 font-semibold">{{ company.adhesionYear ?? '—' }}</span>
+                                </div>
+                                <div v-if="props.showTrophies" class="text-caption text-martinique-950">
+                                    Prix gagnés
+                                    <span class="ml-1 inline-flex h-5 min-w-[1.25rem] items-center justify-center rounded-full bg-razzmatazz-900 px-1 text-caption font-medium text-white">
+                                        {{ company.trophies }}
+                                    </span>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </article>
+                    </article>
+                </div>
+
+                <!-- Dégradé -->
+                <div
+                    v-if="hasMore"
+                    class="pointer-events-none absolute bottom-0 left-0 right-0 h-10 bg-gradient-to-t from-martinique-600 to-transparent"
+                />
             </div>
 
             <div v-if="visible.length === 0" class="mt-10 text-center text-body text-martinique-950">

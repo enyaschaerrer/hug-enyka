@@ -56,7 +56,7 @@ function selectPrizeType(type: PrizeType) {
 <template>
     <section class="px-6 py-8 lg:px-12 lg:py-16">
         <div class="mx-auto max-w-6xl">
-            <h2 class="text-display text-martinique-950">Le podium du Prix du Cœur</h2>
+            <h2 class="text-[1.5rem] font-semibold text-martinique-950 lg:text-display">Le podium du Prix du Cœur</h2>
 
             <!-- Tabs type de prix -->
             <div class="mt-8 flex flex-wrap gap-2 border-b border-martinique-200">
@@ -110,7 +110,7 @@ function selectPrizeType(type: PrizeType) {
                             class="h-28 max-w-full object-contain lg:h-32"
                         />
                     </div>
-                    <div v-else class="flex items-end justify-center gap-2 lg:gap-3">
+                    <div v-else class="hidden lg:flex lg:items-end lg:justify-center lg:gap-2">
                         <!-- 3e -->
                         <div class="flex flex-col items-center">
                             <div class="mb-2 flex h-12 w-20 items-center justify-center p-2 lg:h-16 lg:w-24">

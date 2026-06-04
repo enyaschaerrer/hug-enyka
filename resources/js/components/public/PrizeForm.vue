@@ -75,13 +75,13 @@ async function handleSubmit() {
         </div>
 
         <template v-else>
-            <h2 class="text-center text-display text-martinique-950">Participez au Prix du Cœur</h2>
+            <h2 class="text-[1.5rem] font-semibold text-martinique-950 lg:text-display lg:text-center">Participez au Prix du Cœur</h2>
 
             <!-- Étape 1 -->
             <template v-if="step === 1">
                 <div class="mt-10 rounded-2xl bg-martinique-100 p-8">
                     <p class="text-center text-body text-martinique-800">
-                        Êtes-vous une entreprise déjà labellisée "Cœur d'Honneur" ? *
+                        Êtes-vous une entreprise déjà labellisée "Cœur d'Honneur" ?
                     </p>
 
                     <div class="mt-6 flex justify-center gap-4">
@@ -161,7 +161,7 @@ async function handleSubmit() {
                 <div class="mt-4 flex justify-between">
                     <button
                         type="button"
-                        class="rounded-full border border-martinique-300 px-6 py-3 text-body text-martinique-800 transition hover:bg-martinique-100"
+                        class="rounded-full border border-martinique-300 px-3 py-2 text-body text-martinique-800 transition hover:bg-martinique-100 lg:px-6 lg:py-3"
                         @click="goBack"
                     >
                         ← Retour
@@ -169,7 +169,7 @@ async function handleSubmit() {
                     <button
                         type="button"
                         :disabled="!form.name || !form.email || loading"
-                        class="rounded-full bg-razzmatazz-800 px-6 py-3 text-body text-white transition hover:bg-razzmatazz-600 disabled:opacity-40"
+                        class="rounded-full bg-razzmatazz-800 px-3 py-2 text-body text-white transition hover:bg-razzmatazz-600 disabled:opacity-40  lg:px-6 lg:py-3"
                         @click="handleSubmit"
                     >
                         <span v-if="loading">Envoi en cours…</span>

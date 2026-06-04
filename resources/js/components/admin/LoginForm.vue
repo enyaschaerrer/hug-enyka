@@ -50,7 +50,7 @@ async function submit() {
 <template>
     <form class="flex flex-col gap-5" @submit.prevent="submit">
         <div>
-            <label class="mb-1.5 block text-sm font-medium text-[#2F2F36]">Email</label>
+            <label class="mb-1.5 block text-sm font-medium text-razzmatazz-900">Email</label>
             <input
                 v-model="email"
                 type="email"
@@ -61,7 +61,7 @@ async function submit() {
         </div>
 
         <div>
-            <label class="mb-1.5 block text-sm font-medium text-[#2F2F36]">Mot de passe</label>
+            <label class="mb-1.5 block text-sm font-medium text-razzmatazz-900">Mot de passe</label>
             <input
                 v-model="password"
                 type="password"
@@ -78,7 +78,7 @@ async function submit() {
         <button
             type="submit"
             :disabled="submitting"
-            class="mt-2 w-full rounded-lg bg-[#5A002A] px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-[#460020] disabled:opacity-50"
+            class="mt-2 w-full rounded-lg bg-razzmatazz-900 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-razzmatazz-700 disabled:opacity-50"
         >
             {{ submitting ? 'Connexion...' : 'Se connecter' }}
         </button>

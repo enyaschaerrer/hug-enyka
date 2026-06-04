@@ -15,7 +15,7 @@
         <img src="@yield('banner')" alt="" class="block w-full" />
 
         @hasSection('banner_content')
-            <div class="absolute inset-0 flex items-center px-6 py-10 lg:px-12">
+            <div class="absolute inset-0 flex items-center px-6 py-3 lg:px-12 lg:py-10">
                 <div class="mx-auto w-full max-w-6xl">
                     <div class="banner-copy-fade max-w-xl text-white">
                         @yield('banner_content')
@@ -29,7 +29,7 @@
 @endif
 
 {{-- Barre de navigation — sticky au top une fois atteinte --}}
-<nav class="sticky top-0 z-40 bg-martinique-700 px-6 py-3 text-white lg:px-12">
+<nav class="sticky top-0 z-40 bg-martinique-700 px-6 py-1 text-white lg:px-12 lg:py-3">
     <div class="mx-auto flex max-w-6xl items-center justify-end lg:justify-between">
         {{-- Liens nav (desktop uniquement) --}}
         <ul class="hidden items-center gap-2 lg:flex">

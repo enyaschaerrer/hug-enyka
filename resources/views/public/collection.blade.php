@@ -3,10 +3,10 @@
 @section('title', 'Collecte')
 @section('banner', '/img/banners/banni_re_collecte.webp')
 @section('banner_content')
-    <h1 class="text-heading-t1 leading-none text-white lg:text-[2.5rem] lg:leading-[1.1]">
+    <h1 class="text-[1rem] font-semibold leading-none text-white lg:text-[2.5rem] lg:leading-[1.1]">
         Organisez votre collecte
     </h1>
-    <p class="mt-2 max-w-xl text-[0.82rem] leading-[1.12] font-semibold text-white lg:mt-4 lg:max-w-none lg:text-[1.13rem] lg:leading-snug lg:whitespace-nowrap">
+    <p class="mt-2 max-w-xl text-[0.5rem] leading-[1.12] font-semibold text-white hidden lg:block lg:mt-4 lg:max-w-none lg:text-[1.13rem] lg:leading-snug lg:whitespace-nowrap">
         Le CTS vous accompagne pour mettre en place une collecte de sang dans votre entreprise.
     </p>
 @endsection
@@ -24,7 +24,7 @@
 
     <section class="relative overflow-hidden px-6 py-8 lg:px-12 lg:py-16">
         <div class="mx-auto max-w-6xl">
-            <h1 class="text-left text-display text-martinique-950">
+            <h1 class="text-[1.5rem] font-semibold text-left text-martinique-950 lg:text-display">
                 Comment organiser une collecte ?
             </h1>
 
@@ -125,7 +125,7 @@
     </section>
 
     <div class="mx-auto max-w-2xl px-6">
-        <h3 class="mt-24 text-display text-martinique-950">
+        <h3 class="text-[1.5rem] font-semibold mt-24 text-display text-martinique-950 lg:display">
             Envie d'organiser une collecte ?
         </h3>
     </div>
