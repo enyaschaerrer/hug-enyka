@@ -228,7 +228,7 @@ onBeforeUnmount(() => {
                     type="button"
                     title="Afficher le QR code mobile"
                     aria-label="Afficher le QR code mobile"
-                    :style="{ color: company.colors.primary ?? '#111111' }"
+                    :style="{ color: '#355755' }"
                     @click="qrModalOpen = true"
                 >
                     <svg
