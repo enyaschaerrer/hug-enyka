@@ -17,26 +17,20 @@
     <section class="relative overflow-hidden px-6 py-8 lg:px-12 lg:py-16">
 
         <div class="mx-auto max-w-6xl">
-            <h1 class="text-left text-display text-martinique-950">
-                Le label Coeur d’Honneur
+            <h1 class="flex flex-wrap items-center gap-3 text-left text-display text-martinique-950">
+                <img src="/img/label.svg" alt="" class="h-12 w-auto" />
+                <span>Le label Coeur d’Honneur</span>
             </h1>
 
             <div class="relative mt-14 min-h-[320px]">
-                <img
-                    src="/img/mascots/blutly_hero.webp"
-                    alt=""
-                    class="pointer-events-none absolute bottom-0 left-0 hidden h-56 w-auto object-contain lg:block"
-                />
+                <div class="pointer-events-none absolute bottom-0 left-1/2 hidden -translate-x-1/2 items-end gap-4 lg:flex">
+                    <img src="/img/mascots/blutly_hero.webp" alt="" class="h-56 w-auto object-contain" />
+                    <img src="/img/mascots/sanguy_thumbs_up.webp" alt="" class="h-56 w-auto object-contain" />
+                </div>
 
-                <img
-                    src="/img/mascots/sanguy_thumbs_up.webp"
-                    alt=""
-                    class="pointer-events-none absolute bottom-0 right-0 hidden h-56 w-auto object-contain lg:block"
-                />
-
-                <div class="mx-auto grid max-w-4xl gap-8 lg:grid-cols-3">
-                    <article class="rounded-2xl bg-fuzzywuzzybrown-900 px-8 pb-9 pt-5 text-center text-white shadow-sm">
-                        <div class="mx-auto -mt-1 mb-5 w-fit rounded-full bg-fuzzywuzzybrown-50 px-5 py-1.5 text-body font-medium text-fuzzywuzzybrown-900">
+                <div class="mx-auto grid max-w-5xl gap-8 lg:grid-cols-2">
+                    <article class="rounded-2xl bg-razzmatazz-900 px-6 pb-8 pt-6 text-center text-white shadow-sm">
+                        <div class="mx-auto -mt-1 mb-5 w-fit rounded-full bg-razzmatazz-50 px-5 py-1.5 text-body font-medium text-razzmatazz-900">
                             Engagement reconnu
                         </div>
                         <p class="text-body">
@@ -44,17 +38,8 @@
                         </p>
                     </article>
 
-                    <article class="rounded-2xl bg-fuzzywuzzybrown-900 px-8 pb-9 pt-5 text-center text-white shadow-sm">
-                        <div class="mx-auto -mt-1 mb-5 w-fit rounded-full bg-fuzzywuzzybrown-50 px-5 py-1.5 text-body font-medium text-fuzzywuzzybrown-900">
-                            Reconnaissance officielle
-                        </div>
-                        <p class="text-body">
-                            Plus qu’un label, le Coeur d’Honneur met en lumière les organisations qui transforment leurs valeurs en actions concrètes.
-                        </p>
-                    </article>
-
-                    <article class="rounded-2xl bg-fuzzywuzzybrown-900 px-8 pb-9 pt-5 text-center text-white shadow-sm">
-                        <div class="mx-auto -mt-1 mb-5 w-fit rounded-full bg-fuzzywuzzybrown-50 px-5 py-1.5 text-body font-medium text-fuzzywuzzybrown-900">
+                    <article class="rounded-2xl bg-razzmatazz-900 px-6 pb-8 pt-6 text-center text-white shadow-sm">
+                        <div class="mx-auto -mt-1 mb-5 w-fit rounded-full bg-razzmatazz-50 px-5 py-1.5 text-body font-medium text-razzmatazz-900">
                             Image renforcée
                         </div>
                         <p class="text-body">
@@ -63,7 +48,7 @@
                     </article>
                 </div>
 
-                <div class="mt-10 flex items-end justify-between gap-6 lg:hidden">
+                <div class="mt-10 flex items-end justify-center gap-6 lg:hidden">
                     <img src="/img/mascots/blutly_hero.webp" alt="" class="h-36 w-auto object-contain" />
                     <img src="/img/mascots/sanguy_thumbs_up.webp" alt="" class="h-36 w-auto object-contain" />
                 </div>
