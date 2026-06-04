@@ -7,7 +7,7 @@
         Donnez, sauvez des vies.
     </h1>
     <p class="mt-2 max-w-xl text-[0.82rem] leading-[1.12] font-semibold text-white lg:mt-4 lg:max-w-none lg:text-[1.13rem] lg:leading-snug lg:whitespace-nowrap">
-        Le Prix du Coeur récompense les entreprises engagées dans le don du sang.
+        Le Prix du Cœur récompense les entreprises engagées dans le don du sang.
     </p>
 @endsection
 
@@ -19,15 +19,13 @@
         <div class="mx-auto max-w-6xl">
             <div class="flex flex-col items-center gap-8 lg:flex-row lg:items-start lg:justify-between lg:gap-12">
                 <div class="max-w-2xl">
-                    <h2 class="text-display text-martinique-950">Le Prix du Coeur</h2>
-                    <p class="mt-10 text-body text-martinique-900">
-                        Chaque année, le Prix du Coeur met à l'honneur les entreprises de la région
-                        qui s'engagent activement dans le don du sang aux côtés du Centre de Transfusion
-                        Sanguine des HUG. À travers les collectes organisées sur leur lieu de travail,
-                        salariés et employeurs se rassemblent autour d'un même geste : sauver des vies.
-                        Trois récompenses sont décernées par un jury composé de soignants et de
-                        personnalités du monde de la santé, pour saluer la mobilisation, la fidélité
-                        et l'inventivité des entreprises participantes.
+                    <h2 class="text-display text-martinique-950">Le Prix du Cœur</h2>
+                    <p class="mt-10 text-body text-martinique-900 text-justify">
+                        Chaque année, le Prix du Cœur met à l'honneur les entreprises de la région
+                        qui s'engagent activement dans le don du sang aux côtés du CTS (Centre de Transfusion
+                        Sanguine) des HUG. À travers ces collectes, les salariés et employeurs se rassemblent autour d'un même geste : sauver des vies.
+                        Trois récompenses sont décernées par un jury composé par les membres de l'HUG afin de saluer la mobilisation et la fidélité
+                        des entreprises participantes.
                     </p>
                 </div>
                 <img
@@ -69,7 +67,7 @@
             <div class="lg:col-start-1 lg:row-start-1">
                     <h2 class="text-display text-martinique-950">Mettre en lumière les entreprises engagées</h2>
                     <p class="mt-6 text-body text-martinique-950">
-                        Le Prix du Coeur célèbre trois engagements distincts. Chaque récompense honore une
+                        Le Prix du Cœur célèbre trois engagements distincts. Chaque récompense honore une
                         manière différente de contribuer au don du sang : la générosité des dons, l'effort de
                         mobilisation, et l'impact humain de la démarche.
                     </p>
@@ -97,7 +95,7 @@
 
                 {{-- Carte : Meilleur ambassadeur (top-right sur lg) --}}
                 <article class="flex w-72 shrink-0 snap-center flex-col gap-3 rounded-2xl bg-white p-4 lg:col-start-2 lg:row-start-1 lg:mt-0 lg:w-auto lg:shrink lg:snap-align-none lg:grid lg:grid-cols-[1fr_auto] lg:grid-rows-[auto_1fr] lg:gap-x-4 lg:gap-y-3">
-                    <div class="w-fit rounded-full bg-fuzzywuzzybrown-700 px-4 py-1 text-body font-medium text-white lg:col-start-1 lg:row-start-1">
+                    <div class="w-fit rounded-full bg-razzmatazz-900 px-4 py-1 text-body font-medium text-white lg:col-start-1 lg:row-start-1">
                         Meilleur ambassadeur
                     </div>
                     <div class="relative shrink-0 lg:col-start-2 lg:row-span-2 lg:self-center">
@@ -113,7 +111,7 @@
                                 class="h-48 w-full object-cover lg:h-28 lg:w-40"
                             />
                         </button>
-                        <span class="pointer-events-none absolute -right-2 -top-2 flex h-9 w-9 items-center justify-center rounded-full bg-fuzzywuzzybrown-400 text-white shadow-md">
+                        <span class="pointer-events-none absolute -right-2 -top-2 flex h-9 w-9 items-center justify-center rounded-full bg-razzmatazz-700 text-white shadow-md">
                             <span class="material-symbols-outlined" style="font-size: 20px; font-variation-settings: 'FILL' 1;" aria-hidden="true">star</span>
                         </span>
                     </div>
@@ -125,7 +123,7 @@
 
                 {{-- Carte : Coup de cœur du jury (bottom-left sur lg) --}}
                 <article class="flex w-72 shrink-0 snap-center flex-col gap-3 rounded-2xl bg-white p-4 lg:col-start-1 lg:row-start-2 lg:mt-0 lg:w-auto lg:shrink lg:snap-align-none lg:grid lg:grid-cols-[1fr_auto] lg:grid-rows-[auto_1fr] lg:gap-x-4 lg:gap-y-3">
-                    <div class="w-fit rounded-full bg-fuzzywuzzybrown-700 px-4 py-1 text-body font-medium text-white lg:col-start-1 lg:row-start-1">
+                    <div class="w-fit rounded-full bg-razzmatazz-900 px-4 py-1 text-body font-medium text-white lg:col-start-1 lg:row-start-1">
                         Coup de cœur du jury
                     </div>
                     <div class="relative shrink-0 lg:col-start-2 lg:row-span-2 lg:self-center">
@@ -141,7 +139,7 @@
                                 class="h-48 w-full object-cover lg:h-28 lg:w-40"
                             />
                         </button>
-                        <span class="pointer-events-none absolute -right-2 -top-2 flex h-9 w-9 items-center justify-center rounded-full bg-fuzzywuzzybrown-400 text-white shadow-md">
+                        <span class="pointer-events-none absolute -right-2 -top-2 flex h-9 w-9 items-center justify-center rounded-full bg-razzmatazz-700 text-white shadow-md">
                             <span class="material-symbols-outlined" style="font-size: 20px; font-variation-settings: 'FILL' 1;" aria-hidden="true">favorite</span>
                         </span>
                     </div>
@@ -153,7 +151,7 @@
 
                 {{-- Carte : Meilleur donneur (bottom-right sur lg) --}}
                 <article class="flex w-72 shrink-0 snap-center flex-col gap-3 rounded-2xl bg-white p-4 lg:col-start-2 lg:row-start-2 lg:mt-0 lg:w-auto lg:shrink lg:snap-align-none lg:grid lg:grid-cols-[1fr_auto] lg:grid-rows-[auto_1fr] lg:gap-x-4 lg:gap-y-3">
-                    <div class="w-fit rounded-full bg-fuzzywuzzybrown-700 px-4 py-1 text-body font-medium text-white lg:col-start-1 lg:row-start-1">
+                    <div class="w-fit rounded-full bg-razzmatazz-900 px-4 py-1 text-body font-medium text-white lg:col-start-1 lg:row-start-1">
                         Meilleur donneur
                     </div>
                     <div class="relative shrink-0 lg:col-start-2 lg:row-span-2 lg:self-center">
@@ -169,13 +167,13 @@
                                 class="h-48 w-full object-cover lg:h-28 lg:w-40"
                             />
                         </button>
-                        <span class="pointer-events-none absolute -right-2 -top-2 flex h-9 w-9 items-center justify-center rounded-full bg-fuzzywuzzybrown-400 text-white shadow-md">
+                        <span class="pointer-events-none absolute -right-2 -top-2 flex h-9 w-9 items-center justify-center rounded-full bg-razzmatazz-700 text-white shadow-md">
                             <span class="material-symbols-outlined" style="font-size: 20px; font-variation-settings: 'FILL' 1;" aria-hidden="true">bloodtype</span>
                         </span>
                     </div>
                     <p class="text-body text-martinique-950 lg:col-start-1 lg:row-start-2">
                         Récompense l'entreprise dont les collaborateurs ont effectué le plus de dons au
-                        cours de l'année — un engagement collectif fort et constant.
+                        cours de l'année, donc pour un engagement collectif fort et constant.
                     </p>
                 </article>
 

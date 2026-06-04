@@ -74,17 +74,17 @@ class PublicSiteController extends Controller
             [
                 'name' => 'Antoine Geissbühler',
                 'photo' => '/img/jury/antoinegeissbuhler_photo.jpg',
-                'bio' => 'Médecin interniste, professeur ordinaire, directeur du Centre de l\'innovation des HUG et médecin-chef du Service de cybersanté et télémédecine.',
+                'bio' => 'Directeur du Centre de l\'innovation des HUG et médecin-chef du Service de cybersanté et télémédecine.',
             ],
             [
                 'name' => 'François Freitas',
                 'photo' => '/img/jury/freitasfrancois_photo.jpg',
-                'bio' => 'Infirmier responsable de l\'équipe de soins, joignable pour toute question liée aux dons d\'entreprise ou partenariats (CTS).',
+                'bio' => 'Infirmier responsable de l\'équipe de soins au CTS.',
             ],
             [
                 'name' => 'Robert Mardini',
                 'photo' => '/img/jury/robertmardini_photo.jpg',
-                'bio' => 'Directeur général des Hôpitaux universitaires de Genève depuis septembre 2024.',
+                'bio' => 'Directeur général des Hôpitaux universitaires de Genève.',
             ],
         ];
 

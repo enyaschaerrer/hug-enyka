@@ -17,9 +17,8 @@
     <section class="relative overflow-hidden px-6 py-8 lg:px-12 lg:py-16">
 
         <div class="mx-auto max-w-6xl">
-            <h1 class="flex flex-wrap items-center gap-3 text-left text-display text-martinique-950">
-                <img src="/img/label.svg" alt="" class="h-12 w-auto" />
-                <span>Le label Coeur d’Honneur</span>
+            <h1 class="text-left text-display text-martinique-950">
+                Le label Cœur d’Honneur
             </h1>
 
             <div class="relative mt-14 min-h-[320px]">
@@ -34,7 +33,7 @@
                             Engagement reconnu
                         </div>
                         <p class="text-body">
-                            Le Coeur d’Honneur distingue les entreprises qui s’engagent activement en faveur du don de sang et de la solidarité.
+                            Distingue les entreprises qui s’engagent activement en faveur du don de sang et de la solidarité.
                         </p>
                     </article>
 
@@ -43,7 +42,7 @@
                             Image renforcée
                         </div>
                         <p class="text-body">
-                            Le label Coeur d’Honneur valorise votre entreprise comme acteur engagé de son territoire et de sa communauté.
+                            Il valorise votre entreprise comme acteur engagé de son territoire et de sa communauté.
                         </p>
                     </article>
                 </div>
@@ -59,7 +58,7 @@
     <div
         id="companies"
         data-companies='@json($companies)'
-        data-title="Les entreprises labellisées Coeur d'Honneur"
+        data-title="Les entreprises labellisées Cœur d'Honneur"
         data-description="Découvrez les organisations distinguées par le label, en reconnaissance de leur engagement."
         data-show-trophies="false"
     ></div>

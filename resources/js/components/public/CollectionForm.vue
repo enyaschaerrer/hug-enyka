@@ -170,7 +170,7 @@ async function handleSubmit() {
                             />
                             <div
                                 class="h-5 w-5 rounded-md border-2 transition"
-                                :class="form.participatePrixCoeur ? 'border-fuzzywuzzybrown-700 bg-fuzzywuzzybrown-700' : 'border-martinique-300 bg-white'"
+                                :class="form.participatePrixCoeur ? 'border-razzmatazz-800 bg-razzmatazz-800' : 'border-martinique-300 bg-white'"
                             >
                                 <svg
                                     v-if="form.participatePrixCoeur"
@@ -203,7 +203,7 @@ async function handleSubmit() {
                         <button
                             type="submit"
                             :disabled="loading"
-                            class="rounded-full bg-fuzzywuzzybrown-800 px-6 py-3.5 text-body text-white transition hover:bg-fuzzywuzzybrown-600 active:scale-[0.98] disabled:opacity-60"
+                            class="rounded-full bg-razzmatazz-800 px-6 py-3.5 text-body text-white transition hover:bg-razzmatazz-600 active:scale-[0.98] disabled:opacity-60"
                         >
                             <span v-if="loading">Envoi en cours…</span>
                             <span v-else>Envoyer la demande</span>
