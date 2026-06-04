@@ -103,10 +103,10 @@ const primaryTextStyle = {
             >
                 <div class="flex items-center gap-3">
                     <div
-                        class="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-full text-white"
+                        class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-white"
                         :style="iconBubbleStyle"
                     >
-                        <span class="material-symbols-outlined" style="font-size: 28px;" aria-hidden="true">{{ card.icon }}</span>
+                        <span class="material-symbols-outlined" style="font-size: 24px;" aria-hidden="true">{{ card.icon }}</span>
                     </div>
                     <h3 class="text-heading-t3 text-catskillwhite-900">{{ card.title }}</h3>
                 </div>

@@ -2,10 +2,10 @@
 import { onBeforeUnmount, onMounted, ref } from 'vue';
 import CoBrandedFooter from '../../components/co-branded/CoBrandedFooter.vue';
 import TinderEligibilityPrototype from '../../components/tinder-cards/TinderEligibilityPrototype.vue';
-import CoBrandedPhoneModal from '../../components/modals/CoBrandedPhoneModal.vue';
+import CoBrandedPhoneModal from '../../components/co-branded/CoBrandedPhoneModal.vue';
 import QuestionnaireExitModal from '../../components/modals/QuestionnaireExitModal.vue';
 import CoBrandedModuleHeader from '../../components/public/CoBrandedModuleHeader.vue';
-import CoBrandedAuthGate from '../../components/public/CoBrandedAuthGate.vue';
+import CoBrandedAuthGate from '../../components/co-branded/CoBrandedAuthGate.vue';
 import { useAdminRouter } from '../../composables/useAdminRouter';
 import { useCoBrandedCollecte } from '../../composables/useCoBrandedCollecte';
 

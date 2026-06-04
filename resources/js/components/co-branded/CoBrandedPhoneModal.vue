@@ -111,9 +111,6 @@ onBeforeUnmount(() => {
                 <p class="mt-2 text-center font-cooper text-sm font-semibold text-base-content/70">
                     Pour une expérience plus fluide et interactive, scannez ce QR code avec votre smartphone.
                 </p>
-                <p class="mt-3 text-center font-cooper text-xs font-semibold text-red-600">
-                    Attention : votre progression ne sera pas sauvegardée.
-                </p>
 
                 <div class="mt-6 flex justify-center py-[20px]">
                     <div
