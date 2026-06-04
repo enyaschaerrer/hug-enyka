@@ -31,8 +31,8 @@
             <div class="mt-16 grid grid-cols-1 items-start gap-8 lg:grid-cols-2">
 
                 {{-- Card 1 --}}
-                <article class="rounded-2xl bg-fuzzywuzzybrown-900 px-8 pb-9 pt-5 text-white shadow-sm">
-                    <div class="mb-5 w-fit rounded-full bg-fuzzywuzzybrown-50 px-5 py-1.5 text-body font-medium text-fuzzywuzzybrown-900">
+                <article class="rounded-2xl bg-razzmatazz-900 px-8 pb-9 pt-5 text-white shadow-sm">
+                    <div class="mb-5 w-fit rounded-full bg-razzmatazz-50 px-5 py-1.5 text-body font-medium text-razzmatazz-900">
                         Prise de contact
                     </div>
                     <p class="text-body">
@@ -49,8 +49,8 @@
                         alt=""
                         class="pointer-events-none -my-4 h-48 w-auto object-contain"
                     />
-                    <article class="w-full rounded-2xl bg-fuzzywuzzybrown-900 px-8 pb-9 pt-5 text-white shadow-sm">
-                        <div class="mb-5 w-fit rounded-full bg-fuzzywuzzybrown-50 px-5 py-1.5 text-body font-medium text-fuzzywuzzybrown-900">
+                    <article class="w-full rounded-2xl bg-razzmatazz-900 px-8 pb-9 pt-5 text-white shadow-sm">
+                        <div class="mb-5 w-fit rounded-full bg-razzmatazz-50 px-5 py-1.5 text-body font-medium text-razzmatazz-900">
                             Préparation
                         </div>
                         <p class="text-body">
@@ -68,8 +68,8 @@
 
                 {{-- Colonne gauche : Communication + Blutly + Jour-J --}}
                 <div class="flex flex-col items-center gap-8">
-                    <article class="w-full rounded-2xl bg-fuzzywuzzybrown-900 px-8 pb-9 pt-5 text-white shadow-sm">
-                        <div class="mb-5 w-fit rounded-full bg-fuzzywuzzybrown-50 px-5 py-1.5 text-body font-medium text-fuzzywuzzybrown-900">
+                    <article class="w-full rounded-2xl bg-razzmatazz-900 px-8 pb-9 pt-5 text-white shadow-sm">
+                        <div class="mb-5 w-fit rounded-full bg-razzmatazz-50 px-5 py-1.5 text-body font-medium text-razzmatazz-900">
                             Communication
                         </div>
                         <p class="text-body">
@@ -85,8 +85,8 @@
                         class="pointer-events-none -my-4 h-48 w-auto object-contain"
                     />
 
-                    <article class="w-full rounded-2xl bg-fuzzywuzzybrown-900 px-8 pb-9 pt-5 text-white shadow-sm">
-                        <div class="mb-5 w-fit rounded-full bg-fuzzywuzzybrown-50 px-5 py-1.5 text-body font-medium text-fuzzywuzzybrown-900">
+                    <article class="w-full rounded-2xl bg-razzmatazz-900 px-8 pb-9 pt-5 text-white shadow-sm">
+                        <div class="mb-5 w-fit rounded-full bg-razzmatazz-50 px-5 py-1.5 text-body font-medium text-razzmatazz-900">
                             Jour J
                         </div>
                         <p class="text-body">
@@ -98,8 +98,8 @@
                 </div>
 
                 {{-- Colonne droite : Inscriptions, centrée verticalement --}}
-                <article class="rounded-2xl bg-fuzzywuzzybrown-900 px-8 pb-9 pt-5 text-white shadow-sm lg:self-center">
-                    <div class="mb-5 w-fit rounded-full bg-fuzzywuzzybrown-50 px-5 py-1.5 text-body font-medium text-fuzzywuzzybrown-900">
+                <article class="rounded-2xl bg-razzmatazz-900 px-8 pb-9 pt-5 text-white shadow-sm lg:self-center">
+                    <div class="mb-5 w-fit rounded-full bg-razzmatazz-50 px-5 py-1.5 text-body font-medium text-razzmatazz-900">
                         Inscriptions
                     </div>
                     <p class="text-body">

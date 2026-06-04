@@ -76,7 +76,7 @@ async function handleSubmit() {
         </div>
 
         <template v-else>
-            <h2 class="text-center text-display text-martinique-950">Participez au Prix du Coeur</h2>
+            <h2 class="text-center text-display text-martinique-950">Participez au Prix du Cœur</h2>
 
             <!-- Étape 1 -->
             <template v-if="step === 1">
@@ -124,7 +124,7 @@ async function handleSubmit() {
                     </p>
                     <a
                         href="/collecte#formulaire"
-                        class="mt-6 inline-block rounded-full bg-fuzzywuzzybrown-800 px-6 py-3 text-body text-white transition hover:bg-fuzzywuzzybrown-600"
+                        class="mt-6 inline-block rounded-full bg-razzmatazz-800 px-6 py-3 text-body text-white transition hover:bg-razzmatazz-600"
                     >
                         Formulaire de contact
                     </a>
@@ -170,7 +170,7 @@ async function handleSubmit() {
                     <button
                         type="button"
                         :disabled="!form.name || !form.email || loading"
-                        class="rounded-full bg-fuzzywuzzybrown-800 px-6 py-3 text-body text-white transition hover:bg-fuzzywuzzybrown-600 disabled:opacity-40"
+                        class="rounded-full bg-razzmatazz-800 px-6 py-3 text-body text-white transition hover:bg-razzmatazz-600 disabled:opacity-40"
                         @click="handleSubmit"
                     >
                         <span v-if="loading">Envoi en cours…</span>

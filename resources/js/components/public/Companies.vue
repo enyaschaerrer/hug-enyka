@@ -209,7 +209,7 @@ function resetFilters() {
                             </div>
                             <div v-if="props.showTrophies" class="text-caption text-martinique-950">
                                 Prix gagnés
-                                <span class="ml-1 inline-flex h-5 min-w-[1.25rem] items-center justify-center rounded-full bg-fuzzywuzzybrown-700 px-1 text-caption font-medium text-white">
+                                <span class="ml-1 inline-flex h-5 min-w-[1.25rem] items-center justify-center rounded-full bg-razzmatazz-900 px-1 text-caption font-medium text-white">
                                     {{ company.trophies }}
                                 </span>
                             </div>

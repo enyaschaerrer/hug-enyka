@@ -64,7 +64,7 @@ function selectPrizeType(type: PrizeType) {
                     v-for="option in prizeTypeOptions"
                     :key="option.value"
                     type="button"
-                    :class="selectedPrizeType === option.value ? 'border-fuzzywuzzybrown-700 text-fuzzywuzzybrown-700' : 'border-transparent text-martinique-700 hover:text-martinique-950'"
+                    :class="selectedPrizeType === option.value ? 'border-razzmatazz-700 text-razzmatazz-700' : 'border-transparent text-martinique-700 hover:text-martinique-950'"
                     class="-mb-px border-b-2 px-4 py-3 text-body transition"
                     @click="selectPrizeType(option.value)"
                 >
@@ -130,7 +130,7 @@ function selectPrizeType(type: PrizeType) {
                             <div class="mb-2 flex h-12 w-20 items-center justify-center p-2 lg:h-16 lg:w-24">
                                 <img v-if="currentPodium.second.logo" :src="currentPodium.second.logo" :alt="currentPodium.second.name ?? ''" class="max-h-full max-w-full object-contain" />
                             </div>
-                            <div :key="`bar-2-${selectedYear}-${selectedPrizeType}`" class="podium-bar podium-bar-2 flex h-28 w-20 items-center justify-center rounded-t-lg bg-fuzzywuzzybrown-400 text-display text-white lg:h-40 lg:w-28">2</div>
+                            <div :key="`bar-2-${selectedYear}-${selectedPrizeType}`" class="podium-bar podium-bar-2 flex h-28 w-20 items-center justify-center rounded-t-lg bg-razzmatazz-400 text-display text-white lg:h-40 lg:w-28">2</div>
                         </div>
                     </div>
 
@@ -146,8 +146,8 @@ function selectPrizeType(type: PrizeType) {
                                 <div class="text-caption text-martinique-950">{{ currentPodium.first.trophies }} prix remporté{{ currentPodium.first.trophies > 1 ? 's' : '' }} au total (toutes catégories confondues)</div>
                             </div>
                         </li>
-                        <li v-if="selectedPrizeType !== 'prixJury'" class="flex items-center gap-4 border-b border-fuzzywuzzybrown-400 pb-3">
-                            <span class="flex h-10 w-10 items-center justify-center rounded-full border-2 border-fuzzywuzzybrown-400 text-fuzzywuzzybrown-400">›</span>
+                        <li v-if="selectedPrizeType !== 'prixJury'" class="flex items-center gap-4 border-b border-razzmatazz-400 pb-3">
+                            <span class="flex h-10 w-10 items-center justify-center rounded-full border-2 border-razzmatazz-400 text-razzmatazz-400">›</span>
                             <div>
                                 <div class="text-heading-t3 text-martinique-950">{{ currentPodium.second.name ?? '—' }} — 2ème place</div>
                                 <div class="text-caption text-martinique-950">{{ currentPodium.second.trophies }} prix remporté{{ currentPodium.second.trophies > 1 ? 's' : '' }} au total (toutes catégories confondues)</div>
