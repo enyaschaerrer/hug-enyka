@@ -1,7 +1,15 @@
 @extends('layouts.public')
 
 @section('title', 'Collecte')
-@section('banner', '/img/banners/banner_collection.webp')
+@section('banner', '/img/banners/banni_re_collecte_neutral.webp')
+@section('banner_content')
+    <h1 class="text-heading-t1 leading-none text-white lg:text-[2.5rem] lg:leading-[1.1]">
+        Organisez votre collecte
+    </h1>
+    <p class="mt-2 max-w-xl text-[0.82rem] leading-[1.12] font-semibold text-white lg:mt-4 lg:max-w-none lg:text-[1.13rem] lg:leading-snug lg:whitespace-nowrap">
+        Le CTS vous accompagne pour mettre en place une collecte de sang dans votre entreprise.
+    </p>
+@endsection
 
 @push('scripts')
 <script>
