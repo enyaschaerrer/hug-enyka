@@ -554,9 +554,11 @@ watch(loading, async (isLoading) => {
                 </section>
 
                 <section>
-                    <p class="mb-3 label-text">Couleurs co-brandées <span style="color: #9B2F5C;">*</span></p>
                     <label class="flex w-full flex-col gap-2">
-                        <span class="label-text-alt">Couleur de l'entreprise</span>
+                        <span class="label-text">Couleur de l'entreprise <span style="color: #9B2F5C;">*</span></span>
+                        <p class="text-xs text-base-content/60">
+                            Les deux autres variations de couleur sont calculées automatiquement à partir de cette teinte.
+                        </p>
                         <div class="flex w-full">
                             <span
                                 class="input input-bordered rounded-r-none border-r-0 group relative h-12 w-14 shrink-0 overflow-hidden p-0 transition-colors duration-200 ease-out"
@@ -581,7 +583,7 @@ watch(loading, async (isLoading) => {
                                 </svg>
                             </span>
                             <div class="relative w-full">
-                                <input v-model="sourceColor" type="text" class="input input-bordered rounded-l-none h-12 w-full pr-20 font-cooper" placeholder="#c81e1e" maxlength="7" />
+                                <input v-model="sourceColor" type="text" class="input input-bordered rounded-l-none h-12 w-full pr-20 font-cooper" placeholder="#c81e1e" maxlength="7" required />
                                 <div class="pointer-events-none absolute inset-y-0 right-3 flex items-center gap-1">
                                     <span class="h-4.5 w-4.5 rounded-sm border border-base-300" :style="{ backgroundColor: form.primaryColor }"></span>
                                     <span class="h-4.5 w-4.5 rounded-sm border border-base-300" :style="{ backgroundColor: form.secondaryColor }"></span>
