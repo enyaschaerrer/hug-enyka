@@ -11,7 +11,19 @@
 
 {{-- Bandeau supérieur (image par page) — défile normalement --}}
 @hasSection('banner')
-    <img src="@yield('banner')" alt="" class="block w-full" />
+    <section class="relative overflow-hidden">
+        <img src="@yield('banner')" alt="" class="block w-full" />
+
+        @hasSection('banner_content')
+            <div class="absolute inset-0 flex items-center px-6 py-10 lg:px-12">
+                <div class="mx-auto w-full max-w-6xl">
+                    <div class="banner-copy-fade max-w-xl text-white">
+                        @yield('banner_content')
+                    </div>
+                </div>
+            </div>
+        @endif
+    </section>
 @else
     <div class="h-24 bg-geraldine-500"></div>
 @endif
