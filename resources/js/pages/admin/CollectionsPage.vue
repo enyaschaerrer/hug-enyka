@@ -302,7 +302,7 @@ onMounted(fetchCompanies);
             </a>
         </div>
 
-        <section class="mb-6 rounded-box border border-base-300 bg-base-200/35 p-4">
+        <section class="mb-6 rounded-box border border-base-300 bg-white p-4">
             <div class="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
                 <label class="input input-bordered flex w-full max-w-xl items-center gap-3 bg-white">
                     <span class="material-symbols-outlined text-base-content/45" aria-hidden="true">search</span>
