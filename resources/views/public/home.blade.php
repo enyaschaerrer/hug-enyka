@@ -20,14 +20,12 @@
             <div class="flex flex-col items-center gap-8 lg:flex-row lg:items-start lg:justify-between lg:gap-12">
                 <div class="max-w-2xl">
                     <h2 class="text-display text-martinique-950">Le Prix du Cœur</h2>
-                    <p class="mt-10 text-body text-martinique-900">
+                    <p class="mt-10 text-body text-martinique-900 text-justify">
                         Chaque année, le Prix du Cœur met à l'honneur les entreprises de la région
-                        qui s'engagent activement dans le don du sang aux côtés du Centre de Transfusion
-                        Sanguine des HUG. À travers les collectes organisées sur leur lieu de travail,
-                        salariés et employeurs se rassemblent autour d'un même geste : sauver des vies.
-                        Trois récompenses sont décernées par un jury composé de soignants et de
-                        personnalités du monde de la santé, pour saluer la mobilisation, la fidélité
-                        et l'inventivité des entreprises participantes.
+                        qui s'engagent activement dans le don du sang aux côtés du CTS (Centre de Transfusion
+                        Sanguine) des HUG. À travers ces collectes, les salariés et employeurs se rassemblent autour d'un même geste : sauver des vies.
+                        Trois récompenses sont décernées par un jury composé par les membres de l'HUG afin de saluer la mobilisation et la fidélité
+                        des entreprises participantes.
                     </p>
                 </div>
                 <img
@@ -175,7 +173,7 @@
                     </div>
                     <p class="text-body text-martinique-950 lg:col-start-1 lg:row-start-2">
                         Récompense l'entreprise dont les collaborateurs ont effectué le plus de dons au
-                        cours de l'année — un engagement collectif fort et constant.
+                        cours de l'année, donc pour un engagement collectif fort et constant.
                     </p>
                 </article>
 

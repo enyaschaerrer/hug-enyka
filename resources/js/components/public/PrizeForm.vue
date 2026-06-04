@@ -19,7 +19,6 @@ function selectLabelled(value: boolean) {
     if (value === true) {
         step.value = 2;
     }
-    // Si Non : on reste sur l'étape 1 et on affiche le bloc d'explication via v-if sur form.labelled
 }
 
 function goBack() {
