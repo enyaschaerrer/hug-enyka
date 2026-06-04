@@ -18,6 +18,9 @@ type CoBrandedCollecte = {
         logo: string | null;
         shortDescription: string | null;
         slug: string | null;
+        address: string | null;
+        zipCode: string | null;
+        locality: string | null;
         colors: {
             primary: string | null;
             secondary: string | null;
@@ -52,6 +55,9 @@ const company = coBrandedCollecte?.company ?? {
     logo: null,
     shortDescription: null,
     slug: null,
+    address: null,
+    zipCode: null,
+    locality: null,
     colors: { primary: null, secondary: null, third: null },
 };
 const collection = coBrandedCollecte?.collection ?? {
@@ -112,6 +118,8 @@ const canNext = computed(() => activeTab.value !== tabs[tabs.length - 1].key);
                 :company="company"
                 :csrf-token="csrfToken"
                 :logout-url="auth.logoutUrl"
+                @go-home="goToTab('informations')"
+                @go-test="goToTab('test')"
             />
 
             <CoBrandedTabs
@@ -125,8 +133,10 @@ const canNext = computed(() => activeTab.value !== tabs[tabs.length - 1].key);
             <main class="flex-1">
                 <CoBrandedInformationTab
                     v-if="activeTab === 'informations'"
-                    :company-name="company.name"
                     :collection="collection"
+                    :address="company.address"
+                    :zip-code="company.zipCode"
+                    :locality="company.locality"
                     :colors="company.colors"
                     @go-to-test="goToTab('test')"
                 />
@@ -136,27 +146,29 @@ const canNext = computed(() => activeTab.value !== tabs[tabs.length - 1].key);
                 <CoBrandedTestTab       v-else-if="activeTab === 'test'" />
             </main>
 
-            <!-- Précédent / Suivant -->
-            <div class="mx-auto flex w-full max-w-5xl items-center justify-between gap-4 px-6 pb-8">
-                <button
-                    v-if="canPrev"
-                    type="button"
-                    class="rounded-2xl bg-catskillwhite-800 px-6 py-3 text-body font-semibold text-white transition hover:bg-catskillwhite-900"
-                    @click="prev"
-                >
-                    ← Précédent
-                </button>
-                <span v-else></span>
+            <!-- Précédent / Suivant — sticky bas pour rester visible pendant le scroll -->
+            <div class="sticky bottom-0 z-30 border-t border-catskillwhite-200 bg-white/95 backdrop-blur">
+                <div class="mx-auto flex w-full max-w-5xl items-center justify-between gap-4 px-6 py-4">
+                    <button
+                        v-if="canPrev"
+                        type="button"
+                        class="rounded-2xl bg-catskillwhite-800 px-6 py-3 text-body font-semibold text-white transition hover:bg-catskillwhite-900"
+                        @click="prev"
+                    >
+                        ← Précédent
+                    </button>
+                    <span v-else></span>
 
-                <button
-                    v-if="canNext"
-                    type="button"
-                    class="rounded-2xl bg-catskillwhite-800 px-6 py-3 text-body font-semibold text-white transition hover:bg-catskillwhite-900"
-                    @click="next"
-                >
-                    Suivant →
-                </button>
-                <span v-else></span>
+                    <button
+                        v-if="canNext"
+                        type="button"
+                        class="rounded-2xl bg-catskillwhite-800 px-6 py-3 text-body font-semibold text-white transition hover:bg-catskillwhite-900"
+                        @click="next"
+                    >
+                        Suivant →
+                    </button>
+                    <span v-else></span>
+                </div>
             </div>
 
             <CoBrandedFooter />

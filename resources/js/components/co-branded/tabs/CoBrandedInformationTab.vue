@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { computed } from 'vue';
+
 type Colors = {
     primary: string | null;
     secondary: string | null;
@@ -6,12 +8,14 @@ type Colors = {
 };
 
 const props = defineProps<{
-    companyName: string;
     collection: {
         start: string | null;
         end: string | null;
         appointmentUrl: string | null;
     };
+    address: string | null;
+    zipCode: string | null;
+    locality: string | null;
     colors: Colors;
 }>();
 
@@ -19,11 +23,55 @@ defineEmits<{
     goToTest: [];
 }>();
 
-const cards = [
-    { icon: 'calendar_today', title: 'Date',     text: null },
-    { icon: 'location_on',    title: 'Lieu',     text: 'à définir' },
-    { icon: 'schedule',       title: 'Deadline', text: 'Inscriptions ouvertes' },
+const MONTHS_FR = [
+    'janvier', 'février', 'mars', 'avril', 'mai', 'juin',
+    'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre',
 ];
+
+function formatTime(d: Date): string {
+    const h = d.getHours();
+    const m = d.getMinutes();
+    return m === 0 ? `${h}h` : `${h}h${m.toString().padStart(2, '0')}`;
+}
+
+function formatDateFr(d: Date): string {
+    return `${d.getDate()} ${MONTHS_FR[d.getMonth()]} ${d.getFullYear()}`;
+}
+
+// "12 juin 2026, 13h - 17h30"
+const dateLabel = computed(() => {
+    if (!props.collection.start) return 'à définir';
+    const start = new Date(props.collection.start);
+    let result = formatDateFr(start) + ', ' + formatTime(start);
+    if (props.collection.end) {
+        const end = new Date(props.collection.end);
+        result += ' - ' + formatTime(end);
+    }
+    return result;
+});
+
+const addressLabel = computed(() => {
+    const parts = [props.address, [props.zipCode, props.locality].filter(Boolean).join(' ')].filter(Boolean);
+    return parts.length ? parts.join(', ') : 'à définir';
+});
+
+// "Inscriptions ouvertes jusqu'au [J-1 du début]" — ou "Inscriptions fermées" si la collecte a commencé
+const deadlineLabel = computed(() => {
+    if (!props.collection.start) return 'à définir';
+    const start = new Date(props.collection.start);
+    if (Date.now() >= start.getTime()) {
+        return 'Inscriptions fermées';
+    }
+    const deadline = new Date(start);
+    deadline.setDate(deadline.getDate() - 1);
+    return `Inscriptions ouvertes jusqu'au ${formatDateFr(deadline)}`;
+});
+
+const cards = computed(() => [
+    { icon: 'calendar_today', title: 'Date',     text: dateLabel.value },
+    { icon: 'location_on',    title: 'Lieu',     text: addressLabel.value },
+    { icon: 'schedule',       title: 'Deadline', text: deadlineLabel.value },
+]);
 
 const cardStyle = {
     backgroundColor: props.colors.third ?? 'var(--color-razzmatazz-100)',
@@ -36,10 +84,6 @@ const iconBubbleStyle = {
 
 const primaryTextStyle = {
     color: props.colors.primary ?? 'var(--color-razzmatazz-700)',
-};
-
-const ctaStyle = {
-    backgroundColor: props.colors.primary ?? 'var(--color-razzmatazz-700)',
 };
 </script>
 
@@ -54,40 +98,36 @@ const ctaStyle = {
             <article
                 v-for="(card, idx) in cards"
                 :key="idx"
-                class="rounded-2xl border-2 p-6 text-center"
+                class="rounded-2xl border-2 p-6"
                 :style="cardStyle"
             >
-                <div
-                    class="mx-auto inline-flex h-12 w-12 items-center justify-center rounded-full text-white"
-                    :style="iconBubbleStyle"
-                >
-                    <span class="material-symbols-outlined" style="font-size: 28px;" aria-hidden="true">{{ card.icon }}</span>
+                <div class="flex items-center gap-3">
+                    <div
+                        class="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-full text-white"
+                        :style="iconBubbleStyle"
+                    >
+                        <span class="material-symbols-outlined" style="font-size: 28px;" aria-hidden="true">{{ card.icon }}</span>
+                    </div>
+                    <h3 class="text-heading-t3 text-catskillwhite-900">{{ card.title }}</h3>
                 </div>
-                <h3 class="mt-3 text-heading-t3 text-catskillwhite-900">{{ card.title }}</h3>
-                <p class="mt-1 text-body text-catskillwhite-800">
-                    <template v-if="card.title === 'Date'">
-                        <!-- TODO formatter collection.start / collection.end -->
-                        {{ collection.start ?? 'à définir' }}
-                    </template>
-                    <template v-else>{{ card.text }}</template>
-                </p>
+                <p class="mt-3 text-body text-catskillwhite-800">{{ card.text }}</p>
             </article>
         </div>
 
         <!-- CTA mascots -->
-        <div class="mt-12 flex flex-col items-center gap-6 sm:flex-row sm:justify-center">
-            <img :src="'/img/mascots/blutly_sanguy_home.webp'" alt="" class="h-32 w-auto" />
-            <div class="rounded-2xl px-8 py-6 text-center text-white" :style="ctaStyle">
-                <p class="text-body">Vous êtes intéressé·es ?</p>
+        <div class="mt-12 flex items-center justify-center gap-4 sm:gap-10">
+            <img :src="'/img/mascots/blutly_thumbs_up.webp'" alt="" class="h-32 w-auto sm:h-48" />
+            <div class="text-center">
+                <p class="text-heading-t2 text-catskillwhite-900">Vous êtes intéressé·es ?</p>
                 <button
                     type="button"
-                    class="mt-3 rounded-full bg-white px-6 py-2 text-body font-semibold transition hover:opacity-90"
-                    :style="primaryTextStyle"
+                    class="mt-4 rounded-2xl bg-razzmatazz-800 px-10 py-4 text-heading-t3 font-semibold text-white transition hover:bg-razzmatazz-900"
                     @click="$emit('goToTest')"
                 >
                     Tester votre éligibilité
                 </button>
             </div>
+            <img :src="'/img/mascots/sanguy_thumbs_up.webp'" alt="" class="h-32 w-auto sm:h-48" />
         </div>
     </section>
 </template>

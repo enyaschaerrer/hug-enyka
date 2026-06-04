@@ -15,6 +15,11 @@ const props = defineProps<{
     logoutUrl: string;
 }>();
 
+defineEmits<{
+    goHome: [];
+    goTest: [];
+}>();
+
 async function logout() {
     try {
         const res = await fetch(props.logoutUrl, {
@@ -39,52 +44,48 @@ async function logout() {
 </script>
 
 <template>
-    <header class="font-cooper sticky top-0 z-40 bg-white/90 shadow-sm backdrop-blur">
-        <div class="flex">
-            <span class="h-[10px] flex-1" :style="{ backgroundColor: company.colors.primary ?? '#e5e7eb' }"></span>
-            <span class="h-[10px] flex-1" :style="{ backgroundColor: company.colors.secondary ?? '#e5e7eb' }"></span>
-            <span class="h-[10px] flex-1" :style="{ backgroundColor: company.colors.third ?? '#e5e7eb' }"></span>
-        </div>
-        <nav class="navbar mx-auto min-h-0 w-full max-w-6xl px-4 py-3">
-            <div class="navbar-start">
-                <a class="inline-flex items-center gap-3" href="/" aria-label="Accueil">
-                    <img class="h-9 w-auto object-contain" :src="'/img/logo_HUG.png'" alt="HUG" />
-                    <span class="text-xs font-semibold leading-tight uppercase text-catskillwhite-900">
-                        <span>X</span>
-                    </span>
-                    <img v-if="company.logo" class="h-11 w-auto object-contain" :src="company.logo" :alt="company.name" />
-                    <span v-else class="text-sm font-bold leading-tight text-red-950">
-                        <span>{{ company.name }}</span>
-                    </span>
-                </a>
-            </div>
+    <header class="sticky top-0 z-40 bg-catskillwhite-800 px-6 py-4 font-cooper shadow-sm lg:px-12">
+        <div class="mx-auto flex max-w-6xl items-center justify-between gap-4">
+            <!-- Pill blanche cliquable : logo entreprise X logo HUG → retour à la première page -->
+            <button
+                type="button"
+                class="flex items-center gap-3 rounded-full bg-white px-5 py-2 transition hover:bg-catskillwhite-100"
+                aria-label="Retour à l'accueil"
+                @click="$emit('goHome')"
+            >
+                <img
+                    v-if="company.logo"
+                    class="h-8 w-auto object-contain"
+                    :src="company.logo"
+                    :alt="company.name"
+                />
+                <span v-else class="text-sm font-bold text-catskillwhite-900">{{ company.name }}</span>
 
-            <div class="navbar-end">
+                <span class="text-sm font-bold text-catskillwhite-900">X</span>
+
+                <img class="h-8 w-auto object-contain" :src="'/img/logo_HUG.png'" alt="HUG" />
+            </button>
+
+            <!-- Nav droite -->
+            <div class="flex items-center gap-3 sm:gap-6">
                 <button
                     type="button"
-                    class="inline-flex h-10 w-10 items-center justify-center rounded-full text-slate-600 transition-colors duration-200 ease-in-out hover:bg-slate-100"
-                    title="Sortir"
-                    aria-label="Sortir"
-                    :style="{ color: company.colors.primary ?? '#575656' }"
+                    class="rounded-full bg-white px-5 py-2 text-body font-semibold text-catskillwhite-900 transition hover:bg-catskillwhite-100"
+                    @click="$emit('goTest')"
+                >
+                    Test d'éligibilité
+                </button>
+
+                <button
+                    type="button"
+                    class="inline-flex h-9 w-9 items-center justify-center rounded-full text-white transition hover:bg-white/10"
+                    title="Déconnexion"
+                    aria-label="Déconnexion"
                     @click="logout"
                 >
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        class="h-5 w-5"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        aria-hidden="true"
-                    >
-                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
-                        <polyline points="16 17 21 12 16 7" />
-                        <line x1="21" y1="12" x2="9" y2="12" />
-                    </svg>
+                    <span class="material-symbols-outlined" style="font-size: 22px;" aria-hidden="true">logout</span>
                 </button>
             </div>
-        </nav>
+        </div>
     </header>
 </template>
