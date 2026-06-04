@@ -59,6 +59,29 @@ function slugify(input: string): string {
         .slice(0, 20);
 }
 
+function isHexColor(value: string): boolean {
+    return /^#[0-9a-fA-F]{6}$/.test(value.trim());
+}
+
+function mixHexWithWhite(hex: string, ratio: number): string {
+    const normalized = hex.trim();
+    const red = Number.parseInt(normalized.slice(1, 3), 16);
+    const green = Number.parseInt(normalized.slice(3, 5), 16);
+    const blue = Number.parseInt(normalized.slice(5, 7), 16);
+    const mix = (channel: number) => Math.round(channel + (255 - channel) * ratio);
+
+    return `#${[mix(red), mix(green), mix(blue)]
+        .map((channel) => channel.toString(16).padStart(2, '0'))
+        .join('')}`;
+}
+
+function deriveBrandColors(primaryColor: string) {
+    return {
+        secondaryColor: mixHexWithWhite(primaryColor, 0.45),
+        thirdColor: mixHexWithWhite(primaryColor, 0.72),
+    };
+}
+
 const form = reactive({
     name: '',
     email: '',
@@ -81,6 +104,7 @@ const form = reactive({
     collection_end: '',
     collection_linkOneDoc: ONEDOC_PREFIX,
 });
+const sourceColor = ref('#c81e1e');
 const logoFile = ref<File | null>(null);
 const editLogoInputId = 'company-logo-upload-edit';
 
@@ -114,6 +138,17 @@ watch(() => form.is_public, (isPublic) => {
         form.trophy = false;
     }
 });
+
+watch(sourceColor, (baseColor) => {
+    if (!isHexColor(baseColor)) {
+        return;
+    }
+
+    form.primaryColor = baseColor;
+    const derived = deriveBrandColors(baseColor);
+    form.secondaryColor = derived.secondaryColor;
+    form.thirdColor = derived.thirdColor;
+}, { immediate: true });
 
 function onSlugInput(event: Event) {
     slugTouched.value = true;
@@ -228,6 +263,7 @@ async function fetchCompany() {
             form.trophy = Boolean(data.trophy);
             form.logo = data.logo ?? '';
             form.primaryColor = data.primaryColor ?? '#c81e1e';
+            sourceColor.value = form.primaryColor;
             form.secondaryColor = data.secondaryColor ?? '#fecaca';
             form.thirdColor = data.thirdColor ?? '#1f2937';
             const collections = (data.collections ?? []) as CollectionPayload[];
@@ -519,95 +555,44 @@ watch(loading, async (isLoading) => {
 
                 <section>
                     <p class="mb-3 label-text">Couleurs co-brandées <span style="color: #9B2F5C;">*</span></p>
-                    <div class="grid gap-x-4 gap-y-6 md:grid-cols-3">
-                        <label class="flex w-full flex-col gap-2">
-                            <span class="label-text-alt">Primaire</span>
-                            <div class="join w-full">
-                                <span
-                                    class="join-item input input-bordered group relative h-12 w-14 overflow-hidden p-0 transition-colors duration-200 ease-out"
-                                    :style="{ backgroundColor: form.primaryColor }"
+                    <label class="flex w-full flex-col gap-2">
+                        <span class="label-text-alt">Couleur de l'entreprise</span>
+                        <div class="flex w-full">
+                            <span
+                                class="input input-bordered rounded-r-none border-r-0 group relative h-12 w-14 shrink-0 overflow-hidden p-0 transition-colors duration-200 ease-out"
+                                :style="{ backgroundColor: sourceColor }"
+                            >
+                                <input v-model="sourceColor" type="color" class="absolute inset-0 h-full w-full cursor-pointer opacity-0" aria-label="Couleur de l'entreprise" />
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    class="pointer-events-none absolute left-1/2 top-1/2 h-5 w-5 -translate-x-1/2 -translate-y-1/2 opacity-0 transition-opacity duration-200 ease-out group-hover:opacity-100 group-focus-within:opacity-100"
+                                    :style="{ color: readableTextColor(sourceColor) }"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    aria-hidden="true"
                                 >
-                                    <input v-model="form.primaryColor" type="color" class="absolute inset-0 h-full w-full cursor-pointer opacity-0" aria-label="Couleur primaire" />
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        class="pointer-events-none absolute left-1/2 top-1/2 h-5 w-5 -translate-x-1/2 -translate-y-1/2 opacity-0 transition-opacity duration-200 ease-out group-hover:opacity-100 group-focus-within:opacity-100"
-                                        :style="{ color: readableTextColor(form.primaryColor) }"
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        stroke-width="2"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        aria-hidden="true"
-                                    >
-                                        <path d="m12 9-8.414 8.414A2 2 0 0 0 3 18.828v1.344a2 2 0 0 1-.586 1.414A2 2 0 0 1 3.828 21h1.344a2 2 0 0 0 1.414-.586L15 12" />
-                                        <path d="m18 9 .4.4a1 1 0 1 1-3 3l-3.8-3.8a1 1 0 1 1 3-3l.4.4 3.4-3.4a1 1 0 1 1 3 3z" />
-                                        <path d="m2 22 .414-.414" />
-                                    </svg>
-                                </span>
-                                <input v-model="form.primaryColor" type="text" class="join-item input input-bordered h-12 w-full font-cooper" placeholder="#c81e1e" maxlength="7" required />
+                                    <path d="m12 9-8.414 8.414A2 2 0 0 0 3 18.828v1.344a2 2 0 0 1-.586 1.414A2 2 0 0 1 3.828 21h1.344a2 2 0 0 0 1.414-.586L15 12" />
+                                    <path d="m18 9 .4.4a1 1 0 1 1-3 3l-3.8-3.8a1 1 0 1 1 3-3l.4.4 3.4-3.4a1 1 0 1 1 3 3z" />
+                                    <path d="m2 22 .414-.414" />
+                                </svg>
+                            </span>
+                            <div class="relative w-full">
+                                <input v-model="sourceColor" type="text" class="input input-bordered rounded-l-none h-12 w-full pr-20 font-cooper" placeholder="#c81e1e" maxlength="7" />
+                                <div class="pointer-events-none absolute inset-y-0 right-3 flex items-center gap-1">
+                                    <span class="h-4.5 w-4.5 rounded-sm border border-base-300" :style="{ backgroundColor: form.primaryColor }"></span>
+                                    <span class="h-4.5 w-4.5 rounded-sm border border-base-300" :style="{ backgroundColor: form.secondaryColor }"></span>
+                                    <span class="h-4.5 w-4.5 rounded-sm border border-base-300" :style="{ backgroundColor: form.thirdColor }"></span>
+                                </div>
                             </div>
-                            <p v-if="firstError('primaryColor')" class="mt-1 text-sm text-error">{{ firstError('primaryColor') }}</p>
-                        </label>
-                        <label class="flex w-full flex-col gap-2">
-                            <span class="label-text-alt">Secondaire</span>
-                            <div class="join w-full">
-                                <span
-                                    class="join-item input input-bordered group relative h-12 w-14 overflow-hidden p-0 transition-colors duration-200 ease-out"
-                                    :style="{ backgroundColor: form.secondaryColor }"
-                                >
-                                    <input v-model="form.secondaryColor" type="color" class="absolute inset-0 h-full w-full cursor-pointer opacity-0" aria-label="Couleur secondaire" />
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        class="pointer-events-none absolute left-1/2 top-1/2 h-5 w-5 -translate-x-1/2 -translate-y-1/2 opacity-0 transition-opacity duration-200 ease-out group-hover:opacity-100 group-focus-within:opacity-100"
-                                        :style="{ color: readableTextColor(form.secondaryColor) }"
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        stroke-width="2"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        aria-hidden="true"
-                                    >
-                                        <path d="m12 9-8.414 8.414A2 2 0 0 0 3 18.828v1.344a2 2 0 0 1-.586 1.414A2 2 0 0 1 3.828 21h1.344a2 2 0 0 0 1.414-.586L15 12" />
-                                        <path d="m18 9 .4.4a1 1 0 1 1-3 3l-3.8-3.8a1 1 0 1 1 3-3l.4.4 3.4-3.4a1 1 0 1 1 3 3z" />
-                                        <path d="m2 22 .414-.414" />
-                                    </svg>
-                                </span>
-                                <input v-model="form.secondaryColor" type="text" class="join-item input input-bordered h-12 w-full font-cooper" placeholder="#fecaca" maxlength="7" required />
-                            </div>
-                            <p v-if="firstError('secondaryColor')" class="mt-1 text-sm text-error">{{ firstError('secondaryColor') }}</p>
-                        </label>
-                        <label class="flex w-full flex-col gap-2">
-                            <span class="label-text-alt">Tertiaire</span>
-                            <div class="join w-full">
-                                <span
-                                    class="join-item input input-bordered group relative h-12 w-14 overflow-hidden p-0 transition-colors duration-200 ease-out"
-                                    :style="{ backgroundColor: form.thirdColor }"
-                                >
-                                    <input v-model="form.thirdColor" type="color" class="absolute inset-0 h-full w-full cursor-pointer opacity-0" aria-label="Couleur tertiaire" />
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        class="pointer-events-none absolute left-1/2 top-1/2 h-5 w-5 -translate-x-1/2 -translate-y-1/2 opacity-0 transition-opacity duration-200 ease-out group-hover:opacity-100 group-focus-within:opacity-100"
-                                        :style="{ color: readableTextColor(form.thirdColor) }"
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        stroke-width="2"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        aria-hidden="true"
-                                    >
-                                        <path d="m12 9-8.414 8.414A2 2 0 0 0 3 18.828v1.344a2 2 0 0 1-.586 1.414A2 2 0 0 1 3.828 21h1.344a2 2 0 0 0 1.414-.586L15 12" />
-                                        <path d="m18 9 .4.4a1 1 0 1 1-3 3l-3.8-3.8a1 1 0 1 1 3-3l.4.4 3.4-3.4a1 1 0 1 1 3 3z" />
-                                        <path d="m2 22 .414-.414" />
-                                    </svg>
-                                </span>
-                                <input v-model="form.thirdColor" type="text" class="join-item input input-bordered h-12 w-full font-cooper" placeholder="#1f2937" maxlength="7" required />
-                            </div>
-                            <p v-if="firstError('thirdColor')" class="mt-1 text-sm text-error">{{ firstError('thirdColor') }}</p>
-                        </label>
-                    </div>
+                        </div>
+                        <p v-if="firstError('primaryColor')" class="mt-1 text-sm text-error">{{ firstError('primaryColor') }}</p>
+                        <p v-if="firstError('secondaryColor')" class="mt-1 text-sm text-error">{{ firstError('secondaryColor') }}</p>
+                        <p v-if="firstError('thirdColor')" class="mt-1 text-sm text-error">{{ firstError('thirdColor') }}</p>
+                    </label>
                 </section>
 
                 <section id="participation-settings" class="space-y-4 pt-3">
