@@ -1,4 +1,4 @@
-# Design System — ENYKA / HUG
+# Design System co-brandé — ENYKA / HUG
 ---
 
 ## Typographie
@@ -8,8 +8,8 @@ Police principale : **Cooper Hewitt**
 | Rôle | Police | Graisse | Taille |
 |------|--------|---------|--------|
 | Display | Cooper Hewitt | Bold | 38px |
-| Heading t1 | Cooper Hewitt | Semi-bold | 23px |
-| Heading t2 | Cooper Hewitt | Semi-bold | 20px |
+| Heading t1 | Cooper Hewitt | Semi-bold | 25px |
+| Heading t2 | Cooper Hewitt | Semi-bold | 21px |
 | Heading t3 | Cooper Hewitt | Medium | 18px |
 | Body | Cooper Hewitt | Book | 16px |
 | Caption | Cooper Hewitt | Book | 13px |
@@ -63,12 +63,25 @@ Le fichier `.woff2` complet fait ~3.7 MB (tous les icônes). En production, on p
 ---
 
 
-## Couleurs principales site Coeur d'Honneur
+## Couleurs principales HUG
 Martinique 500 - `#757ABC` 
 Martinique 700 - `#5A579E` 
 Martinique 950 - `#2F2D46` 
 Fuzzy Wuzzy Brown 600 - `#D1444A` 
 Fuzzy Wuzzy Brown 400 - `#EC8380` 
+
+
+## Couleurs principales site
+CatskillWhite 100 - `#ebf3f3`
+CatskillWhite 300 - `#abcecb`
+CatskillWhite 700 - `#3c6866`
+CatskillWhite 900 - `#304a49`
+MonteCarlo 800 - `#23494c`
+PictonBlue 950 - `#0b3146`
+Razzmatazz 50 - `#fff0f3`
+Razzmatazz 100 - `#ffe1e8`
+Razzmatazz 800 - `#ae034c`
+Razzmatazz 950 - `#539924`
 
 ---
 
@@ -85,96 +98,7 @@ Fuzzy Wuzzy Brown 400 - `#EC8380`
 
 ---
 
-### Couleurs spécifiques à l'entreprise
-
-Les couleurs **primary**, **secondary** et **third** de chaque site co-brandé sont **dynamiques** : elles sont stockées en BDD (table `companies`, colonnes `primaryColor`, `secondaryColor`, `thirdColor`) et appliquées au runtime via des bindings `:style` Vue plutôt que par des classes Tailwind.
-
-Exemple (voir `CoBrandedHeader.vue`) :
-\`\`\`vue
-<span :style="{ backgroundColor: company.colors.primary ?? '#e5e7eb' }" />
-\`\`\`
-
-Aucune palette par marque (Migros, Patek, etc.) n'est donc déclarée dans `app.css` — seules les palettes HUG communes et la base typographique y vivent.
-
----
-
-## Palettes complètes
-
-### FuzzyWuzzyBrown
-| Nuance | Hex |
-|--------|-----|
-| 50 | `#fdf4f3` |
-| 200 | `#f9d4d2` |
-| 300 | `#f3b2ae` |
-| 400 | `#ec8380` |
-| 500 | `#e05453` |
-| 600 | `#d1444a` |
-| 700 | `#ab252e` |
-| 800 | `#90212c` |
-| 900 | `#7b202c` |
-| 950 | `#440d13` |
-
-### Geraldine
-| Nuance | Hex |
-|--------|-----|
-| 50 | `#fef3f2` |
-| 100 | `#fee3e2` |
-| 200 | `#fecdca` |
-| 300 | `#fc928c` |
-| 400 | `#f97770` |
-| 500 | `#f04c43` |
-| 600 | `#dd2f25` |
-| 700 | `#ba241b` |
-| 800 | `#9a211a` |
-| 900 | `#80211c` |
-| 950 | `#450d0a` |
-
-### Martinique
-| Nuance | Hex |
-|--------|-----|
-| 50 | `#f4f5fa` |
-| 100 | `#e6e8f3` |
-| 200 | `#d2d5eb` |
-| 300 | `#b4badc` |
-| 400 | `#9098ca` |
-| 500 | `#757abc` |
-| 600 | `#6262ae` |
-| 700 | `#5a579e` |
-| 800 | `#4f4b82` |
-| 900 | `#413f69` |
-| 950 | `#2f2d46` |
-
----
-
-### BlackRussian
-| Nuance | Hex |
-|--------|-----|
-| 50 | `#ecf0ff` |
-| 100 | `#dbe3ff` |
-| 200 | `#bfccff` |
-| 300 | `#98aaff` |
-| 400 | `#707dff` |
-| 500 | `#4e51ff` |
-| 600 | `#3b2ffc` |
-| 700 | `#3223df` |
-| 800 | `#281fb4` |
-| 900 | `#26228d` |
-| 950 | `#0c0a29` |
-
-### Merino
-| Nuance | Hex |
-|--------|-----|
-| 50 | `#faf8f2` |
-| 100 | `#f4efe3` |
-| 200 | `#e6dac2` |
-| 300 | `#d6c19b` |
-| 400 | `#c5a372` |
-| 500 | `#b98c56` |
-| 600 | `#ab794b` |
-| 700 | `#8f613f` |
-| 800 | `#744f38` |
-| 900 | `#5e4230` |
-| 950 | `#322118` |
+## Palettes des alertes
 
 ### Red
 | Nuance | Hex |
@@ -221,7 +145,9 @@ Aucune palette par marque (Migros, Patek, etc.) n'est donc déclarée dans `app.
 | 900 | `#0d542b` |
 | 950 | `#032e15` |
 
-### VistaBlue (HUG)
+## Palettes des contrastes
+
+### VistaBlue
 | Nuance | Hex |
 |--------|-----|
 | 50 | `#f0f9f2` |
@@ -236,7 +162,7 @@ Aucune palette par marque (Migros, Patek, etc.) n'est donc déclarée dans `app.
 | 900 | `#193b26` |
 | 950 | `#0d2115` |
 
-### PictonBlue (HUG)
+### PictonBlue
 | Nuance | Hex |
 |--------|-----|
 | 50 | `#f1f9fe` |
@@ -251,7 +177,7 @@ Aucune palette par marque (Migros, Patek, etc.) n'est donc déclarée dans `app.
 | 900 | `#104c6a` |
 | 950 | `#0b3146` |
 
-### MonteCarlo (HUG)
+### MonteCarlo
 | Nuance | Hex |
 |--------|-----|
 | 50 | `#f3faf9` |
@@ -266,7 +192,7 @@ Aucune palette par marque (Migros, Patek, etc.) n'est donc déclarée dans `app.
 | 900 | `#213e40` |
 | 950 | `#0e2225` |
 
-### CatskillWhite (HUG)
+### CatskillWhite
 | Nuance | Hex |
 |--------|-----|
 | 50 | `#f1f7f7` |
@@ -281,7 +207,7 @@ Aucune palette par marque (Migros, Patek, etc.) n'est donc déclarée dans `app.
 | 900 | `#304a49` |
 | 950 | `#203131` |
 
-### Chicago (HUG)
+### Chicago
 | Nuance | Hex |
 |--------|-----|
 | 50 | `#faf9f9` |
@@ -296,7 +222,7 @@ Aucune palette par marque (Migros, Patek, etc.) n'est donc déclarée dans `app.
 | 900 | `#1a1919` |
 | 950 | `#0b0a0a` |
 
-### Razzmatazz (HUG)
+### Razzmatazz
 | Nuance | Hex |
 |--------|-----|
 | 50 | `#fff0f3` |

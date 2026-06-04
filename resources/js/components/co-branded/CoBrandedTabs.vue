@@ -3,6 +3,7 @@ defineProps<{
     tabs: { key: K; label: string }[];
     active: K;
     primaryColor?: string | null;
+    secondaryColor?: string | null;
 }>();
 
 defineEmits<{
@@ -20,17 +21,19 @@ defineEmits<{
                 :class="[
                     'rounded-full px-4 py-2 text-body font-semibold transition lg:px-6 lg:py-3',
                     active === tab.key
-                        ? 'bg-fuzzywuzzybrown-600 text-white'
-                        : 'bg-merino-200 text-catskillwhite-800 hover:bg-merino-300',
+                        ? 'text-white'
+                        : 'text-catskillwhite-900',
                 ]"
-                :style="active === tab.key && primaryColor ? { backgroundColor: primaryColor } : undefined"
+                :style="active === tab.key
+                    ? { backgroundColor: primaryColor ?? 'var(--color-razzmatazz-700)' }
+                    : { backgroundColor: secondaryColor ?? 'var(--color-catskillwhite-200)' }"
                 @click="$emit('change', tab.key)"
             >
                 {{ tab.label }}
             </button>
             <span
                 v-if="idx < tabs.length - 1"
-                class="hidden h-0.5 w-4 bg-merino-300 lg:block lg:w-6"
+                class="hidden h-0.5 w-4 bg-catskillwhite-300 lg:block lg:w-6"
                 aria-hidden="true"
             ></span>
         </template>

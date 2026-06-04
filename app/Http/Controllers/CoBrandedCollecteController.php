@@ -29,6 +29,9 @@ class CoBrandedCollecteController extends Controller
                     'logo' => $collection->company->logo,
                     'shortDescription' => $collection->company->short_description,
                     'slug' => $collection->company->slug,
+                    'address' => $collection->company->address,
+                    'zipCode' => $collection->company->zip_code,
+                    'locality' => $collection->company->locality,
                     'colors' => [
                         'primary' => $collection->company->primaryColor,
                         'secondary' => $collection->company->secondaryColor,
