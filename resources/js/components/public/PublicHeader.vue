@@ -31,7 +31,7 @@ function isActivePath(href: string) {
                             :class="isActivePath(item.href) ? 'bg-white shadow-sm' : ''"
                             :href="item.href"
                         >
-                            <span class="cooper-baseline">{{ item.label }}</span>
+                            <span>{{ item.label }}</span>
                         </a>
                     </li>
                 </ul>
@@ -47,7 +47,7 @@ function isActivePath(href: string) {
                     <ul class="menu dropdown-content z-50 mt-3 w-52 rounded-2xl border border-red-100 bg-white p-2 shadow-xl" tabindex="0">
                         <li v-for="item in navItems" :key="item.href">
                             <a class="leading-tight" :class="isActivePath(item.href) ? 'bg-rose-50 font-bold text-red-700' : ''" :href="item.href">
-                                <span class="cooper-baseline">{{ item.label }}</span>
+                                <span>{{ item.label }}</span>
                             </a>
                         </li>
                     </ul>
@@ -67,7 +67,7 @@ function isActivePath(href: string) {
                         <circle cx="10" cy="8" r="5"/>
                         <circle cx="18" cy="18" r="3"/>
                     </svg>
-                    <span class="cooper-baseline">Admin</span>
+                    <span>Admin</span>
                 </a>
             </div>
         </nav>

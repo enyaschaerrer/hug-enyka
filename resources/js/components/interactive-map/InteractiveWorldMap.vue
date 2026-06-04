@@ -200,8 +200,8 @@ function onBlur() {
 <template>
     <section ref="sectionRef" class="font-cooper relative w-screen h-svh bg-rose-50 flex flex-col overflow-hidden">
         <div class="mx-auto w-full max-w-3xl px-4 pt-5 text-center z-10">
-            <h2 class="cooper-text-baseline text-2xl font-bold text-gray-950">Delais de don dans le monde</h2>
-            <p class="cooper-text-baseline mt-1 text-sm font-normal text-gray-500">
+            <h2 class="text-2xl font-bold text-gray-950">Delais de don dans le monde</h2>
+            <p class="mt-1 text-sm font-normal text-gray-500">
                 Recherchez un pays ou explorez la carte pour connaitre les delais avant de pouvoir donner son sang.
             </p>
         </div>
@@ -222,7 +222,7 @@ function onBlur() {
                     v-model="searchQuery"
                     type="text"
                     placeholder="Rechercher un pays..."
-                    class="cooper-input-baseline w-full rounded-xl border border-gray-200 bg-white py-2.5 pl-9 pr-4 text-sm font-medium text-gray-900 placeholder-gray-400 shadow-md outline-none transition focus:border-gray-400 focus:shadow-lg"
+                    class="w-full rounded-xl border border-gray-200 bg-white py-2.5 pl-9 pr-4 text-sm font-medium text-gray-900 placeholder-gray-400 shadow-md outline-none transition focus:border-gray-400 focus:shadow-lg"
                     @input="onInput"
                     @focus="searchFocused = true; onInput()"
                     @blur="onBlur"
@@ -240,7 +240,7 @@ function onBlur() {
                         class="flex items-center justify-between px-4 py-2.5 hover:bg-gray-50 cursor-pointer text-sm font-medium text-gray-900"
                         @mousedown.prevent="selectFromSearch(c)"
                     >
-                        <span class="cooper-baseline">{{ c.name }}</span>
+                        <span>{{ c.name }}</span>
                         <span :class="`fi fi-${c.iso2.toLowerCase()} rounded overflow-hidden`" style="width: 1.4em; height: 1.05em;"></span>
                     </li>
                 </ul>
@@ -288,30 +288,30 @@ function onBlur() {
                         :class="`fi fi-${selected.iso2.toLowerCase()} rounded overflow-hidden`"
                         style="width: 1.5em; height: 1.1em;"
                     ></span>
-                    <span class="cooper-baseline font-semibold text-sm text-gray-800">{{ selected.name }}</span>
+                    <span class="font-semibold text-sm text-gray-800">{{ selected.name }}</span>
                 </div>
                 <template v-if="selected.waitTimeDetailed">
                     <div class="mt-1 space-y-1 text-xs">
                         <div class="flex justify-between gap-2">
-                            <span v-if="selected.waitTimeDetailed.labelOutdoor" class="cooper-text-baseline text-gray-500 leading-snug">{{ selected.waitTimeDetailed.labelOutdoor }}</span>
-                            <span v-else class="cooper-text-baseline text-gray-500 leading-snug">Plein air / précaire /<br>durée &gt; 6 mois</span>
-                            <span class="cooper-baseline font-semibold text-red-500 shrink-0">{{ selected.waitTimeDetailed.outdoor }}</span>
+                            <span v-if="selected.waitTimeDetailed.labelOutdoor" class="text-gray-500 leading-snug">{{ selected.waitTimeDetailed.labelOutdoor }}</span>
+                            <span v-else class="text-gray-500 leading-snug">Plein air / précaire /<br>durée &gt; 6 mois</span>
+                            <span class="font-semibold text-red-500 shrink-0">{{ selected.waitTimeDetailed.outdoor }}</span>
                         </div>
                         <div class="flex justify-between gap-2">
-                            <span class="cooper-text-baseline text-gray-500 leading-snug">{{ selected.waitTimeDetailed.labelOther ?? 'Autre type de séjour' }}</span>
-                            <span class="cooper-baseline font-semibold text-red-400 shrink-0">{{ selected.waitTimeDetailed.other }}</span>
+                            <span class="text-gray-500 leading-snug">{{ selected.waitTimeDetailed.labelOther ?? 'Autre type de séjour' }}</span>
+                            <span class="font-semibold text-red-400 shrink-0">{{ selected.waitTimeDetailed.other }}</span>
                         </div>
                     </div>
                 </template>
                 <template v-else>
                     <div v-if="selected.waitTime" class="text-sm font-medium text-red-500">
-                        <span class="cooper-baseline">Attendre {{ selected.waitTime }}</span>
+                        <span>Attendre {{ selected.waitTime }}</span>
                     </div>
                     <div v-else class="text-sm font-medium text-emerald-500">
-                        <span class="cooper-baseline">Aucun délai</span>
+                        <span>Aucun délai</span>
                     </div>
                 </template>
-                <p v-if="selected.description" class="cooper-text-baseline mt-1.5 text-xs font-normal text-gray-400 leading-snug">
+                <p v-if="selected.description" class="mt-1.5 text-xs font-normal text-gray-400 leading-snug">
                     {{ selected.description }}
                 </p>
             </div>
@@ -319,12 +319,12 @@ function onBlur() {
 
         <!-- Légende heatmap -->
         <div class="absolute bottom-4 right-4 flex items-center gap-2 text-xs font-medium bg-white/90 px-2 py-1 rounded shadow">
-            <span class="cooper-baseline text-gray-500">Aucun délai</span>
+            <span class="text-gray-500">Aucun délai</span>
             <div
                 class="w-16 h-2 rounded"
                 style="background: linear-gradient(to right, rgb(255,255,255), rgb(255,0,0)); border: 1px solid #e5e7eb;"
             ></div>
-            <span class="cooper-baseline text-gray-500">6 mois</span>
+            <span class="text-gray-500">6 mois</span>
         </div>
     </section>
 </template>

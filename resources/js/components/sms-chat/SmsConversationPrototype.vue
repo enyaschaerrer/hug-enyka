@@ -121,15 +121,15 @@ pushBotNode(scenario.start);
                         class="chat-image avatar avatar-placeholder"
                     >
                         <div class="w-10 rounded-full bg-red-500 text-white">
-                            <span class="cooper-baseline text-xs font-semibold">LB</span>
+                            <span class="text-xs font-semibold">LB</span>
                         </div>
                     </div>
 
                     <div v-if="message.speaker === 'bot'" class="chat-header chat-label-start font-medium text-red-950/70">
-                        <span class="cooper-baseline">Sanguy</span>
+                        <span>Sanguy</span>
                     </div>
                     <div v-else class="chat-header chat-label-end font-medium text-red-950/70">
-                        <span class="cooper-baseline">Moi</span>
+                        <span>Moi</span>
                     </div>
 
                     <div
@@ -142,21 +142,21 @@ pushBotNode(scenario.start);
                                 : 'bg-red-500 text-white'
                         "
                     >
-                        <p class="cooper-text-baseline">{{ message.text }}</p>
+                        <p>{{ message.text }}</p>
 
                         <a
                             v-if="message.cta"
                             class="btn mt-4 border-red-200 bg-white font-semibold text-red-950 hover:border-white hover:bg-red-100"
                             :href="message.cta.href"
                         >
-                            <span class="cooper-baseline">{{ message.cta.label }}</span>
+                            <span>{{ message.cta.label }}</span>
                         </a>
                     </div>
                 </div>
 
                 <div v-if="isTyping" class="chat chat-start chat-active">
                     <div class="chat-header chat-label-start font-medium text-red-950/70">
-                        <span class="cooper-baseline">Sanguy</span>
+                        <span>Sanguy</span>
                     </div>
                     <div class="chat-bubble bg-red-800 text-white">
                         <span class="loading loading-dots loading-sm"></span>
@@ -166,11 +166,11 @@ pushBotNode(scenario.start);
                 <div v-if="currentAnswers.length > 0" class="chat chat-end chat-active">
                     <div class="chat-image avatar avatar-placeholder">
                         <div class="w-10 rounded-full bg-red-500 text-white">
-                            <span class="cooper-baseline text-xs font-semibold">LB</span>
+                            <span class="text-xs font-semibold">LB</span>
                         </div>
                     </div>
                     <div class="chat-header chat-label-end font-medium text-red-950/70">
-                        <span class="cooper-baseline">Moi</span>
+                        <span>Moi</span>
                     </div>
                     <div class="flex max-w-[78vw] flex-col items-end gap-2 md:max-w-[620px]">
                         <button
@@ -180,7 +180,7 @@ pushBotNode(scenario.start);
                             type="button"
                             @click="answerQuestion(answer)"
                         >
-                            <span class="cooper-text-baseline block">{{ answer.label }}</span>
+                            <span class="block">{{ answer.label }}</span>
                         </button>
                     </div>
                 </div>

@@ -126,13 +126,13 @@ function forgotPassword() {
                     :alt="company.name"
                     class="max-h-10 max-w-32 object-contain"
                 />
-                <span v-else class="cooper-baseline text-sm font-semibold">{{ company.name }}</span>
+                <span v-else class="text-sm font-semibold">{{ company.name }}</span>
             </div>
 
-            <h1 class="cooper-text-baseline mb-5 text-heading-t1">Accès collecte {{ company.name }}</h1>
+            <h1 class="mb-5 text-heading-t1">Accès collecte {{ company.name }}</h1>
 
             <div v-if="successMessage" class="alert mb-4 border-emerald-200 bg-emerald-50 text-emerald-900">
-                <span class="cooper-baseline">{{ successMessage }}</span>
+                <span>{{ successMessage }}</span>
             </div>
 
             <div
@@ -154,22 +154,22 @@ function forgotPassword() {
                         value="code"
                     />
                     <span class="material-symbols-outlined shrink-0" style="font-size: 18px;" aria-hidden="true">mail</span>
-                    <span class="cooper-baseline whitespace-nowrap text-sm font-semibold">Recevoir un code</span>
+                    <span class="whitespace-nowrap text-sm font-semibold">Recevoir un code</span>
                 </label>
                 <div class="tab-content rounded-b-xl border-slate-200 bg-white p-5">
                     <form class="space-y-4" @submit.prevent="requestCode">
                         <label class="flex flex-col gap-2">
-                            <span class="cooper-baseline label-text text-slate-800">Renseigne ton adresse email professionnelle</span>
+                            <span class="label-text text-slate-800">Renseigne ton adresse email professionnelle</span>
                             <input
                                 v-model="codeForm.email"
                                 type="email"
-                                class="cooper-input-baseline input input-bordered w-full bg-white font-semibold"
+                                class="input input-bordered w-full bg-white font-semibold"
                                 :style="{ color: codeInputTextColor }"
                                 :placeholder="emailPlaceholder"
                                 autocomplete="email"
                                 required
                             />
-                            <span v-if="firstError('email')" class="cooper-text-baseline text-sm text-error">{{ firstError('email') }}</span>
+                            <span v-if="firstError('email')" class="text-sm text-error">{{ firstError('email') }}</span>
                         </label>
 
                         <button
@@ -184,7 +184,7 @@ function forgotPassword() {
                             @mouseleave="($event.currentTarget as HTMLElement).style.backgroundColor = primaryColor"
                         >
                             <span v-if="loading" class="loading loading-spinner loading-sm"></span>
-                            <span class="cooper-baseline">Recevoir un code</span>
+                            <span>Recevoir un code</span>
                         </button>
                     </form>
                 </div>
@@ -202,33 +202,33 @@ function forgotPassword() {
                         value="login"
                     />
                     <span class="material-symbols-outlined shrink-0" style="font-size: 18px;" aria-hidden="true">login</span>
-                    <span class="cooper-baseline whitespace-nowrap text-sm font-semibold">Se connecter</span>
+                    <span class="whitespace-nowrap text-sm font-semibold">Se connecter</span>
                 </label>
                 <div class="tab-content rounded-b-xl border-slate-200 bg-white p-5">
                     <form class="space-y-4" @submit.prevent="login">
                         <label class="flex flex-col gap-2">
-                            <span class="cooper-baseline label-text text-slate-800">Email professionnel</span>
+                            <span class="label-text text-slate-800">Email professionnel</span>
                             <input
                                 v-model="loginForm.email"
                                 type="email"
-                                class="cooper-input-baseline input input-bordered w-full bg-white text-slate-900"
+                                class="input input-bordered w-full bg-white text-slate-900"
                                 :placeholder="emailPlaceholder"
                                 autocomplete="email"
                                 required
                             />
-                            <span v-if="firstError('email')" class="cooper-text-baseline text-sm text-error">{{ firstError('email') }}</span>
+                            <span v-if="firstError('email')" class="text-sm text-error">{{ firstError('email') }}</span>
                         </label>
 
                         <label class="flex flex-col gap-2">
-                            <span class="cooper-baseline label-text text-slate-800">Code</span>
+                            <span class="label-text text-slate-800">Code</span>
                             <input
                                 v-model="loginForm.password"
                                 type="password"
-                                class="cooper-input-baseline input input-bordered w-full bg-white text-slate-900"
+                                class="input input-bordered w-full bg-white text-slate-900"
                                 autocomplete="current-password"
                                 required
                             />
-                            <span v-if="firstError('password')" class="cooper-text-baseline text-sm text-error">{{ firstError('password') }}</span>
+                            <span v-if="firstError('password')" class="text-sm text-error">{{ firstError('password') }}</span>
                         </label>
 
                         <button
@@ -243,12 +243,12 @@ function forgotPassword() {
                             @mouseleave="($event.currentTarget as HTMLElement).style.backgroundColor = primaryColor"
                         >
                             <span v-if="loading" class="loading loading-spinner loading-sm"></span>
-                            <span class="cooper-baseline">Se connecter</span>
+                            <span>Se connecter</span>
                         </button>
 
                         <button
                             type="button"
-                            class="cooper-baseline !mt-[-0.25rem] w-full p-0 text-center text-xs font-semibold leading-none text-slate-700 transition-colors duration-200 ease-in-out disabled:cursor-not-allowed disabled:opacity-50"
+                            class="!mt-[-0.25rem] w-full p-0 text-center text-xs font-semibold leading-none text-slate-700 transition-colors duration-200 ease-in-out disabled:cursor-not-allowed disabled:opacity-50"
                             :disabled="loading || !loginForm.email"
                             @mouseenter="($event.currentTarget as HTMLElement).style.color = accessiblePrimaryTextColor"
                             @mouseleave="($event.currentTarget as HTMLElement).style.color = ''"

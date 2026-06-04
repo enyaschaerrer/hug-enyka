@@ -131,26 +131,26 @@ onUnmounted(() => {
         <section class="min-h-full rounded-sm bg-[#FAF8F2] p-1 pr-4 text-[#1f1f22]">
             <div class="mb-6 flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
                 <div>
-                    <h1 class="cooper-text-baseline text-3xl font-semibold">Bienvenue dans votre dashboard</h1>
-                    <p class="cooper-text-baseline mt-1 text-lg text-base-content/60">Campagne 2026 · vue globale CTS</p>
+                    <h1 class="text-3xl font-semibold">Bienvenue dans votre dashboard</h1>
+                    <p class="mt-1 text-lg text-base-content/60">Campagne 2026 · vue globale CTS</p>
                 </div>
 
                 <article
                     v-if="kpis?.live.activeVisitors"
                     class="flex w-full items-center justify-between gap-4 border border-[#5a002a]/10 bg-white px-4 py-2.5 text-[#5a002a] shadow-sm sm:w-80"
                 >
-                    <p class="cooper-text-baseline text-sm font-medium leading-tight text-[#5a002a]/65">
+                    <p class="text-sm font-medium leading-tight text-[#5a002a]/65">
                         Nombre d’utilisateurs connectés
                     </p>
-                    <p class="cooper-text-baseline text-2xl font-bold leading-none">
+                    <p class="text-2xl font-bold leading-none">
                         {{ displayValue(kpis.live.activeVisitors.value, 'number') }}
                     </p>
                 </article>
             </div>
 
-            <div v-if="loading" class="cooper-text-baseline text-sm text-base-content/50">Chargement des KPIs...</div>
+            <div v-if="loading" class="text-sm text-base-content/50">Chargement des KPIs...</div>
             <div v-else-if="loadError" class="alert alert-error">
-                <span class="cooper-baseline">{{ loadError }}</span>
+                <span>{{ loadError }}</span>
             </div>
 
             <template v-else-if="kpis">
@@ -161,19 +161,19 @@ onUnmounted(() => {
                         class="border-2 bg-[#f8e7ee] p-5"
                         :class="card.available ? 'border-[#5a002a] text-[#5a002a]' : 'border-[#8b7f86] text-[#8b7f86] opacity-60 grayscale'"
                     >
-                        <p class="cooper-text-baseline text-xl font-medium">{{ card.label }}</p>
-                        <p class="cooper-text-baseline mt-3 text-4xl font-bold leading-none">
+                        <p class="text-xl font-medium">{{ card.label }}</p>
+                        <p class="mt-3 text-4xl font-bold leading-none">
                             {{ displayValue(card.value, card.format) }}
                         </p>
-                        <p class="cooper-text-baseline mt-3 min-h-9 text-xs opacity-70">{{ card.note }}</p>
+                        <p class="mt-3 min-h-9 text-xs opacity-70">{{ card.note }}</p>
                     </article>
                 </div>
 
                 <section class="mt-6 border border-base-300 bg-white p-6">
                     <div class="mb-5 flex flex-wrap items-center gap-3">
-                        <h2 class="cooper-text-baseline text-2xl font-semibold">Entonnoir de conversion</h2>
+                        <h2 class="text-2xl font-semibold">Entonnoir de conversion</h2>
                         <span class="rounded-full bg-emerald-50 px-3 py-1 text-sm font-medium text-emerald-700">
-                            <span class="cooper-baseline">objectif : réduire le différentiel de 30%</span>
+                            <span>objectif : réduire le différentiel de 30%</span>
                         </span>
                     </div>
 
@@ -186,26 +186,26 @@ onUnmounted(() => {
                                 ]"
                                 :style="{ width: barWidth(step.rate) }"
                             >
-                                <span class="cooper-baseline text-lg font-medium">{{ step.label }}</span>
+                                <span class="text-lg font-medium">{{ step.label }}</span>
                                 <span class="flex items-baseline gap-3">
-                                    <strong class="cooper-baseline text-2xl">{{ displayValue(step.value, 'number') }}</strong>
-                                    <span v-if="step.rate !== null" class="cooper-baseline text-lg">{{ step.rate }}%</span>
+                                    <strong class="text-2xl">{{ displayValue(step.value, 'number') }}</strong>
+                                    <span v-if="step.rate !== null" class="text-lg">{{ step.rate }}%</span>
                                 </span>
                             </div>
                             <p
                                 v-if="index < kpis.funnel.length - 1"
-                                class="cooper-text-baseline mt-2 text-sm"
+                                class="mt-2 text-sm"
                                 :class="step.available ? 'text-red-500' : 'text-base-content/40'"
                             >
                                 ▼ différentiel non disponible
                             </p>
-                            <p v-if="step.note" class="cooper-text-baseline mt-2 text-xs text-base-content/45">{{ step.note }}</p>
+                            <p v-if="step.note" class="mt-2 text-xs text-base-content/45">{{ step.note }}</p>
                         </div>
                     </div>
                 </section>
 
                 <section class="mt-6 pb-2">
-                    <h2 class="cooper-text-baseline text-sm font-semibold uppercase tracking-wide text-base-content/60">Engagement digital</h2>
+                    <h2 class="text-sm font-semibold uppercase tracking-wide text-base-content/60">Engagement digital</h2>
                     <div class="mt-4 grid gap-4 md:grid-cols-2 xl:grid-cols-5">
                         <article
                             v-for="card in engagementCards"
@@ -213,8 +213,8 @@ onUnmounted(() => {
                             class="rounded-2xl border border-base-300 bg-white p-5 shadow-sm"
                             :class="card.available ? '' : 'opacity-45 grayscale'"
                         >
-                            <p class="cooper-text-baseline min-h-11 text-lg text-base-content/65">{{ card.label }}</p>
-                            <p class="cooper-text-baseline mt-2 text-4xl font-bold">{{ displayValue(card.value, card.format) }}</p>
+                            <p class="min-h-11 text-lg text-base-content/65">{{ card.label }}</p>
+                            <p class="mt-2 text-4xl font-bold">{{ displayValue(card.value, card.format) }}</p>
                             <div class="mt-4 h-2 rounded-full bg-base-200">
                                 <div
                                     class="h-full rounded-full"
@@ -222,7 +222,7 @@ onUnmounted(() => {
                                     :style="{ width: progressWidth(card.value) }"
                                 ></div>
                             </div>
-                            <p class="cooper-text-baseline mt-3 text-xs text-base-content/45">{{ card.note }}</p>
+                            <p class="mt-3 text-xs text-base-content/45">{{ card.note }}</p>
                         </article>
                     </div>
                 </section>

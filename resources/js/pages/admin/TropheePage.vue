@@ -276,8 +276,8 @@ onMounted(fetchOverview);
     <AdminLayout>
         <section class="min-h-full rounded-sm bg-[#FAF8F2] p-1 pr-4 text-[#1f1f22]">
             <div class="mb-6">
-                <h1 class="cooper-text-baseline text-3xl font-semibold">Trophée - Édition {{ currentEditionYear }}</h1>
-                <p class="cooper-text-baseline mt-1 text-lg text-base-content/60">
+                <h1 class="text-3xl font-semibold">Trophée - Édition {{ currentEditionYear }}</h1>
+                <p class="mt-1 text-lg text-base-content/60">
                     Attribution des trophées aux entreprises candidates dans les différentes catégories.
                 </p>
             </div>
@@ -290,7 +290,7 @@ onMounted(fetchOverview);
                         : 'text-base-content/50 hover:text-base-content'"
                     @click="activeTab = 'donneur'"
                 >
-                    <span class="cooper-baseline">Meilleur donneur</span>
+                    <span>Meilleur donneur</span>
                 </button>
                 <button
                     class="cursor-pointer px-5 py-2.5 text-sm font-medium transition font-cooper"
@@ -299,7 +299,7 @@ onMounted(fetchOverview);
                         : 'text-base-content/50 hover:text-base-content'"
                     @click="activeTab = 'ambassadeur'"
                 >
-                    <span class="cooper-baseline">Meilleur ambassadeur</span>
+                    <span>Meilleur ambassadeur</span>
                 </button>
                 <button
                     class="cursor-pointer px-5 py-2.5 text-sm font-medium transition font-cooper"
@@ -308,26 +308,26 @@ onMounted(fetchOverview);
                         : 'text-base-content/50 hover:text-base-content'"
                     @click="activeTab = 'jury'"
                 >
-                    <span class="cooper-baseline">Coup de cœur du jury</span>
+                    <span>Coup de cœur du jury</span>
                 </button>
             </div>
 
-            <div v-if="loading" class="cooper-text-baseline text-sm text-base-content/50">Chargement...</div>
-            <div v-else-if="loadError" class="alert alert-error"><span class="cooper-baseline">{{ loadError }}</span></div>
+            <div v-if="loading" class="text-sm text-base-content/50">Chargement...</div>
+            <div v-else-if="loadError" class="alert alert-error"><span>{{ loadError }}</span></div>
 
             <template v-else-if="currentTabData">
                 <div class="mb-5">
-                    <h2 class="cooper-text-baseline text-xl font-semibold text-[#5a002a]">
+                    <h2 class="text-xl font-semibold text-[#5a002a]">
                         Attribution du prix : {{ currentTrophyTitle[activeTab] }}
                     </h2>
                 </div>
 
                 <div v-if="actionError" class="alert alert-error mb-5">
-                    <span class="cooper-baseline">{{ actionError }}</span>
+                    <span>{{ actionError }}</span>
                 </div>
 
                 <div v-if="currentTabData.current_winners.length === 0" class="mb-5">
-                    <p class="cooper-text-baseline text-sm text-base-content/55">Aucun vainqueur pour le moment.</p>
+                    <p class="text-sm text-base-content/55">Aucun vainqueur pour le moment.</p>
                 </div>
 
                 <div
@@ -351,12 +351,12 @@ onMounted(fetchOverview);
                                     color: readableTextColor(currentTabData.current_winners[0].primaryColor || '#FEF3C7'),
                                 }"
                             >
-                                <span class="cooper-baseline">{{ companyBadgeLabel(currentTabData.current_winners[0].name) }}</span>
+                                <span>{{ companyBadgeLabel(currentTabData.current_winners[0].name) }}</span>
                             </div>
                             <div class="w-px -my-4 mx-3 self-stretch" :style="{ backgroundColor: rankDividerColor(1) }"></div>
                             <div>
-                                <p class="cooper-text-baseline text-xs font-semibold uppercase tracking-wider" :class="rankAccentClass(1)">Coup de cœur du jury</p>
-                                <p class="cooper-text-baseline font-semibold text-base-content -mb-[5px]">{{ currentTabData.current_winners[0].name }}</p>
+                                <p class="text-xs font-semibold uppercase tracking-wider" :class="rankAccentClass(1)">Coup de cœur du jury</p>
+                                <p class="font-semibold text-base-content -mb-[5px]">{{ currentTabData.current_winners[0].name }}</p>
                             </div>
                         </div>
                         <button
@@ -404,14 +404,14 @@ onMounted(fetchOverview);
                                             color: readableTextColor(winnerForRank(rank)?.primaryColor || '#E5E7EB'),
                                         }"
                                     >
-                                        <span class="cooper-baseline">{{ companyBadgeLabel(winnerForRank(rank)?.name || '') }}</span>
+                                        <span>{{ companyBadgeLabel(winnerForRank(rank)?.name || '') }}</span>
                                     </div>
                                     <div class="w-px -my-4 mx-3 self-stretch" :style="{ backgroundColor: rankDividerColor(rank) }"></div>
                                     <div>
-                                        <p class="cooper-text-baseline text-xs font-semibold uppercase tracking-wider" :class="rankAccentClass(rank)">
+                                        <p class="text-xs font-semibold uppercase tracking-wider" :class="rankAccentClass(rank)">
                                             {{ rankLabel(rank, currentTabType) }}
                                         </p>
-                                        <p class="cooper-text-baseline font-semibold text-base-content -mb-[5px]">{{ winnerForRank(rank)?.name }}</p>
+                                        <p class="font-semibold text-base-content -mb-[5px]">{{ winnerForRank(rank)?.name }}</p>
                                     </div>
                                 </div>
                                 <button
@@ -431,10 +431,10 @@ onMounted(fetchOverview);
                         </template>
                         <template v-else>
                             <div class="flex min-h-10 items-center gap-3">
-                                <p class="cooper-text-baseline text-xs font-semibold uppercase tracking-wider text-base-content/45">
+                                <p class="text-xs font-semibold uppercase tracking-wider text-base-content/45">
                                     {{ rankLabel(rank, currentTabType) }}
                                 </p>
-                                <p class="cooper-text-baseline text-sm text-base-content/45">Aucun gagnant attribué pour le moment.</p>
+                                <p class="text-sm text-base-content/45">Aucun gagnant attribué pour le moment.</p>
                             </div>
                         </template>
                     </div>
@@ -442,7 +442,7 @@ onMounted(fetchOverview);
 
                 <details v-if="currentTabData.history.length > 0" class="collapse mb-3">
                     <summary class="collapse-title flex cursor-pointer list-none items-center gap-1.5 px-0 pt-1 pb-3 text-sm font-medium text-base-content/60 [&::-webkit-details-marker]:hidden">
-                        <span class="cooper-baseline">Historique des gagnants ({{ currentTabData.history.length }})</span>
+                        <span>Historique des gagnants ({{ currentTabData.history.length }})</span>
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 transition-transform duration-200 [[open]_&]:rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                             <polyline points="6 9 12 15 18 9" />
                         </svg>
@@ -453,7 +453,7 @@ onMounted(fetchOverview);
                             :key="edition.year"
                             class="py-1"
                         >
-                            <p class="cooper-text-baseline mb-3 text-sm font-semibold text-base-content/65">
+                            <p class="mb-3 text-sm font-semibold text-base-content/65">
                                 {{ historySummary(edition, currentTabType) }}
                             </p>
                             <div class="grid gap-3 md:grid-cols-3">
@@ -477,14 +477,14 @@ onMounted(fetchOverview);
                                                 color: readableTextColor(winner.primaryColor || '#E5E7EB'),
                                             }"
                                         >
-                                            <span class="cooper-baseline">{{ companyBadgeLabel(winner.name) }}</span>
+                                            <span>{{ companyBadgeLabel(winner.name) }}</span>
                                         </div>
                                         <div class="w-px -my-3 mx-3 self-stretch bg-base-300"></div>
                                         <div>
-                                            <p class="cooper-text-baseline text-xs font-semibold uppercase tracking-wider text-base-content/45">
+                                            <p class="text-xs font-semibold uppercase tracking-wider text-base-content/45">
                                                 {{ rankLabel(winner.rank, currentTabType) }}
                                             </p>
-                                            <p class="cooper-text-baseline font-semibold text-base-content -mb-[5px]">{{ winner.name }}</p>
+                                            <p class="font-semibold text-base-content -mb-[5px]">{{ winner.name }}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -493,12 +493,12 @@ onMounted(fetchOverview);
                     </div>
                 </details>
 
-                <div v-if="currentTabData.candidates.length === 0" class="cooper-text-baseline text-sm text-base-content/50">
+                <div v-if="currentTabData.candidates.length === 0" class="text-sm text-base-content/50">
                     Aucune entreprise éligible pour le moment.
                 </div>
 
                 <div v-else>
-                    <h3 class="cooper-text-baseline mb-3 text-xl font-semibold text-[#5a002a]">
+                    <h3 class="mb-3 text-xl font-semibold text-[#5a002a]">
                         Liste des concurrents
                     </h3>
 
@@ -507,13 +507,13 @@ onMounted(fetchOverview);
                         :class="isCompetitorListDisabled ? 'pointer-events-none opacity-45' : ''"
                     >
                         <div class="flex border-b border-base-300 bg-[#f8e7ee] px-5 py-3 text-xs font-semibold uppercase tracking-wide text-[#5a002a]">
-                            <div class="w-[16%] pr-4"><span class="cooper-baseline">Entreprise</span></div>
-                            <div class="w-[12%] pr-4"><span class="cooper-baseline">Inscription</span></div>
-                            <div class="w-[24%] pr-4"><span class="cooper-baseline">Adresse</span></div>
-                            <div class="w-[10%] pr-4"><span class="cooper-baseline">Employés</span></div>
-                            <div class="w-[14%] pr-4"><span class="cooper-baseline">Campagnes en {{ currentEditionYear }}</span></div>
-                            <div class="w-[14%] pr-4"><span class="cooper-baseline whitespace-nowrap">Trophées obtenus</span></div>
-                            <div class="w-[10%]"><span class="cooper-baseline">Action</span></div>
+                            <div class="w-[16%] pr-4"><span>Entreprise</span></div>
+                            <div class="w-[12%] pr-4"><span>Inscription</span></div>
+                            <div class="w-[24%] pr-4"><span>Adresse</span></div>
+                            <div class="w-[10%] pr-4"><span>Employés</span></div>
+                            <div class="w-[14%] pr-4"><span>Campagnes en {{ currentEditionYear }}</span></div>
+                            <div class="w-[14%] pr-4"><span class="whitespace-nowrap">Trophées obtenus</span></div>
+                            <div class="w-[10%]"><span>Action</span></div>
                         </div>
 
                         <div
@@ -529,31 +529,31 @@ onMounted(fetchOverview);
                                         color: readableTextColor(company.primaryColor || '#E5E7EB'),
                                     }"
                                 >
-                                    <span class="cooper-baseline">{{ companyBadgeLabel(company.name) }}</span>
+                                    <span>{{ companyBadgeLabel(company.name) }}</span>
                                 </div>
                                 <div class="min-w-0">
-                                    <div class="cooper-text-baseline truncate font-medium text-base-content">{{ company.name }}</div>
+                                    <div class="truncate font-medium text-base-content">{{ company.name }}</div>
                                 </div>
                             </div>
 
                             <div class="w-[12%] pr-4 text-sm text-base-content/70">
-                                <span class="cooper-baseline">{{ formatRegistrationDate(company.created_at) }}</span>
+                                <span>{{ formatRegistrationDate(company.created_at) }}</span>
                             </div>
 
                             <div class="w-[24%] pr-4 text-sm text-base-content/70">
-                                <span class="cooper-baseline">{{ formatFullAddress(company.address, company.npa, company.localite) }}</span>
+                                <span>{{ formatFullAddress(company.address, company.npa, company.localite) }}</span>
                             </div>
 
                             <div class="w-[10%] pr-4 text-base-content/70">
-                                <span class="cooper-baseline">{{ company.employee_count ?? '—' }}</span>
+                                <span>{{ company.employee_count ?? '—' }}</span>
                             </div>
 
                             <div class="w-[14%] pr-4 text-sm text-base-content/70">
-                                <span class="cooper-baseline">{{ formatCollections(company.collections_count) }}</span>
+                                <span>{{ formatCollections(company.collections_count) }}</span>
                             </div>
 
                             <div class="w-[14%] pr-4 text-sm text-base-content/70">
-                                <span class="cooper-baseline">{{ formatTrophies(company.trophies_won) }}</span>
+                                <span>{{ formatTrophies(company.trophies_won) }}</span>
                             </div>
 
                             <div class="w-[10%]">
@@ -567,7 +567,7 @@ onMounted(fetchOverview);
                                         :disabled="submittingKey === `${currentTabType}-${company.id}-${rank}`"
                                         @click="assignPrize(company.id, rank)"
                                     >
-                                        <span class="cooper-baseline">{{ submittingKey === `${currentTabType}-${company.id}-${rank}` ? '...' : rank }}</span>
+                                        <span>{{ submittingKey === `${currentTabType}-${company.id}-${rank}` ? '...' : rank }}</span>
                                     </button>
                                 </div>
                                 <button
@@ -577,7 +577,7 @@ onMounted(fetchOverview);
                                     :disabled="submittingKey === `${currentTabType}-${company.id}-1`"
                                     @click="assignPrize(company.id, 1)"
                                 >
-                                    <span class="cooper-baseline">{{ submittingKey === `${currentTabType}-${company.id}-1` ? '...' : 'Attribuer le prix' }}</span>
+                                    <span>{{ submittingKey === `${currentTabType}-${company.id}-1` ? '...' : 'Attribuer le prix' }}</span>
                                 </button>
                             </div>
                         </div>
