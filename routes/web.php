@@ -19,6 +19,7 @@ Route::get('/label', [PublicSiteController::class, 'label'])->name('public.label
 Route::get('/contact', fn () => view('public.contact'))->name('public.contact');
 Route::post('/collecte/inscription', [CompanyFormController::class, 'store'])->name('public.collecte.inscription');
 Route::get('/collecte/{brand}/{token}', [CoBrandedCollecteController::class, 'show'])->name('public.collecte.cobranded');
+Route::get('/collecte/{brand}/{token}/eligibility', [CoBrandedCollecteController::class, 'show'])->name('public.collecte.cobranded.eligibility');
 Route::post('/collecte/{brand}/{token}/access-code', [CoBrandedAuthController::class, 'sendAccessCode'])->name('public.collecte.cobranded.access-code');
 Route::post('/collecte/{brand}/{token}/login', [CoBrandedAuthController::class, 'login'])->name('public.collecte.cobranded.login');
 Route::post('/collecte/{brand}/{token}/logout', [CoBrandedAuthController::class, 'logout'])->name('public.collecte.cobranded.logout');

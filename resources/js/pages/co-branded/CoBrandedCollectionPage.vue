@@ -9,69 +9,13 @@ import CoBrandedStatisticsTab from '../../components/co-branded/tabs/CoBrandedSt
 import CoBrandedStepsTab from '../../components/co-branded/tabs/CoBrandedStepsTab.vue';
 import CoBrandedMapTab from '../../components/co-branded/tabs/CoBrandedMapTab.vue';
 import CoBrandedTestTab from '../../components/co-branded/tabs/CoBrandedTestTab.vue';
+import { useAdminRouter } from '../../composables/useAdminRouter';
+import { useCoBrandedCollecte } from '../../composables/useCoBrandedCollecte';
 
 type TabKey = 'informations' | 'stats' | 'etapes' | 'map' | 'test';
 
-type CoBrandedCollecte = {
-    company: {
-        name: string;
-        logo: string | null;
-        shortDescription: string | null;
-        slug: string | null;
-        address: string | null;
-        zipCode: string | null;
-        locality: string | null;
-        colors: {
-            primary: string | null;
-            secondary: string | null;
-            third: string | null;
-        };
-    };
-    collection: {
-        start: string | null;
-        end: string | null;
-        appointmentUrl: string | null;
-    };
-    auth: {
-        canAccess: boolean;
-        emailPlaceholder: string;
-        accessCodeUrl: string;
-        loginUrl: string;
-        logoutUrl: string;
-    };
-};
-
-type AppState = {
-    csrfToken: string;
-    coBrandedCollecte?: CoBrandedCollecte | null;
-};
-
-const appState = (window as unknown as { __APP__?: AppState }).__APP__;
-const csrfToken = appState?.csrfToken ?? '';
-const coBrandedCollecte = appState?.coBrandedCollecte;
-
-const company = coBrandedCollecte?.company ?? {
-    name: 'Entreprise',
-    logo: null,
-    shortDescription: null,
-    slug: null,
-    address: null,
-    zipCode: null,
-    locality: null,
-    colors: { primary: null, secondary: null, third: null },
-};
-const collection = coBrandedCollecte?.collection ?? {
-    start: null,
-    end: null,
-    appointmentUrl: null,
-};
-const auth = coBrandedCollecte?.auth ?? {
-    canAccess: false,
-    emailPlaceholder: 'exemple@entreprise.ch',
-    accessCodeUrl: '',
-    loginUrl: '',
-    logoutUrl: '',
-};
+const { navigate } = useAdminRouter();
+const { csrfToken, company, collection, auth } = useCoBrandedCollecte();
 
 const tabs: { key: TabKey; label: string }[] = [
     { key: 'informations', label: 'Informations' },
@@ -98,6 +42,14 @@ function prev() {
     if (idx > 0) goToTab(tabs[idx - 1].key);
 }
 
+function goHome() {
+    navigate(collection.publicUrl);
+}
+
+function goToEligibilityPage() {
+    navigate(collection.eligibilityUrl);
+}
+
 const canPrev = computed(() => activeTab.value !== tabs[0].key);
 const canNext = computed(() => activeTab.value !== tabs[tabs.length - 1].key);
 </script>
@@ -118,8 +70,8 @@ const canNext = computed(() => activeTab.value !== tabs[tabs.length - 1].key);
                 :company="company"
                 :csrf-token="csrfToken"
                 :logout-url="auth.logoutUrl"
-                @go-home="goToTab('informations')"
-                @go-test="goToTab('test')"
+                @go-home="goHome"
+                @go-test="goToEligibilityPage"
             />
 
             <CoBrandedTabs
