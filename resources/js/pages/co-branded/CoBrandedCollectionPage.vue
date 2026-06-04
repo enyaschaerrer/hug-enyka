@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
-import CoBrandedHeader from '../../components/public/CoBrandedHeader.vue';
-import CoBrandedAuthGate from '../../components/public/CoBrandedAuthGate.vue';
+import CoBrandedHeader from '../../components/co-branded/CoBrandedHeader.vue';
+import CoBrandedAuthGate from '../../components/co-branded/CoBrandedAuthGate.vue';
 import CoBrandedTabs from '../../components/co-branded/CoBrandedTabs.vue';
 import CoBrandedFooter from '../../components/co-branded/CoBrandedFooter.vue';
 import CoBrandedInformationTab from '../../components/co-branded/tabs/CoBrandedInformationTab.vue';
@@ -90,7 +90,7 @@ const canNext = computed(() => activeTab.value !== tabs[tabs.length - 1].key);
                     :zip-code="company.zipCode"
                     :locality="company.locality"
                     :colors="company.colors"
-                    @go-to-test="goToTab('test')"
+                    @go-to-test="goToEligibilityPage"
                 />
                 <CoBrandedStatisticsTab v-else-if="activeTab === 'stats'" />
                 <CoBrandedStepsTab      v-else-if="activeTab === 'etapes'" />
@@ -104,7 +104,7 @@ const canNext = computed(() => activeTab.value !== tabs[tabs.length - 1].key);
                     <button
                         v-if="canPrev"
                         type="button"
-                        class="rounded-2xl bg-catskillwhite-800 px-6 py-3 text-body font-semibold text-white transition hover:bg-catskillwhite-900"
+                        class="rounded-2xl bg-catskillwhite-800 px-6 py-3 text-body font-book text-white transition hover:bg-catskillwhite-900"
                         @click="prev"
                     >
                         ← Précédent
@@ -114,7 +114,7 @@ const canNext = computed(() => activeTab.value !== tabs[tabs.length - 1].key);
                     <button
                         v-if="canNext"
                         type="button"
-                        class="rounded-2xl bg-catskillwhite-800 px-6 py-3 text-body font-semibold text-white transition hover:bg-catskillwhite-900"
+                        class="rounded-2xl bg-catskillwhite-800 px-6 py-3 text-body font-book text-white transition hover:bg-catskillwhite-900"
                         @click="next"
                     >
                         Suivant →
