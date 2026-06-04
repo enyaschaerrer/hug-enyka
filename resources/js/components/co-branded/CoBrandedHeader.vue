@@ -70,7 +70,7 @@ async function logout() {
             <div class="flex items-center gap-3 sm:gap-6">
                 <button
                     type="button"
-                    class="rounded-full bg-white px-5 py-2 text-body font-semibold text-catskillwhite-900 transition hover:bg-catskillwhite-100"
+                    class="rounded-full bg-white px-5 py-2 text-heading-t3 font-medium text-catskillwhite-900 transition hover:bg-catskillwhite-100"
                     @click="$emit('goTest')"
                 >
                     Test d'éligibilité
@@ -78,7 +78,7 @@ async function logout() {
 
                 <button
                     type="button"
-                    class="inline-flex h-9 w-9 items-center justify-center rounded-full text-white transition hover:bg-white/10"
+                    class="inline-flex h-11 w-11 items-center justify-center rounded-full text-white transition hover:bg-white/10"
                     title="Déconnexion"
                     aria-label="Déconnexion"
                     @click="logout"
