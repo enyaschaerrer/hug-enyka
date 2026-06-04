@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { ref } from 'vue';
+
 const steps = [
     {
         icon: 'badge',
@@ -26,24 +28,39 @@ const steps = [
 ];
 
 const mascot = '/img/mascots/sanguy_satisfied.webp';
+
+// Une seule carte active à la fois ; 1ère carte (index 0) activée par défaut
+const activeIdx = ref(0);
 </script>
 
 <template>
     <section class="mx-auto max-w-5xl px-6 py-10 pt-24 sm:pt-32">
-        <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div
+            class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4"
+            @mouseleave="activeIdx = 0"
+        >
             <div
                 v-for="(step, idx) in steps"
                 :key="idx"
-                class="group relative"
+                class="relative"
+                @mouseenter="activeIdx = idx"
             >
-                <!-- Mascotte au-dessus, apparaît au hover -->
+                <!-- Mascotte au-dessus, visible uniquement sur la carte active -->
                 <img
                     :src="mascot"
                     alt=""
-                    class="pointer-events-none absolute -top-16 left-1/2 h-24 w-auto -translate-x-1/2 opacity-0 transition-opacity duration-200 group-hover:opacity-100 sm:-top-24 sm:h-28"
+                    :class="[
+                        'pointer-events-none absolute -top-28 left-1/2 h-32 w-auto -translate-x-1/2 transition-opacity duration-200 sm:-top-32 sm:h-36',
+                        activeIdx === idx ? 'opacity-100' : 'opacity-0',
+                    ]"
                 />
 
-                <article class="flex h-full min-h-[280px] flex-col items-center rounded-2xl border-2 border-catskillwhite-800 bg-catskillwhite-50 px-6 py-10 text-center transition-colors group-hover:bg-catskillwhite-200">
+                <article
+                    :class="[
+                        'flex h-full min-h-[280px] flex-col items-center rounded-2xl border-2 border-catskillwhite-800 px-6 py-10 text-center transition-colors',
+                        activeIdx === idx ? 'bg-catskillwhite-200' : 'bg-catskillwhite-50',
+                    ]"
+                >
                     <span
                         class="material-symbols-outlined text-catskillwhite-800"
                         style="font-size: 48px; font-variation-settings: 'FILL' 1;"

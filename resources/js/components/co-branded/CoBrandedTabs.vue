@@ -19,7 +19,7 @@ defineEmits<{
                 role="tab"
                 :aria-selected="active === tab.key"
                 :class="[
-                    'rounded-full px-4 py-2 text-heading-t2 transition lg:px-6 lg:py-3',
+                    'rounded-full px-4 py-2 text-heading-t3 transition lg:px-6 lg:py-3',
                     active === tab.key
                         ? 'text-white'
                         : 'text-catskillwhite-900',

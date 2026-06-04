@@ -116,18 +116,18 @@ const primaryTextStyle = {
 
         <!-- CTA mascots -->
         <div class="mt-12 flex items-center justify-center gap-4 sm:gap-10">
-            <img :src="'/img/mascots/blutly_thumbs_up.webp'" alt="" class="h-32 w-auto sm:h-48" />
+            <img :src="'/img/mascots/blutly_hero.webp'" alt="" class="h-32 w-auto sm:h-40" />
             <div class="text-center">
                 <p class="text-heading-t2 text-catskillwhite-900">Vous êtes intéressé·es ?</p>
                 <button
                     type="button"
-                    class="mt-4 rounded-2xl bg-razzmatazz-800 px-10 py-4 text-heading-t3 font-semibold text-white transition hover:bg-razzmatazz-900"
+                    class="mt-4 rounded-2xl bg-razzmatazz-800 px-10 py-4 text-heading-t3 text-white transition hover:bg-razzmatazz-900"
                     @click="$emit('goToTest')"
                 >
                     Tester votre éligibilité
                 </button>
             </div>
-            <img :src="'/img/mascots/sanguy_thumbs_up.webp'" alt="" class="h-32 w-auto sm:h-48" />
+            <img :src="'/img/mascots/sanguy_satisfied.webp'" alt="" class="h-32 w-auto sm:h-48" />
         </div>
     </section>
 </template>
