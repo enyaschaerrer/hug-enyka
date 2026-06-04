@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import { useAdminRouter } from './composables/useAdminRouter';
+import { useCoBrandedCollecte } from './composables/useCoBrandedCollecte';
 import CollectionsPage from './pages/admin/CollectionsPage.vue';
 import CompanyCreatePage from './pages/admin/CompanyCreatePage.vue';
 import CompanyEditPage from './pages/admin/CompanyEditPage.vue';
@@ -13,6 +14,7 @@ import TropheePage from './pages/admin/TropheePage.vue';
 import AccountsPage from './pages/admin/AccountsPage.vue';
 
 const { currentPath } = useAdminRouter();
+const { company } = useCoBrandedCollecte();
 
 const pages = {
     '/admin': DashboardPage,
@@ -35,9 +37,20 @@ const currentPage = computed(() => {
     }
     return pages[currentPath.value as keyof typeof pages] ?? null;
 });
+
+const cookieAccentColor = computed(() => {
+    if (!currentPath.value.startsWith('/collecte/')) {
+        return null;
+    }
+
+    return '#355755';
+});
 </script>
 
 <template>
     <component :is="currentPage" />
-    <CookieConsentModal v-if="!currentPath.startsWith('/admin')" />
+    <CookieConsentModal
+        v-if="!currentPath.startsWith('/admin')"
+        :accent-color="cookieAccentColor"
+    />
 </template>
