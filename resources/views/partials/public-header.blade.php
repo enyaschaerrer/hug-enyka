@@ -12,7 +12,7 @@
 {{-- Bandeau supérieur (image par page) — défile normalement --}}
 @hasSection('banner')
     <section class="relative overflow-hidden">
-        <img src="@yield('banner')" alt="" class="block min-h-[260px] w-full object-cover lg:min-h-[360px]" />
+        <img src="@yield('banner')" alt="" class="block w-full" />
 
         @hasSection('banner_content')
             <div class="absolute inset-0 flex items-center px-6 py-10 lg:px-12">
