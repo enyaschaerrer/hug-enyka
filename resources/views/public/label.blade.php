@@ -17,8 +17,9 @@
     <section class="relative overflow-hidden px-6 py-8 lg:px-12 lg:py-16">
 
         <div class="mx-auto max-w-6xl">
-            <h1 class="text-left text-display text-martinique-950">
-                Le label Cœur d’Honneur
+            <h1 class="flex flex-wrap items-center gap-3 text-left text-display text-martinique-950">
+                <img src="/img/label.svg" alt="" class="h-12 w-auto" />
+                <span>Le label Cœur d’Honneur</span>
             </h1>
 
             <div class="relative mt-14 min-h-[320px]">
