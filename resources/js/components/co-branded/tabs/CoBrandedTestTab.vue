@@ -1,13 +1,19 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { useAdminRouter } from '../../../composables/useAdminRouter';
+import { useCoBrandedCollecte } from '../../../composables/useCoBrandedCollecte';
 
-const started = ref(false);
+const { navigate } = useAdminRouter();
+const { collection } = useCoBrandedCollecte();
 
 const criteria = [
     { title: 'Âge', description: 'Vous êtes âgé·e entre 18 et 60 ans.' },
     { title: 'Poids', description: 'Vous pesez minimum 50 kg.' },
     { title: 'Globale', description: 'Vous êtes en bonne santé globale et vous n\'êtes pas enceinte.' },
 ];
+
+function startQuestionnaire() {
+    navigate(collection.eligibilityUrl);
+}
 </script>
 
 <template>
@@ -30,10 +36,7 @@ const criteria = [
         </div>
 
         <!-- Card "Prêt·e à savoir..." -->
-        <div
-            v-if="!started"
-            class="mt-10 rounded-2xl bg-razzmatazz-200 px-6 py-10 text-center sm:px-12"
-        >
+        <div class="mt-10 rounded-2xl bg-razzmatazz-200 px-6 py-10 text-center sm:px-12">
             <h2 class="text-display text-catskillwhite-900">
                 Prêt·e à savoir si vous<br>pouvez donner votre sang ?
             </h2>
@@ -49,33 +52,20 @@ const criteria = [
 
             <!-- Boutons Non / Oui — remontés pour passer derrière le bas des mascottes -->
             <div class="-mt-6 flex justify-center gap-4">
-                <button
-                    type="button"
+                <a
+                    href="/"
                     class="min-w-32 rounded-2xl bg-razzmatazz-800 px-10 py-4 text-heading-t2 font-semibold text-white transition hover:bg-razzmatazz-900 sm:min-w-40"
-                    @click="started = false"
                 >
                     Non
-                </button>
+                </a>
                 <button
                     type="button"
                     class="min-w-32 rounded-2xl bg-razzmatazz-800 px-10 py-4 text-heading-t2 font-semibold text-white transition hover:bg-razzmatazz-900 sm:min-w-40"
-                    @click="started = true"
+                    @click="startQuestionnaire"
                 >
                     Oui
                 </button>
             </div>
-        </div>
-
-        <!-- Test placeholder (à brancher sur TinderEligibilityPrototype) -->
-        <div v-else class="mt-10 rounded-2xl border-2 border-catskillwhite-400 bg-catskillwhite-100 p-10 text-center">
-            <p class="text-body text-catskillwhite-700">Test à brancher ici.</p>
-            <button
-                type="button"
-                class="mt-4 rounded-full bg-catskillwhite-700 px-6 py-2 text-body font-semibold text-white"
-                @click="started = false"
-            >
-                Retour
-            </button>
         </div>
     </section>
 </template>

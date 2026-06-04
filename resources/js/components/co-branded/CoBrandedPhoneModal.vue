@@ -14,7 +14,7 @@ defineEmits<{
 
 const qrCodeContainer = ref<HTMLElement | null>(null);
 const qrCodeReady = ref(false);
-const actionBackgroundColor = computed(() => props.primaryColor ?? '#111111');
+const actionBackgroundColor = computed(() => '#355755');
 const actionTextColor = computed(() => readableTextColor(actionBackgroundColor.value));
 let qrCode: QRCodeStyling | null = null;
 let previousBodyOverflow = '';

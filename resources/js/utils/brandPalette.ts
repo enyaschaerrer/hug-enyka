@@ -169,14 +169,11 @@ function buildNeutralPalette(lightness: number): BrandPalette {
 
 function buildColorfulPalette(source: Hsl): BrandPalette {
     const sourceRole = inferSourceRole(source.l);
-    const strongSaturation = clamp(Math.max(source.s, 0.58), 0.52, 0.9);
-    const mediumSaturation = clamp(Math.max(source.s * 0.62, 0.22), 0.18, 0.5);
-    const softSaturation = clamp(Math.max(source.s * 0.28, 0.08), 0.06, 0.24);
 
     const palette: Record<PaletteRole, Hsl> = {
-        primary: { h: source.h, s: strongSaturation, l: 0.46 },
-        secondary: { h: source.h, s: mediumSaturation, l: 0.72 },
-        third: { h: source.h, s: softSaturation, l: 0.97 },
+        primary: { h: source.h, s: source.s, l: 0.46 },
+        secondary: { h: source.h, s: source.s, l: 0.72 },
+        third: { h: source.h, s: source.s, l: 0.97 },
     };
 
     palette[sourceRole] = source;

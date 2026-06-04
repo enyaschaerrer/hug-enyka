@@ -42,6 +42,8 @@ class CoBrandedCollecteController extends Controller
                     'start' => $collection->start?->toIso8601String(),
                     'end' => $collection->end?->toIso8601String(),
                     'appointmentUrl' => $canAccess ? $collection->linkOneDoc : null,
+                    'publicUrl' => route('public.collecte.cobranded', ['brand' => $brand, 'token' => $token]),
+                    'eligibilityUrl' => route('public.collecte.cobranded.eligibility', ['brand' => $brand, 'token' => $token]),
                 ],
                 'auth' => [
                     'canAccess' => $canAccess,

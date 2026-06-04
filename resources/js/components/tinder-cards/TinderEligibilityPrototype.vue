@@ -5,6 +5,12 @@ import tinderScenarioData from '../../data/tinder-scenario.json';
 import TinderActions from './TinderActions.vue';
 import TinderCard from './TinderCard.vue';
 
+const props = withDefaults(defineProps<{
+    contained?: boolean;
+}>(), {
+    contained: false,
+});
+
 type SwipeDirection = 'left' | 'right';
 type TriageStatus = 'clear' | 'warning' | 'blocker';
 
@@ -70,7 +76,10 @@ function getCardPosition(item: Card) {
 </script>
 
 <template>
-    <section class="font-cooper flex min-h-[100svh] w-screen items-center bg-rose-50 px-4 pb-12 pt-0">
+    <section
+        class="font-cooper flex items-center px-4 pt-0"
+        :class="props.contained ? 'min-h-0 w-full bg-transparent pb-0' : 'min-h-[100svh] w-screen bg-rose-50 pb-12'"
+    >
         <div class="relative mx-auto w-full max-w-[430px]">
             <FlashCards
                 :items="items"

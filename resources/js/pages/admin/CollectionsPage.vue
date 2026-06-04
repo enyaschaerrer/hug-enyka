@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue';
+import { computed, nextTick, onMounted, ref, watch } from 'vue';
 import { useAdminRouter } from '../../composables/useAdminRouter';
 import AdminLayout from '../../components/layout/AdminLayout.vue';
 import { readableTextColor } from '../../utils/contrast';
@@ -42,9 +42,11 @@ const loadingCompanies = ref(true);
 const loadError = ref<string | null>(null);
 const searchQuery = ref('');
 const companyFilter = ref<CompanyFilter>('active-first');
+const currentPage = ref(1);
 const deletingCompanyId = ref<number | null>(null);
 const disabledLinkMessage = ref<string | null>(null);
 const copyMessage = ref<string | null>(null);
+const pageSize = 10;
 let disabledLinkTimer: number | undefined;
 let copyMessageTimer: number | undefined;
 
@@ -209,6 +211,43 @@ const displayedCompanies = computed(() => {
     });
 });
 
+const totalPages = computed(() => Math.ceil(displayedCompanies.value.length / pageSize));
+
+const paginatedCompanies = computed(() => {
+    const startIndex = (currentPage.value - 1) * pageSize;
+    return displayedCompanies.value.slice(startIndex, startIndex + pageSize);
+});
+
+const visiblePages = computed(() => Array.from({ length: totalPages.value }, (_, index) => index + 1));
+
+watch([searchQuery, companyFilter], () => {
+    currentPage.value = 1;
+});
+
+watch(totalPages, (pageCount) => {
+    if (pageCount === 0) {
+        currentPage.value = 1;
+        return;
+    }
+
+    if (currentPage.value > pageCount) {
+        currentPage.value = pageCount;
+    }
+});
+
+watch(currentPage, async () => {
+    await nextTick();
+
+    const scrollContainer = document.querySelector('main');
+
+    if (scrollContainer instanceof HTMLElement) {
+        scrollContainer.scrollTo({ top: 0, behavior: 'smooth' });
+        return;
+    }
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+
 function showDisabledLinkMessage() {
     disabledLinkMessage.value = "Le lien public s'active un mois avant le début de la collecte.";
 
@@ -302,7 +341,7 @@ onMounted(fetchCompanies);
             </a>
         </div>
 
-        <section class="mb-6 rounded-box border border-base-300 bg-base-200/35 p-4">
+        <section class="mb-6 rounded-box border border-base-300 bg-white p-4">
             <div class="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
                 <label class="input input-bordered flex w-full max-w-xl items-center gap-3 bg-white">
                     <span class="material-symbols-outlined text-base-content/45" aria-hidden="true">search</span>
@@ -335,7 +374,7 @@ onMounted(fetchCompanies);
 
         <div v-else class="space-y-4">
             <div
-                v-for="company in displayedCompanies"
+                v-for="company in paginatedCompanies"
                 :key="company.id"
                 class="rounded-box border border-base-300 bg-base-100 p-5"
             >
@@ -567,6 +606,23 @@ onMounted(fetchCompanies);
                     </details>
                 </div>
             </div>
+
+            <nav v-if="displayedCompanies.length > pageSize" class="flex justify-center pt-2" aria-label="Pagination des entreprises">
+                <div class="flex flex-wrap items-center justify-center gap-2">
+                    <button
+                        v-for="page in visiblePages"
+                        :key="page"
+                        type="button"
+                        class="inline-flex h-10 min-w-10 items-center justify-center rounded-lg border-2 px-3 text-sm font-medium transition-colors"
+                        :class="page === currentPage
+                            ? 'border-[#432ad5] bg-[#432ad5] text-white'
+                            : 'border-base-300 bg-white text-base-content hover:border-[#432ad5] hover:text-[#432ad5]'"
+                        @click="currentPage = page"
+                    >
+                        {{ page }}
+                    </button>
+                </div>
+            </nav>
         </div>
     </AdminLayout>
 </template>
