@@ -1,7 +1,7 @@
 @extends('layouts.public')
 
 @section('title', 'Collecte')
-@section('banner', '/img/banners/banni_re_collecte_neutral.webp')
+@section('banner', '/img/banners/banni_re_collecte.webp')
 @section('banner_content')
     <h1 class="text-heading-t1 leading-none text-white lg:text-[2.5rem] lg:leading-[1.1]">
         Organisez votre collecte

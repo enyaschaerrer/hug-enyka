@@ -1,7 +1,7 @@
 @extends('layouts.public')
 
 @section('title', 'Label CDH')
-@section('banner', '/img/banners/banni_re_label_neutral.webp')
+@section('banner', '/img/banners/banni_re_label.webp')
 @section('banner_content')
     <h1 class="text-heading-t1 leading-none text-white lg:text-[2.5rem] lg:leading-[1.1]">
         Le label : Cœur d'Honneur
