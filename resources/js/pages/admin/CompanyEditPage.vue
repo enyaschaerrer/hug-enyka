@@ -556,9 +556,6 @@ watch(loading, async (isLoading) => {
                 <section>
                     <label class="flex w-full flex-col gap-2">
                         <span class="label-text">Couleur de l'entreprise <span style="color: #9B2F5C;">*</span></span>
-                        <p class="text-xs text-base-content/60">
-                            Les deux autres variations de couleur sont calculées automatiquement à partir de cette teinte.
-                        </p>
                         <div class="flex w-full">
                             <span
                                 class="input input-bordered rounded-r-none border-r-0 group relative h-12 w-14 shrink-0 overflow-hidden p-0 transition-colors duration-200 ease-out"
@@ -591,6 +588,9 @@ watch(loading, async (isLoading) => {
                                 </div>
                             </div>
                         </div>
+                        <p class="mt-1 text-xs text-base-content/60">
+                            Les deux autres variations de couleur sont calculées automatiquement à partir de cette teinte.
+                        </p>
                         <p v-if="firstError('primaryColor')" class="mt-1 text-sm text-error">{{ firstError('primaryColor') }}</p>
                         <p v-if="firstError('secondaryColor')" class="mt-1 text-sm text-error">{{ firstError('secondaryColor') }}</p>
                         <p v-if="firstError('thirdColor')" class="mt-1 text-sm text-error">{{ firstError('thirdColor') }}</p>
