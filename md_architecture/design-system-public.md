@@ -85,6 +85,19 @@ Fuzzy Wuzzy Brown 400 - `#EC8380`
 
 ---
 
+### Couleurs spécifiques à l'entreprise
+
+Les couleurs **primary**, **secondary** et **third** de chaque site co-brandé sont **dynamiques** : elles sont stockées en BDD (table `companies`, colonnes `primaryColor`, `secondaryColor`, `thirdColor`) et appliquées au runtime via des bindings `:style` Vue plutôt que par des classes Tailwind.
+
+Exemple (voir `CoBrandedHeader.vue`) :
+\`\`\`vue
+<span :style="{ backgroundColor: company.colors.primary ?? '#e5e7eb' }" />
+\`\`\`
+
+Aucune palette par marque (Migros, Patek, etc.) n'est donc déclarée dans `app.css` — seules les palettes HUG communes et la base typographique y vivent.
+
+---
+
 ## Palettes complètes
 
 ### FuzzyWuzzyBrown

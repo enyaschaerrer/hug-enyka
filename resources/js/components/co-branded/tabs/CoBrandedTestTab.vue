@@ -31,7 +31,7 @@ const criteria = [
         <!-- Card Oui/Non -->
         <div
             v-if="!started"
-            class="mt-10 rounded-2xl bg-fuzzywuzzybrown-200 p-10 text-center"
+            class="mt-10 rounded-2xl bg-razzmatazz-200 p-10 text-center"
         >
             <h2 class="text-display text-catskillwhite-900">
                 Prêt·e à savoir si vous pouvez donner votre sang ?
@@ -43,14 +43,14 @@ const criteria = [
             <div class="mt-8 flex justify-center gap-4">
                 <button
                     type="button"
-                    class="rounded-2xl bg-fuzzywuzzybrown-700 px-12 py-3 text-body font-semibold text-white transition hover:bg-fuzzywuzzybrown-800"
+                    class="rounded-2xl bg-razzmatazz-700 px-12 py-3 text-body font-semibold text-white transition hover:bg-razzmatazz-800"
                     @click="started = false"
                 >
                     Non
                 </button>
                 <button
                     type="button"
-                    class="rounded-2xl bg-fuzzywuzzybrown-700 px-12 py-3 text-body font-semibold text-white transition hover:bg-fuzzywuzzybrown-800"
+                    class="rounded-2xl bg-razzmatazz-700 px-12 py-3 text-body font-semibold text-white transition hover:bg-razzmatazz-800"
                     @click="started = true"
                 >
                     Oui

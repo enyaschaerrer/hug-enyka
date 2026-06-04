@@ -118,20 +118,22 @@ const canNext = computed(() => activeTab.value !== tabs[tabs.length - 1].key);
                 :tabs="tabs"
                 :active="activeTab"
                 :primary-color="company.colors.primary"
+                :secondary-color="company.colors.secondary"
                 @change="goToTab"
             />
 
             <main class="flex-1">
-                <CoBrandedInformationsTab
+                <CoBrandedInformationTab
                     v-if="activeTab === 'informations'"
                     :company-name="company.name"
                     :collection="collection"
+                    :colors="company.colors"
                     @go-to-test="goToTab('test')"
                 />
-                <CoBrandedStatistiquesTab v-else-if="activeTab === 'stats'" />
-                <CoBrandedEtapesTab       v-else-if="activeTab === 'etapes'" />
-                <CoBrandedMapTab          v-else-if="activeTab === 'map'" />
-                <CoBrandedTestTab         v-else-if="activeTab === 'test'" />
+                <CoBrandedStatisticsTab v-else-if="activeTab === 'stats'" />
+                <CoBrandedStepsTab      v-else-if="activeTab === 'etapes'" />
+                <CoBrandedMapTab        v-else-if="activeTab === 'map'" />
+                <CoBrandedTestTab       v-else-if="activeTab === 'test'" />
             </main>
 
             <!-- Précédent / Suivant -->

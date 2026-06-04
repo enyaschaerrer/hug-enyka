@@ -49,7 +49,7 @@ async function logout() {
             <div class="navbar-start">
                 <a class="inline-flex items-center gap-3" href="/" aria-label="Accueil">
                     <img class="h-9 w-auto object-contain" :src="'/img/logo_HUG.png'" alt="HUG" />
-                    <span class="text-xs font-semibold leading-tight uppercase" :style="{ color: company.colors.primary ?? '#a8a29e' }">
+                    <span class="text-xs font-semibold leading-tight uppercase text-catskillwhite-900">
                         <span>X</span>
                     </span>
                     <img v-if="company.logo" class="h-11 w-auto object-contain" :src="company.logo" :alt="company.name" />

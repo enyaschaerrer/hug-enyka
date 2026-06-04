@@ -1,3 +1,4 @@
+
 <template>
     <footer class="bg-catskillwhite-200 px-6 py-3 text-caption text-catskillwhite-800">
         <div class="mx-auto flex max-w-6xl flex-col gap-1 text-center sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:text-left">
