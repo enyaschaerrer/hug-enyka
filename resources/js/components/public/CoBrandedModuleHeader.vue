@@ -18,29 +18,8 @@ const props = defineProps<{
 defineEmits<{
     goHome: [];
     goTest: [];
+    logout: [];
 }>();
-
-async function logout() {
-    try {
-        const res = await fetch(props.logoutUrl, {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'X-CSRF-TOKEN': props.csrfToken,
-                'X-Requested-With': 'XMLHttpRequest',
-            },
-        });
-
-        if (res.ok) {
-            window.location.reload();
-            return;
-        }
-    } catch {
-        // Fall through to reload the page and let the server state decide.
-    }
-
-    window.location.reload();
-}
 </script>
 
 <template>
@@ -80,7 +59,7 @@ async function logout() {
                     class="inline-flex h-9 w-9 items-center justify-center rounded-full text-white transition hover:bg-white/10"
                     title="Déconnexion"
                     aria-label="Déconnexion"
-                    @click="logout"
+                    @click="$emit('logout')"
                 >
                     <span class="material-symbols-outlined" style="font-size: 22px;" aria-hidden="true">logout</span>
                 </button>

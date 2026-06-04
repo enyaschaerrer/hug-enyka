@@ -3,17 +3,21 @@ import { onBeforeUnmount, onMounted, ref } from 'vue';
 import CoBrandedFooter from '../../components/co-branded/CoBrandedFooter.vue';
 import TinderEligibilityPrototype from '../../components/tinder-cards/TinderEligibilityPrototype.vue';
 import CoBrandedPhoneModal from '../../components/modals/CoBrandedPhoneModal.vue';
+import QuestionnaireExitModal from '../../components/modals/QuestionnaireExitModal.vue';
 import CoBrandedModuleHeader from '../../components/public/CoBrandedModuleHeader.vue';
 import CoBrandedAuthGate from '../../components/public/CoBrandedAuthGate.vue';
 import { useAdminRouter } from '../../composables/useAdminRouter';
 import { useCoBrandedCollecte } from '../../composables/useCoBrandedCollecte';
 
-const { navigate } = useAdminRouter();
+const { navigate, forceNavigate, setNavigationBlocker } = useAdminRouter();
 const { csrfToken, company, collection, auth } = useCoBrandedCollecte();
 const qrModalOpen = ref(false);
 const isDesktop = ref(false);
+const exitModalOpen = ref(false);
 let desktopMediaQuery: MediaQueryList | null = null;
 let phoneModalTimeout: number | null = null;
+let pendingLeaveAction: (() => void | Promise<void>) | null = null;
+let bypassExitGuard = false;
 
 function goHome() {
     navigate(collection.publicUrl);
@@ -31,6 +35,111 @@ function syncPhoneModal(event?: MediaQueryListEvent) {
     }
 }
 
+function openExitModal(action: () => void | Promise<void>) {
+    pendingLeaveAction = action;
+    exitModalOpen.value = true;
+}
+
+function closeExitModal() {
+    exitModalOpen.value = false;
+    pendingLeaveAction = null;
+}
+
+async function confirmExit() {
+    const action = pendingLeaveAction;
+
+    bypassExitGuard = true;
+    closeExitModal();
+
+    try {
+        await action?.();
+    } finally {
+        window.setTimeout(() => {
+            bypassExitGuard = false;
+        }, 0);
+    }
+}
+
+async function logout() {
+    try {
+        const res = await fetch(auth.logoutUrl, {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'X-CSRF-TOKEN': csrfToken,
+                'X-Requested-With': 'XMLHttpRequest',
+            },
+        });
+
+        if (res.ok) {
+            window.location.reload();
+            return;
+        }
+    } catch {
+        // Fall through to reload the page and let the server state decide.
+    }
+
+    window.location.reload();
+}
+
+function interceptPageExit(event: MouseEvent) {
+    if (bypassExitGuard || !auth.canAccess || event.defaultPrevented) {
+        return;
+    }
+
+    if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
+        return;
+    }
+
+    const target = event.target;
+
+    if (!(target instanceof Element)) {
+        return;
+    }
+
+    const link = target.closest('a[href]') as HTMLAnchorElement | null;
+
+    if (!link) {
+        return;
+    }
+
+    const href = link.getAttribute('href');
+
+    if (!href || href.startsWith('#') || href.startsWith('javascript:')) {
+        return;
+    }
+
+    const destination = new URL(href, window.location.href);
+    const current = new URL(window.location.href);
+
+    if (
+        destination.pathname === current.pathname
+        && destination.search === current.search
+        && destination.hash === current.hash
+    ) {
+        return;
+    }
+
+    event.preventDefault();
+    openExitModal(() => {
+        if (link.target === '_blank') {
+            window.open(destination.toString(), '_blank', 'noopener');
+            return;
+        }
+
+        window.location.assign(destination.toString());
+    });
+}
+
+function preventBrowserUnload(event: BeforeUnloadEvent) {
+    if (bypassExitGuard || !auth.canAccess) {
+        return;
+    }
+
+    event.preventDefault();
+    event.returnValue = '';
+}
+
 onMounted(() => {
     if (!auth.canAccess) {
         return;
@@ -39,6 +148,16 @@ onMounted(() => {
     desktopMediaQuery = window.matchMedia('(min-width: 640px)');
     phoneModalTimeout = window.setTimeout(() => syncPhoneModal(), 450);
     desktopMediaQuery.addEventListener('change', syncPhoneModal);
+    setNavigationBlocker((path) => {
+        if (bypassExitGuard || path === window.location.pathname) {
+            return false;
+        }
+
+        openExitModal(() => forceNavigate(path));
+        return true;
+    });
+    document.addEventListener('click', interceptPageExit, true);
+    window.addEventListener('beforeunload', preventBrowserUnload);
 });
 
 onBeforeUnmount(() => {
@@ -47,6 +166,9 @@ onBeforeUnmount(() => {
     }
 
     desktopMediaQuery?.removeEventListener('change', syncPhoneModal);
+    setNavigationBlocker(null);
+    document.removeEventListener('click', interceptPageExit, true);
+    window.removeEventListener('beforeunload', preventBrowserUnload);
 });
 </script>
 
@@ -68,12 +190,19 @@ onBeforeUnmount(() => {
                 @close="qrModalOpen = false"
             />
 
+            <QuestionnaireExitModal
+                :open="exitModalOpen"
+                @close="closeExitModal"
+                @confirm="confirmExit"
+            />
+
             <CoBrandedModuleHeader
                 :company="company"
                 :csrf-token="csrfToken"
                 :logout-url="auth.logoutUrl"
                 @go-home="goHome"
                 @go-test="goToEligibilityPage"
+                @logout="openExitModal(logout)"
             />
 
             <main
