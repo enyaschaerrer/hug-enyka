@@ -3,7 +3,7 @@ import { onBeforeUnmount, onMounted, ref } from 'vue';
 import CoBrandedFooter from '../../components/co-branded/CoBrandedFooter.vue';
 import TinderEligibilityPrototype from '../../components/tinder-cards/TinderEligibilityPrototype.vue';
 import CoBrandedPhoneModal from '../../components/modals/CoBrandedPhoneModal.vue';
-import CoBrandedHeader from '../../components/public/CoBrandedHeader.vue';
+import CoBrandedModuleHeader from '../../components/public/CoBrandedModuleHeader.vue';
 import CoBrandedAuthGate from '../../components/public/CoBrandedAuthGate.vue';
 import { useAdminRouter } from '../../composables/useAdminRouter';
 import { useCoBrandedCollecte } from '../../composables/useCoBrandedCollecte';
@@ -68,7 +68,7 @@ onBeforeUnmount(() => {
                 @close="qrModalOpen = false"
             />
 
-            <CoBrandedHeader
+            <CoBrandedModuleHeader
                 :company="company"
                 :csrf-token="csrfToken"
                 :logout-url="auth.logoutUrl"
