@@ -1,7 +1,15 @@
 @extends('layouts.public')
 
 @section('title', 'Accueil — Coeur d\'Honneur')
-@section('banner', '/img/banners/banner_home.webp')
+@section('banner', '/img/banners/banni_re_home_neutral.webp')
+@section('banner_content')
+    <h1 class="text-heading-t1 leading-tight text-white lg:text-[2.5rem] lg:leading-[1.1]">
+        Donnez, sauvez des vies.
+    </h1>
+    <p class="mt-4 max-w-none text-[1.03rem] leading-snug font-semibold whitespace-nowrap text-white lg:text-[1.13rem]">
+        Le Prix du Coeur récompense les entreprises engagées dans le don du sang.
+    </p>
+@endsection
 
 @section('content')
     @include('partials.public-side-cta')
