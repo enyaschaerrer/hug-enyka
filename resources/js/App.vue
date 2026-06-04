@@ -6,7 +6,7 @@ import CompanyCreatePage from './pages/admin/CompanyCreatePage.vue';
 import CompanyEditPage from './pages/admin/CompanyEditPage.vue';
 import DashboardPage from './pages/admin/DashboardPage.vue';
 import CookieConsentModal from './components/modals/CookieConsentModal.vue';
-import CoBrandedCollectePage from './pages/coBranded/CoBrandedCollectePage.vue';
+import CoBrandedCollectionPage from './pages/co-branded/CoBrandedCollectionPage.vue';
 import RegistrationsPage from './pages/admin/RegistrationsPage.vue';
 import TropheePage from './pages/admin/TropheePage.vue';
 import AccountsPage from './pages/admin/AccountsPage.vue';
@@ -24,7 +24,7 @@ const pages = {
 
 const currentPage = computed(() => {
     if (/^\/collecte\/[^/]+\/[^/]+$/.test(currentPath.value)) {
-        return CoBrandedCollectePage;
+        return CoBrandedCollectionPage;
     }
     if (/^\/admin\/companies\/\d+\/edit$/.test(currentPath.value)) {
         return CompanyEditPage;
