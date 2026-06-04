@@ -24,7 +24,7 @@ const pages = {
 };
 
 const currentPage = computed(() => {
-    if (/^\/collecte\/[^/]+\/[^/]+\/eligibility$/.test(currentPath.value)) {
+    if (/^\/collecte\/[^/]+\/[^/]+\/questionnaire$/.test(currentPath.value)) {
         return CoBrandedEligibilityPage;
     }
     if (/^\/collecte\/[^/]+\/[^/]+$/.test(currentPath.value)) {
