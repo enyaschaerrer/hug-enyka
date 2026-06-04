@@ -1,7 +1,7 @@
 @extends('layouts.public')
 
 @section('title', 'Accueil — Coeur d\'Honneur')
-@section('banner', '/img/banners/banni_re_home_neutral.webp')
+@section('banner', '/img/banners/banni_re_home.webp')
 @section('banner_content')
     <h1 class="text-heading-t1 leading-none text-white lg:text-[2.5rem] lg:leading-[1.1]">
         Donnez, sauvez des vies.

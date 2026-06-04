@@ -58,4 +58,14 @@ class Collection extends Model
 
         return $this->start !== null && $this->start->greaterThan($now);
     }
+
+    public function isPublicLinkEnabled(?CarbonInterface $now = null): bool
+    {
+        $now ??= now();
+
+        return $this->start !== null
+            && $this->end !== null
+            && $this->end->greaterThanOrEqualTo($now)
+            && $this->start->lessThanOrEqualTo($now->copy()->addMonth());
+    }
 }

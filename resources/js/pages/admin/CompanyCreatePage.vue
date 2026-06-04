@@ -282,13 +282,13 @@ async function submit() {
                         <path d="M6 8L2 12L6 16" />
                         <path d="M2 12H22" />
                     </svg>
-                    <span class="cooper-baseline">Retour</span>
+                    <span>Retour</span>
                 </a>
-                <h1 class="cooper-text-baseline text-2xl font-semibold">Créer une campagne</h1>
+                <h1 class="text-2xl font-semibold">Créer une campagne</h1>
             </div>
 
             <div v-if="pendingForms.length > 0" class="mb-6 rounded-box border border-amber-200 bg-amber-50 p-5">
-                <p class="cooper-text-baseline mb-3 text-sm font-semibold text-amber-900">
+                <p class="mb-3 text-sm font-semibold text-amber-900">
                     Pré-remplir depuis une inscription en attente
                 </p>
                 <div class="relative">
@@ -296,7 +296,7 @@ async function submit() {
                         <input
                             v-model="pendingSearch"
                             type="text"
-                            class="cooper-input-baseline input input-bordered w-full font-cooper text-sm"
+                            class="input input-bordered w-full font-cooper text-sm"
                             :class="selectedFormId !== null ? 'pr-9' : ''"
                             placeholder="Rechercher par nom ou email..."
                             autocomplete="off"
@@ -320,12 +320,12 @@ async function submit() {
                             class="cursor-pointer px-4 py-2.5 transition-colors duration-100 hover:bg-base-200/60"
                             @mousedown.prevent="selectPendingForm(pending)"
                         >
-                            <span class="cooper-baseline text-sm font-semibold text-base-content">{{ pending.name }}</span>
-                            <span class="cooper-baseline ml-3 text-sm text-base-content/55">{{ pending.email }}</span>
+                            <span class="text-sm font-semibold text-base-content">{{ pending.name }}</span>
+                            <span class="ml-3 text-sm text-base-content/55">{{ pending.email }}</span>
                         </li>
                     </ul>
                 </div>
-                <p v-if="selectedFormId !== null" class="cooper-text-baseline mt-2 text-xs text-amber-700">
+                <p v-if="selectedFormId !== null" class="mt-2 text-xs text-amber-700">
                     Champs pré-remplis. L&#39;inscription sera archivée à la création de la campagne.
                 </p>
             </div>
@@ -333,136 +333,136 @@ async function submit() {
             <form @submit.prevent="submit" class="space-y-6 font-cooper">
                 <section class="grid gap-x-4 gap-y-6 md:grid-cols-2">
                     <label class="flex w-full flex-col gap-2">
-                        <span class="cooper-baseline label-text">Nom <span style="color: #9B2F5C;">*</span></span>
+                        <span class="label-text">Nom <span style="color: #9B2F5C;">*</span></span>
                         <input
                             v-model="form.name"
                             type="text"
-                            class="cooper-input-baseline input input-bordered w-full"
+                            class="input input-bordered w-full"
                             required
                         />
-                        <p v-if="firstError('name')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('name') }}</p>
+                        <p v-if="firstError('name')" class="mt-1 text-sm text-error">{{ firstError('name') }}</p>
                     </label>
 
                     <label class="flex w-full flex-col gap-2">
-                        <span class="cooper-baseline label-text">Email <span style="color: #9B2F5C;">*</span></span>
+                        <span class="label-text">Email <span style="color: #9B2F5C;">*</span></span>
                         <input
                             v-model="form.email"
                             type="email"
-                            class="cooper-input-baseline input input-bordered w-full"
+                            class="input input-bordered w-full"
                             required
                         />
-                        <p v-if="firstError('email')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('email') }}</p>
+                        <p v-if="firstError('email')" class="mt-1 text-sm text-error">{{ firstError('email') }}</p>
                     </label>
 
                     <label class="flex w-full flex-col gap-2">
-                        <span class="cooper-baseline label-text">Slug URL <span style="color: #9B2F5C;">*</span></span>
+                        <span class="label-text">Slug URL <span style="color: #9B2F5C;">*</span></span>
                         <input
                             v-model="form.slug"
                             type="text"
-                            class="cooper-input-baseline input input-bordered w-full"
+                            class="input input-bordered w-full"
                             maxlength="20"
                             pattern="[A-Za-z0-9]+"
                             @input="onSlugInput"
                             required
                         />
-                        <span class="cooper-text-baseline mt-1 text-xs text-base-content/60">
+                        <span class="mt-1 text-xs text-base-content/60">
                             URL co-brandée : /collecte/{{ form.slug || '...' }}/{token}
                         </span>
-                        <p v-if="firstError('slug')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('slug') }}</p>
+                        <p v-if="firstError('slug')" class="mt-1 text-sm text-error">{{ firstError('slug') }}</p>
                     </label>
 
                     <label class="flex w-full flex-col gap-2">
-                        <span class="cooper-baseline label-text">Téléphone</span>
+                        <span class="label-text">Téléphone</span>
                         <input
                             v-model="form.telephone"
                             type="tel"
-                            class="cooper-input-baseline input input-bordered w-full"
+                            class="input input-bordered w-full"
                         />
-                        <p v-if="firstError('telephone')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('telephone') }}</p>
+                        <p v-if="firstError('telephone')" class="mt-1 text-sm text-error">{{ firstError('telephone') }}</p>
                     </label>
                 </section>
 
                 <label class="flex w-full flex-col gap-2">
-                    <span class="cooper-baseline label-text">Description courte</span>
+                    <span class="label-text">Description courte</span>
                     <textarea
                         v-model="form.short_description"
-                        class="cooper-textarea-baseline textarea textarea-bordered w-full font-cooper"
+                        class="textarea textarea-bordered w-full font-cooper"
                         rows="2"
                         maxlength="500"
                     ></textarea>
-                    <p v-if="firstError('short_description')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('short_description') }}</p>
+                    <p v-if="firstError('short_description')" class="mt-1 text-sm text-error">{{ firstError('short_description') }}</p>
                 </label>
 
                 <section class="grid gap-x-4 gap-y-6 md:grid-cols-3">
                     <label class="flex w-full flex-col gap-2 md:col-span-2">
-                        <span class="cooper-baseline label-text">Adresse <span style="color: #9B2F5C;">*</span></span>
+                        <span class="label-text">Adresse <span style="color: #9B2F5C;">*</span></span>
                         <input
                             v-model="form.address"
                             type="text"
-                            class="cooper-input-baseline input input-bordered w-full"
+                            class="input input-bordered w-full"
                             maxlength="500"
                             required
                         />
-                        <p v-if="firstError('address')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('address') }}</p>
+                        <p v-if="firstError('address')" class="mt-1 text-sm text-error">{{ firstError('address') }}</p>
                     </label>
 
                     <label class="flex w-full flex-col gap-2">
-                        <span class="cooper-baseline label-text">NPA <span style="color: #9B2F5C;">*</span></span>
+                        <span class="label-text">NPA <span style="color: #9B2F5C;">*</span></span>
                         <input
                             v-model="form.npa"
                             type="text"
-                            class="cooper-input-baseline input input-bordered w-full"
+                            class="input input-bordered w-full"
                             inputmode="numeric"
                             pattern="[0-9]{4}"
                             maxlength="4"
                             @input="onNpaInput"
                             required
                         />
-                        <p v-if="firstError('npa')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('npa') }}</p>
+                        <p v-if="firstError('npa')" class="mt-1 text-sm text-error">{{ firstError('npa') }}</p>
                     </label>
 
                     <label class="flex w-full flex-col gap-2 md:col-span-3">
-                        <span class="cooper-baseline label-text">Localité <span style="color: #9B2F5C;">*</span></span>
+                        <span class="label-text">Localité <span style="color: #9B2F5C;">*</span></span>
                         <input
                             v-model="form.localite"
                             type="text"
-                            class="cooper-input-baseline input input-bordered w-full"
+                            class="input input-bordered w-full"
                             maxlength="100"
                             required
                         />
-                        <p v-if="firstError('localite')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('localite') }}</p>
+                        <p v-if="firstError('localite')" class="mt-1 text-sm text-error">{{ firstError('localite') }}</p>
                     </label>
                 </section>
 
                 <section class="grid gap-x-4 gap-y-6 md:grid-cols-2">
                     <label class="flex w-full flex-col gap-2">
-                        <span class="cooper-baseline label-text">Nombre d'employés <span style="color: #9B2F5C;">*</span></span>
+                        <span class="label-text">Nombre d'employés <span style="color: #9B2F5C;">*</span></span>
                         <input
                             v-model="form.employee_count"
                             type="number"
                             min="0"
-                            class="cooper-input-baseline input input-bordered w-full"
+                            class="input input-bordered w-full"
                             required
                         />
-                        <p v-if="firstError('employee_count')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('employee_count') }}</p>
+                        <p v-if="firstError('employee_count')" class="mt-1 text-sm text-error">{{ firstError('employee_count') }}</p>
                     </label>
 
                     <label class="flex w-full flex-col gap-2">
-                        <span class="cooper-baseline label-text">Domaines email autorisés (séparés par ",") <span style="color: #9B2F5C;">*</span></span>
+                        <span class="label-text">Domaines email autorisés (séparés par ",") <span style="color: #9B2F5C;">*</span></span>
                         <input
                             v-model="form.allowed_email_domains"
                             type="text"
-                            class="cooper-input-baseline input input-bordered w-full"
+                            class="input input-bordered w-full"
                             placeholder="rolex.com,rolex.ch"
                             required
                         />
-                        <p v-if="firstError('allowed_email_domains')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('allowed_email_domains') }}</p>
+                        <p v-if="firstError('allowed_email_domains')" class="mt-1 text-sm text-error">{{ firstError('allowed_email_domains') }}</p>
                     </label>
                 </section>
 
                 <section class="space-y-6">
                     <div class="flex w-full flex-col gap-2">
-                        <span class="cooper-baseline label-text">Logo de l'entreprise <span style="color: #9B2F5C;">*</span></span>
+                        <span class="label-text">Logo de l'entreprise <span style="color: #9B2F5C;">*</span></span>
                         <input
                             :id="createLogoInputId"
                             type="file"
@@ -472,34 +472,34 @@ async function submit() {
                         />
                         <label
                             :for="createLogoInputId"
-                            class="group cooper-input-baseline input input-bordered flex w-full cursor-pointer items-center gap-3 px-3 text-base-content/60"
+                            class="group input input-bordered flex w-full cursor-pointer items-center gap-3 px-3 text-base-content/60"
                         >
                             <span class="material-symbols-outlined shrink-0 text-base-content/70 transition-colors duration-200 ease-in-out group-hover:text-primary" aria-hidden="true">upload</span>
-                            <span class="cooper-baseline min-w-0 truncate text-sm">
+                            <span class="min-w-0 truncate text-sm">
                                 {{ logoFile?.name || 'Aucun fichier sélectionné' }}
                             </span>
                         </label>
-                        <p class="cooper-text-baseline mt-1 text-xs text-base-content/60">Formats autorisés : PNG, JPG, JPEG, WEBP, SVG. Taille maximale : 5 Mo.</p>
-                        <p v-if="firstError('logo')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('logo') }}</p>
+                        <p class="mt-1 text-xs text-base-content/60">Formats autorisés : PNG, JPG, JPEG, WEBP, SVG. Taille maximale : 5 Mo.</p>
+                        <p v-if="firstError('logo')" class="mt-1 text-sm text-error">{{ firstError('logo') }}</p>
                     </div>
 
                     <label class="flex w-full flex-col gap-2">
-                        <span class="cooper-baseline label-text">Où avez-vous entendu parler de nous ?</span>
+                        <span class="label-text">Où avez-vous entendu parler de nous ?</span>
                         <input
                             v-model="form.source"
                             type="text"
-                            class="cooper-input-baseline input input-bordered w-full"
+                            class="input input-bordered w-full"
                             placeholder="Recommandation, salon, ..."
                         />
-                        <p v-if="firstError('source')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('source') }}</p>
+                        <p v-if="firstError('source')" class="mt-1 text-sm text-error">{{ firstError('source') }}</p>
                     </label>
                 </section>
 
                 <section>
-                    <p class="cooper-text-baseline mb-3 label-text">Couleurs co-brandées <span style="color: #9B2F5C;">*</span></p>
+                    <p class="mb-3 label-text">Couleurs co-brandées <span style="color: #9B2F5C;">*</span></p>
                     <div class="grid gap-x-4 gap-y-6 md:grid-cols-3">
                         <label class="flex w-full flex-col gap-2">
-                            <span class="cooper-baseline label-text-alt">Primaire</span>
+                            <span class="label-text-alt">Primaire</span>
                             <div class="join w-full">
                                 <span
                                     class="join-item input input-bordered group relative h-12 w-14 overflow-hidden p-0 transition-colors duration-200 ease-out"
@@ -531,16 +531,16 @@ async function submit() {
                                 <input
                                     v-model="form.primaryColor"
                                     type="text"
-                                    class="cooper-input-baseline join-item input input-bordered h-12 w-full font-cooper"
+                                    class="join-item input input-bordered h-12 w-full font-cooper"
                                     placeholder="#c81e1e"
                                     maxlength="7"
                                     required
                                 />
                             </div>
-                            <p v-if="firstError('primaryColor')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('primaryColor') }}</p>
+                            <p v-if="firstError('primaryColor')" class="mt-1 text-sm text-error">{{ firstError('primaryColor') }}</p>
                         </label>
                         <label class="flex w-full flex-col gap-2">
-                            <span class="cooper-baseline label-text-alt">Secondaire</span>
+                            <span class="label-text-alt">Secondaire</span>
                             <div class="join w-full">
                                 <span
                                     class="join-item input input-bordered group relative h-12 w-14 overflow-hidden p-0 transition-colors duration-200 ease-out"
@@ -572,16 +572,16 @@ async function submit() {
                                 <input
                                     v-model="form.secondaryColor"
                                     type="text"
-                                    class="cooper-input-baseline join-item input input-bordered h-12 w-full font-cooper"
+                                    class="join-item input input-bordered h-12 w-full font-cooper"
                                     placeholder="#fecaca"
                                     maxlength="7"
                                     required
                                 />
                             </div>
-                            <p v-if="firstError('secondaryColor')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('secondaryColor') }}</p>
+                            <p v-if="firstError('secondaryColor')" class="mt-1 text-sm text-error">{{ firstError('secondaryColor') }}</p>
                         </label>
                         <label class="flex w-full flex-col gap-2">
-                            <span class="cooper-baseline label-text-alt">Tertiaire</span>
+                            <span class="label-text-alt">Tertiaire</span>
                             <div class="join w-full">
                                 <span
                                     class="join-item input input-bordered group relative h-12 w-14 overflow-hidden p-0 transition-colors duration-200 ease-out"
@@ -613,13 +613,13 @@ async function submit() {
                                 <input
                                     v-model="form.thirdColor"
                                     type="text"
-                                    class="cooper-input-baseline join-item input input-bordered h-12 w-full font-cooper"
+                                    class="join-item input input-bordered h-12 w-full font-cooper"
                                     placeholder="#1f2937"
                                     maxlength="7"
                                     required
                                 />
                             </div>
-                            <p v-if="firstError('thirdColor')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('thirdColor') }}</p>
+                            <p v-if="firstError('thirdColor')" class="mt-1 text-sm text-error">{{ firstError('thirdColor') }}</p>
                         </label>
                     </div>
                 </section>
@@ -631,7 +631,7 @@ async function submit() {
                             type="checkbox"
                             class="checkbox checked:[--input-color:var(--color-primary)] checked:[color:var(--color-primary-content)]"
                         />
-                        <span class="cooper-baseline text-sm font-medium text-base-content/75">Participation anonyme</span>
+                        <span class="text-sm font-medium text-base-content/75">Participation anonyme</span>
                     </label>
 
                     <label
@@ -644,30 +644,30 @@ async function submit() {
                             class="checkbox checked:[--input-color:var(--color-primary)] checked:[color:var(--color-primary-content)]"
                             :disabled="!form.is_public"
                         />
-                        <span class="cooper-baseline text-sm font-medium text-base-content/75">Participation au Prix du Cœur</span>
+                        <span class="text-sm font-medium text-base-content/75">Participation au Prix du Cœur</span>
                     </label>
                 </section>
 
                 <section class="space-y-4 border-t border-base-300 pt-6">
                     <div>
-                        <h2 class="cooper-text-baseline text-lg font-semibold">Collecte</h2>
-                        <p class="cooper-text-baseline mt-1 text-sm text-base-content/60">Dates de la collecte et lien de prise de rendez-vous OneDoc.</p>
+                        <h2 class="text-lg font-semibold">Collecte</h2>
+                        <p class="mt-1 text-sm text-base-content/60">Dates de la collecte et lien de prise de rendez-vous OneDoc.</p>
                     </div>
 
                     <div class="grid gap-x-4 gap-y-6 md:grid-cols-2">
                         <div class="flex w-full flex-col gap-2">
-                            <span class="cooper-baseline label-text">Début <span style="color: #9B2F5C;">*</span></span>
+                            <span class="label-text">Début <span style="color: #9B2F5C;">*</span></span>
                             <AdminDateTimePicker
                                 v-model="form.collection_start"
                                 label="Choisir une date de début"
                                 mode="start"
                                 default-time="09:00"
                             />
-                            <p v-if="firstError('collection_start')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('collection_start') }}</p>
+                            <p v-if="firstError('collection_start')" class="mt-1 text-sm text-error">{{ firstError('collection_start') }}</p>
                         </div>
 
                         <div class="flex w-full flex-col gap-2">
-                            <span class="cooper-baseline label-text">Fin <span style="color: #9B2F5C;">*</span></span>
+                            <span class="label-text">Fin <span style="color: #9B2F5C;">*</span></span>
                             <AdminDateTimePicker
                                 v-model="form.collection_end"
                                 label="Choisir une date de fin"
@@ -677,30 +677,30 @@ async function submit() {
                                 :reference-date-time="form.collection_start || null"
                                 default-time="17:00"
                             />
-                            <p v-if="firstError('collection_end')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('collection_end') }}</p>
+                            <p v-if="firstError('collection_end')" class="mt-1 text-sm text-error">{{ firstError('collection_end') }}</p>
                         </div>
 
                         <label class="flex w-full flex-col gap-2 md:col-span-2">
-                            <span class="cooper-baseline label-text">Lien OneDoc <span style="color: #9B2F5C;">*</span></span>
+                            <span class="label-text">Lien OneDoc <span style="color: #9B2F5C;">*</span></span>
                             <input
                                 v-model="form.collection_linkOneDoc"
                                 type="text"
-                                class="cooper-input-baseline input input-bordered w-full"
+                                class="input input-bordered w-full"
                                 placeholder="https://www.onedoc.ch/..."
                                 pattern="https://(www\.)?onedoc\.ch/.*"
                                 required
                             />
-                            <p v-if="firstError('collection_linkOneDoc')" class="cooper-text-baseline mt-1 text-sm text-error">{{ firstError('collection_linkOneDoc') }}</p>
+                            <p v-if="firstError('collection_linkOneDoc')" class="mt-1 text-sm text-error">{{ firstError('collection_linkOneDoc') }}</p>
                         </label>
                     </div>
                 </section>
 
                 <div class="flex justify-end gap-2 pt-4">
                     <a href="/admin/campagnes" @click="back" class="btn btn-ghost font-cooper">
-                        <span class="cooper-baseline">Annuler</span>
+                        <span>Annuler</span>
                     </a>
                     <button type="submit" class="btn btn-primary font-cooper" :disabled="submitting">
-                        <span class="cooper-baseline">{{ submitting ? '...' : 'Créer la campagne' }}</span>
+                        <span>{{ submitting ? '...' : 'Créer la campagne' }}</span>
                     </button>
                 </div>
             </form>

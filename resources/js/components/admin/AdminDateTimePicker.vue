@@ -421,13 +421,13 @@ onUnmounted(() => {
         <button
             ref="triggerRef"
             type="button"
-            class="cooper-datetime-baseline group input input-bordered flex w-full items-center justify-between pr-3 text-left font-cooper font-medium text-sm"
+            class="group input input-bordered flex w-full items-center justify-between pr-3 text-left font-cooper font-medium text-sm"
             :class="props.disabled ? 'cursor-not-allowed border-base-300 bg-base-200/60 text-base-content/35' : 'cursor-pointer'"
             :disabled="props.disabled"
             @click="toggleOpen"
         >
             <span
-                class="cooper-baseline truncate transition-colors duration-200 ease-out"
+                class="truncate transition-colors duration-200 ease-out"
                 :class="[
                     displayValue ? 'text-base-content' : 'text-base-content/35',
                     props.disabled ? '!text-base-content/35' : 'group-hover:text-primary',
@@ -466,14 +466,14 @@ onUnmounted(() => {
                     :disabled="!canGoPreviousMonth"
                     @click.stop="previousMonth"
                 >
-                    <span class="cooper-baseline">←</span>
+                    <span>←</span>
                 </button>
-                <select v-model.number="visibleMonth" class="cooper-input-baseline select select-bordered select-sm min-h-9 flex-1 font-cooper font-medium text-sm">
+                <select v-model.number="visibleMonth" class="select select-bordered select-sm min-h-9 flex-1 font-cooper font-medium text-sm">
                     <option v-for="(month, index) in months" :key="month" :value="index">
                         {{ month }}
                     </option>
                 </select>
-                <span class="cooper-baseline min-w-14 text-center text-sm font-medium text-base-content/70">
+                <span class="min-w-14 text-center text-sm font-medium text-base-content/70">
                     {{ visibleYear }}
                 </span>
                 <button
@@ -483,12 +483,12 @@ onUnmounted(() => {
                     :disabled="!canGoNextMonth"
                     @click.stop="nextMonth"
                 >
-                    <span class="cooper-baseline">→</span>
+                    <span>→</span>
                 </button>
             </div>
 
             <div class="mt-4 grid grid-cols-7 gap-1 text-center text-xs font-medium text-base-content/45">
-                <span v-for="day in weekDays" :key="day" class="cooper-baseline py-1">{{ day }}</span>
+                <span v-for="day in weekDays" :key="day" class="py-1">{{ day }}</span>
             </div>
 
             <div class="mt-1 grid grid-cols-7 gap-1" @mouseleave="setHovered(null)">
@@ -503,20 +503,20 @@ onUnmounted(() => {
                     @click.stop="selectDate(day)"
                     @mousedown.stop
                 >
-                    <span class="cooper-baseline">{{ day?.getDate() }}</span>
+                    <span>{{ day?.getDate() }}</span>
                 </button>
             </div>
 
             <div class="mt-4 flex items-center justify-between gap-3">
                 <button v-if="mode === 'start'" type="button" class="btn btn-ghost btn-sm font-cooper" @click.stop="selectToday">
-                    <span class="cooper-baseline">Aujourd&#39;hui</span>
+                    <span>Aujourd&#39;hui</span>
                 </button>
-                <p v-if="mode === 'end' && referenceDateTime" class="cooper-text-baseline text-xs text-base-content/45">
+                <p v-if="mode === 'end' && referenceDateTime" class="text-xs text-base-content/45">
                     Début : {{ new Intl.DateTimeFormat('fr-CH', { day: '2-digit', month: '2-digit', year: 'numeric' }).format(parseLocalDateTime(referenceDateTime) ?? new Date()) }}
                 </p>
                 <select
                     v-model.number="selectedHour"
-                    class="cooper-input-baseline select select-bordered select-sm font-cooper font-medium text-sm mx-auto"
+                    class="select select-bordered select-sm font-cooper font-medium text-sm mx-auto"
                     @click.stop
                     @mousedown.stop
                 >
@@ -525,7 +525,7 @@ onUnmounted(() => {
                     </option>
                 </select>
                 <button type="button" class="btn btn-primary btn-sm font-cooper" @click.stop="isOpen = false">
-                    <span class="cooper-baseline">Valider</span>
+                    <span>Valider</span>
                 </button>
             </div>
         </div>

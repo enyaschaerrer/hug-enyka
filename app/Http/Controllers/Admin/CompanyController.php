@@ -185,6 +185,7 @@ class CompanyController extends Controller
             'url' => '/collecte/' . $company->slug . '/' . $collection->access_token,
             'is_active' => $collection->isActive(),
             'is_upcoming' => $collection->isUpcoming(),
+            'is_public_link_enabled' => $collection->isPublicLinkEnabled(),
             'is_public' => (bool) $collection->is_public,
             'trophy' => (bool) $collection->trophy,
         ];

@@ -100,7 +100,7 @@ function getCardPosition(item: Card) {
                         <div
                             class="-rotate-12 inline-flex items-center rounded-2xl border-4 border-red-500 bg-white px-6 py-3 text-4xl font-bold leading-none uppercase text-red-600 shadow-lg"
                         >
-                            <span class="cooper-baseline">C'est faux</span>
+                            <span>C'est faux</span>
                         </div>
                     </div>
                 </template>
@@ -113,7 +113,7 @@ function getCardPosition(item: Card) {
                         <div
                             class="inline-flex rotate-12 items-center rounded-2xl border-4 border-emerald-500 bg-white px-6 py-3 text-4xl font-bold leading-none uppercase text-emerald-600 shadow-lg"
                         >
-                            <span class="cooper-baseline">Je valide</span>
+                            <span>Je valide</span>
                         </div>
                     </div>
                 </template>
@@ -124,9 +124,9 @@ function getCardPosition(item: Card) {
                             class="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl"
                             :class="hasMatch ? 'bg-emerald-50 text-emerald-600' : 'bg-red-50 text-red-600'"
                         >
-                            <span class="cooper-baseline text-3xl font-bold">{{ hasMatch ? 'OK' : '!' }}</span>
+                            <span class="text-3xl font-bold">{{ hasMatch ? 'OK' : '!' }}</span>
                         </div>
-                        <h2 class="cooper-text-baseline text-2xl font-bold leading-tight">
+                        <h2 class="text-2xl font-bold leading-tight">
                             {{ hasMatch ? 'Match pour continuer' : 'Pas de match pour le moment' }}
                         </h2>
                         <p class="mt-3 text-sm font-normal leading-relaxed text-stone-600">
