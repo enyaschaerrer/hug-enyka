@@ -119,7 +119,7 @@ async function handleSubmit() {
                     </div>
 
                     <!-- NPA / Localité -->
-                    <div class="grid grid-cols-[120px_1fr] gap-4">
+                    <div class="grid grid-cols-1 gap-4 lg:grid-cols-[120px_1fr]">
                         <div>
                             <label class="mb-1.5 block text-body text-martinique-800">NPA *</label>
                             <input
