@@ -1,8 +1,12 @@
 <script setup lang="ts">
 import { ref } from 'vue';
+import { useAdminRouter } from '../../../composables/useAdminRouter';
+import { useCoBrandedCollecte } from '../../../composables/useCoBrandedCollecte';
 // TODO: brancher TinderEligibilityPrototype quand started === true
 // import TinderEligibilityPrototype from '../../tinder-cards/TinderEligibilityPrototype.vue';
 
+const { navigate } = useAdminRouter();
+const { collection } = useCoBrandedCollecte();
 const started = ref(false);
 
 const criteria = [
@@ -10,6 +14,10 @@ const criteria = [
     { title: 'Poids', description: 'Vous pesez minimum 50 kg.' },
     { title: 'Globale', description: 'Vous êtes en bonne santé globale et vous n\'êtes pas enceinte.' },
 ];
+
+function startQuestionnaire() {
+    navigate(collection.eligibilityUrl);
+}
 </script>
 
 <template>
@@ -51,7 +59,7 @@ const criteria = [
                 <button
                     type="button"
                     class="rounded-2xl bg-razzmatazz-700 px-12 py-3 text-body font-semibold text-white transition hover:bg-razzmatazz-800"
-                    @click="started = true"
+                    @click="startQuestionnaire"
                 >
                     Oui
                 </button>
