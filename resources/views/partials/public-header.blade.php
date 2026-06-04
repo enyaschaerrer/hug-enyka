@@ -17,7 +17,7 @@
         @hasSection('banner_content')
             <div class="absolute inset-0 flex items-center px-6 py-10 lg:px-12">
                 <div class="mx-auto w-full max-w-6xl">
-                    <div class="max-w-xl text-white">
+                    <div class="banner-copy-fade max-w-xl text-white">
                         @yield('banner_content')
                     </div>
                 </div>

@@ -259,6 +259,26 @@ a {
     cursor: pointer;
 }
 
+.banner-copy-fade {
+    animation: banner-copy-fade-in 520ms ease-out both;
+}
+
+@keyframes banner-copy-fade-in {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .banner-copy-fade {
+        animation: none;
+    }
+}
+
 input[type='color'] {
     background: transparent;
     overflow: hidden;

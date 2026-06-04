@@ -1,7 +1,15 @@
 @extends('layouts.public')
 
 @section('title', 'Label CDH')
-@section('banner', '/img/banners/banner_label.webp')
+@section('banner', '/img/banners/banni_re_label_neutral.webp')
+@section('banner_content')
+    <h1 class="text-heading-t1 leading-tight text-white lg:text-[2.5rem] lg:leading-[1.1]">
+        Le label : Cœur d'Honneur
+    </h1>
+    <p class="mt-4 max-w-none text-[1.03rem] leading-snug font-semibold whitespace-nowrap text-white lg:text-[1.13rem]">
+        Une distinction pour les entreprises qui s'engagent durablement dans le don du sang.
+    </p>
+@endsection
 
 @section('content')
     @include('partials.public-side-cta')
