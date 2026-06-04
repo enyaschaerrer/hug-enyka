@@ -17,7 +17,7 @@ const props = withDefaults(
     }>(),
     {
         title: 'Présentation des entreprises participantes',
-        description: 'Découvrez les entreprises qui ont pris part au Prix du Coeur depuis sa création.',
+        description: 'Découvrez les entreprises qui ont pris part au Prix du Cœur depuis sa création.',
         showTrophies: true,
     },
 );

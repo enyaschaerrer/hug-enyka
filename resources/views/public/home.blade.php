@@ -7,7 +7,7 @@
         Donnez, sauvez des vies.
     </h1>
     <p class="mt-2 max-w-xl text-[0.82rem] leading-[1.12] font-semibold text-white lg:mt-4 lg:max-w-none lg:text-[1.13rem] lg:leading-snug lg:whitespace-nowrap">
-        Le Prix du Coeur récompense les entreprises engagées dans le don du sang.
+        Le Prix du Cœur récompense les entreprises engagées dans le don du sang.
     </p>
 @endsection
 
