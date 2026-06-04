@@ -231,25 +231,25 @@ onMounted(fetchAccounts);
 <template>
     <AdminLayout>
         <div class="mb-6">
-            <h1 class="cooper-text-baseline text-2xl font-semibold">Comptes</h1>
+            <h1 class="text-2xl font-semibold">Comptes</h1>
         </div>
 
         <div v-if="flashMessage" class="alert alert-success mb-6">
-            <span class="cooper-baseline">{{ flashMessage }}</span>
+            <span>{{ flashMessage }}</span>
         </div>
         <div v-if="firstError('account')" class="alert alert-error mb-6">
-            <span class="cooper-baseline">{{ firstError('account') }}</span>
+            <span>{{ firstError('account') }}</span>
         </div>
 
             <section class="mb-6 rounded-box border border-base-300 bg-base-100 p-5">
-            <h2 class="cooper-text-baseline mb-4 text-lg font-semibold">Créer un compte</h2>
+            <h2 class="mb-4 text-lg font-semibold">Créer un compte</h2>
             <form class="grid gap-4 md:grid-cols-[minmax(260px,1fr)_360px_160px_auto]" autocomplete="new-password" @submit.prevent="createAccount">
                 <label class="flex flex-col gap-2">
-                    <span class="cooper-baseline label-text">Email</span>
+                    <span class="label-text">Email</span>
                     <input
                         v-model="form.email"
                         type="text"
-                        class="cooper-input-baseline input input-bordered w-full"
+                        class="input input-bordered w-full"
                         autocomplete="new-password"
                         autocapitalize="none"
                         autocorrect="off"
@@ -258,16 +258,16 @@ onMounted(fetchAccounts);
                         name="account_identifier_create"
                         required
                     />
-                    <span v-if="firstError('email') && editingId === null" class="cooper-text-baseline text-sm text-error">{{ firstError('email') }}</span>
+                    <span v-if="firstError('email') && editingId === null" class="text-sm text-error">{{ firstError('email') }}</span>
                 </label>
 
                 <label class="flex flex-col gap-2">
-                    <span class="cooper-baseline label-text">Mot de passe</span>
+                    <span class="label-text">Mot de passe</span>
                     <div class="relative">
                         <input
                             v-model="form.password"
                             type="text"
-                            class="cooper-input-baseline input input-bordered w-full pr-24"
+                            class="input input-bordered w-full pr-24"
                             :style="`-webkit-text-security: ${showCreatePassword ? 'none' : 'disc'}`"
                             autocomplete="off"
                             autocapitalize="none"
@@ -285,7 +285,7 @@ onMounted(fetchAccounts);
                             aria-label="Générer un mot de passe"
                             @click="generateCreatePassword"
                         >
-                            <span class="cooper-baseline">Générer</span>
+                            <span>Générer</span>
                         </button>
                         <button
                             type="button"
@@ -306,36 +306,36 @@ onMounted(fetchAccounts);
                             </svg>
                         </button>
                     </div>
-                    <span v-if="firstError('password') && editingId === null" class="cooper-text-baseline text-sm text-error">{{ firstError('password') }}</span>
+                    <span v-if="firstError('password') && editingId === null" class="text-sm text-error">{{ firstError('password') }}</span>
                 </label>
 
                 <label class="flex flex-col gap-2">
-                    <span class="cooper-baseline label-text">Rôle</span>
+                    <span class="label-text">Rôle</span>
                     <select v-model="form.role" class="select select-bordered w-full">
                         <option value="admin">Admin</option>
                         <option value="superadmin">Superadmin</option>
                     </select>
-                    <span v-if="firstError('role') && editingId === null" class="cooper-text-baseline text-sm text-error">{{ firstError('role') }}</span>
+                    <span v-if="firstError('role') && editingId === null" class="text-sm text-error">{{ firstError('role') }}</span>
                 </label>
 
                 <div class="flex items-end">
                     <button type="submit" class="btn btn-primary w-full font-cooper" :disabled="submitting">
-                        <span class="cooper-baseline">{{ submitting ? '...' : 'Créer' }}</span>
+                        <span>{{ submitting ? '...' : 'Créer' }}</span>
                     </button>
                 </div>
             </form>
         </section>
 
-        <div v-if="loading" class="cooper-text-baseline text-sm text-base-content/50">Chargement...</div>
-        <div v-else-if="loadError" class="alert alert-error"><span class="cooper-baseline">{{ loadError }}</span></div>
-        <p v-else-if="accounts.length === 0" class="cooper-text-baseline text-sm text-base-content/50">Aucun compte admin.</p>
+        <div v-if="loading" class="text-sm text-base-content/50">Chargement...</div>
+        <div v-else-if="loadError" class="alert alert-error"><span>{{ loadError }}</span></div>
+        <p v-else-if="accounts.length === 0" class="text-sm text-base-content/50">Aucun compte admin.</p>
 
             <section v-else class="rounded-box border border-base-300 bg-base-100">
             <div class="grid grid-cols-[minmax(260px,1fr)_160px_130px_220px] border-b border-base-300 px-5 py-3 text-sm font-semibold text-base-content/50">
-                <span class="cooper-baseline">Email</span>
-                <span class="cooper-baseline">Rôle</span>
-                <span class="cooper-baseline">Créé le</span>
-                <span class="cooper-baseline text-right">Actions</span>
+                <span>Email</span>
+                <span>Rôle</span>
+                <span>Créé le</span>
+                <span class="text-right">Actions</span>
             </div>
 
             <div
@@ -353,7 +353,7 @@ onMounted(fetchAccounts);
                         <input
                             v-model="editForm.email"
                             type="text"
-                            class="cooper-input-baseline input input-bordered w-full"
+                            class="input input-bordered w-full"
                             autocomplete="new-password"
                             autocapitalize="none"
                             autocorrect="off"
@@ -362,21 +362,21 @@ onMounted(fetchAccounts);
                             :name="`account_identifier_${account.id}`"
                             required
                         />
-                        <span v-if="firstError('email')" class="cooper-text-baseline mt-1 block text-sm text-error">{{ firstError('email') }}</span>
+                        <span v-if="firstError('email')" class="mt-1 block text-sm text-error">{{ firstError('email') }}</span>
                     </div>
                     <div>
                         <select v-model="editForm.role" class="select select-bordered w-full">
                             <option value="admin">Admin</option>
                             <option value="superadmin">Superadmin</option>
                         </select>
-                        <span v-if="firstError('role')" class="cooper-text-baseline mt-1 block text-sm text-error">{{ firstError('role') }}</span>
+                        <span v-if="firstError('role')" class="mt-1 block text-sm text-error">{{ firstError('role') }}</span>
                     </div>
                     <div>
                         <div class="relative">
                             <input
                                 v-model="editForm.password"
                                 type="text"
-                                class="cooper-input-baseline input input-bordered w-full pr-24"
+                                class="input input-bordered w-full pr-24"
                                 :style="`-webkit-text-security: ${showEditPassword ? 'none' : 'disc'}`"
                                 placeholder="Nouveau mot de passe"
                                 autocomplete="off"
@@ -394,7 +394,7 @@ onMounted(fetchAccounts);
                                 aria-label="Générer un mot de passe"
                                 @click="generateEditPassword"
                             >
-                                <span class="cooper-baseline">Générer</span>
+                                <span>Générer</span>
                             </button>
                             <button
                                 type="button"
@@ -415,25 +415,25 @@ onMounted(fetchAccounts);
                                 </svg>
                             </button>
                         </div>
-                        <span v-if="firstError('password')" class="cooper-text-baseline mt-1 block text-sm text-error">{{ firstError('password') }}</span>
+                        <span v-if="firstError('password')" class="mt-1 block text-sm text-error">{{ firstError('password') }}</span>
                     </div>
                     <div class="flex justify-end gap-2">
                         <button type="button" class="btn btn-ghost btn-sm font-cooper" @click="cancelEdit">
-                            <span class="cooper-baseline">Annuler</span>
+                            <span>Annuler</span>
                         </button>
                         <button type="submit" class="btn btn-primary btn-sm font-cooper" :disabled="submitting">
-                            <span class="cooper-baseline">Enregistrer</span>
+                            <span>Enregistrer</span>
                         </button>
                     </div>
                 </form>
 
                 <div v-else class="grid grid-cols-[minmax(260px,1fr)_160px_130px_220px] items-center gap-3">
-                    <p class="cooper-text-baseline font-semibold">{{ account.email }}</p>
-                    <p class="cooper-text-baseline text-sm">{{ roleLabel(account.role) }}</p>
-                    <p class="cooper-text-baseline text-sm text-base-content/50">{{ formatDate(account.created_at) }}</p>
+                    <p class="font-semibold">{{ account.email }}</p>
+                    <p class="text-sm">{{ roleLabel(account.role) }}</p>
+                    <p class="text-sm text-base-content/50">{{ formatDate(account.created_at) }}</p>
                     <div class="flex justify-end gap-2">
                         <button type="button" class="btn btn-ghost btn-sm font-cooper" @click="startEdit(account)">
-                            <span class="cooper-baseline">Modifier</span>
+                            <span>Modifier</span>
                         </button>
                         <button
                             type="button"
@@ -441,7 +441,7 @@ onMounted(fetchAccounts);
                             :disabled="deletingId === account.id || currentUserId === account.id"
                             @click="deleteAccount(account)"
                         >
-                            <span class="cooper-baseline">{{ deletingId === account.id ? '...' : 'Supprimer' }}</span>
+                            <span>{{ deletingId === account.id ? '...' : 'Supprimer' }}</span>
                         </button>
                     </div>
                 </div>

@@ -158,8 +158,8 @@ onUnmounted(() => {
         <section class="min-h-full rounded-sm bg-[#FAF8F2] p-1 pr-4 text-[#1f1f22]">
             <div class="mb-6 flex items-center justify-between">
                 <div>
-                    <h1 class="cooper-text-baseline text-3xl font-semibold">Inscriptions</h1>
-                    <p class="cooper-text-baseline mt-1 text-lg text-base-content/60">
+                    <h1 class="text-3xl font-semibold">Inscriptions</h1>
+                    <p class="mt-1 text-lg text-base-content/60">
                         Nouvelles demandes reçues via le formulaire
                     </p>
                 </div>
@@ -169,12 +169,12 @@ onUnmounted(() => {
                     @click="hasNew = false"
                 >
                     <span class="h-2 w-2 animate-pulse rounded-full bg-emerald-500"></span>
-                    <span class="cooper-baseline">Nouvelles inscriptions</span>
+                    <span>Nouvelles inscriptions</span>
                 </div>
             </div>
 
-            <div v-if="loading" class="cooper-text-baseline text-sm text-base-content/50">Chargement...</div>
-            <div v-else-if="loadError" class="alert alert-error"><span class="cooper-baseline">{{ loadError }}</span></div>
+            <div v-if="loading" class="text-sm text-base-content/50">Chargement...</div>
+            <div v-else-if="loadError" class="alert alert-error"><span>{{ loadError }}</span></div>
 
             <template v-else>
                 <!-- Onglets -->
@@ -186,9 +186,9 @@ onUnmounted(() => {
                             : 'text-base-content/50 hover:text-base-content'"
                         @click="activeTab = 'pending'"
                     >
-                        <span class="cooper-baseline">En attente</span>
+                        <span>En attente</span>
                         <span class="ml-1.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-rose-100 text-xs text-[#5a002a]">
-                            <span class="cooper-baseline">{{ registrations.filter(r => !r.treated).length }}</span>
+                            <span>{{ registrations.filter(r => !r.treated).length }}</span>
                         </span>
                     </button>
                     <button
@@ -198,26 +198,26 @@ onUnmounted(() => {
                             : 'text-base-content/50 hover:text-base-content'"
                         @click="activeTab = 'treated'"
                     >
-                        <span class="cooper-baseline">Historique</span>
+                        <span>Historique</span>
                         <span class="ml-1.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-stone-100 text-xs text-stone-500">
-                            <span class="cooper-baseline">{{ registrations.filter(r => r.treated).length }}</span>
+                            <span>{{ registrations.filter(r => r.treated).length }}</span>
                         </span>
                     </button>
                 </div>
 
                 <!-- Message vide -->
-                <div v-if="filteredRegistrations.length === 0" class="cooper-text-baseline text-sm text-base-content/50">
+                <div v-if="filteredRegistrations.length === 0" class="text-sm text-base-content/50">
                     Aucune inscription {{ activeTab === 'pending' ? 'en attente' : 'dans l\'historique' }} pour le moment.
                 </div>
 
                 <div v-else class="border border-base-300 bg-white">
                     <!-- Header -->
                     <div class="flex border-b border-base-300 bg-[#f8e7ee] px-5 py-3 text-xs font-semibold uppercase tracking-wide text-[#5a002a]">
-                        <div class="w-1/5"><span class="cooper-baseline">Entreprise</span></div>
-                        <div class="w-1/5"><span class="cooper-baseline">Email</span></div>
-                        <div class="w-1/5"><span class="cooper-baseline">Date</span></div>
-                        <div class="w-1/5 text-center"><span class="cooper-baseline">Trophée</span></div>
-                        <div class="w-1/5 text-center"><span class="cooper-baseline">Actions</span></div>
+                        <div class="w-1/5"><span>Entreprise</span></div>
+                        <div class="w-1/5"><span>Email</span></div>
+                        <div class="w-1/5"><span>Date</span></div>
+                        <div class="w-1/5 text-center"><span>Trophée</span></div>
+                        <div class="w-1/5 text-center"><span>Actions</span></div>
                     </div>
 
                     <!-- Rows -->
@@ -229,15 +229,15 @@ onUnmounted(() => {
                         @click="!reg.treated && openDetail(reg.id)"
                     >
                         <div class="flex w-4/5 items-center" :class="reg.treated ? 'opacity-50' : ''">
-                            <div class="w-1/4 truncate font-medium"><span class="cooper-baseline">{{ reg.name }}</span></div>
-                            <div class="w-1/4 truncate text-base-content/70"><span class="cooper-baseline">{{ reg.email }}</span></div>
-                            <div class="w-1/4 truncate text-sm text-base-content/50"><span class="cooper-baseline">{{ formatDate(reg.created_at) }}</span></div>
+                            <div class="w-1/4 truncate font-medium"><span>{{ reg.name }}</span></div>
+                            <div class="w-1/4 truncate text-base-content/70"><span>{{ reg.email }}</span></div>
+                            <div class="w-1/4 truncate text-sm text-base-content/50"><span>{{ formatDate(reg.created_at) }}</span></div>
                             <div class="w-1/4 text-center">
                                 <span
                                     class="rounded-full px-2 py-1 text-xs font-medium"
                                     :class="reg.trophy ? 'bg-emerald-50 text-emerald-700' : 'bg-stone-100 text-stone-400'"
                                 >
-                                    <span class="cooper-baseline">{{ reg.trophy ? 'Oui' : 'Non' }}</span>
+                                    <span>{{ reg.trophy ? 'Oui' : 'Non' }}</span>
                                 </span>
                             </div>
                         </div>
@@ -248,7 +248,7 @@ onUnmounted(() => {
                                     class="cursor-pointer rounded border border-stone-200 bg-stone-50 px-3 py-1 text-xs font-medium text-stone-600 transition hover:bg-stone-100 font-cooper"
                                     @click="openDetail(reg.id)"
                                 >
-                                    <span class="cooper-baseline">Voir</span>
+                                    <span>Voir</span>
                                 </button>
                                 <button
                                     class="cursor-pointer rounded border px-3 py-1 text-xs font-medium transition font-cooper"
@@ -257,14 +257,14 @@ onUnmounted(() => {
                                         : 'border-emerald-200 bg-emerald-50 text-emerald-700 hover:bg-emerald-100'"
                                     @click="toggleTreated(reg)"
                                 >
-                                    <span class="cooper-baseline">{{ reg.treated ? 'Réouvrir' : 'Archiver' }}</span>
+                                    <span>{{ reg.treated ? 'Réouvrir' : 'Archiver' }}</span>
                                 </button>
                                 <button
                                     v-if="reg.treated"
                                     class="cursor-pointer rounded border border-red-200 bg-red-50 px-3 py-1 text-xs font-medium text-red-600 transition hover:bg-red-100 font-cooper"
                                     @click="deleteRegistration(reg)"
                                 >
-                                    <span class="cooper-baseline">Supprimer</span>
+                                    <span>Supprimer</span>
                                 </button>
                             </div>
                         </div>
@@ -280,56 +280,56 @@ onUnmounted(() => {
             @click.self="selectedForm = null"
         >
             <div class="w-full max-w-lg rounded-2xl bg-white p-8 shadow-xl">
-                <div v-if="loadingDetail" class="cooper-text-baseline text-sm text-base-content/50">Chargement...</div>
+                <div v-if="loadingDetail" class="text-sm text-base-content/50">Chargement...</div>
 
                 <template v-else>
-                    <h2 class="cooper-text-baseline mb-6 text-lg font-semibold text-[#5a002a]">
+                    <h2 class="mb-6 text-lg font-semibold text-[#5a002a]">
                         Détail de la demande
                     </h2>
 
                     <dl class="space-y-3 text-sm">
                         <div class="flex gap-4">
-                            <dt class="w-32 shrink-0 font-medium text-stone-500"><span class="cooper-baseline">Entreprise</span></dt>
-                            <dd class="text-stone-900"><span class="cooper-baseline">{{ selectedForm.name }}</span></dd>
+                            <dt class="w-32 shrink-0 font-medium text-stone-500"><span>Entreprise</span></dt>
+                            <dd class="text-stone-900"><span>{{ selectedForm.name }}</span></dd>
                         </div>
                         <div class="flex gap-4">
-                            <dt class="w-32 shrink-0 font-medium text-stone-500"><span class="cooper-baseline">Email</span></dt>
-                            <dd class="text-stone-900"><span class="cooper-baseline">{{ selectedForm.email }}</span></dd>
+                            <dt class="w-32 shrink-0 font-medium text-stone-500"><span>Email</span></dt>
+                            <dd class="text-stone-900"><span>{{ selectedForm.email }}</span></dd>
                         </div>
                         <div class="flex gap-4">
-                            <dt class="w-32 shrink-0 font-medium text-stone-500"><span class="cooper-baseline">Téléphone</span></dt>
-                            <dd class="text-stone-900"><span class="cooper-baseline">{{ selectedForm.phone ?? '—' }}</span></dd>
+                            <dt class="w-32 shrink-0 font-medium text-stone-500"><span>Téléphone</span></dt>
+                            <dd class="text-stone-900"><span>{{ selectedForm.phone ?? '—' }}</span></dd>
                         </div>
                         <div class="flex gap-4">
-                            <dt class="w-32 shrink-0 font-medium text-stone-500"><span class="cooper-baseline">Adresse</span></dt>
-                            <dd class="text-stone-900"><span class="cooper-baseline">{{ formatFullAddress(selectedForm.address, selectedForm.npa, selectedForm.localite) }}</span></dd>
+                            <dt class="w-32 shrink-0 font-medium text-stone-500"><span>Adresse</span></dt>
+                            <dd class="text-stone-900"><span>{{ formatFullAddress(selectedForm.address, selectedForm.npa, selectedForm.localite) }}</span></dd>
                         </div>
                         <div class="flex gap-4">
-                            <dt class="w-32 shrink-0 font-medium text-stone-500"><span class="cooper-baseline">Trophée</span></dt>
+                            <dt class="w-32 shrink-0 font-medium text-stone-500"><span>Trophée</span></dt>
                             <dd>
                                 <span
                                     class="rounded-full px-2 py-1 text-xs font-medium"
                                     :class="selectedForm.trophy ? 'bg-emerald-50 text-emerald-700' : 'bg-stone-100 text-stone-400'"
                                 >
-                                    <span class="cooper-baseline">{{ selectedForm.trophy ? 'Oui' : 'Non' }}</span>
+                                    <span>{{ selectedForm.trophy ? 'Oui' : 'Non' }}</span>
                                 </span>
                             </dd>
                         </div>
                         <div v-if="selectedForm.message" class="flex gap-4">
-                            <dt class="w-32 shrink-0 font-medium text-stone-500"><span class="cooper-baseline">Message</span></dt>
-                            <dd class="whitespace-pre-wrap text-stone-900"><span class="cooper-baseline">{{ selectedForm.message }}</span></dd>
+                            <dt class="w-32 shrink-0 font-medium text-stone-500"><span>Message</span></dt>
+                            <dd class="whitespace-pre-wrap text-stone-900"><span>{{ selectedForm.message }}</span></dd>
                         </div>
                         <div class="flex gap-4">
-                            <dt class="w-32 shrink-0 font-medium text-stone-500"><span class="cooper-baseline">Date</span></dt>
-                            <dd class="text-stone-900"><span class="cooper-baseline">{{ formatDate(selectedForm.created_at) }}</span></dd>
+                            <dt class="w-32 shrink-0 font-medium text-stone-500"><span>Date</span></dt>
+                            <dd class="text-stone-900"><span>{{ formatDate(selectedForm.created_at) }}</span></dd>
                         </div>
                     </dl>
 
                     <div class="mt-6">
-                        <p class="cooper-text-baseline mb-2 text-xs font-semibold uppercase tracking-wide text-stone-500">
+                        <p class="mb-2 text-xs font-semibold uppercase tracking-wide text-stone-500">
                             Entreprises similaires dans la base
                         </p>
-                        <div v-if="matchingCompanies.length === 0" class="cooper-text-baseline text-sm text-stone-400">
+                        <div v-if="matchingCompanies.length === 0" class="text-sm text-stone-400">
                             Aucune entreprise similaire trouvée.
                         </div>
                         <ul v-else class="space-y-2">
@@ -338,8 +338,8 @@ onUnmounted(() => {
                                 :key="company.id"
                                 class="flex items-center justify-between rounded-lg bg-amber-50 px-4 py-2 text-sm"
                             >
-                                <span class="cooper-baseline font-medium text-amber-800">{{ company.name }}</span>
-                                <span class="cooper-baseline text-amber-600">{{ company.email }}</span>
+                                <span class="font-medium text-amber-800">{{ company.name }}</span>
+                                <span class="text-amber-600">{{ company.email }}</span>
                             </li>
                         </ul>
                     </div>
@@ -349,7 +349,7 @@ onUnmounted(() => {
                             class="rounded-xl bg-[#5a002a] px-5 py-2 text-sm font-medium text-white hover:bg-[#7a0038] font-cooper"
                             @click="selectedForm = null"
                         >
-                            <span class="cooper-baseline">Fermer</span>
+                            <span>Fermer</span>
                         </button>
                     </div>
                 </template>

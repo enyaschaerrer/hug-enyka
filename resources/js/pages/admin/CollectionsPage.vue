@@ -280,24 +280,24 @@ onMounted(fetchCompanies);
     <AdminLayout>
         <!-- Header -->
         <div v-if="flashMessage" class="alert alert-success mb-6">
-            <span class="cooper-baseline">{{ flashMessage }}</span>
+            <span>{{ flashMessage }}</span>
         </div>
         <div v-if="disabledLinkMessage" class="toast toast-end toast-top z-50">
             <div class="alert alert-warning shadow-sm">
-                <span class="cooper-baseline">{{ disabledLinkMessage }}</span>
+                <span>{{ disabledLinkMessage }}</span>
             </div>
         </div>
         <div v-if="copyMessage" class="toast toast-end toast-top z-50">
             <div class="alert alert-success shadow-sm">
-                <span class="cooper-baseline">{{ copyMessage }}</span>
+                <span>{{ copyMessage }}</span>
             </div>
         </div>
 
         <div class="mb-4 flex items-center justify-between">
-            <h1 class="cooper-text-baseline text-2xl font-semibold">Campagnes</h1>
+            <h1 class="text-2xl font-semibold">Campagnes</h1>
             <a href="/admin/companies/create" class="btn btn-primary btn-sm font-cooper" @click="goToCreate">
                 <span class="material-symbols-outlined" style="font-size: 18px;" aria-hidden="true">add</span>
-                <span class="cooper-baseline">Créer une nouvelle campagne</span>
+                <span>Créer une nouvelle campagne</span>
             </a>
         </div>
 
@@ -308,13 +308,13 @@ onMounted(fetchCompanies);
                     <input
                         v-model="searchQuery"
                         type="text"
-                        class="cooper-input-baseline w-full font-cooper"
+                        class="w-full font-cooper"
                         placeholder="Rechercher par entreprise ou email"
                     />
                 </label>
 
                 <label class="flex items-center gap-3 self-start lg:self-auto">
-                    <span class="cooper-baseline text-sm font-medium text-base-content/55">Filtrer</span>
+                    <span class="text-sm font-medium text-base-content/55">Filtrer</span>
                     <select v-model="companyFilter" class="select select-bordered bg-white font-cooper">
                         <option value="active-first">Campagnes actives d'abord</option>
                         <option value="active-only">Campagnes actives uniquement</option>
@@ -327,10 +327,10 @@ onMounted(fetchCompanies);
         </section>
 
         <!-- List -->
-        <div v-if="loadingCompanies" class="cooper-text-baseline text-sm text-base-content/50">Chargement...</div>
-        <div v-else-if="loadError" class="alert alert-error"><span class="cooper-baseline">{{ loadError }}</span></div>
-        <p v-else-if="companies.length === 0" class="cooper-text-baseline text-sm text-base-content/50">Aucune campagne. Créez-en une.</p>
-        <p v-else-if="displayedCompanies.length === 0" class="cooper-text-baseline text-sm text-base-content/50">Aucun résultat pour ce filtre.</p>
+        <div v-if="loadingCompanies" class="text-sm text-base-content/50">Chargement...</div>
+        <div v-else-if="loadError" class="alert alert-error"><span>{{ loadError }}</span></div>
+        <p v-else-if="companies.length === 0" class="text-sm text-base-content/50">Aucune campagne. Créez-en une.</p>
+        <p v-else-if="displayedCompanies.length === 0" class="text-sm text-base-content/50">Aucun résultat pour ce filtre.</p>
 
         <div v-else class="space-y-4">
             <div
@@ -348,11 +348,11 @@ onMounted(fetchCompanies);
                                 color: readableTextColor(company.primaryColor || '#E5E7EB'),
                             }"
                         >
-                            <span class="cooper-baseline">{{ companyBadgeLabel(company.name) }}</span>
+                            <span>{{ companyBadgeLabel(company.name) }}</span>
                         </div>
                         <div>
-                            <p class="cooper-text-baseline font-semibold">{{ company.name }}</p>
-                            <p class="cooper-text-baseline mt-0.5 text-sm text-base-content/50">
+                            <p class="font-semibold">{{ company.name }}</p>
+                            <p class="mt-0.5 text-sm text-base-content/50">
                                 <span>{{ company.slug }}</span>
                                 · {{ company.email }}
                                 <span v-if="company.employee_count"> · {{ company.employee_count }} employés</span>
@@ -366,7 +366,7 @@ onMounted(fetchCompanies);
                             @click.prevent="navigate(companyActionPath(company))"
                         >
                             <span class="material-symbols-outlined" style="font-size: 16px;" aria-hidden="true">add</span>
-                            <span class="cooper-baseline">{{ companyActionLabel(company) }}</span>
+                            <span>{{ companyActionLabel(company) }}</span>
                         </a>
                         <a
                             :href="companyEditPath(company)"
@@ -374,7 +374,7 @@ onMounted(fetchCompanies);
                             @click.prevent="navigate(companyEditPath(company))"
                         >
                             <span class="material-symbols-outlined" style="font-size: 16px;" aria-hidden="true">edit</span>
-                            <span class="cooper-baseline">Modifier l'entreprise</span>
+                            <span>Modifier l'entreprise</span>
                         </a>
                         <button
                             type="button"
@@ -382,18 +382,18 @@ onMounted(fetchCompanies);
                             :disabled="deletingCompanyId === company.id"
                             @click="deleteCompany(company)"
                         >
-                            <span class="cooper-baseline">{{ deletingCompanyId === company.id ? '...' : 'Supprimer' }}</span>
+                            <span>{{ deletingCompanyId === company.id ? '...' : 'Supprimer' }}</span>
                         </button>
                     </div>
                 </div>
 
                 <!-- Collections -->
                 <div class="mt-4">
-                    <p class="cooper-text-baseline mb-2 text-xs font-medium tracking-wider text-base-content/40 uppercase">
+                    <p class="mb-2 text-xs font-medium tracking-wider text-base-content/40 uppercase">
                         Collecte active
                     </p>
-                    <p v-if="company.collections.length === 0" class="cooper-text-baseline text-sm text-base-content/40">Aucune collecte.</p>
-                    <p v-else-if="activeCollections(company).length === 0" class="cooper-text-baseline text-sm text-base-content/40">
+                    <p v-if="company.collections.length === 0" class="text-sm text-base-content/40">Aucune collecte.</p>
+                    <p v-else-if="activeCollections(company).length === 0" class="text-sm text-base-content/40">
                         Aucune collecte active pour le moment.
                     </p>
 
@@ -404,11 +404,11 @@ onMounted(fetchCompanies);
                     >
                         <div class="flex items-center justify-between gap-3">
                             <div class="flex min-w-0 flex-1 items-center gap-4">
-                                <span class="cooper-baseline shrink-0 text-sm font-medium text-emerald-800">
+                                <span class="shrink-0 text-sm font-medium text-emerald-800">
                                     {{ formatDate(col.start) }} → {{ formatDate(col.end) }}
                                 </span>
                                 <a :href="col.url" target="_blank" class="link link-primary min-w-0 truncate text-sm">
-                                    <span class="cooper-baseline">{{ col.url }}</span>
+                                    <span>{{ col.url }}</span>
                                 </a>
                             </div>
                             <div class="flex shrink-0 items-center gap-3">
@@ -420,7 +420,7 @@ onMounted(fetchCompanies);
                                 >
                                     <svg v-if="company.trophy" xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5"/></svg>
                                     <svg v-else xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.733 5.076A10.744 10.744 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"/><path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"/><path d="M2 2l20 20"/><path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"/></svg>
-                                    <span class="cooper-baseline">{{ company.trophy ? 'Participation au Prix du Cœur' : 'Participation anonyme' }}</span>
+                                    <span>{{ company.trophy ? 'Participation au Prix du Cœur' : 'Participation anonyme' }}</span>
                                 </a>
                                 <div class="flex items-center gap-1">
                                     <button
@@ -459,7 +459,7 @@ onMounted(fetchCompanies);
                     </div>
 
                     <div v-if="upcomingCollections(company).length > 0" class="mt-4">
-                        <p class="cooper-text-baseline mb-2 text-xs font-medium tracking-wider text-base-content/40 uppercase">
+                        <p class="mb-2 text-xs font-medium tracking-wider text-base-content/40 uppercase">
                             Collecte à venir
                         </p>
 
@@ -471,14 +471,14 @@ onMounted(fetchCompanies);
                             >
                                 <div class="flex items-center justify-between gap-3">
                                     <div class="flex min-w-0 flex-1 items-center gap-4">
-                                        <span class="cooper-baseline shrink-0 text-sm font-medium text-amber-900">
+                                        <span class="shrink-0 text-sm font-medium text-amber-900">
                                             {{ formatDate(col.start) }} → {{ formatDate(col.end) }}
                                         </span>
-                                        <span class="cooper-baseline min-w-0 truncate text-sm text-amber-800/70">
+                                        <span class="min-w-0 truncate text-sm text-amber-800/70">
                                             {{ col.url }}
                                         </span>
                                         <button type="button" class="btn btn-ghost btn-xs cursor-not-allowed border-transparent font-cooper text-amber-800/70 hover:border-transparent hover:bg-amber-100 hover:text-amber-900" @click="showDisabledLinkMessage">
-                                            <span class="cooper-baseline">Lien désactivé</span>
+                                            <span>Lien désactivé</span>
                                         </button>
                                     </div>
                                     <div class="flex shrink-0 items-center gap-3">
@@ -498,7 +498,7 @@ onMounted(fetchCompanies);
 
                     <details v-if="inactiveCollections(company).length > 0" class="collapse-arrow collapse mt-3 bg-base-200">
                         <summary class="collapse-title min-h-11 px-4 py-3 text-sm font-medium text-base-content/60">
-                            <span class="cooper-baseline">Historique ({{ inactiveCollections(company).length }})</span>
+                            <span>Historique ({{ inactiveCollections(company).length }})</span>
                         </summary>
                         <div class="collapse-content px-4 pb-4">
                             <div
@@ -507,12 +507,12 @@ onMounted(fetchCompanies);
                                 class="flex items-center justify-between gap-3 border-t border-base-300 py-3 first:border-t-0"
                             >
                                 <div class="flex min-w-0 flex-1 items-center gap-4">
-                                    <span class="cooper-baseline shrink-0 text-sm text-base-content/55">
+                                    <span class="shrink-0 text-sm text-base-content/55">
                                         {{ formatDate(col.start) }} → {{ formatDate(col.end) }}
                                     </span>
-                                    <span class="cooper-baseline min-w-0 truncate text-xs text-base-content/35">{{ col.url }}</span>
+                                    <span class="min-w-0 truncate text-xs text-base-content/35">{{ col.url }}</span>
                                     <button type="button" class="btn btn-ghost btn-xs cursor-not-allowed font-cooper opacity-50" @click="showDisabledLinkMessage">
-                                        <span class="cooper-baseline">Lien désactivé</span>
+                                        <span>Lien désactivé</span>
                                     </button>
                                 </div>
                             </div>

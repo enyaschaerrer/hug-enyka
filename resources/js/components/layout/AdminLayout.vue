@@ -49,7 +49,7 @@ async function logout() {
         <!-- Sidebar -->
         <aside class="flex h-screen w-72 shrink-0 flex-col border-r border-[#EFE8DD] bg-white">
             <div class="flex min-h-24 items-center justify-between px-8">
-                <p class="cooper-text-baseline text-lg font-semibold text-[#5A002A]">Administration CTS</p>
+                <p class="text-lg font-semibold text-[#5A002A]">Administration CTS</p>
                 <a
                     href="/"
                     title="Retour au site"
@@ -70,7 +70,7 @@ async function logout() {
                             :class="navLinkClasses(currentPath === '/admin')"
                             @click="goTo('/admin', $event)"
                         >
-                            <span class="cooper-baseline">Dashboard</span>
+                            <span>Dashboard</span>
                         </a>
                     </li>
                     <li class="m-0 p-0">
@@ -79,7 +79,7 @@ async function logout() {
                             :class="navLinkClasses(currentPath === '/admin/registrations')"
                             @click="goTo('/admin/registrations', $event)"
                         >
-                            <span class="cooper-baseline">Inscriptions</span>
+                            <span>Inscriptions</span>
                         </a>
                     </li>
                     <li class="m-0 p-0">
@@ -88,7 +88,7 @@ async function logout() {
                             :class="navLinkClasses(currentPath === '/admin/campagnes' || currentPath.startsWith('/admin/companies'))"
                             @click="goTo('/admin/campagnes', $event)"
                         >
-                            <span class="cooper-baseline">Campagnes</span>
+                            <span>Campagnes</span>
                         </a>
                     </li>
                     <li class="m-0 p-0">
@@ -97,7 +97,7 @@ async function logout() {
                             :class="navLinkClasses(currentPath === '/admin/trophee')"
                             @click="goTo('/admin/trophee', $event)"
                         >
-                            <span class="cooper-baseline">Trophée</span>
+                            <span>Trophée</span>
                         </a>
                     </li>
                     <li v-if="isSuperAdmin" class="m-0 p-0">
@@ -106,7 +106,7 @@ async function logout() {
                             :class="navLinkClasses(currentPath === '/admin/comptes')"
                             @click="goTo('/admin/comptes', $event)"
                         >
-                            <span class="cooper-baseline">Comptes</span>
+                            <span>Comptes</span>
                         </a>
                     </li>
                 </ul>
@@ -114,14 +114,14 @@ async function logout() {
 
             <div class="border-t border-[#EFE8DD] px-8 pb-8 pt-5">
                 <div>
-                    <p class="cooper-text-baseline truncate text-sm font-semibold text-[#2F2F36]">{{ user?.name }}</p>
-                    <p class="cooper-text-baseline mt-1 truncate text-xs text-[#2F2F36]/45">{{ user?.email }}</p>
+                    <p class="truncate text-sm font-semibold text-[#2F2F36]">{{ user?.name }}</p>
+                    <p class="mt-1 truncate text-xs text-[#2F2F36]/45">{{ user?.email }}</p>
                     <button
                         type="button"
                         class="mt-4 inline-flex w-full items-center justify-center border border-[#5A002A]/15 px-3 py-2 text-sm font-medium text-[#5A002A]/75 transition-colors hover:bg-[#F8E8EF] hover:text-[#5A002A]"
                         @click="logout"
                     >
-                        <span class="cooper-baseline">Déconnexion</span>
+                        <span>Déconnexion</span>
                     </button>
                 </div>
             </div>
