@@ -15,10 +15,10 @@ class CoBrandedCollecteController extends Controller
         $collection = Collection::query()
             ->with('company')
             ->where('access_token', $token)
-            ->where('start', '<=', now())
-            ->where('end', '>=', now())
             ->whereHas('company', fn ($query) => $query->where('slug', $brand))
             ->firstOrFail();
+
+        abort_unless($collection->isPublicLinkEnabled(), 404);
 
         $canAccess = $this->canAccessCollection($request, $collection);
 
