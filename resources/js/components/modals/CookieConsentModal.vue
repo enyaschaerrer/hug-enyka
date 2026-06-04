@@ -3,6 +3,12 @@ import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { getCookieConsentPreferences, hasCookieConsentDecision, saveCookieConsentPreferences } from '../../services/cookieConsent';
 import type { CookieConsentCategory, CookieConsentPreferences } from '../../types/cookie-consent';
 
+const props = withDefaults(defineProps<{
+    accentColor?: string | null;
+}>(), {
+    accentColor: '#5a579e',
+});
+
 const categories: CookieConsentCategory[] = [
     {
         id: 'necessary',
@@ -26,6 +32,9 @@ const toggleTransition = ref(false);
 let previousBodyOverflow = '';
 
 const modalTitle = computed(() => (view.value === 'summary' ? 'Aidez-nous à améliorer l’expérience de collecte !' : 'Configurer les cookies'));
+const accentColor = computed(() => props.accentColor ?? '#5a579e');
+const accentStyle = computed(() => ({ backgroundColor: accentColor.value }));
+const toggleStyle = computed(() => ({ '--cookie-accent': accentColor.value }));
 
 function syncPreferences(preferences: CookieConsentPreferences | null = getCookieConsentPreferences()) {
     hasDecision.value = preferences !== null;
@@ -148,7 +157,7 @@ onBeforeUnmount(() => {
                         </button>
                         <button
                             class="btn h-[48px] rounded-2xl border-none font-cooper text-[0.95rem] text-white transition-[filter] duration-150 hover:brightness-90 ease-in-out"
-                            style="background-color: #5a579e;"
+                            :style="accentStyle"
                             type="button"
                             @click="acceptAnalytics"
                         >
@@ -177,15 +186,17 @@ onBeforeUnmount(() => {
                                 <input
                                     v-if="category.id === 'analytics'"
                                     v-model="analyticsEnabled"
-                                    class="toggle mt-1 shrink-0 transition-colors ease-in-out checked:border-[#5a579e] checked:bg-[#5a579e] checked:text-white"
+                                    class="cookie-toggle toggle mt-1 shrink-0 transition-colors ease-in-out checked:text-white"
                                     :class="toggleTransition ? 'duration-150' : 'duration-0'"
+                                    :style="toggleStyle"
                                     type="checkbox"
                                     aria-label="Activer la mesure d’audience et les KPIs"
                                 />
                                 <input
                                     v-else
-                                    class="toggle mt-1 shrink-0 transition-colors ease-in-out checked:border-[#5a579e] checked:bg-[#5a579e] checked:text-white"
+                                    class="cookie-toggle toggle mt-1 shrink-0 transition-colors ease-in-out checked:text-white"
                                     :class="toggleTransition ? 'duration-150' : 'duration-0'"
+                                    :style="toggleStyle"
                                     type="checkbox"
                                     checked
                                     disabled
@@ -214,7 +225,7 @@ onBeforeUnmount(() => {
                         </button>
                         <button
                             class="btn h-[48px] rounded-2xl border-none font-cooper text-[0.95rem] text-white transition-[filter] duration-150 hover:brightness-90 ease-in-out"
-                            style="background-color: #5a579e;"
+                            :style="accentStyle"
                             type="button"
                             @click="saveSettings"
                         >
@@ -264,3 +275,11 @@ onBeforeUnmount(() => {
         </button>
     </Transition>
 </template>
+
+<style scoped>
+.cookie-toggle:checked,
+.cookie-toggle[checked] {
+    border-color: var(--cookie-accent);
+    background-color: var(--cookie-accent);
+}
+</style>
