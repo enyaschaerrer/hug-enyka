@@ -56,7 +56,7 @@ function selectPrizeType(type: PrizeType) {
 <template>
     <section class="px-6 py-8 lg:px-12 lg:py-16">
         <div class="mx-auto max-w-6xl">
-            <h2 class="text-display text-martinique-950">Le podium du Prix du Coeur</h2>
+            <h2 class="text-display text-martinique-950">Le podium du Prix du Cœur</h2>
 
             <!-- Tabs type de prix -->
             <div class="mt-8 flex flex-wrap gap-2 border-b border-martinique-200">

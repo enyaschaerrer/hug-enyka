@@ -11,9 +11,9 @@
         <div class="mx-auto max-w-6xl">
             <div class="flex flex-col items-center gap-8 lg:flex-row lg:items-start lg:justify-between lg:gap-12">
                 <div class="max-w-2xl">
-                    <h2 class="text-display text-martinique-950">Le Prix du Coeur</h2>
+                    <h2 class="text-display text-martinique-950">Le Prix du Cœur</h2>
                     <p class="mt-10 text-body text-martinique-900">
-                        Chaque année, le Prix du Coeur met à l'honneur les entreprises de la région
+                        Chaque année, le Prix du Cœur met à l'honneur les entreprises de la région
                         qui s'engagent activement dans le don du sang aux côtés du Centre de Transfusion
                         Sanguine des HUG. À travers les collectes organisées sur leur lieu de travail,
                         salariés et employeurs se rassemblent autour d'un même geste : sauver des vies.
@@ -61,7 +61,7 @@
             <div class="lg:col-start-1 lg:row-start-1">
                     <h2 class="text-display text-martinique-950">Mettre en lumière les entreprises engagées</h2>
                     <p class="mt-6 text-body text-martinique-950">
-                        Le Prix du Coeur célèbre trois engagements distincts. Chaque récompense honore une
+                        Le Prix du Cœur célèbre trois engagements distincts. Chaque récompense honore une
                         manière différente de contribuer au don du sang : la générosité des dons, l'effort de
                         mobilisation, et l'impact humain de la démarche.
                     </p>
