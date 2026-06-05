@@ -158,7 +158,7 @@ function startTypewriter() {
             <div class="relative mt-2 flex min-h-0 flex-1 items-center justify-center">
                 <div class="grid w-full grid-cols-2 gap-3 sm:gap-4">
                     <div class="flex min-h-0 flex-col items-center justify-end">
-                        <div v-if="item.leftDialogue !== ''" class="speech-bubble speech-bubble-left relative min-h-[52px] w-full max-w-[148px] rounded-[1.1rem] border border-[#2f1725] bg-[#f8eef1] px-3 py-2 text-left text-[11px] leading-snug text-[#2f1725] shadow-[0_10px_24px_rgba(47,23,37,0.08)] sm:min-h-[58px] sm:max-w-[168px] sm:text-[12px]">
+                        <div v-if="item.leftDialogue !== ''" class="speech-bubble speech-bubble-left relative min-h-[52px] w-full max-w-[148px] rounded-[1.1rem] border border-[#2f1725] bg-white px-3 py-2 text-left text-[11px] font-semibold leading-snug text-[#2f1725] shadow-[0_10px_24px_rgba(47,23,37,0.08)] sm:min-h-[58px] sm:max-w-[168px] sm:text-[12px]">
                             <span class="invisible">{{ item.leftDialogue }}</span>
                             <span class="absolute inset-0 px-3 py-2 text-[11px] leading-snug sm:text-[12px]">{{ leftTypedText }}</span>
                         </div>
@@ -173,7 +173,7 @@ function startTypewriter() {
                     </div>
 
                     <div class="flex min-h-0 flex-col items-center justify-end">
-                        <div v-if="item.rightDialogue !== ''" class="speech-bubble speech-bubble-right relative min-h-[52px] w-full max-w-[148px] rounded-[1.1rem] border border-[#2f1725] bg-[#f8eef1] px-3 py-2 text-left text-[11px] leading-snug text-[#2f1725] shadow-[0_10px_24px_rgba(47,23,37,0.08)] sm:min-h-[58px] sm:max-w-[168px] sm:text-[12px]">
+                        <div v-if="item.rightDialogue !== ''" class="speech-bubble speech-bubble-right relative min-h-[52px] w-full max-w-[148px] rounded-[1.1rem] border border-[#2f1725] bg-white px-3 py-2 text-left text-[11px] font-semibold leading-snug text-[#2f1725] shadow-[0_10px_24px_rgba(47,23,37,0.08)] sm:min-h-[58px] sm:max-w-[168px] sm:text-[12px]">
                             <span class="invisible">{{ item.rightDialogue }}</span>
                             <span class="absolute inset-0 px-3 py-2 text-[11px] leading-snug sm:text-[12px]">{{ rightTypedText }}</span>
                         </div>
@@ -193,6 +193,10 @@ function startTypewriter() {
         <template v-else>
             <div class="h-full w-full bg-[#f8eef1]"></div>
         </template>
+
+        <div v-if="item.id !== 0" class="absolute right-4 top-4 rounded-full bg-[#6d002e] px-2.5 py-0.5 text-xs font-bold text-white">
+            {{ current }}/{{ total }}
+        </div>
 
         <div class="pointer-events-none absolute inset-0 rounded-[1.75rem] border border-white/80" />
     </article>
@@ -214,7 +218,7 @@ function startTypewriter() {
     bottom: -6px;
     width: 11px;
     height: 11px;
-    background: #f8eef1;
+    background: #ffffff;
     border-right: 1px solid #2f1725;
     border-bottom: 1px solid #2f1725;
     transform: rotate(45deg);
@@ -226,7 +230,7 @@ function startTypewriter() {
     bottom: 0px;
     width: 14px;
     height: 5px;
-    background: #f8eef1;
+    background: #ffffff;
 }
 
 .speech-bubble-left::before {
