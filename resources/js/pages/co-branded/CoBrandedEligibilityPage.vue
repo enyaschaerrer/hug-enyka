@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onBeforeUnmount, onMounted, ref } from 'vue';
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
 import CoBrandedFooter from '../../components/co-branded/CoBrandedFooter.vue';
 import TinderEligibilityPrototype from '../../components/tinder-cards/TinderEligibilityPrototype.vue';
 import CoBrandedPhoneModal from '../../components/co-branded/CoBrandedPhoneModal.vue';
@@ -16,6 +16,7 @@ const qrModalOpen = ref(false);
 const isDesktop = ref(false);
 const exitModalOpen = ref(false);
 const showNonEligible = ref(false);
+const nonEligibleBgStyle = computed(() => showNonEligible.value ? { backgroundImage: 'url(/img/cobranded-background/bg-cobranded.webp)' } : {});
 let desktopMediaQuery: MediaQueryList | null = null;
 let phoneModalTimeout: number | null = null;
 let pendingLeaveAction: (() => void | Promise<void>) | null = null;
@@ -175,7 +176,11 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-    <div class="flex flex-col" :class="showNonEligible ? 'min-h-screen bg-white' : 'h-[100svh] overflow-hidden bg-catskillwhite-50'">
+    <div
+        class="flex flex-col"
+        :class="showNonEligible ? 'min-h-screen bg-cover bg-center bg-no-repeat' : 'h-[100svh] overflow-hidden bg-catskillwhite-50'"
+        :style="nonEligibleBgStyle"
+    >
         <CoBrandedAuthGate
             v-if="!auth.canAccess"
             :company="company"

@@ -15,7 +15,7 @@ const placeholderReasons = [
 </script>
 
 <template>
-    <div class="font-cooper overflow-y-auto bg-white">
+    <div class="font-cooper overflow-y-auto">
         <div class="mx-auto max-w-5xl px-6 py-10 lg:px-12">
             <div class="flex flex-col gap-10 lg:flex-row lg:items-start lg:gap-16">
 
