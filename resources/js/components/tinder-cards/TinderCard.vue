@@ -121,7 +121,7 @@ function startTypewriter() {
             <div class="relative mt-2 flex min-h-0 flex-1 items-center justify-center">
                 <div class="grid w-full grid-cols-2 gap-3 sm:gap-4">
                     <div class="flex min-h-0 flex-col items-center justify-end">
-                        <div class="speech-bubble speech-bubble-left min-h-[52px] w-full max-w-[148px] rounded-[1.1rem] border border-[#2f1725] bg-white px-3 py-2 text-left text-[11px] leading-snug text-[#2f1725] shadow-[0_10px_24px_rgba(47,23,37,0.08)] sm:min-h-[58px] sm:max-w-[168px] sm:text-[12px]">
+                        <div class="speech-bubble speech-bubble-left min-h-[52px] w-full max-w-[148px] rounded-[1.1rem] border border-[#2f1725] bg-[#f8eef1] px-3 py-2 text-left text-[11px] leading-snug text-[#2f1725] shadow-[0_10px_24px_rgba(47,23,37,0.08)] sm:min-h-[58px] sm:max-w-[168px] sm:text-[12px]">
                             <span>{{ leftTypedText }}</span>
                         </div>
                         <div :key="`${item.id}-${emoteAnimationKey}-left`" class="sanguy-card-emote relative mt-1 flex h-[108px] w-full items-end justify-center sm:h-[124px] lg:h-[136px]">
@@ -135,7 +135,7 @@ function startTypewriter() {
                     </div>
 
                     <div class="flex min-h-0 flex-col items-center justify-end">
-                        <div class="speech-bubble speech-bubble-right min-h-[52px] w-full max-w-[148px] rounded-[1.1rem] border border-[#2f1725] bg-white px-3 py-2 text-left text-[11px] leading-snug text-[#2f1725] shadow-[0_10px_24px_rgba(47,23,37,0.08)] sm:min-h-[58px] sm:max-w-[168px] sm:text-[12px]">
+                        <div class="speech-bubble speech-bubble-right min-h-[52px] w-full max-w-[148px] rounded-[1.1rem] border border-[#2f1725] bg-[#f8eef1] px-3 py-2 text-left text-[11px] leading-snug text-[#2f1725] shadow-[0_10px_24px_rgba(47,23,37,0.08)] sm:min-h-[58px] sm:max-w-[168px] sm:text-[12px]">
                             <span>{{ rightTypedText }}</span>
                         </div>
                         <div :key="`${item.id}-${emoteAnimationKey}-right`" class="sanguy-card-emote relative mt-1 flex h-[108px] w-full items-end justify-center sm:h-[124px] lg:h-[136px]">
@@ -169,34 +169,41 @@ function startTypewriter() {
     position: relative;
 }
 
-.speech-bubble::after {
-    content: '';
-    position: absolute;
-    bottom: -12px;
-    width: 0;
-    height: 0;
-    border-top: 14px solid white;
-}
-
 .speech-bubble::before {
     content: '';
     position: absolute;
-    bottom: -14px;
-    width: 0;
-    height: 0;
-    border-top: 16px solid #2f1725;
+    bottom: -7px;
+    width: 11px;
+    height: 11px;
+    background: #f8eef1;
+    border-right: 1px solid #2f1725;
+    border-bottom: 1px solid #2f1725;
+    transform: rotate(45deg);
 }
 
-.speech-bubble-left::before,
+.speech-bubble::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    width: 14px;
+    height: 5px;
+    background: #f8eef1;
+}
+
+.speech-bubble-left::before {
+    left: 28px;
+}
+
 .speech-bubble-left::after {
-    left: 20px;
-    border-right: 8px solid transparent;
+    left: 27px;
 }
 
-.speech-bubble-right::before,
+.speech-bubble-right::before {
+    right: 28px;
+}
+
 .speech-bubble-right::after {
-    right: 20px;
-    border-left: 8px solid transparent;
+    right: 27px;
 }
 
 @keyframes sanguy-card-emote-in {
