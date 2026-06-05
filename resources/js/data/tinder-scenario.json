@@ -3,6 +3,26 @@
     "cards": [
         {
             "id": 1,
+            "theme": "Âge",
+            "title": "Tranche d'âge requise",
+            "question": "Avez-vous entre 18 et 60 ans ? (75 ans si vous êtes habitué-e à donner votre sang)",
+            "bio": "L'âge est une condition de base pour le don de sang.",
+            "hint": "La limite est portée à 75 ans pour les donneurs réguliers.",
+            "image": "/img/mascots/sanguy_hero.webp",
+            "tone": "red",
+            "leftDialogue": "Pour donner son sang, il faut avoir l'âge requis !",
+            "rightDialogue": "C'est une mesure qui protège les donneurs comme les receveurs.",
+            "leftOutcome": {
+                "status": "blocker",
+                "label": "Tranche d'âge non éligible"
+            },
+            "rightOutcome": {
+                "status": "clear",
+                "label": "Âge OK"
+            }
+        },
+        {
+            "id": 2,
             "theme": "Don récent",
             "title": "Don des 4 derniers mois",
             "question": "Au cours des 4 derniers mois, avez-vous déjà donné votre sang ?",
@@ -22,7 +42,7 @@
             }
         },
         {
-            "id": 2,
+            "id": 3,
             "theme": "Poids",
             "title": "Poids minimum",
             "question": "Pesez-vous au moins 50 kg ?",
@@ -42,7 +62,7 @@
             }
         },
         {
-            "id": 3,
+            "id": 4,
             "theme": "Relations sexuelles",
             "title": "Relations sexuelles récentes",
             "question": "Au cours des 4 derniers mois, avez-vous eu des relations sexuelles ?",
@@ -62,7 +82,7 @@
             }
         },
         {
-            "id": 4,
+            "id": 5,
             "theme": "IST",
             "title": "Infection sexuellement transmissible",
             "question": "Avez-vous déjà contracté et/ou testé positif à une maladie sexuellement transmissible ?",
@@ -82,7 +102,7 @@
             }
         },
         {
-            "id": 5,
+            "id": 6,
             "theme": "Drogues",
             "title": "Consommation de drogues",
             "question": "Au cours des 12 derniers mois, avez-vous consommé ou injecté de la drogue ?",
@@ -102,7 +122,7 @@
             }
         },
         {
-            "id": 6,
+            "id": 7,
             "theme": "Grossesse",
             "title": "Grossesse ou accouchement",
             "question": "Êtes-vous actuellement enceinte ou cela fait-il moins d'un an depuis la dernière naissance ?",
@@ -122,7 +142,7 @@
             }
         },
         {
-            "id": 7,
+            "id": 8,
             "theme": "Voyage",
             "title": "Voyage hors Suisse",
             "question": "Au cours des 6 derniers mois, avez-vous voyagé hors de la Suisse ?",
@@ -142,7 +162,7 @@
             }
         },
         {
-            "id": 8,
+            "id": 9,
             "theme": "Santé",
             "title": "Soins médicaux ou maladie",
             "question": "Au cours du mois dernier, avez-vous reçu des soins médicaux ou étiez-vous malade ?",
@@ -162,7 +182,7 @@
             }
         },
         {
-            "id": 9,
+            "id": 10,
             "theme": "Médicaments",
             "title": "Médicaments ou vaccins",
             "question": "Au cours des 6 derniers mois, avez-vous pris des médicaments et/ou vaccins ?",
@@ -182,7 +202,7 @@
             }
         },
         {
-            "id": 10,
+            "id": 11,
             "theme": "Tique",
             "title": "Piqûre de tique",
             "question": "Au cours du dernier mois, avez-vous été piqué(e) par une tique ?",
@@ -202,7 +222,7 @@
             }
         },
         {
-            "id": 11,
+            "id": 12,
             "theme": "Blessures",
             "title": "Plaie ouverte ou opération",
             "question": "Au cours du dernier mois, avez-vous une plaie ouverte (blessure, tatouage, piercing…) ou avez-vous effectué une opération ?",

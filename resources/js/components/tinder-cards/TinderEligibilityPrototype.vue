@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
 import { FlashCards } from 'vue3-flashcards';
+import { Vue3Lottie } from 'vue3-lottie';
 import tinderScenarioData from '../../data/tinder-scenario.json';
+import swipeLottieData from '../../data/swipe-lottie.json';
 import TinderActions from './TinderActions.vue';
 import TinderCard from './TinderCard.vue';
 
@@ -53,6 +55,7 @@ type TriageAnswer = {
 
 const tinderScenario = tinderScenarioData as TinderScenario;
 const items = ref<Card[]>(tinderScenario.cards);
+const showIntro = ref(true);
 const answers = ref<TriageAnswer[]>([]);
 const viewportWidth = ref(0);
 const viewportHeight = ref(0);
@@ -133,7 +136,32 @@ onBeforeUnmount(() => {
                 ></span>
             </div>
 
+            <!-- Carte intro tutoriel -->
+            <div
+                v-if="showIntro"
+                class="relative z-10 flex h-[27rem] w-full flex-col items-center justify-center overflow-hidden rounded-[2rem] border-2 bg-[#f8eef1] px-6 shadow-[0_24px_70px_rgba(109,0,46,0.14)] sm:h-[28rem] lg:h-[29rem]"
+                :style="{ borderColor: '#b81e62' }"
+            >
+                <!-- Contenu à ajouter -->
+                <Vue3Lottie
+                    :animation-data="swipeLottieData"
+                    :height="220"
+                    :loop="true"
+                    :auto-play="true"
+                />
+                <button
+                    type="button"
+                    class="rounded-2xl px-10 py-3.5 text-lg font-bold text-white transition hover:opacity-90"
+                    style="background-color: #6d002e;"
+                    @click="showIntro = false"
+                >
+                    C'est parti !
+                </button>
+                <div class="pointer-events-none absolute inset-0 rounded-[1.75rem] border border-white/80" />
+            </div>
+
             <FlashCards
+                v-else
                 :items="items"
                 :swipe-direction="['left', 'right']"
                 :swipe-threshold="140"
