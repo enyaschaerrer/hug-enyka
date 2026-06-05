@@ -55,7 +55,10 @@ const canNext = computed(() => activeTab.value !== tabs[tabs.length - 1].key);
 </script>
 
 <template>
-    <div class="flex min-h-screen flex-col bg-white">
+    <div
+        class="flex min-h-screen flex-col bg-cover bg-center bg-no-repeat"
+        style="background-image: url('/img/cobranded-background/bg-cobranded-clear.webp');"
+    >
         <CoBrandedAuthGate
             v-if="!auth.canAccess"
             :company="company"
