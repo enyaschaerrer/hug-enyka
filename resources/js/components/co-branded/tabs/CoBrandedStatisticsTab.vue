@@ -43,7 +43,7 @@ const activeIdx = ref(0);
                     :src="stat.mascot"
                     alt=""
                     :class="[
-                        'pointer-events-none absolute -top-24 left-1/2 h-24 w-auto -translate-x-1/2 transition-opacity duration-200 sm:-top-28 sm:h-28',
+                        'pointer-events-none absolute -top-29 left-1/2 h-48 w-auto -translate-x-1/2 transition-opacity duration-200 sm:-top-35 sm:h-58',
                         activeIdx === idx ? 'opacity-100' : 'opacity-0',
                     ]"
                 />
