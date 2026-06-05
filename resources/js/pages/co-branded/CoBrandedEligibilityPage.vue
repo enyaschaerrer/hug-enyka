@@ -34,9 +34,7 @@ const confettiPieces = Array.from({ length: 55 }, (_, i) => ({
 
 function onMatch() {
     showConfetti.value = true;
-    window.setTimeout(() => {
-        showSms.value = true;
-    }, 1600);
+    showSms.value = true;
     window.setTimeout(() => {
         showConfetti.value = false;
     }, 2600);

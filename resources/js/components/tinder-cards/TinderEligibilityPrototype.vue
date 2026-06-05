@@ -211,6 +211,10 @@ onBeforeUnmount(() => {
                 </template>
 
 
+                <template #empty>
+                    <div />
+                </template>
+
                 <template
                     #actions="{
                         restore,
