@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue';
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
 import { FlashCards } from 'vue3-flashcards';
 import tinderScenarioData from '../../data/tinder-scenario.json';
 import TinderActions from './TinderActions.vue';
@@ -10,6 +10,11 @@ const props = withDefaults(defineProps<{
 }>(), {
     contained: false,
 });
+
+const emit = defineEmits<{
+    ineligible: [];
+    match: [];
+}>();
 
 type SwipeDirection = 'left' | 'right';
 type TriageStatus = 'clear' | 'warning' | 'blocker';
@@ -23,6 +28,8 @@ type Card = Record<string, unknown> & {
     hint: string;
     image: string;
     tone: 'red' | 'green' | 'blue' | 'violet' | 'orange' | 'turquoise' | 'pink' | 'emerald';
+    leftDialogue: string;
+    rightDialogue: string;
     leftOutcome: {
         status: TriageStatus;
         label: string;
@@ -45,15 +52,61 @@ type TriageAnswer = {
     label: string;
 };
 
+const introCard: Card = {
+    id: 0,
+    theme: '',
+    title: '',
+    question: '',
+    bio: '',
+    hint: '',
+    image: '',
+    tone: 'red',
+    leftDialogue: '',
+    rightDialogue: '',
+    leftOutcome: { status: 'clear', label: '' },
+    rightOutcome: { status: 'clear', label: '' },
+};
+
 const tinderScenario = tinderScenarioData as TinderScenario;
-const items = ref<Card[]>(tinderScenario.cards);
+const items = ref<Card[]>([introCard, ...tinderScenario.cards]);
 const answers = ref<TriageAnswer[]>([]);
-const totalCards = computed(() => items.value.length);
+const introSwiped = ref(false);
+const introCardActive = computed(() => !introSwiped.value);
+const storedSwipeRight = ref<(() => void) | null>(null);
+const viewportWidth = ref(0);
+const viewportHeight = ref(0);
+const totalCards = computed(() => items.value.filter(item => item.id !== 0).length);
+const answeredCount = computed(() => answers.value.length);
 const blockerCount = computed(() => answers.value.filter((answer) => answer.status === 'blocker').length);
 const warningCount = computed(() => answers.value.filter((answer) => answer.status === 'warning').length);
 const hasMatch = computed(() => blockerCount.value === 0);
+const progressSegments = computed(() => Array.from({ length: totalCards.value }, (_, index) => introSwiped.value && index <= answeredCount.value));
+const layoutMode = computed<'mobile' | 'tablet' | 'desktop'>(() => {
+    const width = viewportWidth.value;
+    const height = viewportHeight.value;
+
+    if (width >= 1100 && height >= 700) {
+        return 'desktop';
+    }
+
+    if (width >= 768 && height >= 560) {
+        return 'tablet';
+    }
+
+    return 'mobile';
+});
+
+function syncViewport() {
+    viewportWidth.value = window.innerWidth;
+    viewportHeight.value = window.innerHeight;
+}
 
 function handleSwipe(item: Card, direction: SwipeDirection) {
+    if (item.id === 0) {
+        introSwiped.value = true;
+        return;
+    }
+
     const outcome = direction === 'right' ? item.rightOutcome : item.leftOutcome;
     answers.value = [
         ...answers.value.filter((answer) => answer.cardId !== item.id),
@@ -64,6 +117,16 @@ function handleSwipe(item: Card, direction: SwipeDirection) {
             label: outcome.label,
         },
     ];
+
+    if (outcome.status === 'blocker') {
+        emit('ineligible');
+        return;
+    }
+
+    const allAnswered = answers.value.length === totalCards.value;
+    if (allAnswered) {
+        emit('match');
+    }
 }
 
 function handleRestore(item: Card) {
@@ -71,23 +134,42 @@ function handleRestore(item: Card) {
 }
 
 function getCardPosition(item: Card) {
-    return Math.max(1, items.value.findIndex((card) => card.id === item.id) + 1);
+    return Math.max(1, items.value.findIndex((card) => card.id === item.id));
 }
+
+onMounted(() => {
+    syncViewport();
+    window.addEventListener('resize', syncViewport);
+});
+
+onBeforeUnmount(() => {
+    window.removeEventListener('resize', syncViewport);
+});
 </script>
 
 <template>
     <section
-        class="font-cooper flex items-center px-4 pt-0"
+        v-if="layoutMode === 'desktop'"
+        class="font-cooper flex w-full items-center px-3 py-2 sm:px-4 sm:py-3"
         :class="props.contained ? 'min-h-0 w-full bg-transparent pb-0' : 'min-h-[100svh] w-screen bg-rose-50 pb-12'"
     >
-        <div class="relative mx-auto w-full max-w-[430px]">
+        <div class="relative mx-auto w-full max-w-[680px]" :class="props.contained ? '' : '-mt-10 sm:-mt-12'">
+            <div class="mb-[33px] flex items-center justify-center gap-2 px-6 sm:mb-[34px] sm:gap-3 sm:px-10">
+                <span
+                    v-for="(isCompleted, index) in progressSegments"
+                    :key="index"
+                    class="h-2 flex-1 rounded-full transition-colors duration-200 sm:h-2.5"
+                    :class="isCompleted ? 'bg-[#6d002e]' : 'bg-[#f4b5ca]'"
+                ></span>
+            </div>
+
             <FlashCards
                 :items="items"
                 :swipe-direction="['left', 'right']"
                 :swipe-threshold="140"
                 :stack="3"
-                :stack-offset="10"
-                :stack-scale="0.03"
+                :stack-offset="6"
+                :stack-scale="0.018"
                 @swipe-left="(item) => handleSwipe(item, 'left')"
                 @swipe-right="(item) => handleSwipe(item, 'right')"
                 @restore="handleRestore"
@@ -98,16 +180,17 @@ function getCardPosition(item: Card) {
                         :active="item.id === activeItemKey"
                         :current="getCardPosition(item)"
                         :total="totalCards"
+                        @intro-start="storedSwipeRight?.()"
                     />
                 </template>
 
                 <template #left="{ delta }">
                     <div
-                        class="pointer-events-none absolute inset-0 z-10 flex items-center justify-center rounded-[1.75rem] bg-white/70 backdrop-blur-[2px]"
+                        class="pointer-events-none absolute inset-0 z-10 flex items-center justify-center rounded-[2rem] bg-white/25"
                         :style="{ opacity: Math.min(Math.abs(delta), 0.92) }"
                     >
                         <div
-                            class="-rotate-12 inline-flex items-center rounded-2xl border-4 border-red-500 bg-white px-6 py-3 text-4xl font-bold leading-none uppercase text-red-600 shadow-lg"
+                            class="-rotate-12 inline-flex items-center rounded-2xl border-4 border-[#ef4444] bg-white px-3 py-1.5 text-xl font-bold leading-none uppercase text-[#ef4444] shadow-lg sm:px-5 sm:py-2.5 sm:text-3xl"
                         >
                             <span>C'est faux</span>
                         </div>
@@ -116,42 +199,20 @@ function getCardPosition(item: Card) {
 
                 <template #right="{ delta }">
                     <div
-                        class="pointer-events-none absolute inset-0 z-10 flex items-center justify-center rounded-[1.75rem] bg-red-50/80 backdrop-blur-[2px]"
+                        class="pointer-events-none absolute inset-0 z-10 flex items-center justify-center rounded-[2rem] bg-white/25"
                         :style="{ opacity: Math.min(Math.abs(delta), 0.92) }"
                     >
                         <div
-                            class="inline-flex rotate-12 items-center rounded-2xl border-4 border-emerald-500 bg-white px-6 py-3 text-4xl font-bold leading-none uppercase text-emerald-600 shadow-lg"
+                            class="inline-flex rotate-12 items-center rounded-2xl border-4 border-[#22c55e] bg-white px-3 py-1.5 text-xl font-bold leading-none uppercase text-[#22c55e] shadow-lg sm:px-5 sm:py-2.5 sm:text-3xl"
                         >
                             <span>Je valide</span>
                         </div>
                     </div>
                 </template>
 
+
                 <template #empty>
-                    <div class="rounded-[1.75rem] border border-red-100 bg-white p-8 text-center text-red-950 shadow-[0_20px_60px_rgba(127,29,29,0.12)]">
-                        <div
-                            class="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl"
-                            :class="hasMatch ? 'bg-emerald-50 text-emerald-600' : 'bg-red-50 text-red-600'"
-                        >
-                            <span class="text-3xl font-bold">{{ hasMatch ? 'OK' : '!' }}</span>
-                        </div>
-                        <h2 class="text-2xl font-bold leading-tight">
-                            {{ hasMatch ? 'Match pour continuer' : 'Pas de match pour le moment' }}
-                        </h2>
-                        <p class="mt-3 text-sm font-normal leading-relaxed text-stone-600">
-                            {{
-                                hasMatch
-                                    ? warningCount > 0
-                                        ? 'Sanguy a repere quelques points a clarifier. Le SMS peut prendre le relais.'
-                                        : 'Aucun point bloquant dans ce premier tri. Tu peux passer au SMS.'
-                                    : 'Un ou plusieurs points demandent de reporter ou de verifier avant de poursuivre.'
-                            }}
-                        </p>
-                        <div class="mt-5 flex justify-center gap-2">
-                            <span class="badge badge-error badge-outline font-medium">{{ blockerCount }} blocage</span>
-                            <span class="badge badge-warning badge-outline font-medium">{{ warningCount }} a verifier</span>
-                        </div>
-                    </div>
+                    <div />
                 </template>
 
                 <template
@@ -163,13 +224,16 @@ function getCardPosition(item: Card) {
                         canRestore,
                     }"
                 >
-                    <TinderActions
-                        :left="swipeLeft"
-                        :right="swipeRight"
-                        :restore="restore"
-                        :is-end="isEnd"
-                        :can-restore="canRestore"
-                    />
+                    <div :ref="() => storedSwipeRight = swipeRight">
+                        <TinderActions
+                            v-if="!introCardActive"
+                            :left="swipeLeft"
+                            :right="swipeRight"
+                            :restore="restore"
+                            :is-end="isEnd"
+                            :can-restore="canRestore && answeredCount > 0"
+                        />
+                    </div>
                 </template>
             </FlashCards>
         </div>

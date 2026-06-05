@@ -42,7 +42,7 @@ defineEmits<{
                         class="rounded-full border border-catskillwhite-300 px-6 py-3 text-sm font-semibold text-catskillwhite-900 transition hover:bg-catskillwhite-50"
                         @click="$emit('close')"
                     >
-                        Retour au formulaire
+                        Retour au questionnaire
                     </button>
                     <button
                         type="button"

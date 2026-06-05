@@ -1,5 +1,7 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
+import { Vue3Lottie } from 'vue3-lottie';
+import swipeLottieData from '../../data/swipe-lottie.json';
 
 type TinderItem = {
     id: number;
@@ -8,8 +10,9 @@ type TinderItem = {
     question: string;
     bio: string;
     hint: string;
-    image: string;
     tone: 'red' | 'green' | 'blue' | 'violet' | 'orange' | 'turquoise' | 'pink' | 'emerald';
+    leftDialogue: string;
+    rightDialogue: string;
 };
 
 const props = defineProps<{
@@ -19,94 +22,180 @@ const props = defineProps<{
     total: number;
 }>();
 
+const emit = defineEmits<{
+    introStart: [];
+}>();
+
 const emoteAnimationKey = ref(0);
+const leftTypedText = ref('');
+const rightTypedText = ref('');
+let leftTypingTimeout: number | null = null;
+let rightTypingTimeout: number | null = null;
+
+const sanguyVariants = [
+    '/img/mascots/sanguy_hero.webp',
+    '/img/mascots/sanguy_thumbs_up.webp',
+    '/img/mascots/sanguy_satisfied.webp',
+    '/img/mascots/sanguy_above.webp',
+];
+
+const blutlyVariants = [
+    '/img/mascots/blutly_hero.webp',
+    '/img/mascots/blutly_thumbs_up.webp',
+    '/img/mascots/blutly_above.webp',
+    '/img/mascots/blutly_sanguy_hey.webp',
+];
+
+const sanguyImage = computed(() => sanguyVariants[props.item.id % sanguyVariants.length]);
+const blutlyImage = computed(() => blutlyVariants[(props.item.id + 1) % blutlyVariants.length]);
 
 watch(
     () => props.active,
     (active) => {
         if (active) {
             emoteAnimationKey.value += 1;
+            startTypewriter();
         }
     },
     { immediate: true },
 );
 
 const toneClasses: Record<TinderItem['tone'], string> = {
-    red: 'from-red-50 via-white to-rose-100',
-    green: 'from-green-50 via-white to-emerald-50',
-    blue: 'from-blue-50 via-white to-sky-50',
-    violet: 'from-violet-50 via-white to-purple-50',
-    orange: 'from-orange-50 via-white to-amber-50',
-    turquoise: 'from-cyan-50 via-white to-teal-50',
-    pink: 'from-pink-50 via-white to-rose-50',
-    emerald: 'from-emerald-50 via-white to-green-50',
+    red: 'bg-[#f8eef1]',
+    green: 'bg-[#f8eef1]',
+    blue: 'bg-[#f8eef1]',
+    violet: 'bg-[#f8eef1]',
+    orange: 'bg-[#f8eef1]',
+    turquoise: 'bg-[#f8eef1]',
+    pink: 'bg-[#f8eef1]',
+    emerald: 'bg-[#f8eef1]',
 };
 
-const themeClasses: Record<TinderItem['tone'], string> = {
-    red: 'border-red-200 bg-red-50 text-red-700',
-    green: 'border-green-200 bg-green-50 text-green-700',
-    blue: 'border-blue-200 bg-blue-50 text-blue-700',
-    violet: 'border-violet-200 bg-violet-50 text-violet-700',
-    orange: 'border-orange-200 bg-orange-50 text-orange-700',
-    turquoise: 'border-cyan-200 bg-cyan-50 text-cyan-700',
-    pink: 'border-pink-200 bg-pink-50 text-pink-700',
-    emerald: 'border-emerald-200 bg-emerald-50 text-emerald-700',
-};
+function clearTypingTimers() {
+    if (leftTypingTimeout !== null) {
+        window.clearTimeout(leftTypingTimeout);
+        leftTypingTimeout = null;
+    }
 
-const counterClasses: Record<TinderItem['tone'], string> = {
-    red: 'border-red-600 bg-red-600 text-white',
-    green: 'border-green-600 bg-green-600 text-white',
-    blue: 'border-blue-600 bg-blue-600 text-white',
-    violet: 'border-violet-600 bg-violet-600 text-white',
-    orange: 'border-orange-500 bg-orange-500 text-white',
-    turquoise: 'border-cyan-600 bg-cyan-600 text-white',
-    pink: 'border-pink-600 bg-pink-600 text-white',
-    emerald: 'border-emerald-600 bg-emerald-600 text-white',
-};
+    if (rightTypingTimeout !== null) {
+        window.clearTimeout(rightTypingTimeout);
+        rightTypingTimeout = null;
+    }
+}
 
-const glowClasses: Record<TinderItem['tone'], string> = {
-    red: 'bg-red-300/55',
-    green: 'bg-green-300/55',
-    blue: 'bg-blue-300/55',
-    violet: 'bg-violet-300/55',
-    orange: 'bg-orange-300/55',
-    turquoise: 'bg-cyan-300/55',
-    pink: 'bg-pink-300/55',
-    emerald: 'bg-emerald-300/55',
-};
+function animateText(target: typeof leftTypedText, fullText: string, delay = 24) {
+    let index = 0;
+
+    const tick = () => {
+        target.value = fullText.slice(0, index);
+        index += 1;
+
+        if (index <= fullText.length) {
+            return window.setTimeout(tick, delay);
+        }
+
+        return null;
+    };
+
+    return tick();
+}
+
+function startTypewriter() {
+    clearTypingTimers();
+    leftTypedText.value = '';
+    rightTypedText.value = '';
+    leftTypingTimeout = animateText(leftTypedText, props.item.leftDialogue, 22);
+    rightTypingTimeout = window.setTimeout(() => {
+        rightTypingTimeout = animateText(rightTypedText, props.item.rightDialogue, 20);
+    }, 220);
+}
 </script>
 
 <template>
     <article
-        class="font-cooper relative z-10 flex h-[540px] w-full flex-col overflow-hidden rounded-[1.75rem] border border-red-100 bg-gradient-to-br p-5 text-red-950 shadow-[0_20px_60px_rgba(127,29,29,0.12)]"
+        class="font-cooper relative z-10 flex h-[27rem] w-full flex-col overflow-hidden rounded-[2rem] border-2 px-4 pb-18 pt-4 text-red-950 shadow-[0_24px_70px_rgba(109,0,46,0.14)] sm:h-[28rem] sm:px-6 sm:pb-20 sm:pt-5 lg:h-[29rem] lg:px-7 lg:pb-22"
         :class="toneClasses[item.tone]"
+        :style="{ borderColor: '#b81e62' }"
     >
-        <div class="flex items-center justify-between gap-3">
-            <span class="rounded-full border-2 px-3 py-1 text-xs font-semibold uppercase tracking-wide" :class="themeClasses[item.tone]">
-                <span>{{ item.theme }}</span>
-            </span>
-            <span class="rounded-full border-2 px-3 py-1 text-sm font-bold tabular-nums" :class="counterClasses[item.tone]">
-                <span>{{ current }}/{{ total }}</span>
-            </span>
-        </div>
-
-        <div class="relative mt-5 flex min-h-0 flex-1 items-center justify-center">
-            <div class="absolute inset-x-5 bottom-10 h-24 rounded-full blur-2xl" :class="glowClasses[item.tone]"></div>
-            <div :key="`${item.id}-${emoteAnimationKey}`" class="sanguy-card-emote relative flex w-full items-center justify-center">
-                <img
-                    class="pointer-events-none max-h-[300px] w-full select-none object-contain drop-shadow-2xl"
-                    :src="item.image"
-                    :alt="item.title"
-                    draggable="false"
+        <!-- Carte intro (id === 0) -->
+        <template v-if="item.id === 0">
+            <div class="flex h-full flex-col items-center pt-4">
+                <Vue3Lottie
+                    :animation-data="swipeLottieData"
+                    :height="160"
+                    :loop="true"
+                    :auto-play="true"
+                    class="mt-6"
                 />
+                <div class="absolute inset-x-4 bottom-[8rem] px-2 text-center">
+                    <p class="text-3xl font-bold text-[#5f0f35]">Comment ça marche ?</p>
+                    <p class="mt-4 text-lg font-semibold leading-snug text-[#7a4b62]">
+                        Swipez à <span class="text-[#ef4444]">gauche</span> si vous n'êtes pas concerné(e),
+                        à <span class="text-[#22c55e]">droite</span> si oui.
+                    </p>
+                    <p class="mt-1 text-lg font-semibold leading-snug text-[#7a4b62]">
+                        Lisez bien chaque question avant de répondre.
+                    </p>
+                </div>
             </div>
-        </div>
+            <button
+                type="button"
+                class="absolute bottom-8 left-1/2 -translate-x-1/2 w-48 rounded-2xl py-3.5 text-base font-bold text-white transition hover:opacity-90"
+                style="background-color: #6d002e;"
+                @click="emit('introStart')"
+            >
+                C'est parti !
+            </button>
+        </template>
 
-        <div class="rounded-3xl border border-red-100 bg-white/88 p-5 shadow-[0_12px_36px_rgba(127,29,29,0.08)] backdrop-blur">
-            <h2 class="text-2xl font-bold leading-tight text-red-950">
-                {{ item.question }}
-            </h2>
-            <p class="mt-3 text-base font-normal leading-relaxed text-stone-500">{{ item.bio }}</p>
+        <template v-else-if="active">
+            <div class="mt-[15px] px-2 text-center sm:mt-[15px] sm:px-6">
+                <h2 class="text-[1.8rem] font-bold leading-[1.32] text-[#5f0f35]">
+                    {{ item.question }}
+                </h2>
+            </div>
+
+            <div class="relative mt-2 flex min-h-0 flex-1 items-center justify-center">
+                <div class="grid w-full grid-cols-2 gap-3 sm:gap-4">
+                    <div class="flex min-h-0 flex-col items-center justify-end">
+                        <div v-if="item.leftDialogue !== ''" class="speech-bubble speech-bubble-left relative ml-auto mr-3 min-h-[52px] w-full max-w-[148px] rounded-[1.1rem] border border-[#2f1725] bg-white px-3 py-2 text-left text-[11px] font-semibold leading-snug text-[#2f1725] shadow-[0_10px_24px_rgba(47,23,37,0.08)] sm:min-h-[58px] sm:max-w-[168px] sm:text-[12px]">
+                            <span class="invisible">{{ item.leftDialogue }}</span>
+                            <span class="absolute inset-0 px-3 py-2 text-[11px] leading-snug sm:text-[12px]">{{ leftTypedText }}</span>
+                        </div>
+                        <div :key="`${item.id}-${emoteAnimationKey}-left`" class="sanguy-card-emote relative mt-1 flex h-[108px] w-full items-end justify-center sm:h-[124px] lg:h-[136px]">
+                            <img
+                                class="pointer-events-none h-full select-none object-contain drop-shadow-[0_12px_22px_rgba(109,0,46,0.18)]"
+                                :src="sanguyImage"
+                                alt="Sanguy"
+                                draggable="false"
+                            />
+                        </div>
+                    </div>
+
+                    <div class="flex min-h-0 flex-col items-center justify-end">
+                        <div v-if="item.rightDialogue !== ''" class="speech-bubble speech-bubble-right relative mr-auto ml-3 min-h-[52px] w-full max-w-[148px] rounded-[1.1rem] border border-[#2f1725] bg-white px-3 py-2 text-left text-[11px] font-semibold leading-snug text-[#2f1725] shadow-[0_10px_24px_rgba(47,23,37,0.08)] sm:min-h-[58px] sm:max-w-[168px] sm:text-[12px]">
+                            <span class="invisible">{{ item.rightDialogue }}</span>
+                            <span class="absolute inset-0 px-3 py-2 text-[11px] leading-snug sm:text-[12px]">{{ rightTypedText }}</span>
+                        </div>
+                        <div :key="`${item.id}-${emoteAnimationKey}-right`" class="sanguy-card-emote relative mt-1 flex h-[108px] w-full items-end justify-center sm:h-[124px] lg:h-[136px]">
+                            <img
+                                class="pointer-events-none h-full select-none object-contain drop-shadow-[0_12px_22px_rgba(109,0,46,0.18)]"
+                                :src="blutlyImage"
+                                alt="Blutly"
+                                draggable="false"
+                            />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </template>
+
+        <template v-else>
+            <div class="h-full w-full bg-[#f8eef1]"></div>
+        </template>
+
+        <div v-if="item.id !== 0" class="absolute right-4 top-4 rounded-full bg-[#6d002e] px-2.5 py-0.5 text-xs font-bold text-white">
+            {{ current }}/{{ total }}
         </div>
 
         <div class="pointer-events-none absolute inset-0 rounded-[1.75rem] border border-white/80" />
@@ -119,6 +208,47 @@ const glowClasses: Record<TinderItem['tone'], string> = {
     will-change: transform;
 }
 
+.speech-bubble {
+    position: relative;
+}
+
+.speech-bubble::before {
+    content: '';
+    position: absolute;
+    bottom: -6px;
+    width: 11px;
+    height: 11px;
+    background: #ffffff;
+    border-right: 1px solid #2f1725;
+    border-bottom: 1px solid #2f1725;
+    transform: rotate(45deg);
+}
+
+.speech-bubble::after {
+    content: '';
+    position: absolute;
+    bottom: 0px;
+    width: 14px;
+    height: 5px;
+    background: #ffffff;
+}
+
+.speech-bubble-left::before {
+    left: 28px;
+}
+
+.speech-bubble-left::after {
+    left: 27px;
+}
+
+.speech-bubble-right::before {
+    right: 28px;
+}
+
+.speech-bubble-right::after {
+    right: 27px;
+}
+
 @keyframes sanguy-card-emote-in {
     0% {
         transform: translateY(24px);
@@ -128,4 +258,5 @@ const glowClasses: Record<TinderItem['tone'], string> = {
         transform: translateY(0);
     }
 }
+
 </style>

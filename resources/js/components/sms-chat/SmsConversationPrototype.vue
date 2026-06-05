@@ -5,10 +5,10 @@ import type { SanguyEmotion, SmsAnswer, SmsMessage, SmsScenario } from '../../ty
 
 const scenario = scenarioData as SmsScenario;
 const sanguyImages: Record<SanguyEmotion, string> = {
-    happy: '/img/sanguy/sanguy_happy.png',
-    angry: '/img/sanguy/sanguy-angry.png',
-    'alt-happy': '/img/sanguy/sanguy-alt-happy.png',
-    'alt-angry': '/img/sanguy/sanguy-alt-angry.png',
+    happy: '/img/mascots/sanguy_thumbs_up.webp',
+    angry: '/img/mascots/sanguy_hero.webp',
+    'alt-happy': '/img/mascots/sanguy_satisfied.webp',
+    'alt-angry': '/img/mascots/sanguy_above.webp',
 };
 
 const messagesContainer = ref<HTMLElement | null>(null);
@@ -94,7 +94,7 @@ pushBotNode(scenario.start);
 </script>
 
 <template>
-    <section class="font-cooper flex h-[100svh] max-h-[100svh] w-screen flex-col overflow-hidden bg-rose-50 text-stone-950">
+    <section class="font-cooper flex min-h-0 w-full flex-1 flex-col overflow-hidden text-stone-950">
         <div ref="messagesContainer" class="min-h-0 flex-1 overflow-y-auto px-4 py-6">
             <div class="mx-auto flex w-full max-w-5xl flex-col gap-2">
                 <div
