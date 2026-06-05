@@ -114,7 +114,7 @@ onBeforeUnmount(() => {
         :class="props.contained ? 'min-h-0 w-full bg-transparent pb-0' : 'min-h-[100svh] w-screen bg-rose-50 pb-12'"
     >
         <div class="relative mx-auto w-full max-w-[680px]" :class="props.contained ? '' : '-mt-10 sm:-mt-12'">
-            <div class="mb-3 flex items-center justify-center gap-2 px-6 sm:mb-4 sm:gap-3 sm:px-10">
+            <div class="mb-[33px] flex items-center justify-center gap-2 px-6 sm:mb-[34px] sm:gap-3 sm:px-10">
                 <span
                     v-for="(isCompleted, index) in progressSegments"
                     :key="index"
