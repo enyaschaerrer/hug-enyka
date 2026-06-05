@@ -139,19 +139,28 @@ onBeforeUnmount(() => {
             <!-- Carte intro tutoriel -->
             <div
                 v-if="showIntro"
-                class="relative z-10 flex h-[27rem] w-full flex-col items-center justify-center overflow-hidden rounded-[2rem] border-2 bg-[#f8eef1] px-6 shadow-[0_24px_70px_rgba(109,0,46,0.14)] sm:h-[28rem] lg:h-[29rem]"
+                class="relative z-10 flex h-[27rem] w-full flex-col items-center justify-between overflow-hidden rounded-[2rem] border-2 bg-[#f8eef1] px-6 pb-7 pt-10 shadow-[0_24px_70px_rgba(109,0,46,0.14)] sm:h-[28rem] lg:h-[29rem]"
                 :style="{ borderColor: '#b81e62' }"
             >
-                <!-- Contenu à ajouter -->
                 <Vue3Lottie
                     :animation-data="swipeLottieData"
-                    :height="220"
+                    :height="155"
                     :loop="true"
                     :auto-play="true"
                 />
+
+                <div class="space-y-2.5 px-2 text-center">
+                    <p class="text-lg font-bold text-[#5f0f35]">Comment ça marche ?</p>
+                    <p class="text-lg leading-snug text-[#7a4b62]">
+                        Swipez à <span class="font-semibold text-[#ef4444]">gauche</span> si vous n'êtes pas concerné(e),
+                        à <span class="font-semibold text-[#22c55e]">droite</span> si oui, ou utilisez les boutons.
+                        Lisez bien chaque question avant de répondre.
+                    </p>
+                </div>
+
                 <button
                     type="button"
-                    class="rounded-2xl px-10 py-3.5 text-lg font-bold text-white transition hover:opacity-90"
+                    class="w-full rounded-2xl py-3.5 text-base font-bold text-white transition hover:opacity-90"
                     style="background-color: #6d002e;"
                     @click="showIntro = false"
                 >
