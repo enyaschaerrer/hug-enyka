@@ -13,6 +13,7 @@ const props = withDefaults(defineProps<{
 
 const emit = defineEmits<{
     ineligible: [];
+    match: [];
 }>();
 
 type SwipeDirection = 'left' | 'right';
@@ -119,6 +120,12 @@ function handleSwipe(item: Card, direction: SwipeDirection) {
 
     if (outcome.status === 'blocker') {
         emit('ineligible');
+        return;
+    }
+
+    const allAnswered = answers.value.length === totalCards.value;
+    if (allAnswered) {
+        emit('match');
     }
 }
 
@@ -203,32 +210,6 @@ onBeforeUnmount(() => {
                     </div>
                 </template>
 
-                <template #empty>
-                    <div class="rounded-[2rem] border-2 border-[#b81e62] bg-[#f9edf0] p-8 text-center text-red-950 shadow-[0_24px_70px_rgba(109,0,46,0.14)]">
-                        <div
-                            class="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl"
-                            :class="hasMatch ? 'bg-white text-[#6d002e]' : 'bg-white text-[#cc4d7d]'"
-                        >
-                            <span class="text-3xl font-bold">{{ hasMatch ? 'OK' : '!' }}</span>
-                        </div>
-                        <h2 class="text-2xl font-bold leading-tight text-[#5f0f35]">
-                            {{ hasMatch ? 'Match pour continuer' : 'Pas de match pour le moment' }}
-                        </h2>
-                        <p class="mt-3 text-sm font-normal leading-relaxed text-[#7a4b62]">
-                            {{
-                                hasMatch
-                                    ? warningCount > 0
-                                        ? 'Sanguy a repere quelques points a clarifier. Le SMS peut prendre le relais.'
-                                        : 'Aucun point bloquant dans ce premier tri. Tu peux passer au SMS.'
-                                    : 'Un ou plusieurs points demandent de reporter ou de verifier avant de poursuivre.'
-                            }}
-                        </p>
-                        <div class="mt-5 flex justify-center gap-2">
-                            <span class="badge border-[#f68eaf] bg-white font-medium text-[#cc4d7d]">{{ blockerCount }} blocage</span>
-                            <span class="badge border-[#6d002e] bg-white font-medium text-[#6d002e]">{{ warningCount }} a verifier</span>
-                        </div>
-                    </div>
-                </template>
 
                 <template
                     #actions="{

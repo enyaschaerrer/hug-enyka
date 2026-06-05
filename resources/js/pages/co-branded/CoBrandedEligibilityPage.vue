@@ -7,6 +7,7 @@ import QuestionnaireExitModal from '../../components/modals/QuestionnaireExitMod
 import CoBrandedModuleHeader from '../../components/public/CoBrandedModuleHeader.vue';
 import CoBrandedAuthGate from '../../components/co-branded/CoBrandedAuthGate.vue';
 import CoBrandedNonEligibleView from '../../components/co-branded/CoBrandedNonEligibleView.vue';
+import SmsConversationPrototype from '../../components/sms-chat/SmsConversationPrototype.vue';
 import { useAdminRouter } from '../../composables/useAdminRouter';
 import { useCoBrandedCollecte } from '../../composables/useCoBrandedCollecte';
 
@@ -16,7 +17,30 @@ const qrModalOpen = ref(false);
 const isDesktop = ref(false);
 const exitModalOpen = ref(false);
 const showNonEligible = ref(false);
+const showSms = ref(false);
+const showConfetti = ref(false);
 const nonEligibleBgStyle = computed(() => showNonEligible.value ? { backgroundImage: 'url(/img/cobranded-background/bg-cobranded.webp)' } : {});
+
+const CONFETTI_COLORS = ['#6d002e', '#b81e62', '#f4b5ca', '#355755', '#8ab4b0', '#ffffff'];
+const confettiPieces = Array.from({ length: 55 }, (_, i) => ({
+    id: i,
+    color: CONFETTI_COLORS[i % CONFETTI_COLORS.length],
+    left: `${(i * 97 + 13) % 100}%`,
+    delay: `${(i * 137) % 900}ms`,
+    duration: `${1100 + (i * 73) % 700}ms`,
+    size: `${6 + (i * 31) % 7}px`,
+    round: i % 3 === 0,
+}));
+
+function onMatch() {
+    showConfetti.value = true;
+    window.setTimeout(() => {
+        showSms.value = true;
+    }, 1600);
+    window.setTimeout(() => {
+        showConfetti.value = false;
+    }, 2600);
+}
 let desktopMediaQuery: MediaQueryList | null = null;
 let phoneModalTimeout: number | null = null;
 let pendingLeaveAction: (() => void | Promise<void>) | null = null;
@@ -212,17 +236,52 @@ onBeforeUnmount(() => {
                 @logout="openExitModal(logout)"
             />
 
+            <!-- Confetti overlay -->
+            <div v-if="showConfetti" class="pointer-events-none fixed inset-0 z-[500] overflow-hidden">
+                <div
+                    v-for="piece in confettiPieces"
+                    :key="piece.id"
+                    class="confetti-piece absolute top-0"
+                    :style="{
+                        left: piece.left,
+                        width: piece.size,
+                        height: piece.size,
+                        backgroundColor: piece.color,
+                        borderRadius: piece.round ? '50%' : '2px',
+                        animationDuration: piece.duration,
+                        animationDelay: piece.delay,
+                    }"
+                />
+            </div>
+
+            <!-- Tinder -->
             <main
-                v-if="!showNonEligible"
+                v-if="!showNonEligible && !showSms"
                 class="flex flex-1 items-center justify-center overflow-hidden bg-cover bg-center bg-no-repeat"
                 style="background-image: url('/img/cobranded-background/bg-cobranded.webp');"
             >
                 <div class="flex w-full justify-center px-6 py-4 lg:px-12" style="transform: translateY(-20px);">
-                    <TinderEligibilityPrototype contained @ineligible="showNonEligible = true" />
+                    <TinderEligibilityPrototype contained @ineligible="showNonEligible = true" @match="onMatch" />
                 </div>
             </main>
 
-            <CoBrandedNonEligibleView v-else class="flex-1" />
+            <!-- SMS -->
+            <Transition
+                enter-active-class="transition-opacity duration-300 ease-out"
+                enter-from-class="opacity-0"
+                enter-to-class="opacity-100"
+            >
+                <div
+                    v-if="showSms"
+                    class="flex flex-col flex-1 min-h-0 overflow-hidden bg-cover bg-center bg-no-repeat"
+                    style="background-image: url('/img/cobranded-background/bg-cobranded.webp');"
+                >
+                    <SmsConversationPrototype />
+                </div>
+            </Transition>
+
+            <!-- Non éligible -->
+            <CoBrandedNonEligibleView v-if="showNonEligible" class="flex-1" />
 
             <Transition
                 enter-active-class="transition duration-200 ease-out"
@@ -233,7 +292,7 @@ onBeforeUnmount(() => {
                 leave-to-class="opacity-0"
             >
                 <button
-                    v-if="isDesktop && !qrModalOpen && !showNonEligible"
+                    v-if="isDesktop && !qrModalOpen && !showNonEligible && !showSms"
                     class="btn fixed bottom-8 right-6 z-[900] h-[60px] w-[60px] rounded-full border-none bg-white p-0 shadow-lg transition-transform duration-200 ease-out hover:scale-110"
                     type="button"
                     title="Afficher le QR code mobile"
@@ -310,3 +369,24 @@ onBeforeUnmount(() => {
         </template>
     </div>
 </template>
+
+<style scoped>
+.confetti-piece {
+    animation: confetti-fall linear forwards;
+    will-change: transform, opacity;
+}
+
+@keyframes confetti-fall {
+    0% {
+        transform: translateY(-10px) rotate(0deg);
+        opacity: 1;
+    }
+    80% {
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(110vh) rotate(540deg);
+        opacity: 0;
+    }
+}
+</style>
