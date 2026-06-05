@@ -43,7 +43,12 @@ function prev() {
 }
 
 function goHome() {
-    navigate(collection.publicUrl);
+    // Si on est déjà sur la page collection, on revient juste à l'onglet "informations"
+    if (window.location.pathname === new URL(collection.publicUrl, window.location.origin).pathname) {
+        goToTab('informations');
+    } else {
+        navigate(collection.publicUrl);
+    }
 }
 
 function goToEligibilityPage() {
@@ -101,8 +106,8 @@ const canNext = computed(() => activeTab.value !== tabs[tabs.length - 1].key);
                 <CoBrandedTestTab       v-else-if="activeTab === 'test'" />
             </main>
 
-            <!-- Précédent / Suivant — sticky bas pour rester visible pendant le scroll -->
-            <div class="sticky bottom-0 z-30 border-t border-catskillwhite-200 bg-white/95 backdrop-blur">
+            <!-- Précédent / Suivant — sticky bas sur desktop uniquement (caché sur mobile) -->
+            <div class="sticky bottom-0 z-30 hidden border-t border-catskillwhite-200 bg-white/95 backdrop-blur lg:block">
                 <div class="mx-auto flex w-full max-w-5xl items-center justify-between gap-4 px-6 py-4">
                     <button
                         v-if="canPrev"
