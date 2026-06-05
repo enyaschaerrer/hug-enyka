@@ -113,10 +113,10 @@ function startTypewriter() {
     >
         <template v-if="active">
             <div class="mt-1 px-2 text-center sm:mt-2 sm:px-6">
-                <h2 class="text-[clamp(1.35rem,2.4vw,2.35rem)] font-bold leading-[1.05] text-[#5f0f35]">
+                <h2 class="text-[2.2rem] font-bold leading-[1.05] text-[#5f0f35]">
                     {{ item.question }}
                 </h2>
-                <p class="mt-1.5 text-[12px] leading-relaxed text-[#7a4b62] sm:text-[13px]">{{ item.hint }}</p>
+                <p class="mt-1.5 text-[13px] leading-relaxed text-[#7a4b62]">{{ item.hint }}</p>
             </div>
 
             <div class="relative mt-2 flex min-h-0 flex-1 items-center justify-center">
@@ -155,27 +155,7 @@ function startTypewriter() {
         </template>
 
         <template v-else>
-            <div class="flex h-full flex-col">
-                <div class="pointer-events-none mt-6 flex flex-1 flex-col justify-between">
-                    <div class="mx-auto h-10 w-[40%] rounded-full border border-[#b81e62]/45 bg-white/40"></div>
-                    <div class="space-y-3 px-4 sm:px-8">
-                        <div class="mx-auto h-6 w-[88%] rounded-full bg-[#b81e62]/10"></div>
-                        <div class="mx-auto h-6 w-[72%] rounded-full bg-[#b81e62]/10"></div>
-                        <div class="mt-6 grid grid-cols-2 gap-4 sm:gap-8">
-                            <div class="h-20 rounded-[1.4rem] border border-[#2f1725]/25 bg-white/65"></div>
-                            <div class="h-20 rounded-[1.4rem] border border-[#2f1725]/25 bg-white/65"></div>
-                        </div>
-                        <div class="mt-4 grid grid-cols-2 gap-8 px-6 sm:px-10">
-                            <div class="h-28 rounded-[2rem] bg-[#b81e62]/8"></div>
-                            <div class="h-28 rounded-[2rem] bg-[#b81e62]/8"></div>
-                        </div>
-                    </div>
-                    <div class="grid grid-cols-2 gap-3 rounded-[1.6rem] border border-[#ffffff] bg-white p-3 sm:gap-4 sm:p-4">
-                        <div class="min-h-[58px] rounded-[1.05rem] bg-[#f6c0d0]/85"></div>
-                        <div class="min-h-[58px] rounded-[1.05rem] bg-[#6d002e]/18"></div>
-                    </div>
-                </div>
-            </div>
+            <div class="h-full w-full bg-[#f8eef1]"></div>
         </template>
 
         <div class="pointer-events-none absolute inset-0 rounded-[1.75rem] border border-white/80" />
