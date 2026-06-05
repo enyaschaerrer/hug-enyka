@@ -11,7 +11,7 @@ defineProps<{
 <template>
     <div class="relative z-20 mt-[-4.9rem] flex w-full items-center justify-center px-4 sm:mt-[-5.4rem] sm:px-8">
         <button
-            class="btn btn-ghost absolute -top-9 right-4 h-8 w-8 rounded-full border border-[#b81e62]/20 bg-white/90 p-0 text-[#7d2d53] shadow-[0_8px_18px_rgba(109,0,46,0.08)] transition hover:-translate-y-0.5 hover:bg-white hover:text-[#5f0f35] disabled:border-[#b81e62]/10 disabled:bg-white/60 disabled:text-[#b894a8] disabled:opacity-100 sm:right-8 sm:h-9 sm:w-9"
+            class="btn btn-ghost absolute -top-9 left-4 h-8 w-8 rounded-full border border-[#b81e62]/20 bg-white/90 p-0 text-[#7d2d53] shadow-[0_8px_18px_rgba(109,0,46,0.08)] transition hover:-translate-y-0.5 hover:bg-white hover:text-[#5f0f35] disabled:border-[#b81e62]/10 disabled:bg-white/60 disabled:text-[#b894a8] disabled:opacity-100 sm:left-8 sm:h-9 sm:w-9"
             type="button"
             :disabled="!canRestore"
             aria-label="Revenir a la carte precedente"

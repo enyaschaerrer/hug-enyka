@@ -112,11 +112,10 @@ function startTypewriter() {
         :style="{ borderColor: '#b81e62' }"
     >
         <template v-if="active">
-            <div class="mt-1 px-2 text-center sm:mt-2 sm:px-6">
-                <h2 class="text-[2.2rem] font-bold leading-[1.05] text-[#5f0f35]">
+            <div class="mt-[15px] px-2 text-center sm:mt-[15px] sm:px-6">
+                <h2 class="text-[1.8rem] font-bold leading-[1.32] text-[#5f0f35]">
                     {{ item.question }}
                 </h2>
-                <p class="mt-1.5 text-[13px] leading-relaxed text-[#7a4b62]">{{ item.hint }}</p>
             </div>
 
             <div class="relative mt-2 flex min-h-0 flex-1 items-center justify-center">
@@ -126,7 +125,7 @@ function startTypewriter() {
                             <span>{{ leftTypedText }}</span>
                             <span class="type-cursor" aria-hidden="true"></span>
                         </div>
-                        <div :key="`${item.id}-${emoteAnimationKey}-left`" class="sanguy-card-emote relative mt-1 flex h-[72px] w-full items-end justify-center sm:h-[88px] lg:h-[96px]">
+                        <div :key="`${item.id}-${emoteAnimationKey}-left`" class="sanguy-card-emote relative mt-1 flex h-[108px] w-full items-end justify-center sm:h-[124px] lg:h-[136px]">
                             <img
                                 class="pointer-events-none h-full select-none object-contain drop-shadow-[0_12px_22px_rgba(109,0,46,0.18)]"
                                 :src="sanguyImage"
@@ -141,7 +140,7 @@ function startTypewriter() {
                             <span>{{ rightTypedText }}</span>
                             <span class="type-cursor" aria-hidden="true"></span>
                         </div>
-                        <div :key="`${item.id}-${emoteAnimationKey}-right`" class="sanguy-card-emote relative mt-1 flex h-[72px] w-full items-end justify-center sm:h-[88px] lg:h-[96px]">
+                        <div :key="`${item.id}-${emoteAnimationKey}-right`" class="sanguy-card-emote relative mt-1 flex h-[108px] w-full items-end justify-center sm:h-[124px] lg:h-[136px]">
                             <img
                                 class="pointer-events-none h-full select-none object-contain drop-shadow-[0_12px_22px_rgba(109,0,46,0.18)]"
                                 :src="blutlyImage"
