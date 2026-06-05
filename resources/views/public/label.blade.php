@@ -24,10 +24,10 @@
 
             <img src="/img/label.svg" alt="" class="mt-10 mx-auto h-32 w-auto lg:hidden" />
 
-            <div class="relative mt-14 min-h-[320px]">
-                <div class="pointer-events-none absolute bottom-0 left-1/2 hidden -translate-x-1/2 items-end gap-4 lg:flex">
-                    <img src="/img/mascots/blutly_hero.webp" alt="" class="h-56 w-auto object-contain" />
-                    <img src="/img/mascots/sanguy_thumbs_up.webp" alt="" class="h-56 w-auto object-contain" />
+            <div class="relative mt-14 min-h-[280px]">
+                <div class="pointer-events-none absolute bottom-0 left-0 right-0 hidden justify-center items-end gap-195 lg:flex">
+                    <img src="/img/mascots/blutly_hero.webp" alt="" class="h-48 w-auto object-contain" />
+                    <img src="/img/mascots/sanguy_thumbs_up.webp" alt="" class="h-48 w-auto object-contain" />
                 </div>
 
                 <div class="mx-auto grid max-w-5xl gap-8 lg:grid-cols-2">
