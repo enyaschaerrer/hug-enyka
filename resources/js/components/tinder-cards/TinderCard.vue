@@ -158,7 +158,7 @@ function startTypewriter() {
             <div class="relative mt-2 flex min-h-0 flex-1 items-center justify-center">
                 <div class="grid w-full grid-cols-2 gap-3 sm:gap-4">
                     <div class="flex min-h-0 flex-col items-center justify-end">
-                        <div v-if="item.leftDialogue !== ''" class="speech-bubble speech-bubble-left relative min-h-[52px] w-full max-w-[148px] rounded-[1.1rem] border border-[#2f1725] bg-white px-3 py-2 text-left text-[11px] font-semibold leading-snug text-[#2f1725] shadow-[0_10px_24px_rgba(47,23,37,0.08)] sm:min-h-[58px] sm:max-w-[168px] sm:text-[12px]">
+                        <div v-if="item.leftDialogue !== ''" class="speech-bubble speech-bubble-left relative ml-auto mr-3 min-h-[52px] w-full max-w-[148px] rounded-[1.1rem] border border-[#2f1725] bg-white px-3 py-2 text-left text-[11px] font-semibold leading-snug text-[#2f1725] shadow-[0_10px_24px_rgba(47,23,37,0.08)] sm:min-h-[58px] sm:max-w-[168px] sm:text-[12px]">
                             <span class="invisible">{{ item.leftDialogue }}</span>
                             <span class="absolute inset-0 px-3 py-2 text-[11px] leading-snug sm:text-[12px]">{{ leftTypedText }}</span>
                         </div>
@@ -173,7 +173,7 @@ function startTypewriter() {
                     </div>
 
                     <div class="flex min-h-0 flex-col items-center justify-end">
-                        <div v-if="item.rightDialogue !== ''" class="speech-bubble speech-bubble-right relative min-h-[52px] w-full max-w-[148px] rounded-[1.1rem] border border-[#2f1725] bg-white px-3 py-2 text-left text-[11px] font-semibold leading-snug text-[#2f1725] shadow-[0_10px_24px_rgba(47,23,37,0.08)] sm:min-h-[58px] sm:max-w-[168px] sm:text-[12px]">
+                        <div v-if="item.rightDialogue !== ''" class="speech-bubble speech-bubble-right relative mr-auto ml-3 min-h-[52px] w-full max-w-[148px] rounded-[1.1rem] border border-[#2f1725] bg-white px-3 py-2 text-left text-[11px] font-semibold leading-snug text-[#2f1725] shadow-[0_10px_24px_rgba(47,23,37,0.08)] sm:min-h-[58px] sm:max-w-[168px] sm:text-[12px]">
                             <span class="invisible">{{ item.rightDialogue }}</span>
                             <span class="absolute inset-0 px-3 py-2 text-[11px] leading-snug sm:text-[12px]">{{ rightTypedText }}</span>
                         </div>
