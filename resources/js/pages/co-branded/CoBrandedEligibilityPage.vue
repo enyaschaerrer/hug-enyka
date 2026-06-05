@@ -209,7 +209,7 @@ onBeforeUnmount(() => {
                 class="flex flex-1 items-center justify-center overflow-hidden bg-cover bg-center bg-no-repeat"
                 style="background-image: url('/img/cobranded-background/bg-cobranded.webp');"
             >
-                <div class="w-full px-6 py-4 lg:px-12">
+                <div class="flex w-full justify-center px-6 py-4 lg:px-12" style="transform: translateY(-20px);">
                     <TinderEligibilityPrototype contained />
                 </div>
             </main>
