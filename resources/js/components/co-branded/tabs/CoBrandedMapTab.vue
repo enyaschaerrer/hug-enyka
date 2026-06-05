@@ -31,8 +31,8 @@ const searchQuery = ref('');
 const suggestions = ref<Country[]>([]);
 const showSuggestions = ref(false);
 
-// Zoom / pan — par défaut scale 2 centré (la carte est zoomée d'office)
-const INITIAL_SCALE = 2;
+// Zoom / pan — par défaut scale 2.5 centré (la carte est zoomée d'office)
+const INITIAL_SCALE = 2.5;
 const scale = ref(INITIAL_SCALE);
 const tx = ref(VB_W / 2 * (1 - INITIAL_SCALE));
 const ty = ref(VB_H / 2 * (1 - INITIAL_SCALE));
@@ -85,10 +85,10 @@ function getFill(f: { id?: string | number }): string {
 }
 function getStrokeWidth(f: { id?: string | number }): number {
     const country = getCountry(f.id);
-    if (!country) return 0.3 / scale.value;
-    if (selected.value?.numericId === country.numericId) return 2 / scale.value;
-    if (hoveredId.value === country.numericId) return 1.6 / scale.value;
-    return 0.4 / scale.value;
+    if (!country) return 0.6 / scale.value;
+    if (selected.value?.numericId === country.numericId) return 2.5 / scale.value;
+    if (hoveredId.value === country.numericId) return 2 / scale.value;
+    return 0.9 / scale.value;
 }
 function getPath(f: unknown): string {
     return pathGen(f as GeoPermissibleObjects) ?? '';
@@ -262,13 +262,24 @@ function onSearchInput() {
     showSuggestions.value = true;
 }
 function selectFromSearch(c: Country) {
-    selected.value = c;
     searchQuery.value = c.name;
     showSuggestions.value = false;
+    // Sur mobile : ouvre la modale ; sur desktop : pas de modale (l'étiquette se fera au hover)
+    if (isMobile()) {
+        selected.value = c;
+    }
 }
+function isMobile(): boolean {
+    return window.matchMedia('(max-width: 639px)').matches;
+}
+
 function handleClick(f: { id?: string | number }) {
     const country = getCountry(f.id);
-    if (country) selected.value = country;
+    if (!country) return;
+    // Modal uniquement sur mobile ; sur desktop l'étiquette hover suffit
+    if (isMobile()) {
+        selected.value = country;
+    }
 }
 
 function closePopup() {
@@ -314,7 +325,7 @@ function closePopup() {
         </div>
 
         <!-- Carte (section dédiée, hauteur fixe) -->
-        <div class="relative h-[500px] overflow-hidden rounded-2xl border-2 border-catskillwhite-300 bg-white">
+        <div class="relative h-[380px] overflow-hidden rounded-2xl border-2 border-catskillwhite-300 bg-white">
             <svg
                 ref="svgRef"
                 :viewBox="`0 0 ${VB_W} ${VB_H}`"
@@ -336,8 +347,8 @@ function closePopup() {
                         :key="`u-${String(f.id)}`"
                         :d="getPath(f)"
                         fill="var(--color-catskillwhite-100)"
-                        stroke="white"
-                        :stroke-width="0.3 / scale"
+                        stroke="var(--color-catskillwhite-400)"
+                        :stroke-width="0.5 / scale"
                     />
                     <path
                         v-for="f in mapFeatures"
@@ -353,33 +364,33 @@ function closePopup() {
                     />
                 </g>
 
-                <!-- Tooltip hover : hors du <g> zoomé pour garder une taille constante -->
+                <!-- Tooltip hover : hors du <g> zoomé pour garder une taille constante. Caché sur mobile. -->
                 <g
                     v-if="hoveredCountry && tooltipPos"
-                    :transform="`translate(${tx + tooltipPos.x * scale}, ${ty + tooltipPos.y * scale - 20})`"
-                    class="pointer-events-none"
+                    :transform="`translate(${tx + tooltipPos.x * scale}, ${ty + tooltipPos.y * scale - 24})`"
+                    class="pointer-events-none hidden sm:inline"
                 >
                     <rect
-                        x="-90"
-                        y="-36"
-                        width="180"
-                        height="48"
-                        rx="8"
+                        x="-115"
+                        y="-46"
+                        width="230"
+                        height="60"
+                        rx="10"
                         fill="var(--color-catskillwhite-900)"
                     />
                     <text
                         x="0"
-                        y="-18"
+                        y="-22"
                         text-anchor="middle"
                         fill="white"
-                        class="font-cooper text-caption font-semibold"
+                        class="font-cooper text-body font-semibold"
                     >{{ hoveredCountry.name }}</text>
                     <text
                         x="0"
-                        y="0"
+                        y="2"
                         text-anchor="middle"
                         fill="var(--color-catskillwhite-200)"
-                        class="font-cooper text-caption"
+                        class="font-cooper text-body"
                     >{{ hoveredWaitLabel }}</text>
                 </g>
             </svg>
