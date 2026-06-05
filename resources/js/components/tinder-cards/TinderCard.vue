@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue';
+import { Vue3Lottie } from 'vue3-lottie';
+import swipeLottieData from '../../data/swipe-lottie.json';
 
 type TinderItem = {
     id: number;
@@ -111,7 +113,29 @@ function startTypewriter() {
         :class="toneClasses[item.tone]"
         :style="{ borderColor: '#b81e62' }"
     >
-        <template v-if="active">
+        <!-- Carte intro (id === 0) -->
+        <template v-if="item.id === 0">
+            <div class="flex h-full flex-col items-center justify-between pb-1 pt-4">
+                <Vue3Lottie
+                    :animation-data="swipeLottieData"
+                    :height="155"
+                    :loop="true"
+                    :auto-play="true"
+                    class="mt-2"
+                />
+                <div class="space-y-2.5 px-2 text-center">
+                    <p class="text-lg font-bold text-[#5f0f35]">Comment ça marche ?</p>
+                    <p class="text-lg leading-snug text-[#7a4b62]">
+                        Swipez à <span class="font-semibold text-[#ef4444]">gauche</span> si vous n'êtes pas concerné(e),
+                        à <span class="font-semibold text-[#22c55e]">droite</span> si oui, ou utilisez les boutons.
+                        Lisez bien chaque question avant de répondre.
+                    </p>
+                </div>
+                <p class="text-sm font-semibold text-[#9e6070]">Swipez pour commencer →</p>
+            </div>
+        </template>
+
+        <template v-else-if="active">
             <div class="mt-[15px] px-2 text-center sm:mt-[15px] sm:px-6">
                 <h2 class="text-[1.8rem] font-bold leading-[1.32] text-[#5f0f35]">
                     {{ item.question }}
