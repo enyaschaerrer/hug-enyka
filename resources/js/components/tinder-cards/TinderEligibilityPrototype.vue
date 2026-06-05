@@ -49,9 +49,11 @@ const tinderScenario = tinderScenarioData as TinderScenario;
 const items = ref<Card[]>(tinderScenario.cards);
 const answers = ref<TriageAnswer[]>([]);
 const totalCards = computed(() => items.value.length);
+const answeredCount = computed(() => answers.value.length);
 const blockerCount = computed(() => answers.value.filter((answer) => answer.status === 'blocker').length);
 const warningCount = computed(() => answers.value.filter((answer) => answer.status === 'warning').length);
 const hasMatch = computed(() => blockerCount.value === 0);
+const progressSegments = computed(() => Array.from({ length: totalCards.value }, (_, index) => index < answeredCount.value));
 
 function handleSwipe(item: Card, direction: SwipeDirection) {
     const outcome = direction === 'right' ? item.rightOutcome : item.leftOutcome;
@@ -77,17 +79,26 @@ function getCardPosition(item: Card) {
 
 <template>
     <section
-        class="font-cooper flex items-center px-4 pt-0"
+        class="font-cooper flex items-center px-3 pt-0 sm:px-4"
         :class="props.contained ? 'min-h-0 w-full bg-transparent pb-0' : 'min-h-[100svh] w-screen bg-rose-50 pb-12'"
     >
-        <div class="relative mx-auto w-full max-w-[430px]">
+        <div class="relative mx-auto w-full max-w-[760px]">
+            <div class="mb-5 flex items-center justify-center gap-2 px-6 sm:mb-6 sm:gap-3 sm:px-12">
+                <span
+                    v-for="(isCompleted, index) in progressSegments"
+                    :key="index"
+                    class="h-2.5 flex-1 rounded-full transition-colors duration-200 sm:h-3"
+                    :class="isCompleted ? 'bg-[#6d002e]' : 'bg-[#f4b5ca]'"
+                ></span>
+            </div>
+
             <FlashCards
                 :items="items"
                 :swipe-direction="['left', 'right']"
                 :swipe-threshold="140"
                 :stack="3"
-                :stack-offset="10"
-                :stack-scale="0.03"
+                :stack-offset="8"
+                :stack-scale="0.024"
                 @swipe-left="(item) => handleSwipe(item, 'left')"
                 @swipe-right="(item) => handleSwipe(item, 'right')"
                 @restore="handleRestore"
@@ -103,11 +114,11 @@ function getCardPosition(item: Card) {
 
                 <template #left="{ delta }">
                     <div
-                        class="pointer-events-none absolute inset-0 z-10 flex items-center justify-center rounded-[1.75rem] bg-white/70 backdrop-blur-[2px]"
+                        class="pointer-events-none absolute inset-0 z-10 flex items-center justify-center rounded-[2rem] bg-white/25"
                         :style="{ opacity: Math.min(Math.abs(delta), 0.92) }"
                     >
                         <div
-                            class="-rotate-12 inline-flex items-center rounded-2xl border-4 border-red-500 bg-white px-6 py-3 text-4xl font-bold leading-none uppercase text-red-600 shadow-lg"
+                            class="-rotate-12 inline-flex items-center rounded-2xl border-4 border-[#f68eaf] bg-white px-4 py-2 text-2xl font-bold leading-none uppercase text-[#cc4d7d] shadow-lg sm:px-6 sm:py-3 sm:text-4xl"
                         >
                             <span>C'est faux</span>
                         </div>
@@ -116,11 +127,11 @@ function getCardPosition(item: Card) {
 
                 <template #right="{ delta }">
                     <div
-                        class="pointer-events-none absolute inset-0 z-10 flex items-center justify-center rounded-[1.75rem] bg-red-50/80 backdrop-blur-[2px]"
+                        class="pointer-events-none absolute inset-0 z-10 flex items-center justify-center rounded-[2rem] bg-white/25"
                         :style="{ opacity: Math.min(Math.abs(delta), 0.92) }"
                     >
                         <div
-                            class="inline-flex rotate-12 items-center rounded-2xl border-4 border-emerald-500 bg-white px-6 py-3 text-4xl font-bold leading-none uppercase text-emerald-600 shadow-lg"
+                            class="inline-flex rotate-12 items-center rounded-2xl border-4 border-[#6d002e] bg-white px-4 py-2 text-2xl font-bold leading-none uppercase text-[#6d002e] shadow-lg sm:px-6 sm:py-3 sm:text-4xl"
                         >
                             <span>Je valide</span>
                         </div>
@@ -128,17 +139,17 @@ function getCardPosition(item: Card) {
                 </template>
 
                 <template #empty>
-                    <div class="rounded-[1.75rem] border border-red-100 bg-white p-8 text-center text-red-950 shadow-[0_20px_60px_rgba(127,29,29,0.12)]">
+                    <div class="rounded-[2rem] border-2 border-[#b81e62] bg-[#f9edf0] p-8 text-center text-red-950 shadow-[0_24px_70px_rgba(109,0,46,0.14)]">
                         <div
                             class="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl"
-                            :class="hasMatch ? 'bg-emerald-50 text-emerald-600' : 'bg-red-50 text-red-600'"
+                            :class="hasMatch ? 'bg-white text-[#6d002e]' : 'bg-white text-[#cc4d7d]'"
                         >
                             <span class="text-3xl font-bold">{{ hasMatch ? 'OK' : '!' }}</span>
                         </div>
-                        <h2 class="text-2xl font-bold leading-tight">
+                        <h2 class="text-2xl font-bold leading-tight text-[#5f0f35]">
                             {{ hasMatch ? 'Match pour continuer' : 'Pas de match pour le moment' }}
                         </h2>
-                        <p class="mt-3 text-sm font-normal leading-relaxed text-stone-600">
+                        <p class="mt-3 text-sm font-normal leading-relaxed text-[#7a4b62]">
                             {{
                                 hasMatch
                                     ? warningCount > 0
@@ -148,8 +159,8 @@ function getCardPosition(item: Card) {
                             }}
                         </p>
                         <div class="mt-5 flex justify-center gap-2">
-                            <span class="badge badge-error badge-outline font-medium">{{ blockerCount }} blocage</span>
-                            <span class="badge badge-warning badge-outline font-medium">{{ warningCount }} a verifier</span>
+                            <span class="badge border-[#f68eaf] bg-white font-medium text-[#cc4d7d]">{{ blockerCount }} blocage</span>
+                            <span class="badge border-[#6d002e] bg-white font-medium text-[#6d002e]">{{ warningCount }} a verifier</span>
                         </div>
                     </div>
                 </template>
