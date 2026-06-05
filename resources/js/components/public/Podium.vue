@@ -110,7 +110,7 @@ function selectPrizeType(type: PrizeType) {
                             class="h-28 max-w-full object-contain lg:h-32"
                         />
                     </div>
-                    <div v-else class="hidden lg:flex lg:items-end lg:justify-center lg:gap-2">
+                    <div v-else class="flex items-end justify-center gap-2">
                         <!-- 3e -->
                         <div class="flex flex-col items-center">
                             <div class="mb-2 flex h-12 w-20 items-center justify-center p-2 lg:h-16 lg:w-24">
