@@ -172,7 +172,7 @@ function startTypewriter() {
 .speech-bubble::before {
     content: '';
     position: absolute;
-    bottom: -7px;
+    bottom: -6px;
     width: 11px;
     height: 11px;
     background: #f8eef1;
@@ -184,7 +184,7 @@ function startTypewriter() {
 .speech-bubble::after {
     content: '';
     position: absolute;
-    bottom: -1px;
+    bottom: 0px;
     width: 14px;
     height: 5px;
     background: #f8eef1;
