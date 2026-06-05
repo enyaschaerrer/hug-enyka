@@ -9,9 +9,9 @@ defineProps<{
 </script>
 
 <template>
-    <div class="relative z-20 mt-[-3.8rem] flex w-full items-center justify-center px-3 sm:mt-[-4.4rem] sm:px-6">
+    <div class="relative z-20 mt-[-4.9rem] flex w-full items-center justify-center px-4 sm:mt-[-5.4rem] sm:px-8">
         <button
-            class="btn btn-ghost absolute -top-8 right-3 h-8 w-8 rounded-full border border-[#b81e62]/20 bg-white/90 p-0 text-[#7d2d53] shadow-[0_8px_18px_rgba(109,0,46,0.08)] transition hover:-translate-y-0.5 hover:bg-white hover:text-[#5f0f35] disabled:border-[#b81e62]/10 disabled:bg-white/60 disabled:text-[#b894a8] disabled:opacity-100 sm:right-6 sm:h-9 sm:w-9"
+            class="btn btn-ghost absolute -top-9 right-4 h-8 w-8 rounded-full border border-[#b81e62]/20 bg-white/90 p-0 text-[#7d2d53] shadow-[0_8px_18px_rgba(109,0,46,0.08)] transition hover:-translate-y-0.5 hover:bg-white hover:text-[#5f0f35] disabled:border-[#b81e62]/10 disabled:bg-white/60 disabled:text-[#b894a8] disabled:opacity-100 sm:right-8 sm:h-9 sm:w-9"
             type="button"
             :disabled="!canRestore"
             aria-label="Revenir a la carte precedente"
@@ -22,7 +22,7 @@ defineProps<{
             </svg>
         </button>
 
-        <div class="grid w-full max-w-[560px] grid-cols-2 gap-2.5 rounded-[1.35rem] border border-white/65 bg-white/28 p-2.5 backdrop-blur-sm sm:gap-3 sm:p-3">
+        <div class="grid w-full max-w-[520px] grid-cols-2 gap-3 sm:max-w-[560px] sm:gap-4">
             <button
                 class="group inline-flex min-h-[50px] items-center justify-center gap-2 rounded-[0.95rem] border border-[#f6a0bb] bg-[#f68eaf] px-3 py-3 text-left text-[#5f0f35] shadow-[0_14px_28px_rgba(246,142,175,0.24)] transition-transform hover:-translate-y-0.5 disabled:opacity-35 sm:min-h-[56px] sm:px-5"
                 type="button"

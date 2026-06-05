@@ -65,28 +65,6 @@ const toneClasses: Record<TinderItem['tone'], string> = {
     emerald: 'bg-[#f8eef1]',
 };
 
-const themeClasses: Record<TinderItem['tone'], string> = {
-    red: 'border-[#d67a92] bg-white/80 text-[#7a123d]',
-    green: 'border-[#d67a92] bg-white/80 text-[#7a123d]',
-    blue: 'border-[#d67a92] bg-white/80 text-[#7a123d]',
-    violet: 'border-[#d67a92] bg-white/80 text-[#7a123d]',
-    orange: 'border-[#d67a92] bg-white/80 text-[#7a123d]',
-    turquoise: 'border-[#d67a92] bg-white/80 text-[#7a123d]',
-    pink: 'border-[#d67a92] bg-white/80 text-[#7a123d]',
-    emerald: 'border-[#d67a92] bg-white/80 text-[#7a123d]',
-};
-
-const counterClasses: Record<TinderItem['tone'], string> = {
-    red: 'border-[#6d002e] bg-[#6d002e] text-white',
-    green: 'border-[#6d002e] bg-[#6d002e] text-white',
-    blue: 'border-[#6d002e] bg-[#6d002e] text-white',
-    violet: 'border-[#6d002e] bg-[#6d002e] text-white',
-    orange: 'border-[#6d002e] bg-[#6d002e] text-white',
-    turquoise: 'border-[#6d002e] bg-[#6d002e] text-white',
-    pink: 'border-[#6d002e] bg-[#6d002e] text-white',
-    emerald: 'border-[#6d002e] bg-[#6d002e] text-white',
-};
-
 function clearTypingTimers() {
     if (leftTypingTimeout !== null) {
         window.clearTimeout(leftTypingTimeout);
@@ -129,35 +107,26 @@ function startTypewriter() {
 
 <template>
     <article
-        class="font-cooper relative z-10 flex h-[31rem] w-full flex-col overflow-hidden rounded-[2rem] border-2 px-4 pb-20 pt-4 text-red-950 shadow-[0_24px_70px_rgba(109,0,46,0.14)] sm:h-[32rem] sm:px-6 sm:pb-22 sm:pt-5 lg:h-[33rem] lg:px-7 lg:pb-24"
+        class="font-cooper relative z-10 flex h-[27rem] w-full flex-col overflow-hidden rounded-[2rem] border-2 px-4 pb-18 pt-4 text-red-950 shadow-[0_24px_70px_rgba(109,0,46,0.14)] sm:h-[28rem] sm:px-6 sm:pb-20 sm:pt-5 lg:h-[29rem] lg:px-7 lg:pb-22"
         :class="toneClasses[item.tone]"
         :style="{ borderColor: '#b81e62' }"
     >
         <template v-if="active">
-            <div class="flex items-center justify-between gap-3">
-                <span class="rounded-full border px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] sm:px-3 sm:text-[11px]" :class="themeClasses[item.tone]">
-                    <span>{{ item.theme }}</span>
-                </span>
-                <span class="rounded-full border px-2.5 py-1 text-[11px] font-bold tabular-nums sm:px-3 sm:text-xs" :class="counterClasses[item.tone]">
-                    <span>{{ current }}/{{ total }}</span>
-                </span>
-            </div>
-
-            <div class="mt-4 px-2 text-center sm:mt-4 sm:px-6">
-                <h2 class="text-[clamp(1.55rem,2.8vw,2.7rem)] font-bold leading-[1.08] text-[#5f0f35]">
+            <div class="mt-1 px-2 text-center sm:mt-2 sm:px-6">
+                <h2 class="text-[clamp(1.35rem,2.4vw,2.35rem)] font-bold leading-[1.05] text-[#5f0f35]">
                     {{ item.question }}
                 </h2>
-                <p class="mt-2 text-[13px] leading-relaxed text-[#7a4b62] sm:text-sm">{{ item.hint }}</p>
+                <p class="mt-1.5 text-[12px] leading-relaxed text-[#7a4b62] sm:text-[13px]">{{ item.hint }}</p>
             </div>
 
-            <div class="relative mt-3 flex min-h-0 flex-1 items-end justify-center sm:mt-4">
-                <div class="grid w-full grid-cols-2 gap-3 sm:gap-5">
+            <div class="relative mt-2 flex min-h-0 flex-1 items-center justify-center">
+                <div class="grid w-full grid-cols-2 gap-3 sm:gap-4">
                     <div class="flex min-h-0 flex-col items-center justify-end">
-                        <div class="speech-bubble speech-bubble-left min-h-[58px] w-full max-w-[156px] rounded-[1.15rem] border border-[#2f1725] bg-white px-3 py-2 text-left text-[12px] leading-snug text-[#2f1725] shadow-[0_10px_24px_rgba(47,23,37,0.08)] sm:min-h-[64px] sm:max-w-[178px] sm:text-[13px]">
+                        <div class="speech-bubble speech-bubble-left min-h-[52px] w-full max-w-[148px] rounded-[1.1rem] border border-[#2f1725] bg-white px-3 py-2 text-left text-[11px] leading-snug text-[#2f1725] shadow-[0_10px_24px_rgba(47,23,37,0.08)] sm:min-h-[58px] sm:max-w-[168px] sm:text-[12px]">
                             <span>{{ leftTypedText }}</span>
                             <span class="type-cursor" aria-hidden="true"></span>
                         </div>
-                        <div :key="`${item.id}-${emoteAnimationKey}-left`" class="sanguy-card-emote relative mt-2 flex h-[88px] w-full items-end justify-center sm:h-[108px] lg:h-[118px]">
+                        <div :key="`${item.id}-${emoteAnimationKey}-left`" class="sanguy-card-emote relative mt-1 flex h-[72px] w-full items-end justify-center sm:h-[88px] lg:h-[96px]">
                             <img
                                 class="pointer-events-none h-full select-none object-contain drop-shadow-[0_12px_22px_rgba(109,0,46,0.18)]"
                                 :src="sanguyImage"
@@ -168,11 +137,11 @@ function startTypewriter() {
                     </div>
 
                     <div class="flex min-h-0 flex-col items-center justify-end">
-                        <div class="speech-bubble speech-bubble-right min-h-[58px] w-full max-w-[156px] rounded-[1.15rem] border border-[#2f1725] bg-white px-3 py-2 text-left text-[12px] leading-snug text-[#2f1725] shadow-[0_10px_24px_rgba(47,23,37,0.08)] sm:min-h-[64px] sm:max-w-[178px] sm:text-[13px]">
+                        <div class="speech-bubble speech-bubble-right min-h-[52px] w-full max-w-[148px] rounded-[1.1rem] border border-[#2f1725] bg-white px-3 py-2 text-left text-[11px] leading-snug text-[#2f1725] shadow-[0_10px_24px_rgba(47,23,37,0.08)] sm:min-h-[58px] sm:max-w-[168px] sm:text-[12px]">
                             <span>{{ rightTypedText }}</span>
                             <span class="type-cursor" aria-hidden="true"></span>
                         </div>
-                        <div :key="`${item.id}-${emoteAnimationKey}-right`" class="sanguy-card-emote relative mt-2 flex h-[88px] w-full items-end justify-center sm:h-[108px] lg:h-[118px]">
+                        <div :key="`${item.id}-${emoteAnimationKey}-right`" class="sanguy-card-emote relative mt-1 flex h-[72px] w-full items-end justify-center sm:h-[88px] lg:h-[96px]">
                             <img
                                 class="pointer-events-none h-full select-none object-contain drop-shadow-[0_12px_22px_rgba(109,0,46,0.18)]"
                                 :src="blutlyImage"
@@ -187,11 +156,6 @@ function startTypewriter() {
 
         <template v-else>
             <div class="flex h-full flex-col">
-                <div class="flex items-center justify-between gap-3 opacity-0">
-                    <span class="rounded-full border px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] sm:text-xs">Theme</span>
-                    <span class="rounded-full border px-3 py-1 text-xs font-bold tabular-nums sm:text-sm">0/0</span>
-                </div>
-
                 <div class="pointer-events-none mt-6 flex flex-1 flex-col justify-between">
                     <div class="mx-auto h-10 w-[40%] rounded-full border border-[#b81e62]/45 bg-white/40"></div>
                     <div class="space-y-3 px-4 sm:px-8">
