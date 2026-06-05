@@ -132,50 +132,51 @@ async function handleSubmit() {
 
             <!-- Étape 2 -->
             <div v-if="step === 2">
-                <div class="mt-10 space-y-6 rounded-2xl bg-martinique-100 p-8">
-                    <div>
-                        <label class="mb-1.5 block text-body text-martinique-800">Nom de l'entreprise *</label>
-                        <input
-                            v-model="form.name"
-                            type="text"
-                            required
-                            maxlength="255"
-                            placeholder="Entreprise SA"
-                            class="w-full rounded-xl border-2 border-martinique-300 bg-white px-4 py-3 text-body text-martinique-950 placeholder-martinique-400 outline-none transition focus:border-martinique-500 focus:ring-2 focus:ring-martinique-200"
-                        />
+                <form @submit.prevent="handleSubmit">
+                    <div class="mt-10 space-y-6 rounded-2xl bg-martinique-100 p-8">
+                        <div>
+                            <label class="mb-1.5 block text-body text-martinique-800">Nom de l'entreprise *</label>
+                            <input
+                                v-model="form.name"
+                                type="text"
+                                required
+                                maxlength="255"
+                                placeholder="Entreprise SA"
+                                class="w-full rounded-xl border-2 border-martinique-300 bg-white px-4 py-3 text-body text-martinique-950 placeholder-martinique-400 outline-none transition focus:border-martinique-500 focus:ring-2 focus:ring-martinique-200"
+                            />
+                        </div>
+
+                        <div>
+                            <label class="mb-1.5 block text-body text-martinique-800">Adresse e-mail *</label>
+                            <input
+                                v-model="form.email"
+                                type="email"
+                                required
+                                maxlength="255"
+                                placeholder="contact@entreprise.ch"
+                                class="w-full rounded-xl border-2 border-martinique-300 bg-white px-4 py-3 text-body text-martinique-950 placeholder-martinique-400 outline-none transition focus:border-martinique-500 focus:ring-2 focus:ring-martinique-200"
+                            />
+                        </div>
                     </div>
 
-                    <div>
-                        <label class="mb-1.5 block text-body text-martinique-800">Adresse e-mail *</label>
-                        <input
-                            v-model="form.email"
-                            type="email"
-                            required
-                            maxlength="255"
-                            placeholder="contact@entreprise.ch"
-                            class="w-full rounded-xl border-2 border-martinique-300 bg-white px-4 py-3 text-body text-martinique-950 placeholder-martinique-400 outline-none transition focus:border-martinique-500 focus:ring-2 focus:ring-martinique-200"
-                        />
+                    <div class="mt-4 flex justify-between">
+                        <button
+                            type="button"
+                            class="rounded-full border border-martinique-300 px-3 py-2 text-body text-martinique-800 transition hover:bg-martinique-100 lg:px-6 lg:py-3"
+                            @click="goBack"
+                        >
+                            ← Retour
+                        </button>
+                        <button
+                            type="submit"
+                            :disabled="loading"
+                            class="rounded-full bg-razzmatazz-800 px-3 py-2 text-body text-white transition hover:bg-razzmatazz-600 disabled:opacity-40 lg:px-6 lg:py-3"
+                        >
+                            <span v-if="loading">Envoi en cours…</span>
+                            <span v-else>Envoyer la candidature</span>
+                        </button>
                     </div>
-                </div>
-
-                <div class="mt-4 flex justify-between">
-                    <button
-                        type="button"
-                        class="rounded-full border border-martinique-300 px-3 py-2 text-body text-martinique-800 transition hover:bg-martinique-100 lg:px-6 lg:py-3"
-                        @click="goBack"
-                    >
-                        ← Retour
-                    </button>
-                    <button
-                        type="button"
-                        :disabled="!form.name || !form.email || loading"
-                        class="rounded-full bg-razzmatazz-800 px-3 py-2 text-body text-white transition hover:bg-razzmatazz-600 disabled:opacity-40  lg:px-6 lg:py-3"
-                        @click="handleSubmit"
-                    >
-                        <span v-if="loading">Envoi en cours…</span>
-                        <span v-else>Envoyer la candidature</span>
-                    </button>
-                </div>
+                </form>
             </div>
         </template>
     </section>

@@ -219,10 +219,10 @@ function resetFilters() {
                     </article>
                 </div>
 
-                <!-- Dégradé -->
                 <div
                     v-if="hasMore"
-                    class="pointer-events-none absolute bottom-0 left-0 right-0 h-10 bg-gradient-to-t from-martinique-600 to-transparent"
+                    class="pointer-events-none absolute bottom-0 left-0 right-0 h-12 backdrop-blur-md bg-martinique-600/30"
+                    style="backdrop-filter: blur(8px); -webkit-mask-image: linear-gradient(to top, white 20%, transparent 100%); mask-image: linear-gradient(to top, white 20%, transparent 100%);"
                 />
             </div>
 
