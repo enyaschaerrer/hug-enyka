@@ -32,24 +32,24 @@ const showSuggestions = ref(false);
 // Mapping waitTime → couleur (palette HUG)
 const waitTimeColor: Record<string, string> = {
     none:       'var(--color-vistablue-300)',  // Pas de délai
-    '28 jours': 'var(--color-pictonblue-300)',
-    '4 mois':   'var(--color-catskillwhite-600)',
-    '6 mois':   'var(--color-razzmatazz-600)',
+    '28 jours': 'var(--color-pictonblue-200)',
+    '4 mois':   'var(--color-catskillwhite-500)',
+    '6 mois':   'var(--color-razzmatazz-500)',
 };
 
 // Quand hover : couleur plus contrastée
 const waitTimeColorHover: Record<string, string> = {
     none:       'var(--color-vistablue-600)',
-    '28 jours': 'var(--color-pictonblue-600)',
-    '4 mois':   'var(--color-catskillwhite-900)',
-    '6 mois':   'var(--color-razzmatazz-900)',
+    '28 jours': 'var(--color-pictonblue-300)',
+    '4 mois':   'var(--color-catskillwhite-700)',
+    '6 mois':   'var(--color-razzmatazz-800)',
 };
 
 const legendItems = [
     { label: 'Pas de délai', color: 'var(--color-vistablue-300)' },
-    { label: '28 jours',     color: 'var(--color-pictonblue-300)' },
-    { label: '4 mois',       color: 'var(--color-catskillwhite-600)' },
-    { label: '6 mois',       color: 'var(--color-razzmatazz-600)' },
+    { label: '28 jours',     color: 'var(--color-pictonblue-200)' },
+    { label: '4 mois',       color: 'var(--color-catskillwhite-500)' },
+    { label: '6 mois',       color: 'var(--color-razzmatazz-500)' },
 ];
 
 const hoveredCountry = computed(() => {

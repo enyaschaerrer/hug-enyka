@@ -66,7 +66,7 @@ const activeIdx = ref(0);
                         style="font-size: 48px; font-variation-settings: 'FILL' 1;"
                         aria-hidden="true"
                     >{{ step.icon }}</span>
-                    <h3 class="mt-4 text-heading-t1 text-catskillwhite-900">{{ step.title }}</h3>
+                    <h3 class="mt-4 text-heading-t2 text-catskillwhite-900">{{ step.title }}</h3>
                     <p class="mt-3 text-body text-catskillwhite-800">{{ step.description }}</p>
                 </article>
             </div>
