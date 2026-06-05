@@ -23,11 +23,11 @@ function startQuestionnaire() {
             <div class="bg-catskillwhite-800 px-6 py-2 text-center">
                 <h3 class="text-body font-semibold text-white">Les critères éliminatoires</h3>
             </div>
-            <div class="grid gap-4 bg-white p-6 sm:grid-cols-3 sm:divide-x sm:divide-catskillwhite-300">
+            <div class="grid gap-4 bg-white p-4 sm:grid-cols-3 sm:divide-x sm:divide-catskillwhite-300">
                 <div
                     v-for="(item, idx) in criteria"
                     :key="idx"
-                    class="px-4 text-center"
+                    class="px-2 text-center"
                 >
                     <h4 class="text-heading-t3 text-catskillwhite-900">{{ item.title }}</h4>
                     <p class="mt-1 text-body text-catskillwhite-700">{{ item.description }}</p>

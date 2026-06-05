@@ -89,7 +89,7 @@ const primaryTextStyle = {
 
 <template>
     <section class="mx-auto max-w-5xl px-6 py-10">
-        <h2 class="text-center text-display text-catskillwhite-900">
+        <h2 class="text-left text-display text-catskillwhite-900 sm:text-center sm:text-display">
             Votre <span :style="primaryTextStyle">entreprise</span> se mobilise pour le don du sang
         </h2>
 
@@ -114,20 +114,21 @@ const primaryTextStyle = {
             </article>
         </div>
 
-        <!-- CTA mascots -->
-        <div class="mt-12 flex items-center justify-center gap-4 sm:gap-10">
-            <img :src="'/img/mascots/blutly_hero.webp'" alt="" class="h-32 w-auto sm:h-40" />
-            <div class="text-center">
-                <p class="text-heading-t2 text-catskillwhite-900">Vous êtes intéressé·es ?</p>
-                <button
-                    type="button"
-                    class="mt-4 rounded-2xl bg-razzmatazz-800 px-10 py-4 text-heading-t3 text-white transition hover:bg-razzmatazz-900"
-                    @click="$emit('goToTest')"
-                >
-                    Tester votre éligibilité
-                </button>
+        <!-- CTA mascots — texte + bouton en haut, mascottes en dessous -->
+        <div class="mt-12 flex flex-col items-center gap-6">
+            <p class="text-heading-t2 text-catskillwhite-900">Vous êtes intéressé·es ?</p>
+            <button
+                type="button"
+                class="rounded-2xl bg-razzmatazz-800 px-10 py-4 text-heading-t3 text-white transition hover:bg-razzmatazz-900"
+                @click="$emit('goToTest')"
+            >
+                Tester votre éligibilité
+            </button>
+
+            <div class="-mt-8 flex items-end justify-center gap-2 sm:gap-16">
+                <img :src="'/img/mascots/blutly_hero.webp'" alt="" class="h-32 w-auto sm:h-40" />
+                <img :src="'/img/mascots/sanguy_satisfied.webp'" alt="" class="h-40 w-auto translate-y-4 sm:h-48 sm:translate-y-0" />
             </div>
-            <img :src="'/img/mascots/sanguy_satisfied.webp'" alt="" class="h-32 w-auto sm:h-48" />
         </div>
     </section>
 </template>
