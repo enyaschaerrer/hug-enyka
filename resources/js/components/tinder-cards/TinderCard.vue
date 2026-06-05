@@ -129,35 +129,35 @@ function startTypewriter() {
 
 <template>
     <article
-        class="font-cooper relative z-10 flex h-[540px] w-full flex-col overflow-hidden rounded-[2rem] border-2 px-5 pb-24 pt-5 text-red-950 shadow-[0_24px_70px_rgba(109,0,46,0.14)] sm:h-[580px] sm:px-8 sm:pb-28 sm:pt-6"
+        class="font-cooper relative z-10 flex h-[31rem] w-full flex-col overflow-hidden rounded-[2rem] border-2 px-4 pb-20 pt-4 text-red-950 shadow-[0_24px_70px_rgba(109,0,46,0.14)] sm:h-[32rem] sm:px-6 sm:pb-22 sm:pt-5 lg:h-[33rem] lg:px-7 lg:pb-24"
         :class="toneClasses[item.tone]"
         :style="{ borderColor: '#b81e62' }"
     >
         <template v-if="active">
             <div class="flex items-center justify-between gap-3">
-                <span class="rounded-full border px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] sm:text-xs" :class="themeClasses[item.tone]">
+                <span class="rounded-full border px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] sm:px-3 sm:text-[11px]" :class="themeClasses[item.tone]">
                     <span>{{ item.theme }}</span>
                 </span>
-                <span class="rounded-full border px-3 py-1 text-xs font-bold tabular-nums sm:text-sm" :class="counterClasses[item.tone]">
+                <span class="rounded-full border px-2.5 py-1 text-[11px] font-bold tabular-nums sm:px-3 sm:text-xs" :class="counterClasses[item.tone]">
                     <span>{{ current }}/{{ total }}</span>
                 </span>
             </div>
 
-            <div class="mt-6 px-2 text-center sm:mt-5 sm:px-8">
-                <h2 class="text-[1.55rem] font-bold leading-[1.15] text-[#5f0f35] sm:text-[2.15rem]">
+            <div class="mt-4 px-2 text-center sm:mt-4 sm:px-6">
+                <h2 class="text-[clamp(1.55rem,2.8vw,2.7rem)] font-bold leading-[1.08] text-[#5f0f35]">
                     {{ item.question }}
                 </h2>
-                <p class="mt-3 text-sm leading-relaxed text-[#7a4b62] sm:text-base">{{ item.hint }}</p>
+                <p class="mt-2 text-[13px] leading-relaxed text-[#7a4b62] sm:text-sm">{{ item.hint }}</p>
             </div>
 
-            <div class="relative mt-5 flex min-h-0 flex-1 items-end justify-center">
-                <div class="grid w-full grid-cols-2 gap-4 sm:gap-8">
+            <div class="relative mt-3 flex min-h-0 flex-1 items-end justify-center sm:mt-4">
+                <div class="grid w-full grid-cols-2 gap-3 sm:gap-5">
                     <div class="flex min-h-0 flex-col items-center justify-end">
-                        <div class="speech-bubble speech-bubble-left min-h-[72px] w-full max-w-[180px] rounded-[1.35rem] border border-[#2f1725] bg-white px-4 py-3 text-left text-sm leading-snug text-[#2f1725] shadow-[0_10px_24px_rgba(47,23,37,0.08)] sm:max-w-[210px]">
+                        <div class="speech-bubble speech-bubble-left min-h-[58px] w-full max-w-[156px] rounded-[1.15rem] border border-[#2f1725] bg-white px-3 py-2 text-left text-[12px] leading-snug text-[#2f1725] shadow-[0_10px_24px_rgba(47,23,37,0.08)] sm:min-h-[64px] sm:max-w-[178px] sm:text-[13px]">
                             <span>{{ leftTypedText }}</span>
                             <span class="type-cursor" aria-hidden="true"></span>
                         </div>
-                        <div :key="`${item.id}-${emoteAnimationKey}-left`" class="sanguy-card-emote relative mt-3 flex h-[116px] w-full items-end justify-center sm:h-[150px]">
+                        <div :key="`${item.id}-${emoteAnimationKey}-left`" class="sanguy-card-emote relative mt-2 flex h-[88px] w-full items-end justify-center sm:h-[108px] lg:h-[118px]">
                             <img
                                 class="pointer-events-none h-full select-none object-contain drop-shadow-[0_12px_22px_rgba(109,0,46,0.18)]"
                                 :src="sanguyImage"
@@ -168,11 +168,11 @@ function startTypewriter() {
                     </div>
 
                     <div class="flex min-h-0 flex-col items-center justify-end">
-                        <div class="speech-bubble speech-bubble-right min-h-[72px] w-full max-w-[180px] rounded-[1.35rem] border border-[#2f1725] bg-white px-4 py-3 text-left text-sm leading-snug text-[#2f1725] shadow-[0_10px_24px_rgba(47,23,37,0.08)] sm:max-w-[210px]">
+                        <div class="speech-bubble speech-bubble-right min-h-[58px] w-full max-w-[156px] rounded-[1.15rem] border border-[#2f1725] bg-white px-3 py-2 text-left text-[12px] leading-snug text-[#2f1725] shadow-[0_10px_24px_rgba(47,23,37,0.08)] sm:min-h-[64px] sm:max-w-[178px] sm:text-[13px]">
                             <span>{{ rightTypedText }}</span>
                             <span class="type-cursor" aria-hidden="true"></span>
                         </div>
-                        <div :key="`${item.id}-${emoteAnimationKey}-right`" class="sanguy-card-emote relative mt-3 flex h-[116px] w-full items-end justify-center sm:h-[150px]">
+                        <div :key="`${item.id}-${emoteAnimationKey}-right`" class="sanguy-card-emote relative mt-2 flex h-[88px] w-full items-end justify-center sm:h-[108px] lg:h-[118px]">
                             <img
                                 class="pointer-events-none h-full select-none object-contain drop-shadow-[0_12px_22px_rgba(109,0,46,0.18)]"
                                 :src="blutlyImage"
@@ -231,31 +231,31 @@ function startTypewriter() {
 .speech-bubble::after {
     content: '';
     position: absolute;
-    bottom: -16px;
+    bottom: -12px;
     width: 0;
     height: 0;
-    border-top: 18px solid white;
+    border-top: 14px solid white;
 }
 
 .speech-bubble::before {
     content: '';
     position: absolute;
-    bottom: -18px;
+    bottom: -14px;
     width: 0;
     height: 0;
-    border-top: 20px solid #2f1725;
+    border-top: 16px solid #2f1725;
 }
 
 .speech-bubble-left::before,
 .speech-bubble-left::after {
-    left: 22px;
-    border-right: 10px solid transparent;
+    left: 20px;
+    border-right: 8px solid transparent;
 }
 
 .speech-bubble-right::before,
 .speech-bubble-right::after {
-    right: 22px;
-    border-left: 10px solid transparent;
+    right: 20px;
+    border-left: 8px solid transparent;
 }
 
 .type-cursor {

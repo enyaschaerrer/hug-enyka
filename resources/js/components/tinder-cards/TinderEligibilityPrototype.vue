@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue';
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
 import { FlashCards } from 'vue3-flashcards';
 import tinderScenarioData from '../../data/tinder-scenario.json';
 import TinderActions from './TinderActions.vue';
@@ -48,12 +48,33 @@ type TriageAnswer = {
 const tinderScenario = tinderScenarioData as TinderScenario;
 const items = ref<Card[]>(tinderScenario.cards);
 const answers = ref<TriageAnswer[]>([]);
+const viewportWidth = ref(0);
+const viewportHeight = ref(0);
 const totalCards = computed(() => items.value.length);
 const answeredCount = computed(() => answers.value.length);
 const blockerCount = computed(() => answers.value.filter((answer) => answer.status === 'blocker').length);
 const warningCount = computed(() => answers.value.filter((answer) => answer.status === 'warning').length);
 const hasMatch = computed(() => blockerCount.value === 0);
 const progressSegments = computed(() => Array.from({ length: totalCards.value }, (_, index) => index < answeredCount.value));
+const layoutMode = computed<'mobile' | 'tablet' | 'desktop'>(() => {
+    const width = viewportWidth.value;
+    const height = viewportHeight.value;
+
+    if (width >= 1100 && height >= 700) {
+        return 'desktop';
+    }
+
+    if (width >= 768 && height >= 560) {
+        return 'tablet';
+    }
+
+    return 'mobile';
+});
+
+function syncViewport() {
+    viewportWidth.value = window.innerWidth;
+    viewportHeight.value = window.innerHeight;
+}
 
 function handleSwipe(item: Card, direction: SwipeDirection) {
     const outcome = direction === 'right' ? item.rightOutcome : item.leftOutcome;
@@ -75,19 +96,29 @@ function handleRestore(item: Card) {
 function getCardPosition(item: Card) {
     return Math.max(1, items.value.findIndex((card) => card.id === item.id) + 1);
 }
+
+onMounted(() => {
+    syncViewport();
+    window.addEventListener('resize', syncViewport);
+});
+
+onBeforeUnmount(() => {
+    window.removeEventListener('resize', syncViewport);
+});
 </script>
 
 <template>
     <section
-        class="font-cooper flex items-center px-3 pt-0 sm:px-4"
+        v-if="layoutMode === 'desktop'"
+        class="font-cooper flex w-full items-center px-3 py-2 sm:px-4 sm:py-3"
         :class="props.contained ? 'min-h-0 w-full bg-transparent pb-0' : 'min-h-[100svh] w-screen bg-rose-50 pb-12'"
     >
-        <div class="relative mx-auto w-full max-w-[760px]">
-            <div class="mb-5 flex items-center justify-center gap-2 px-6 sm:mb-6 sm:gap-3 sm:px-12">
+        <div class="relative mx-auto w-full max-w-[680px]">
+            <div class="mb-3 flex items-center justify-center gap-2 px-6 sm:mb-4 sm:gap-3 sm:px-10">
                 <span
                     v-for="(isCompleted, index) in progressSegments"
                     :key="index"
-                    class="h-2.5 flex-1 rounded-full transition-colors duration-200 sm:h-3"
+                    class="h-2 flex-1 rounded-full transition-colors duration-200 sm:h-2.5"
                     :class="isCompleted ? 'bg-[#6d002e]' : 'bg-[#f4b5ca]'"
                 ></span>
             </div>
@@ -97,8 +128,8 @@ function getCardPosition(item: Card) {
                 :swipe-direction="['left', 'right']"
                 :swipe-threshold="140"
                 :stack="3"
-                :stack-offset="8"
-                :stack-scale="0.024"
+                :stack-offset="6"
+                :stack-scale="0.018"
                 @swipe-left="(item) => handleSwipe(item, 'left')"
                 @swipe-right="(item) => handleSwipe(item, 'right')"
                 @restore="handleRestore"
@@ -118,7 +149,7 @@ function getCardPosition(item: Card) {
                         :style="{ opacity: Math.min(Math.abs(delta), 0.92) }"
                     >
                         <div
-                            class="-rotate-12 inline-flex items-center rounded-2xl border-4 border-[#f68eaf] bg-white px-4 py-2 text-2xl font-bold leading-none uppercase text-[#cc4d7d] shadow-lg sm:px-6 sm:py-3 sm:text-4xl"
+                            class="-rotate-12 inline-flex items-center rounded-2xl border-4 border-[#f68eaf] bg-white px-3 py-1.5 text-xl font-bold leading-none uppercase text-[#cc4d7d] shadow-lg sm:px-5 sm:py-2.5 sm:text-3xl"
                         >
                             <span>C'est faux</span>
                         </div>
@@ -131,7 +162,7 @@ function getCardPosition(item: Card) {
                         :style="{ opacity: Math.min(Math.abs(delta), 0.92) }"
                     >
                         <div
-                            class="inline-flex rotate-12 items-center rounded-2xl border-4 border-[#6d002e] bg-white px-4 py-2 text-2xl font-bold leading-none uppercase text-[#6d002e] shadow-lg sm:px-6 sm:py-3 sm:text-4xl"
+                            class="inline-flex rotate-12 items-center rounded-2xl border-4 border-[#6d002e] bg-white px-3 py-1.5 text-xl font-bold leading-none uppercase text-[#6d002e] shadow-lg sm:px-5 sm:py-2.5 sm:text-3xl"
                         >
                             <span>Je valide</span>
                         </div>
