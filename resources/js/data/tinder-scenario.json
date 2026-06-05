@@ -10,7 +10,7 @@
             "hint": "Le délai standard est de 4 mois entre deux dons de sang total.",
             "image": "/img/mascots/sanguy_hero.webp",
             "tone": "violet",
-            "leftDialogue": "Dialogue manquant",
+            "leftDialogue": "",
             "rightDialogue": "Votre corps a besoin de temps pour refaire ses réserves.",
             "leftOutcome": {
                 "status": "clear",
@@ -43,146 +43,6 @@
         },
         {
             "id": 3,
-            "theme": "Drogues",
-            "title": "Consommation de drogues",
-            "question": "Au cours des 12 derniers mois, avez-vous consommé ou injecté de la drogue ?",
-            "bio": "La sécurité du receveur est prioritaire.",
-            "hint": "Toute consommation de drogues impose une période d'exclusion.",
-            "image": "/img/mascots/sanguy_hero.webp",
-            "tone": "orange",
-            "leftDialogue": "Dialogue manquant",
-            "rightDialogue": "Certains voyages nécessitent quelques vérifications supplémentaires...",
-            "leftOutcome": {
-                "status": "clear",
-                "label": "Aucune consommation signalée"
-            },
-            "rightOutcome": {
-                "status": "blocker",
-                "label": "Consommation de drogues — attente 12 mois"
-            }
-        },
-        {
-            "id": 4,
-            "theme": "Grossesse",
-            "title": "Grossesse ou accouchement",
-            "question": "Êtes-vous actuellement enceinte ou cela fait-il moins d'un an depuis la dernière naissance ?",
-            "bio": "Cette question ne concerne que les personnes concernées.",
-            "hint": "Un délai d'un an après l'accouchement est requis.",
-            "image": "/img/mascots/sanguy_hero.webp",
-            "tone": "pink",
-            "leftDialogue": "Quelques soins ou maladies récentes peuvent nécessiter un délai.",
-            "rightDialogue": "Dialogue manquant",
-            "leftOutcome": {
-                "status": "clear",
-                "label": "Non concerné(e) ou délai écoulé"
-            },
-            "rightOutcome": {
-                "status": "blocker",
-                "label": "Grossesse ou accouchement récent"
-            }
-        },
-        {
-            "id": 5,
-            "theme": "Voyage",
-            "title": "Voyage hors Suisse",
-            "question": "Au cours des 6 derniers mois, avez-vous voyagé hors de la Suisse ?",
-            "bio": "Certains pays peuvent imposer un délai selon les risques épidémiques.",
-            "hint": "La carte monde vous aidera à préciser votre situation.",
-            "image": "/img/mascots/sanguy_hero.webp",
-            "tone": "blue",
-            "leftDialogue": "C'est bien que vous preniez soin de vous.",
-            "rightDialogue": "Votre santé passe avant tout. Le don pourra attendre quelques semaines.",
-            "leftOutcome": {
-                "status": "clear",
-                "label": "Aucun voyage récent"
-            },
-            "rightOutcome": {
-                "status": "warning",
-                "label": "Voyage à préciser"
-            }
-        },
-        {
-            "id": 6,
-            "theme": "Santé",
-            "title": "Soins médicaux ou maladie",
-            "question": "Au cours du mois dernier, avez-vous reçu des soins médicaux ou étiez-vous malade ?",
-            "bio": "Une maladie récente peut nécessiter un report du don.",
-            "hint": "Fièvre, infection ou traitement récent sont des points à signaler.",
-            "image": "/img/mascots/sanguy_hero.webp",
-            "tone": "turquoise",
-            "leftDialogue": "Dialogue manquant",
-            "rightDialogue": "Cette question nous aide à garantir la sécurité des dons.",
-            "leftOutcome": {
-                "status": "clear",
-                "label": "Rien à signaler"
-            },
-            "rightOutcome": {
-                "status": "warning",
-                "label": "Soins récents à préciser"
-            }
-        },
-        {
-            "id": 7,
-            "theme": "Médicaments",
-            "title": "Médicaments ou vaccins",
-            "question": "Au cours des 6 derniers mois, avez-vous pris des médicaments et/ou vaccins ?",
-            "bio": "Certains traitements imposent un délai avant de donner.",
-            "hint": "Les antibiotiques, anticoagulants et certains vaccins sont à signaler.",
-            "image": "/img/mascots/sanguy_hero.webp",
-            "tone": "emerald",
-            "leftDialogue": "Je peux pas faire un don actuellement, mais regarde mon nouveau tatouage !",
-            "rightDialogue": "Dialogue manquant",
-            "leftOutcome": {
-                "status": "clear",
-                "label": "Aucun traitement récent"
-            },
-            "rightOutcome": {
-                "status": "warning",
-                "label": "Traitement à préciser"
-            }
-        },
-        {
-            "id": 8,
-            "theme": "Tique",
-            "title": "Piqûre de tique",
-            "question": "Au cours du dernier mois, avez-vous été piqué(e) par une tique ?",
-            "bio": "Une piqûre de tique peut nécessiter une vérification.",
-            "hint": "En cas de maladie de Lyme, un délai s'applique.",
-            "image": "/img/mascots/sanguy_hero.webp",
-            "tone": "red",
-            "leftDialogue": "Dialogue manquant",
-            "rightDialogue": "Dialogue manquant",
-            "leftOutcome": {
-                "status": "clear",
-                "label": "Pas de piqûre signalée"
-            },
-            "rightOutcome": {
-                "status": "warning",
-                "label": "Piqûre de tique à signaler"
-            }
-        },
-        {
-            "id": 9,
-            "theme": "Blessures",
-            "title": "Plaie ouverte ou opération",
-            "question": "Au cours du dernier mois, avez-vous une plaie ouverte (blessure, tatouage, piercing…) ou avez-vous effectué une opération ?",
-            "bio": "Ces situations peuvent nécessiter un délai selon le contexte.",
-            "hint": "Un tatouage ou piercing récent impose généralement un délai de 4 mois.",
-            "image": "/img/mascots/sanguy_hero.webp",
-            "tone": "violet",
-            "leftDialogue": "Cette information est essentielle pour protéger les receveurs.",
-            "rightDialogue": "Merci pour votre sincérité, chaque réponse compte.",
-            "leftOutcome": {
-                "status": "clear",
-                "label": "Aucune plaie ou opération récente"
-            },
-            "rightOutcome": {
-                "status": "warning",
-                "label": "Plaie ou opération à préciser"
-            }
-        },
-        {
-            "id": 10,
             "theme": "Relations sexuelles",
             "title": "Relations sexuelles récentes",
             "question": "Au cours des 4 derniers mois, avez-vous eu des relations sexuelles ?",
@@ -191,7 +51,7 @@
             "image": "/img/mascots/sanguy_hero.webp",
             "tone": "pink",
             "leftDialogue": "Certaines situations rendent le don impossible pour des raisons de sécurité.",
-            "rightDialogue": "Dialogue manquant",
+            "rightDialogue": "",
             "leftOutcome": {
                 "status": "clear",
                 "label": "Aucune relation récente"
@@ -202,7 +62,7 @@
             }
         },
         {
-            "id": 11,
+            "id": 4,
             "theme": "IST",
             "title": "Infection sexuellement transmissible",
             "question": "Avez-vous déjà contracté et/ou testé positif à une maladie sexuellement transmissible ?",
@@ -210,8 +70,8 @@
             "hint": "Selon la maladie et son traitement, un délai peut s'appliquer.",
             "image": "/img/mascots/sanguy_hero.webp",
             "tone": "emerald",
-            "leftDialogue": "Vous prenez déjà soin d'une petite vie, c'est une belle mission !",
-            "rightDialogue": "Je reviendrais quand le moment sera venu.",
+            "leftDialogue": "Cette information est essentielle pour protéger les receveurs.",
+            "rightDialogue": "Merci pour votre sincérité, chaque réponse compte.",
             "leftOutcome": {
                 "status": "clear",
                 "label": "Aucune IST signalée"
@@ -219,6 +79,146 @@
             "rightOutcome": {
                 "status": "warning",
                 "label": "IST à préciser avec le médecin"
+            }
+        },
+        {
+            "id": 5,
+            "theme": "Drogues",
+            "title": "Consommation de drogues",
+            "question": "Au cours des 12 derniers mois, avez-vous consommé ou injecté de la drogue ?",
+            "bio": "La sécurité du receveur est prioritaire.",
+            "hint": "Toute consommation de drogues impose une période d'exclusion.",
+            "image": "/img/mascots/sanguy_hero.webp",
+            "tone": "orange",
+            "leftDialogue": "",
+            "rightDialogue": "Cette question nous aide à garantir la sécurité des dons.",
+            "leftOutcome": {
+                "status": "clear",
+                "label": "Aucune consommation signalée"
+            },
+            "rightOutcome": {
+                "status": "blocker",
+                "label": "Consommation de drogues — attente 12 mois"
+            }
+        },
+        {
+            "id": 6,
+            "theme": "Grossesse",
+            "title": "Grossesse ou accouchement",
+            "question": "Êtes-vous actuellement enceinte ou cela fait-il moins d'un an depuis la dernière naissance ?",
+            "bio": "Cette question ne concerne que les personnes concernées.",
+            "hint": "Un délai d'un an après l'accouchement est requis.",
+            "image": "/img/mascots/sanguy_hero.webp",
+            "tone": "pink",
+            "leftDialogue": "Vous prenez déjà soin d'une petite vie, c'est une belle mission !",
+            "rightDialogue": "Je reviendrais quand le moment sera venu.",
+            "leftOutcome": {
+                "status": "clear",
+                "label": "Non concerné(e) ou délai écoulé"
+            },
+            "rightOutcome": {
+                "status": "blocker",
+                "label": "Grossesse ou accouchement récent"
+            }
+        },
+        {
+            "id": 7,
+            "theme": "Voyage",
+            "title": "Voyage hors Suisse",
+            "question": "Au cours des 6 derniers mois, avez-vous voyagé hors de la Suisse ?",
+            "bio": "Certains pays peuvent imposer un délai selon les risques épidémiques.",
+            "hint": "La carte monde vous aidera à préciser votre situation.",
+            "image": "/img/mascots/sanguy_hero.webp",
+            "tone": "blue",
+            "leftDialogue": "",
+            "rightDialogue": "Certains voyages nécessitent quelques vérifications supplémentaires...",
+            "leftOutcome": {
+                "status": "clear",
+                "label": "Aucun voyage récent"
+            },
+            "rightOutcome": {
+                "status": "warning",
+                "label": "Voyage à préciser"
+            }
+        },
+        {
+            "id": 8,
+            "theme": "Santé",
+            "title": "Soins médicaux ou maladie",
+            "question": "Au cours du mois dernier, avez-vous reçu des soins médicaux ou étiez-vous malade ?",
+            "bio": "Une maladie récente peut nécessiter un report du don.",
+            "hint": "Fièvre, infection ou traitement récent sont des points à signaler.",
+            "image": "/img/mascots/sanguy_hero.webp",
+            "tone": "turquoise",
+            "leftDialogue": "Quelques soins ou maladies récentes peuvent nécessiter un délai.",
+            "rightDialogue": "",
+            "leftOutcome": {
+                "status": "clear",
+                "label": "Rien à signaler"
+            },
+            "rightOutcome": {
+                "status": "warning",
+                "label": "Soins récents à préciser"
+            }
+        },
+        {
+            "id": 9,
+            "theme": "Médicaments",
+            "title": "Médicaments ou vaccins",
+            "question": "Au cours des 6 derniers mois, avez-vous pris des médicaments et/ou vaccins ?",
+            "bio": "Certains traitements imposent un délai avant de donner.",
+            "hint": "Les antibiotiques, anticoagulants et certains vaccins sont à signaler.",
+            "image": "/img/mascots/sanguy_hero.webp",
+            "tone": "emerald",
+            "leftDialogue": "C'est bien que vous preniez soin de vous.",
+            "rightDialogue": "Votre santé passe avant tout. Le don pourra attendre quelques semaines.",
+            "leftOutcome": {
+                "status": "clear",
+                "label": "Aucun traitement récent"
+            },
+            "rightOutcome": {
+                "status": "warning",
+                "label": "Traitement à préciser"
+            }
+        },
+        {
+            "id": 10,
+            "theme": "Tique",
+            "title": "Piqûre de tique",
+            "question": "Au cours du dernier mois, avez-vous été piqué(e) par une tique ?",
+            "bio": "Une piqûre de tique peut nécessiter une vérification.",
+            "hint": "En cas de maladie de Lyme, un délai s'applique.",
+            "image": "/img/mascots/sanguy_hero.webp",
+            "tone": "red",
+            "leftDialogue": "",
+            "rightDialogue": "",
+            "leftOutcome": {
+                "status": "clear",
+                "label": "Pas de piqûre signalée"
+            },
+            "rightOutcome": {
+                "status": "warning",
+                "label": "Piqûre de tique à signaler"
+            }
+        },
+        {
+            "id": 11,
+            "theme": "Blessures",
+            "title": "Plaie ouverte ou opération",
+            "question": "Au cours du dernier mois, avez-vous une plaie ouverte (blessure, tatouage, piercing…) ou avez-vous effectué une opération ?",
+            "bio": "Ces situations peuvent nécessiter un délai selon le contexte.",
+            "hint": "Un tatouage ou piercing récent impose généralement un délai de 4 mois.",
+            "image": "/img/mascots/sanguy_hero.webp",
+            "tone": "violet",
+            "leftDialogue": "Je peux pas faire un don actuellement, mais regarde mon nouveau tatouage !",
+            "rightDialogue": "",
+            "leftOutcome": {
+                "status": "clear",
+                "label": "Aucune plaie ou opération récente"
+            },
+            "rightOutcome": {
+                "status": "warning",
+                "label": "Plaie ou opération à préciser"
             }
         }
     ]
