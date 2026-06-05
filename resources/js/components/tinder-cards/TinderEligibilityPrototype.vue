@@ -11,6 +11,10 @@ const props = withDefaults(defineProps<{
     contained: false,
 });
 
+const emit = defineEmits<{
+    ineligible: [];
+}>();
+
 type SwipeDirection = 'left' | 'right';
 type TriageStatus = 'clear' | 'warning' | 'blocker';
 
@@ -23,6 +27,8 @@ type Card = Record<string, unknown> & {
     hint: string;
     image: string;
     tone: 'red' | 'green' | 'blue' | 'violet' | 'orange' | 'turquoise' | 'pink' | 'emerald';
+    leftDialogue: string;
+    rightDialogue: string;
     leftOutcome: {
         status: TriageStatus;
         label: string;
@@ -87,6 +93,10 @@ function handleSwipe(item: Card, direction: SwipeDirection) {
             label: outcome.label,
         },
     ];
+
+    if (outcome.status === 'blocker') {
+        emit('ineligible');
+    }
 }
 
 function handleRestore(item: Card) {

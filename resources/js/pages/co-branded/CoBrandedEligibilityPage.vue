@@ -6,6 +6,7 @@ import CoBrandedPhoneModal from '../../components/co-branded/CoBrandedPhoneModal
 import QuestionnaireExitModal from '../../components/modals/QuestionnaireExitModal.vue';
 import CoBrandedModuleHeader from '../../components/public/CoBrandedModuleHeader.vue';
 import CoBrandedAuthGate from '../../components/co-branded/CoBrandedAuthGate.vue';
+import CoBrandedNonEligibleView from '../../components/co-branded/CoBrandedNonEligibleView.vue';
 import { useAdminRouter } from '../../composables/useAdminRouter';
 import { useCoBrandedCollecte } from '../../composables/useCoBrandedCollecte';
 
@@ -14,6 +15,7 @@ const { csrfToken, company, collection, auth } = useCoBrandedCollecte();
 const qrModalOpen = ref(false);
 const isDesktop = ref(false);
 const exitModalOpen = ref(false);
+const showNonEligible = ref(false);
 let desktopMediaQuery: MediaQueryList | null = null;
 let phoneModalTimeout: number | null = null;
 let pendingLeaveAction: (() => void | Promise<void>) | null = null;
@@ -173,7 +175,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-    <div class="flex h-[100svh] flex-col overflow-hidden bg-catskillwhite-50">
+    <div class="flex flex-col" :class="showNonEligible ? 'min-h-screen bg-white' : 'h-[100svh] overflow-hidden bg-catskillwhite-50'">
         <CoBrandedAuthGate
             v-if="!auth.canAccess"
             :company="company"
@@ -206,13 +208,16 @@ onBeforeUnmount(() => {
             />
 
             <main
+                v-if="!showNonEligible"
                 class="flex flex-1 items-center justify-center overflow-hidden bg-cover bg-center bg-no-repeat"
                 style="background-image: url('/img/cobranded-background/bg-cobranded.webp');"
             >
                 <div class="flex w-full justify-center px-6 py-4 lg:px-12" style="transform: translateY(-20px);">
-                    <TinderEligibilityPrototype contained />
+                    <TinderEligibilityPrototype contained @ineligible="showNonEligible = true" />
                 </div>
             </main>
+
+            <CoBrandedNonEligibleView v-else class="flex-1" />
 
             <Transition
                 enter-active-class="transition duration-200 ease-out"
@@ -223,7 +228,7 @@ onBeforeUnmount(() => {
                 leave-to-class="opacity-0"
             >
                 <button
-                    v-if="isDesktop && !qrModalOpen"
+                    v-if="isDesktop && !qrModalOpen && !showNonEligible"
                     class="btn fixed bottom-8 right-6 z-[900] h-[60px] w-[60px] rounded-full border-none bg-white p-0 shadow-lg transition-transform duration-200 ease-out hover:scale-110"
                     type="button"
                     title="Afficher le QR code mobile"

@@ -1,148 +1,224 @@
 {
-    "title": "Pre-tri don du sang",
+    "title": "Pré-tri don du sang",
     "cards": [
         {
             "id": 1,
-            "theme": "Etat du jour",
-            "title": "Forme generale",
-            "question": "Aujourd'hui, tu te sens en forme et disponible pour donner ?",
-            "bio": "Premier check rapide avant de lancer le parcours.",
-            "hint": "Fatigue, fievre ou infection recente demandent souvent un controle avant de continuer.",
-            "image": "/img/sanguy/sanguy_happy.png",
-            "tone": "red",
+            "theme": "Don récent",
+            "title": "Don des 4 derniers mois",
+            "question": "Au cours des 4 derniers mois, avez-vous déjà donné votre sang ?",
+            "bio": "Un délai minimum est requis entre deux dons.",
+            "hint": "Le délai standard est de 4 mois entre deux dons de sang total.",
+            "image": "/img/mascots/sanguy_hero.webp",
+            "tone": "violet",
+            "leftDialogue": "Dialogue manquant",
+            "rightDialogue": "Votre corps a besoin de temps pour refaire ses réserves.",
             "leftOutcome": {
-                "status": "blocker",
-                "label": "A verifier avant de continuer"
+                "status": "clear",
+                "label": "Pas de don récent"
             },
             "rightOutcome": {
-                "status": "clear",
-                "label": "Base OK"
+                "status": "blocker",
+                "label": "Don de sang récent — attente 4 mois"
             }
         },
         {
             "id": 2,
-            "theme": "Voyage",
-            "title": "Retour de voyage",
-            "question": "Tu as voyage hors Suisse ou dans une zone a risque recemment ?",
-            "bio": "Sanguy aime les vacances, mais il check les delais.",
-            "hint": "Certains pays peuvent imposer une attente. La carte monde aide a preciser.",
-            "image": "/img/sanguy/sanguy-alt-angry.png",
-            "tone": "blue",
+            "theme": "Poids",
+            "title": "Poids minimum",
+            "question": "Pesez-vous au moins 50 kg ?",
+            "bio": "Le poids minimum est requis pour la sécurité du donneur.",
+            "hint": "En dessous de 50 kg, le don peut être contre-indiqué.",
+            "image": "/img/mascots/sanguy_hero.webp",
+            "tone": "green",
+            "leftDialogue": "Pour donner votre sang, il faut peser au moins 50 kg.",
+            "rightDialogue": "C'est une question de sécurité pour vous avant tout.",
             "leftOutcome": {
-                "status": "clear",
-                "label": "Pas de voyage signale"
+                "status": "blocker",
+                "label": "Poids insuffisant pour donner"
             },
             "rightOutcome": {
-                "status": "warning",
-                "label": "A confirmer avec la carte"
+                "status": "clear",
+                "label": "Poids OK"
             }
         },
         {
             "id": 3,
-            "theme": "Medicaments",
-            "title": "Traitement en cours",
-            "question": "Tu prends un traitement important, des antibiotiques ou un medicament a signaler ?",
-            "bio": "Pas de jugement, juste un checkpoint pour orienter la suite.",
-            "hint": "Le SMS pourra demander le type de traitement avant toute decision.",
-            "image": "/img/sanguy/sanguy-angry.png",
-            "tone": "violet",
+            "theme": "Drogues",
+            "title": "Consommation de drogues",
+            "question": "Au cours des 12 derniers mois, avez-vous consommé ou injecté de la drogue ?",
+            "bio": "La sécurité du receveur est prioritaire.",
+            "hint": "Toute consommation de drogues impose une période d'exclusion.",
+            "image": "/img/mascots/sanguy_hero.webp",
+            "tone": "orange",
+            "leftDialogue": "Dialogue manquant",
+            "rightDialogue": "Certains voyages nécessitent quelques vérifications supplémentaires...",
             "leftOutcome": {
                 "status": "clear",
-                "label": "Rien a signaler"
+                "label": "Aucune consommation signalée"
             },
             "rightOutcome": {
-                "status": "warning",
-                "label": "Question SMS necessaire"
+                "status": "blocker",
+                "label": "Consommation de drogues — attente 12 mois"
             }
         },
         {
             "id": 4,
-            "theme": "Sante recente",
-            "title": "Symptomes",
-            "question": "Tu as eu fievre, infection ou gros rhume ces derniers jours ?",
-            "bio": "Le don doit rester safe pour toi et pour les receveurs.",
-            "hint": "En cas de symptomes recents, mieux vaut temporiser.",
-            "image": "/img/sanguy/sanguy-alt-angry.png",
-            "tone": "green",
+            "theme": "Grossesse",
+            "title": "Grossesse ou accouchement",
+            "question": "Êtes-vous actuellement enceinte ou cela fait-il moins d'un an depuis la dernière naissance ?",
+            "bio": "Cette question ne concerne que les personnes concernées.",
+            "hint": "Un délai d'un an après l'accouchement est requis.",
+            "image": "/img/mascots/sanguy_hero.webp",
+            "tone": "pink",
+            "leftDialogue": "Quelques soins ou maladies récentes peuvent nécessiter un délai.",
+            "rightDialogue": "Dialogue manquant",
             "leftOutcome": {
                 "status": "clear",
-                "label": "Pas de symptome"
+                "label": "Non concerné(e) ou délai écoulé"
             },
             "rightOutcome": {
                 "status": "blocker",
-                "label": "A reporter"
+                "label": "Grossesse ou accouchement récent"
             }
         },
         {
             "id": 5,
-            "theme": "Delais",
-            "title": "Tatouage ou piercing",
-            "question": "Tu as fait un tatouage, piercing ou acte similaire recemment ?",
-            "bio": "Une petite carte pour eviter les mauvaises surprises au rendez-vous.",
-            "hint": "Ces situations peuvent demander un delai selon le contexte.",
-            "image": "/img/sanguy/sanguy-alt-happy.png",
-            "tone": "pink",
+            "theme": "Voyage",
+            "title": "Voyage hors Suisse",
+            "question": "Au cours des 6 derniers mois, avez-vous voyagé hors de la Suisse ?",
+            "bio": "Certains pays peuvent imposer un délai selon les risques épidémiques.",
+            "hint": "La carte monde vous aidera à préciser votre situation.",
+            "image": "/img/mascots/sanguy_hero.webp",
+            "tone": "blue",
+            "leftDialogue": "C'est bien que vous preniez soin de vous.",
+            "rightDialogue": "Votre santé passe avant tout. Le don pourra attendre quelques semaines.",
             "leftOutcome": {
                 "status": "clear",
-                "label": "Aucun delai apparent"
+                "label": "Aucun voyage récent"
             },
             "rightOutcome": {
                 "status": "warning",
-                "label": "Delai possible"
+                "label": "Voyage à préciser"
             }
         },
         {
             "id": 6,
-            "theme": "Recuperation",
-            "title": "Soin ou operation",
-            "question": "Tu as eu une operation, un soin dentaire lourd ou un examen medical recent ?",
-            "bio": "Sanguy met un marque-page si une precision est utile.",
-            "hint": "Certaines interventions demandent un controle avant le don.",
-            "image": "/img/sanguy/sanguy-angry.png",
-            "tone": "orange",
+            "theme": "Santé",
+            "title": "Soins médicaux ou maladie",
+            "question": "Au cours du mois dernier, avez-vous reçu des soins médicaux ou étiez-vous malade ?",
+            "bio": "Une maladie récente peut nécessiter un report du don.",
+            "hint": "Fièvre, infection ou traitement récent sont des points à signaler.",
+            "image": "/img/mascots/sanguy_hero.webp",
+            "tone": "turquoise",
+            "leftDialogue": "Dialogue manquant",
+            "rightDialogue": "Cette question nous aide à garantir la sécurité des dons.",
             "leftOutcome": {
                 "status": "clear",
-                "label": "Rien de recent"
+                "label": "Rien à signaler"
             },
             "rightOutcome": {
                 "status": "warning",
-                "label": "A preciser"
+                "label": "Soins récents à préciser"
             }
         },
         {
             "id": 7,
-            "theme": "Profil",
-            "title": "Conditions de base",
-            "question": "Tu penses remplir les conditions generales de don indiquees par l'organisation ?",
-            "bio": "Ce prototype ne remplace pas le controle officiel, il oriente juste le parcours.",
-            "hint": "Si tu n'es pas sur, Sanguy te bascule vers les questions fermees.",
-            "image": "/img/sanguy/sanguy_happy.png",
-            "tone": "turquoise",
+            "theme": "Médicaments",
+            "title": "Médicaments ou vaccins",
+            "question": "Au cours des 6 derniers mois, avez-vous pris des médicaments et/ou vaccins ?",
+            "bio": "Certains traitements imposent un délai avant de donner.",
+            "hint": "Les antibiotiques, anticoagulants et certains vaccins sont à signaler.",
+            "image": "/img/mascots/sanguy_hero.webp",
+            "tone": "emerald",
+            "leftDialogue": "Je peux pas faire un don actuellement, mais regarde mon nouveau tatouage !",
+            "rightDialogue": "Dialogue manquant",
             "leftOutcome": {
-                "status": "warning",
-                "label": "A verifier"
+                "status": "clear",
+                "label": "Aucun traitement récent"
             },
             "rightOutcome": {
-                "status": "clear",
-                "label": "Profil de base OK"
+                "status": "warning",
+                "label": "Traitement à préciser"
             }
         },
         {
             "id": 8,
-            "theme": "Motivation",
-            "title": "Suite du parcours",
-            "question": "Tu veux continuer avec Sanguy en mode SMS pour affiner le tri ?",
-            "bio": "Derniere carte : si tout semble jouable, le chat prend le relais.",
-            "hint": "Le SMS reste un prototype et ne donne pas de validation medicale officielle.",
-            "image": "/img/sanguy/sanguy-alt-happy.png",
-            "tone": "emerald",
+            "theme": "Tique",
+            "title": "Piqûre de tique",
+            "question": "Au cours du dernier mois, avez-vous été piqué(e) par une tique ?",
+            "bio": "Une piqûre de tique peut nécessiter une vérification.",
+            "hint": "En cas de maladie de Lyme, un délai s'applique.",
+            "image": "/img/mascots/sanguy_hero.webp",
+            "tone": "red",
+            "leftDialogue": "Dialogue manquant",
+            "rightDialogue": "Dialogue manquant",
             "leftOutcome": {
-                "status": "blocker",
-                "label": "Parcours stoppe"
+                "status": "clear",
+                "label": "Pas de piqûre signalée"
             },
             "rightOutcome": {
+                "status": "warning",
+                "label": "Piqûre de tique à signaler"
+            }
+        },
+        {
+            "id": 9,
+            "theme": "Blessures",
+            "title": "Plaie ouverte ou opération",
+            "question": "Au cours du dernier mois, avez-vous une plaie ouverte (blessure, tatouage, piercing…) ou avez-vous effectué une opération ?",
+            "bio": "Ces situations peuvent nécessiter un délai selon le contexte.",
+            "hint": "Un tatouage ou piercing récent impose généralement un délai de 4 mois.",
+            "image": "/img/mascots/sanguy_hero.webp",
+            "tone": "violet",
+            "leftDialogue": "Cette information est essentielle pour protéger les receveurs.",
+            "rightDialogue": "Merci pour votre sincérité, chaque réponse compte.",
+            "leftOutcome": {
                 "status": "clear",
-                "label": "Pret pour le SMS"
+                "label": "Aucune plaie ou opération récente"
+            },
+            "rightOutcome": {
+                "status": "warning",
+                "label": "Plaie ou opération à préciser"
+            }
+        },
+        {
+            "id": 10,
+            "theme": "Relations sexuelles",
+            "title": "Relations sexuelles récentes",
+            "question": "Au cours des 4 derniers mois, avez-vous eu des relations sexuelles ?",
+            "bio": "Question nécessaire pour évaluer certains risques de transmission.",
+            "hint": "Certaines situations spécifiques peuvent imposer un délai.",
+            "image": "/img/mascots/sanguy_hero.webp",
+            "tone": "pink",
+            "leftDialogue": "Certaines situations rendent le don impossible pour des raisons de sécurité.",
+            "rightDialogue": "Dialogue manquant",
+            "leftOutcome": {
+                "status": "clear",
+                "label": "Aucune relation récente"
+            },
+            "rightOutcome": {
+                "status": "warning",
+                "label": "Relations récentes à préciser"
+            }
+        },
+        {
+            "id": 11,
+            "theme": "IST",
+            "title": "Infection sexuellement transmissible",
+            "question": "Avez-vous déjà contracté et/ou testé positif à une maladie sexuellement transmissible ?",
+            "bio": "Certaines IST peuvent affecter l'éligibilité au don.",
+            "hint": "Selon la maladie et son traitement, un délai peut s'appliquer.",
+            "image": "/img/mascots/sanguy_hero.webp",
+            "tone": "emerald",
+            "leftDialogue": "Vous prenez déjà soin d'une petite vie, c'est une belle mission !",
+            "rightDialogue": "Je reviendrais quand le moment sera venu.",
+            "leftOutcome": {
+                "status": "clear",
+                "label": "Aucune IST signalée"
+            },
+            "rightOutcome": {
+                "status": "warning",
+                "label": "IST à préciser avec le médecin"
             }
         }
     ]

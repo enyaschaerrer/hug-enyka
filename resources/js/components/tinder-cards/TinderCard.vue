@@ -9,6 +9,8 @@ type TinderItem = {
     bio: string;
     hint: string;
     tone: 'red' | 'green' | 'blue' | 'violet' | 'orange' | 'turquoise' | 'pink' | 'emerald';
+    leftDialogue: string;
+    rightDialogue: string;
 };
 
 const props = defineProps<{
@@ -19,8 +21,6 @@ const props = defineProps<{
 }>();
 
 const emoteAnimationKey = ref(0);
-const leftBubbleText = 'Placeholder dialogue placeholder dialogue.';
-const rightBubbleText = 'Placeholder dialogue placeholder dialogue.';
 const leftTypedText = ref('');
 const rightTypedText = ref('');
 let leftTypingTimeout: number | null = null;
@@ -98,9 +98,9 @@ function startTypewriter() {
     clearTypingTimers();
     leftTypedText.value = '';
     rightTypedText.value = '';
-    leftTypingTimeout = animateText(leftTypedText, leftBubbleText, 22);
+    leftTypingTimeout = animateText(leftTypedText, props.item.leftDialogue, 22);
     rightTypingTimeout = window.setTimeout(() => {
-        rightTypingTimeout = animateText(rightTypedText, rightBubbleText, 20);
+        rightTypingTimeout = animateText(rightTypedText, props.item.rightDialogue, 20);
     }, 220);
 }
 </script>
@@ -121,7 +121,7 @@ function startTypewriter() {
             <div class="relative mt-2 flex min-h-0 flex-1 items-center justify-center">
                 <div class="grid w-full grid-cols-2 gap-3 sm:gap-4">
                     <div class="flex min-h-0 flex-col items-center justify-end">
-                        <div class="speech-bubble speech-bubble-left min-h-[52px] w-full max-w-[148px] rounded-[1.1rem] border border-[#2f1725] bg-[#f8eef1] px-3 py-2 text-left text-[11px] leading-snug text-[#2f1725] shadow-[0_10px_24px_rgba(47,23,37,0.08)] sm:min-h-[58px] sm:max-w-[168px] sm:text-[12px]">
+                        <div v-if="item.leftDialogue !== 'Dialogue manquant'" class="speech-bubble speech-bubble-left min-h-[52px] w-full max-w-[148px] rounded-[1.1rem] border border-[#2f1725] bg-[#f8eef1] px-3 py-2 text-left text-[11px] leading-snug text-[#2f1725] shadow-[0_10px_24px_rgba(47,23,37,0.08)] sm:min-h-[58px] sm:max-w-[168px] sm:text-[12px]">
                             <span>{{ leftTypedText }}</span>
                         </div>
                         <div :key="`${item.id}-${emoteAnimationKey}-left`" class="sanguy-card-emote relative mt-1 flex h-[108px] w-full items-end justify-center sm:h-[124px] lg:h-[136px]">
@@ -135,7 +135,7 @@ function startTypewriter() {
                     </div>
 
                     <div class="flex min-h-0 flex-col items-center justify-end">
-                        <div class="speech-bubble speech-bubble-right min-h-[52px] w-full max-w-[148px] rounded-[1.1rem] border border-[#2f1725] bg-[#f8eef1] px-3 py-2 text-left text-[11px] leading-snug text-[#2f1725] shadow-[0_10px_24px_rgba(47,23,37,0.08)] sm:min-h-[58px] sm:max-w-[168px] sm:text-[12px]">
+                        <div v-if="item.rightDialogue !== 'Dialogue manquant'" class="speech-bubble speech-bubble-right min-h-[52px] w-full max-w-[148px] rounded-[1.1rem] border border-[#2f1725] bg-[#f8eef1] px-3 py-2 text-left text-[11px] leading-snug text-[#2f1725] shadow-[0_10px_24px_rgba(47,23,37,0.08)] sm:min-h-[58px] sm:max-w-[168px] sm:text-[12px]">
                             <span>{{ rightTypedText }}</span>
                         </div>
                         <div :key="`${item.id}-${emoteAnimationKey}-right`" class="sanguy-card-emote relative mt-1 flex h-[108px] w-full items-end justify-center sm:h-[124px] lg:h-[136px]">
