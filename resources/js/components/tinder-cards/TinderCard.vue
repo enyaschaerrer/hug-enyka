@@ -119,18 +119,21 @@ function startTypewriter() {
     >
         <!-- Carte intro (id === 0) -->
         <template v-if="item.id === 0">
-            <div class="flex h-full flex-col items-center justify-center gap-4 pt-4 pb-16">
+            <div class="flex h-full flex-col items-center pt-4">
                 <Vue3Lottie
                     :animation-data="swipeLottieData"
-                    :height="155"
+                    :height="160"
                     :loop="true"
                     :auto-play="true"
+                    class="mt-6"
                 />
-                <div class="space-y-2.5 px-2 text-center">
-                    <p class="text-lg font-bold text-[#5f0f35]">Comment ça marche ?</p>
-                    <p class="text-lg leading-snug text-[#7a4b62]">
-                        Swipez à <span class="font-semibold text-[#ef4444]">gauche</span> si vous n'êtes pas concerné(e),
-                        à <span class="font-semibold text-[#22c55e]">droite</span> si oui, ou utilisez les boutons.
+                <div class="absolute inset-x-4 bottom-[8rem] px-2 text-center">
+                    <p class="text-3xl font-bold text-[#5f0f35]">Comment ça marche ?</p>
+                    <p class="mt-4 text-lg font-semibold leading-snug text-[#7a4b62]">
+                        Swipez à <span class="text-[#ef4444]">gauche</span> si vous n'êtes pas concerné(e),
+                        à <span class="text-[#22c55e]">droite</span> si oui.
+                    </p>
+                    <p class="mt-1 text-lg font-semibold leading-snug text-[#7a4b62]">
                         Lisez bien chaque question avant de répondre.
                     </p>
                 </div>

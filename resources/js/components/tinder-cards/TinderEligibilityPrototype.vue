@@ -246,7 +246,7 @@ onBeforeUnmount(() => {
                             :right="swipeRight"
                             :restore="restore"
                             :is-end="isEnd"
-                            :can-restore="canRestore"
+                            :can-restore="canRestore && answeredCount > 0"
                         />
                     </div>
                 </template>
