@@ -69,6 +69,9 @@ const introCard: Card = {
 const tinderScenario = tinderScenarioData as TinderScenario;
 const items = ref<Card[]>([introCard, ...tinderScenario.cards]);
 const answers = ref<TriageAnswer[]>([]);
+const introSwiped = ref(false);
+const introCardActive = computed(() => !introSwiped.value);
+const storedSwipeRight = ref<(() => void) | null>(null);
 const viewportWidth = ref(0);
 const viewportHeight = ref(0);
 const totalCards = computed(() => items.value.filter(item => item.id !== 0).length);
@@ -98,7 +101,10 @@ function syncViewport() {
 }
 
 function handleSwipe(item: Card, direction: SwipeDirection) {
-    if (item.id === 0) return;
+    if (item.id === 0) {
+        introSwiped.value = true;
+        return;
+    }
 
     const outcome = direction === 'right' ? item.rightOutcome : item.leftOutcome;
     answers.value = [
@@ -167,6 +173,7 @@ onBeforeUnmount(() => {
                         :active="item.id === activeItemKey"
                         :current="getCardPosition(item)"
                         :total="totalCards"
+                        @intro-start="storedSwipeRight?.()"
                     />
                 </template>
 
@@ -232,13 +239,16 @@ onBeforeUnmount(() => {
                         canRestore,
                     }"
                 >
-                    <TinderActions
-                        :left="swipeLeft"
-                        :right="swipeRight"
-                        :restore="restore"
-                        :is-end="isEnd"
-                        :can-restore="canRestore"
-                    />
+                    <div :ref="() => storedSwipeRight = swipeRight">
+                        <TinderActions
+                            v-if="!introCardActive"
+                            :left="swipeLeft"
+                            :right="swipeRight"
+                            :restore="restore"
+                            :is-end="isEnd"
+                            :can-restore="canRestore"
+                        />
+                    </div>
                 </template>
             </FlashCards>
         </div>

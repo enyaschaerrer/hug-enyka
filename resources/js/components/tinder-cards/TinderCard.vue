@@ -22,6 +22,10 @@ const props = defineProps<{
     total: number;
 }>();
 
+const emit = defineEmits<{
+    introStart: [];
+}>();
+
 const emoteAnimationKey = ref(0);
 const leftTypedText = ref('');
 const rightTypedText = ref('');
@@ -115,13 +119,12 @@ function startTypewriter() {
     >
         <!-- Carte intro (id === 0) -->
         <template v-if="item.id === 0">
-            <div class="flex h-full flex-col items-center justify-between pb-1 pt-4">
+            <div class="flex h-full flex-col items-center justify-center gap-4 pt-4 pb-16">
                 <Vue3Lottie
                     :animation-data="swipeLottieData"
                     :height="155"
                     :loop="true"
                     :auto-play="true"
-                    class="mt-2"
                 />
                 <div class="space-y-2.5 px-2 text-center">
                     <p class="text-lg font-bold text-[#5f0f35]">Comment ça marche ?</p>
@@ -131,8 +134,15 @@ function startTypewriter() {
                         Lisez bien chaque question avant de répondre.
                     </p>
                 </div>
-                <p class="text-sm font-semibold text-[#9e6070]">Swipez pour commencer →</p>
             </div>
+            <button
+                type="button"
+                class="absolute bottom-8 left-1/2 -translate-x-1/2 w-48 rounded-2xl py-3.5 text-base font-bold text-white transition hover:opacity-90"
+                style="background-color: #6d002e;"
+                @click="emit('introStart')"
+            >
+                C'est parti !
+            </button>
         </template>
 
         <template v-else-if="active">
