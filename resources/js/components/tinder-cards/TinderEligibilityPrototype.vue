@@ -79,7 +79,7 @@ const answeredCount = computed(() => answers.value.length);
 const blockerCount = computed(() => answers.value.filter((answer) => answer.status === 'blocker').length);
 const warningCount = computed(() => answers.value.filter((answer) => answer.status === 'warning').length);
 const hasMatch = computed(() => blockerCount.value === 0);
-const progressSegments = computed(() => Array.from({ length: totalCards.value }, (_, index) => index <= answeredCount.value));
+const progressSegments = computed(() => Array.from({ length: totalCards.value }, (_, index) => introSwiped.value && index <= answeredCount.value));
 const layoutMode = computed<'mobile' | 'tablet' | 'desktop'>(() => {
     const width = viewportWidth.value;
     const height = viewportHeight.value;
@@ -127,7 +127,7 @@ function handleRestore(item: Card) {
 }
 
 function getCardPosition(item: Card) {
-    return Math.max(1, items.value.findIndex((card) => card.id === item.id) + 1);
+    return Math.max(1, items.value.findIndex((card) => card.id === item.id));
 }
 
 onMounted(() => {
