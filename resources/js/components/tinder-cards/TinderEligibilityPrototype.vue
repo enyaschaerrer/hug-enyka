@@ -149,7 +149,7 @@ onBeforeUnmount(() => {
                         :style="{ opacity: Math.min(Math.abs(delta), 0.92) }"
                     >
                         <div
-                            class="-rotate-12 inline-flex items-center rounded-2xl border-4 border-[#f68eaf] bg-white px-3 py-1.5 text-xl font-bold leading-none uppercase text-[#cc4d7d] shadow-lg sm:px-5 sm:py-2.5 sm:text-3xl"
+                            class="-rotate-12 inline-flex items-center rounded-2xl border-4 border-[#ef4444] bg-white px-3 py-1.5 text-xl font-bold leading-none uppercase text-[#ef4444] shadow-lg sm:px-5 sm:py-2.5 sm:text-3xl"
                         >
                             <span>C'est faux</span>
                         </div>
@@ -162,7 +162,7 @@ onBeforeUnmount(() => {
                         :style="{ opacity: Math.min(Math.abs(delta), 0.92) }"
                     >
                         <div
-                            class="inline-flex rotate-12 items-center rounded-2xl border-4 border-[#6d002e] bg-white px-3 py-1.5 text-xl font-bold leading-none uppercase text-[#6d002e] shadow-lg sm:px-5 sm:py-2.5 sm:text-3xl"
+                            class="inline-flex rotate-12 items-center rounded-2xl border-4 border-[#22c55e] bg-white px-3 py-1.5 text-xl font-bold leading-none uppercase text-[#22c55e] shadow-lg sm:px-5 sm:py-2.5 sm:text-3xl"
                         >
                             <span>Je valide</span>
                         </div>

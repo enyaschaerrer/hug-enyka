@@ -123,7 +123,6 @@ function startTypewriter() {
                     <div class="flex min-h-0 flex-col items-center justify-end">
                         <div class="speech-bubble speech-bubble-left min-h-[52px] w-full max-w-[148px] rounded-[1.1rem] border border-[#2f1725] bg-white px-3 py-2 text-left text-[11px] leading-snug text-[#2f1725] shadow-[0_10px_24px_rgba(47,23,37,0.08)] sm:min-h-[58px] sm:max-w-[168px] sm:text-[12px]">
                             <span>{{ leftTypedText }}</span>
-                            <span class="type-cursor" aria-hidden="true"></span>
                         </div>
                         <div :key="`${item.id}-${emoteAnimationKey}-left`" class="sanguy-card-emote relative mt-1 flex h-[108px] w-full items-end justify-center sm:h-[124px] lg:h-[136px]">
                             <img
@@ -138,7 +137,6 @@ function startTypewriter() {
                     <div class="flex min-h-0 flex-col items-center justify-end">
                         <div class="speech-bubble speech-bubble-right min-h-[52px] w-full max-w-[148px] rounded-[1.1rem] border border-[#2f1725] bg-white px-3 py-2 text-left text-[11px] leading-snug text-[#2f1725] shadow-[0_10px_24px_rgba(47,23,37,0.08)] sm:min-h-[58px] sm:max-w-[168px] sm:text-[12px]">
                             <span>{{ rightTypedText }}</span>
-                            <span class="type-cursor" aria-hidden="true"></span>
                         </div>
                         <div :key="`${item.id}-${emoteAnimationKey}-right`" class="sanguy-card-emote relative mt-1 flex h-[108px] w-full items-end justify-center sm:h-[124px] lg:h-[136px]">
                             <img
@@ -201,16 +199,6 @@ function startTypewriter() {
     border-left: 8px solid transparent;
 }
 
-.type-cursor {
-    display: inline-block;
-    height: 1em;
-    width: 0.08em;
-    margin-left: 0.12em;
-    vertical-align: -0.12em;
-    background: currentColor;
-    animation: type-cursor-blink 1s steps(1, end) infinite;
-}
-
 @keyframes sanguy-card-emote-in {
     0% {
         transform: translateY(24px);
@@ -221,15 +209,4 @@ function startTypewriter() {
     }
 }
 
-@keyframes type-cursor-blink {
-    0%,
-    49% {
-        opacity: 1;
-    }
-
-    50%,
-    100% {
-        opacity: 0;
-    }
-}
 </style>
