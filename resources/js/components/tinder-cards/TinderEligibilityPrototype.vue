@@ -238,4 +238,177 @@ onBeforeUnmount(() => {
             </FlashCards>
         </div>
     </section>
+
+    <section
+        v-else-if="layoutMode === 'tablet'"
+        class="font-cooper flex w-full items-center px-3 py-2"
+        :class="props.contained ? 'min-h-0 w-full bg-transparent pb-0' : 'min-h-[100svh] w-screen bg-rose-50 pb-12'"
+    >
+        <div class="relative mx-auto w-full max-w-[600px]" :class="props.contained ? '' : '-mt-8'">
+            <div class="mb-[20px] flex items-center justify-center gap-2 px-6">
+                <span
+                    v-for="(isCompleted, index) in progressSegments"
+                    :key="index"
+                    class="h-2 flex-1 rounded-full transition-colors duration-200"
+                    :class="isCompleted ? 'bg-[#6d002e]' : 'bg-[#f4b5ca]'"
+                ></span>
+            </div>
+
+            <FlashCards
+                :items="items"
+                :swipe-direction="['left', 'right']"
+                :swipe-threshold="140"
+                :stack="3"
+                :stack-offset="6"
+                :stack-scale="0.018"
+                @swipe-left="(item) => handleSwipe(item, 'left')"
+                @swipe-right="(item) => handleSwipe(item, 'right')"
+                @restore="handleRestore"
+            >
+                <template #default="{ item, activeItemKey }">
+                    <TinderCard
+                        :item="item"
+                        :active="item.id === activeItemKey"
+                        :current="getCardPosition(item)"
+                        :total="totalCards"
+                        layout="compact"
+                        @intro-start="storedSwipeRight?.()"
+                    />
+                </template>
+
+                <template #left="{ delta }">
+                    <div
+                        class="pointer-events-none absolute inset-0 z-10 flex items-center justify-center rounded-[2rem] bg-white/25"
+                        :style="{ opacity: Math.min(Math.abs(delta), 0.92) }"
+                    >
+                        <div class="-rotate-12 inline-flex items-center rounded-2xl border-4 border-[#ef4444] bg-white px-3 py-1.5 text-xl font-bold leading-none uppercase text-[#ef4444] shadow-lg">
+                            <span>C'est faux</span>
+                        </div>
+                    </div>
+                </template>
+
+                <template #right="{ delta }">
+                    <div
+                        class="pointer-events-none absolute inset-0 z-10 flex items-center justify-center rounded-[2rem] bg-white/25"
+                        :style="{ opacity: Math.min(Math.abs(delta), 0.92) }"
+                    >
+                        <div class="inline-flex rotate-12 items-center rounded-2xl border-4 border-[#22c55e] bg-white px-3 py-1.5 text-xl font-bold leading-none uppercase text-[#22c55e] shadow-lg">
+                            <span>Je valide</span>
+                        </div>
+                    </div>
+                </template>
+
+                <template #empty>
+                    <div />
+                </template>
+
+                <template
+                    #actions="{
+                        restore,
+                        swipeLeft,
+                        swipeRight,
+                        isEnd,
+                        canRestore,
+                    }"
+                >
+                    <div :ref="() => storedSwipeRight = swipeRight">
+                        <TinderActions
+                            v-if="!introCardActive"
+                            :left="swipeLeft"
+                            :right="swipeRight"
+                            :restore="restore"
+                            :is-end="isEnd"
+                            :can-restore="canRestore && answeredCount > 0"
+                        />
+                    </div>
+                </template>
+            </FlashCards>
+        </div>
+    </section>
+
+    <section
+        v-else
+        class="font-cooper flex w-full flex-col px-4 pt-3"
+        :class="props.contained ? 'min-h-0 w-full bg-transparent' : 'min-h-[100svh] w-screen bg-rose-50 pb-6'"
+    >
+        <div class="mb-[22px] flex items-center justify-center gap-1.5 px-2">
+            <span
+                v-for="(isCompleted, index) in progressSegments"
+                :key="index"
+                class="h-1.5 flex-1 rounded-full transition-colors duration-200"
+                :class="isCompleted ? 'bg-[#6d002e]' : 'bg-[#f4b5ca]'"
+            ></span>
+        </div>
+
+        <FlashCards
+            :items="items"
+            :swipe-direction="['left', 'right']"
+            :swipe-threshold="100"
+            :stack="3"
+            :stack-offset="5"
+            :stack-scale="0.015"
+            @swipe-left="(item) => handleSwipe(item, 'left')"
+            @swipe-right="(item) => handleSwipe(item, 'right')"
+            @restore="handleRestore"
+        >
+            <template #default="{ item, activeItemKey }">
+                <TinderCard
+                    :item="item"
+                    :active="item.id === activeItemKey"
+                    :current="getCardPosition(item)"
+                    :total="totalCards"
+                    layout="mobile"
+                    @intro-start="storedSwipeRight?.()"
+                />
+            </template>
+
+            <template #left="{ delta }">
+                <div
+                    class="pointer-events-none absolute inset-0 z-10 flex items-center justify-center rounded-[2rem] bg-white/25"
+                    :style="{ opacity: Math.min(Math.abs(delta), 0.92) }"
+                >
+                    <div class="-rotate-12 inline-flex items-center rounded-2xl border-4 border-[#ef4444] bg-white px-3 py-1.5 text-lg font-bold leading-none uppercase text-[#ef4444] shadow-lg">
+                        <span>C'est faux</span>
+                    </div>
+                </div>
+            </template>
+
+            <template #right="{ delta }">
+                <div
+                    class="pointer-events-none absolute inset-0 z-10 flex items-center justify-center rounded-[2rem] bg-white/25"
+                    :style="{ opacity: Math.min(Math.abs(delta), 0.92) }"
+                >
+                    <div class="inline-flex rotate-12 items-center rounded-2xl border-4 border-[#22c55e] bg-white px-3 py-1.5 text-lg font-bold leading-none uppercase text-[#22c55e] shadow-lg">
+                        <span>Je valide</span>
+                    </div>
+                </div>
+            </template>
+
+            <template #empty>
+                <div />
+            </template>
+
+            <template
+                #actions="{
+                    restore,
+                    swipeLeft,
+                    swipeRight,
+                    isEnd,
+                    canRestore,
+                }"
+            >
+                <div :ref="() => storedSwipeRight = swipeRight">
+                    <TinderActions
+                        v-if="!introCardActive"
+                        :left="swipeLeft"
+                        :right="swipeRight"
+                        :restore="restore"
+                        :is-end="isEnd"
+                        :can-restore="canRestore && answeredCount > 0"
+                        pill
+                    />
+                </div>
+            </template>
+        </FlashCards>
+    </section>
 </template>
