@@ -5,6 +5,7 @@ defineProps<{
     restore: () => void;
     isEnd: boolean;
     canRestore: boolean;
+    pill?: boolean;
 }>();
 </script>
 
@@ -24,7 +25,8 @@ defineProps<{
 
         <div class="grid w-full max-w-[520px] grid-cols-2 gap-3 sm:max-w-[560px] sm:gap-4">
             <button
-                class="group inline-flex min-h-[50px] items-center justify-center gap-2 rounded-[0.95rem] border border-[#f6a0bb] bg-[#f68eaf] px-3 py-3 text-left text-[#5f0f35] shadow-[0_14px_28px_rgba(246,142,175,0.24)] transition-transform hover:-translate-y-0.5 disabled:opacity-35 sm:min-h-[56px] sm:px-5"
+                :class="pill ? 'rounded-full' : 'rounded-[0.95rem]'"
+            class="group inline-flex min-h-[50px] items-center justify-center gap-2 border border-[#f6a0bb] bg-[#f68eaf] px-3 py-3 text-left text-[#5f0f35] shadow-[0_14px_28px_rgba(246,142,175,0.24)] transition-transform hover:-translate-y-0.5 disabled:opacity-35 sm:min-h-[56px] sm:px-5"
                 type="button"
                 :disabled="isEnd"
                 aria-label="Refuser la carte"
@@ -35,7 +37,8 @@ defineProps<{
             </button>
 
             <button
-                class="group inline-flex min-h-[50px] items-center justify-center gap-2 rounded-[0.95rem] border border-[#6d002e] bg-[#6d002e] px-3 py-3 text-left text-white shadow-[0_14px_28px_rgba(109,0,46,0.24)] transition-transform hover:-translate-y-0.5 disabled:opacity-35 sm:min-h-[56px] sm:px-5"
+                :class="pill ? 'rounded-full' : 'rounded-[0.95rem]'"
+            class="group inline-flex min-h-[50px] items-center justify-center gap-2 border border-[#6d002e] bg-[#6d002e] px-3 py-3 text-left text-white shadow-[0_14px_28px_rgba(109,0,46,0.24)] transition-transform hover:-translate-y-0.5 disabled:opacity-35 sm:min-h-[56px] sm:px-5"
                 type="button"
                 :disabled="isEnd"
                 aria-label="Valider la carte"
