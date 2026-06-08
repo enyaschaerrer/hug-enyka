@@ -282,10 +282,16 @@ a {
 .input:focus,
 .input:focus-within,
 .select:focus,
-.textarea:focus {
-    outline: none;
-    outline-offset: 0;
-    box-shadow: none;
+.select:focus-within,
+.select:focus-visible,
+.textarea:focus,
+.textarea:focus-visible {
+    outline: none !important;
+    outline-offset: 0 !important;
+    box-shadow: none !important;
+    --tw-ring-shadow: 0 0 #0000 !important;
+    --tw-ring-color: transparent !important;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .banner-copy-fade {
