@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, watchEffect } from 'vue';
 import { useAdminRouter } from './composables/useAdminRouter';
 import { useCoBrandedCollecte } from './composables/useCoBrandedCollecte';
 import CollectionsPage from './pages/admin/CollectionsPage.vue';
@@ -15,6 +15,14 @@ import AccountsPage from './pages/admin/AccountsPage.vue';
 
 const { currentPath } = useAdminRouter();
 const { company } = useCoBrandedCollecte();
+const adminTitles = {
+    '/admin': 'Dashboard - Administration CTS',
+    '/admin/campagnes': 'Campagnes - Administration CTS',
+    '/admin/companies/create': 'Créer une campagne - Administration CTS',
+    '/admin/registrations': 'Inscriptions - Administration CTS',
+    '/admin/trophee': 'Trophée - Administration CTS',
+    '/admin/comptes': 'Comptes - Administration CTS',
+} as const;
 
 const pages = {
     '/admin': DashboardPage,
@@ -44,6 +52,25 @@ const cookieAccentColor = computed(() => {
     }
 
     return '#355755';
+});
+
+watchEffect(() => {
+    if (/^\/collecte\/[^/]+\/[^/]+\/questionnaire$/.test(currentPath.value)) {
+        document.title = `${company.name || 'Cœur d’Honneur'} - Questionnaire d’éligibilité`;
+        return;
+    }
+
+    if (/^\/collecte\/[^/]+\/[^/]+$/.test(currentPath.value)) {
+        document.title = `${company.name || 'Cœur d’Honneur'} - Collecte de sang`;
+        return;
+    }
+
+    if (/^\/admin\/companies\/\d+\/edit$/.test(currentPath.value)) {
+        document.title = 'Modifier une campagne - Administration CTS';
+        return;
+    }
+
+    document.title = adminTitles[currentPath.value as keyof typeof adminTitles] ?? document.title;
 });
 </script>
 
