@@ -116,7 +116,7 @@ const primaryTextStyle = {
 
         <!-- CTA mascots — texte + bouton en haut, mascottes en dessous -->
         <div class="mt-12 flex flex-col items-center gap-6">
-            <p class="text-heading-t2 text-catskillwhite-900">Vous êtes intéressé·es ?</p>
+            <p class="text-heading-t2 text-catskillwhite-900">Vous êtes intéressé·e·s ?</p>
             <button
                 type="button"
                 class="rounded-2xl bg-razzmatazz-800 px-10 py-4 text-heading-t3 text-white transition hover:bg-razzmatazz-900"

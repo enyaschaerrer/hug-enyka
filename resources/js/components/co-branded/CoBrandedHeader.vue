@@ -83,7 +83,7 @@ async function logout() {
                     aria-label="Déconnexion"
                     @click="logout"
                 >
-                    <span class="material-symbols-outlined" style="font-size: 18px;" aria-hidden="true">logout</span>
+                    <span class="material-symbols-outlined" style="font-size: 26px;" aria-hidden="true">logout</span>
                 </button>
             </div>
         </div>
