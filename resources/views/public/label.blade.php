@@ -1,6 +1,6 @@
 @extends('layouts.public')
 
-@section('title', 'Label CDH')
+@section('title', config('page_titles.public.label'))
 @section('banner', '/img/banners/banni_re_label.webp')
 @section('banner_content')
     <h1 class="text-[1rem] font-semibold leading-none text-white lg:text-[2.5rem] lg:leading-[1.1]">

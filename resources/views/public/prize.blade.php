@@ -1,7 +1,6 @@
 @extends('layouts.public')
 
-@section('body-bg', 'bg-martinique-900')
-@section('title', 'Prix du Cœur — Candidature')
+@section('title', config('page_titles.public.prix'))
 @section('banner', '/img/banners/banni_re_formulaire_participation.webp')
 @section('banner_content')
     <h1 class="text-[1rem] font-semibold leading-none text-white lg:text-[2.5rem] lg:leading-[1.1]">
