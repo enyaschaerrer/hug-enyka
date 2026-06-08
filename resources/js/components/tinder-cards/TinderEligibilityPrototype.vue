@@ -13,7 +13,7 @@ const props = withDefaults(defineProps<{
 
 const emit = defineEmits<{
     ineligible: [];
-    match: [];
+    match: [modules: string[]];
 }>();
 
 type SwipeDirection = 'left' | 'right';
@@ -21,6 +21,7 @@ type TriageStatus = 'clear' | 'warning' | 'blocker';
 
 type Card = Record<string, unknown> & {
     id: number;
+    module?: string;
     theme: string;
     title: string;
     question: string;
@@ -125,7 +126,13 @@ function handleSwipe(item: Card, direction: SwipeDirection) {
 
     const allAnswered = answers.value.length === totalCards.value;
     if (allAnswered) {
-        emit('match');
+        // Modules de messagerie « enregistrés » : cartes swipées vers un avertissement (oui),
+        // dans l'ordre des cartes du scénario.
+        const registeredModules = tinderScenario.cards
+            .filter((card) => typeof card.module === 'string'
+                && answers.value.some((answer) => answer.cardId === card.id && answer.status === 'warning'))
+            .map((card) => card.module as string);
+        emit('match', registeredModules);
     }
 }
 

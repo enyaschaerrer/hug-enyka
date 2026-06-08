@@ -19,6 +19,7 @@ const exitModalOpen = ref(false);
 const showNonEligible = ref(false);
 const showSms = ref(false);
 const showConfetti = ref(false);
+const smsModules = ref<string[]>([]);
 const nonEligibleBgStyle = computed(() => showNonEligible.value ? { backgroundImage: 'url(/img/cobranded-background/bg-cobranded.webp)' } : {});
 
 const CONFETTI_COLORS = ['#6d002e', '#b81e62', '#f4b5ca', '#355755', '#8ab4b0', '#ffffff'];
@@ -32,7 +33,8 @@ const confettiPieces = Array.from({ length: 55 }, (_, i) => ({
     round: i % 3 === 0,
 }));
 
-function onMatch() {
+function onMatch(modules: string[]) {
+    smsModules.value = modules;
     showConfetti.value = true;
     showSms.value = true;
     window.setTimeout(() => {
@@ -274,7 +276,7 @@ onBeforeUnmount(() => {
                     class="flex flex-col flex-1 min-h-0 overflow-hidden bg-cover bg-center bg-no-repeat"
                     style="background-image: url('/img/cobranded-background/bg-cobranded.webp');"
                 >
-                    <SmsConversationPrototype />
+                    <SmsConversationPrototype :modules="smsModules" />
                 </div>
             </Transition>
 
