@@ -138,14 +138,14 @@ function rankLabel(rank: number, type: ApiTrophyType): string {
 function rankButtonClass(rank: number, isSelected: boolean): string {
     const styles = {
         1: isSelected
-            ? 'border-[#d7ccb0] bg-[#d7ccb0] text-white'
-            : 'border-[#d7ccb0] bg-[#f4efe3] text-[#8b7a52] hover:bg-[#e7dcc2]',
+            ? 'border-[var(--color-podium-gold)] bg-[var(--color-podium-gold)] text-white'
+            : 'border-[var(--color-podium-gold)] bg-[var(--color-podium-gold-soft)] text-[var(--color-podium-gold-text)] hover:bg-[var(--color-podium-gold-soft-hover)]',
         2: isSelected
-            ? 'border-[#c48772] bg-[#c48772] text-white'
-            : 'border-[#c48772] bg-[#f4e2db] text-[#9e5f4d] hover:bg-[#ebd2c8]',
+            ? 'border-[var(--color-podium-silver)] bg-[var(--color-podium-silver)] text-white'
+            : 'border-[var(--color-podium-silver)] bg-[var(--color-podium-silver-soft)] text-[var(--color-podium-silver-text)] hover:bg-[var(--color-podium-silver-soft-hover)]',
         3: isSelected
-            ? 'border-[#56627e] bg-[#56627e] text-white'
-            : 'border-[#56627e] bg-[#e4e8f0] text-[#44506b] hover:bg-[#d6dce8]',
+            ? 'border-[var(--color-podium-bronze)] bg-[var(--color-podium-bronze)] text-white'
+            : 'border-[var(--color-podium-bronze)] bg-[var(--color-podium-bronze-soft)] text-[var(--color-podium-bronze-text)] hover:bg-[var(--color-podium-bronze-soft-hover)]',
     } as const;
 
     return styles[rank as keyof typeof styles] ?? styles[3];
@@ -153,24 +153,28 @@ function rankButtonClass(rank: number, isSelected: boolean): string {
 
 function rankCardClass(rank: number): string {
     const styles = {
-        1: 'border-[#d7ccb0] bg-[#fbf8f0]',
-        2: 'border-[#c48772] bg-[#fbf1ec]',
-        3: 'border-[#56627e] bg-[#f2f4f8]',
+        1: 'border-[var(--color-podium-gold)] bg-[var(--color-podium-gold-surface)]',
+        2: 'border-[var(--color-podium-silver)] bg-[var(--color-podium-silver-surface)]',
+        3: 'border-[var(--color-podium-bronze)] bg-[var(--color-podium-bronze-surface)]',
     } as const;
 
     return styles[rank as keyof typeof styles] ?? styles[3];
 }
 
 function rankDividerColor(rank: number): string {
-    const colors = { 1: '#d7ccb0', 2: '#c48772', 3: '#56627e' } as const;
+    const colors = {
+        1: 'var(--color-podium-gold)',
+        2: 'var(--color-podium-silver)',
+        3: 'var(--color-podium-bronze)',
+    } as const;
     return colors[rank as keyof typeof colors] ?? colors[3];
 }
 
 function rankAccentClass(rank: number): string {
     const styles = {
-        1: 'text-[#8b7a52]',
-        2: 'text-[#9e5f4d]',
-        3: 'text-[#44506b]',
+        1: 'text-[var(--color-podium-gold-text)]',
+        2: 'text-[var(--color-podium-silver-text)]',
+        3: 'text-[var(--color-podium-bronze-text)]',
     } as const;
 
     return styles[rank as keyof typeof styles] ?? styles[3];

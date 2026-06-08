@@ -164,6 +164,25 @@
     --color-merino-900: #5e4230;
     --color-merino-950: #322118;
 
+    /* Couleurs podium pour les classements 1, 2 et 3 de l'admin trophées. */
+    --color-podium-gold: #E6C17B;
+    --color-podium-gold-soft: #F8EEDB;
+    --color-podium-gold-soft-hover: #F1DFB7;
+    --color-podium-gold-surface: #FCF8F0;
+    --color-podium-gold-text: #8F6A2E;
+
+    --color-podium-silver: #C0C0C8;
+    --color-podium-silver-soft: #F1F1F4;
+    --color-podium-silver-soft-hover: #E2E2E8;
+    --color-podium-silver-surface: #F7F7F9;
+    --color-podium-silver-text: #6D6D78;
+
+    --color-podium-bronze: #B0865D;
+    --color-podium-bronze-soft: #F4ECE5;
+    --color-podium-bronze-soft-hover: #E7D5C4;
+    --color-podium-bronze-surface: #FAF5F1;
+    --color-podium-bronze-text: #7B5937;
+
 
     /* ----- Palettes — HUG ----- */
 
