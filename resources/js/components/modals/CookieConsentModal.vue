@@ -147,7 +147,7 @@ onBeforeUnmount(() => {
                         </p>
                     </div>
 
-                    <div class="modal-action mt-6 grid gap-3 sm:grid-cols-2">
+                    <div class="modal-action mt-6 flex gap-3">
                         <button
                             class="btn h-[48px] rounded-2xl border-base-300 bg-white font-cooper text-[0.95rem] text-base-content"
                             type="button"
@@ -206,7 +206,7 @@ onBeforeUnmount(() => {
                         </section>
                     </div>
 
-                    <div class="modal-action mt-6 grid gap-3 sm:grid-cols-2">
+                    <div class="modal-action mt-6 flex gap-3">
                         <button
                             v-if="!hasDecision"
                             class="btn h-[48px] rounded-2xl border-base-300 bg-white font-cooper text-[0.95rem] text-base-content"

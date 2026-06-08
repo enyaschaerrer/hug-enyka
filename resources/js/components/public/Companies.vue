@@ -23,7 +23,7 @@ const props = withDefaults(
 );
 
 const search = ref('');
-const pageSize = 8;
+const pageSize = 12;
 const visibleCount = ref(pageSize);
 
 const isFilterOpen = ref(false);
@@ -35,7 +35,7 @@ const availableYears = computed(() => {
     for (const c of props.initialCompanies) {
         if (c.adhesionYear !== null) years.add(c.adhesionYear);
     }
-    return [...years].sort();
+    return [...years].sort((a, b) => b - a);
 });
 
 const filtered = computed(() =>
@@ -154,7 +154,7 @@ function resetFilters() {
                         </ul>
 
                         <template v-if="props.showTrophies">
-                            <div class="mt-5 border-b border-martinique-200 pb-2 text-body text-martinique-800">Nombre de trophées gagnés</div>
+                            <div class="mt-5 border-b border-martinique-200 pb-2 text-body text-martinique-800">Nombre de prix gagnés</div>
 
                             <div class="mt-3 inline-flex items-center gap-2 rounded-md border border-martinique-300 bg-white px-3 py-1">
                                 <span class="text-body text-martinique-800">{{ minTrophies }}</span>
@@ -220,10 +220,10 @@ function resetFilters() {
                 </div>
 
                 <div
-                    v-if="hasMore"
-                    class="pointer-events-none absolute bottom-0 left-0 right-0 h-12 backdrop-blur-md bg-martinique-600/30"
-                    style="backdrop-filter: blur(8px); -webkit-mask-image: linear-gradient(to top, white 20%, transparent 100%); mask-image: linear-gradient(to top, white 20%, transparent 100%);"
-                />
+                v-if="hasMore"
+                class="pointer-events-none absolute bottom-0 left-0 right-0 h-60"
+                style="backdrop-filter: blur(6px); -webkit-mask-image: linear-gradient(to top, white 20%, transparent 100%); mask-image: linear-gradient(to top, white 20%, transparent 100%);"
+            />
             </div>
 
             <div v-if="visible.length === 0" class="mt-10 text-center text-body text-martinique-950">

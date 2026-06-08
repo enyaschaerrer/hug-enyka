@@ -6,7 +6,7 @@
     <h1 class="text-[1rem] font-semibold leading-none text-white lg:text-[2.5rem] lg:leading-[1.1]">
         Le label : Cœur d'Honneur
     </h1>
-    <p class="mt-2 max-w-xl text-[0.5rem] leading-[1.12] font-semibold text-white hidden lg:block lg:mt-4 lg:max-w-none lg:text-[1.13rem] lg:leading-snug lg:whitespace-nowrap">
+    <p class="hidden lg:block lg:mt-4 lg:max-w-none lg:text-[1.13rem] lg:leading-snug lg:whitespace-nowrap">
         Une distinction pour les entreprises qui s'engagent durablement dans le don du sang.
     </p>
 @endsection
@@ -18,11 +18,11 @@
 
         <div class="mx-auto max-w-6xl">
             <h1 class="flex flex-wrap items-center gap-3 text-[1.5rem] font-semibold text-left text-martinique-950 lg:text-display">
-                <img src="/img/label.svg" alt="" class="h-12 w-auto hidden lg:block" />
-                <span>Le label Cœur d’Honneur</span>
+                <img src="/img/label.svg" alt="" class="h-8 w-auto lg:h-12" />
+                <span>Label CDH</span>
             </h1>
 
-            <img src="/img/label.svg" alt="" class="mt-10 mx-auto h-32 w-auto lg:hidden" />
+            {{-- <img src="/img/label.svg" alt="" class="mt-10 mx-auto h-32 w-auto lg:hidden" /> --}}
 
             <div class="relative mt-14 min-h-[280px]">
                 <div class="pointer-events-none absolute bottom-0 left-0 right-0 hidden justify-center items-end gap-195 lg:flex">
