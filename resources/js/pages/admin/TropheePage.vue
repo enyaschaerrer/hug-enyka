@@ -75,6 +75,7 @@ const loading = ref(true);
 const loadError = ref<string | null>(null);
 const actionError = ref<string | null>(null);
 const submittingKey = ref<string | null>(null);
+const competitorSearch = ref('');
 
 const currentEditionYear = computed(() => overview.value?.editionYear ?? new Date().getFullYear());
 const currentTabType = computed<ApiTrophyType>(() => tabToApiType[activeTab.value]);
@@ -87,6 +88,25 @@ const currentTabData = computed<TrophyTabPayload | null>(() => {
 });
 
 const isCompetitorListDisabled = computed(() => currentTabData.value?.is_complete ?? false);
+const filteredCandidates = computed(() => {
+    const candidates = currentTabData.value?.candidates ?? [];
+    const query = competitorSearch.value.trim().toLowerCase();
+
+    if (!query) {
+        return candidates;
+    }
+
+    return candidates.filter((company) => {
+        return [
+            company.name,
+            company.address,
+            company.npa,
+            company.localite,
+        ]
+            .filter(Boolean)
+            .some((value) => value?.toLowerCase().includes(query));
+    });
+});
 
 function companyBadgeLabel(name: string): string {
     const sanitized = name.replace(/[^a-zA-Z0-9]/g, '');
@@ -506,9 +526,28 @@ onMounted(fetchOverview);
                 </div>
 
                 <div v-else>
-                    <h3 class="mb-3 text-xl font-semibold text-[#5a002a]">
-                        Liste des concurrents
-                    </h3>
+                    <div class="mb-3 flex items-center justify-between gap-4">
+                        <h3 class="text-xl font-semibold text-[#5a002a]">
+                            Liste des concurrents
+                        </h3>
+                        <label class="input input-bordered flex w-full max-w-sm items-center gap-3 bg-white">
+                            <span
+                                class="material-symbols-outlined"
+                                :class="isCompetitorListDisabled ? 'text-base-content/25' : 'text-base-content/45'"
+                                aria-hidden="true"
+                            >
+                                search
+                            </span>
+                            <input
+                                v-model="competitorSearch"
+                                type="text"
+                                class="w-full font-cooper"
+                                :class="isCompetitorListDisabled ? 'cursor-not-allowed text-base-content/35' : ''"
+                                placeholder="Rechercher une entreprise"
+                                :disabled="isCompetitorListDisabled"
+                            />
+                        </label>
+                    </div>
 
                     <div
                         class="border border-base-300 bg-white transition-opacity"
@@ -525,7 +564,7 @@ onMounted(fetchOverview);
                         </div>
 
                         <div
-                            v-for="company in currentTabData.candidates"
+                            v-for="company in filteredCandidates"
                             :key="company.id"
                             class="flex items-center border-b border-base-200 px-5 py-3 last:border-b-0"
                         >
@@ -589,6 +628,10 @@ onMounted(fetchOverview);
                                     <span>{{ submittingKey === `${currentTabType}-${company.id}-1` ? '...' : 'Attribuer le prix' }}</span>
                                 </button>
                             </div>
+                        </div>
+
+                        <div v-if="filteredCandidates.length === 0" class="px-5 py-4 text-sm text-base-content/50">
+                            Aucune entreprise ne correspond à cette recherche.
                         </div>
                     </div>
                 </div>
