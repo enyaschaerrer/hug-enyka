@@ -278,6 +278,16 @@ a {
     cursor: pointer;
 }
 
+/* Admin / DaisyUI form fields: remove the default double focus outline/ring. */
+.input:focus,
+.input:focus-within,
+.select:focus,
+.textarea:focus {
+    outline: none;
+    outline-offset: 0;
+    box-shadow: none;
+}
+
 .banner-copy-fade {
     animation: banner-copy-fade-in 520ms ease-out both;
 }
