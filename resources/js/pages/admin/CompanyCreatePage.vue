@@ -136,6 +136,15 @@ function selectPendingForm(pending: PendingForm) {
 function clearPendingSelection() {
     selectedFormId.value = null;
     pendingSearch.value = '';
+    pendingOpen.value = false;
+    form.name = '';
+    form.email = '';
+    form.telephone = '';
+    form.address = '';
+    form.npa = '';
+    form.localite = '';
+    form.trophy = false;
+    slugTouched.value = false;
 }
 
 async function fetchPendingForms() {
