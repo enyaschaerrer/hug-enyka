@@ -479,41 +479,39 @@ onMounted(fetchOverview);
                         <div
                             v-for="edition in currentTabData.history"
                             :key="edition.year"
-                            class="py-1"
+                            class="mb-3 flex flex-wrap items-stretch gap-3 last:mb-0"
                         >
-                            <p class="mb-3 text-sm font-semibold text-base-content/65">
-                                {{ historySummary(edition, currentTabType) }}
-                            </p>
-                            <div class="grid gap-3 md:grid-cols-3">
+                            <div class="inline-flex min-w-[88px] items-center justify-center rounded-box border border-[#5a002a]/15 bg-[#f8e7ee] px-4 py-2 text-sm font-semibold text-[#5a002a]">
+                                {{ edition.year }}
+                            </div>
+                            <div class="flex min-w-0 flex-1 flex-wrap gap-3">
                                 <div
                                     v-for="winner in edition.winners"
                                     :key="`${edition.year}-${winner.rank}-${winner.id}`"
-                                    class="rounded-box border border-base-content/20 bg-base-200/60 px-4 py-3"
+                                    class="flex min-w-[220px] flex-1 items-center gap-3 rounded-box border border-base-content/20 bg-base-200/60 px-4 py-3"
                                 >
-                                    <div class="flex items-center gap-3">
-                                        <img
-                                            v-if="winner.logo"
-                                            :src="winner.logo"
-                                            :alt="winner.name"
-                                            class="h-10 w-auto max-w-[5rem] object-contain"
-                                        />
-                                        <div
-                                            v-else
-                                            class="flex h-10 w-10 items-center justify-center rounded-full text-sm font-semibold"
-                                            :style="{
-                                                backgroundColor: winner.primaryColor || '#E5E7EB',
-                                                color: readableTextColor(winner.primaryColor || '#E5E7EB'),
-                                            }"
-                                        >
-                                            <span>{{ companyBadgeLabel(winner.name) }}</span>
-                                        </div>
-                                        <div class="w-px -my-3 mx-3 self-stretch bg-base-300"></div>
-                                        <div>
-                                            <p class="text-xs font-semibold uppercase tracking-wider text-base-content/45">
-                                                {{ rankLabel(winner.rank, currentTabType) }}
-                                            </p>
-                                            <p class="font-semibold text-base-content -mb-[5px]">{{ winner.name }}</p>
-                                        </div>
+                                    <img
+                                        v-if="winner.logo"
+                                        :src="winner.logo"
+                                        :alt="winner.name"
+                                        class="h-10 w-auto max-w-[5rem] object-contain"
+                                    />
+                                    <div
+                                        v-else
+                                        class="flex h-10 w-10 items-center justify-center rounded-full text-sm font-semibold"
+                                        :style="{
+                                            backgroundColor: winner.primaryColor || '#E5E7EB',
+                                            color: readableTextColor(winner.primaryColor || '#E5E7EB'),
+                                        }"
+                                    >
+                                        <span>{{ companyBadgeLabel(winner.name) }}</span>
+                                    </div>
+                                    <div class="w-px -my-3 mx-1 self-stretch bg-base-300"></div>
+                                    <div>
+                                        <p class="text-xs font-semibold uppercase tracking-wider text-base-content/45">
+                                            {{ rankLabel(winner.rank, currentTabType) }}
+                                        </p>
+                                        <p class="font-semibold text-base-content -mb-[5px]">{{ winner.name }}</p>
                                     </div>
                                 </div>
                             </div>
