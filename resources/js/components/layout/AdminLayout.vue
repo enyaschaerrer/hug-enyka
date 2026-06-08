@@ -48,18 +48,8 @@ async function logout() {
     <div data-theme="light" class="font-cooper flex h-screen overflow-hidden bg-[#FAF8F2] text-[#2F2F36]">
         <!-- Sidebar -->
         <aside class="flex h-screen w-72 shrink-0 flex-col border-r border-[#EFE8DD] bg-white">
-            <div class="flex min-h-24 items-center justify-between px-8">
+            <div class="flex min-h-24 items-center px-8">
                 <p class="text-lg font-semibold text-[#5A002A]">Administration CTS</p>
-                <a
-                    href="/"
-                    title="Retour au site"
-                    class="inline-flex h-9 w-9 items-center justify-center rounded-full text-[#5A002A]/65 transition-colors hover:bg-[#FAF8F2] hover:text-[#5A002A]"
-                >
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                        <path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5z" />
-                        <polyline points="9 21 9 12 15 12 15 21" />
-                    </svg>
-                </a>
             </div>
 
             <nav class="-mt-px flex-1">
@@ -116,13 +106,25 @@ async function logout() {
                 <div>
                     <p class="truncate text-sm font-semibold text-[#2F2F36]">{{ user?.name }}</p>
                     <p class="mt-1 truncate text-xs text-[#2F2F36]/45">{{ user?.email }}</p>
-                    <button
-                        type="button"
-                        class="mt-4 inline-flex w-full items-center justify-center border border-[#5A002A]/15 px-3 py-2 text-sm font-medium text-[#5A002A]/75 transition-colors hover:bg-[#F8E8EF] hover:text-[#5A002A]"
-                        @click="logout"
-                    >
-                        <span>Déconnexion</span>
-                    </button>
+                    <div class="mt-4 flex items-center gap-[6px]">
+                        <a
+                            href="/"
+                            title="Retour au site"
+                            class="inline-flex h-11 w-11 shrink-0 items-center justify-center border border-[#5A002A]/15 p-0 leading-none text-[#5A002A]/75 transition-colors hover:bg-[#F8E8EF] hover:text-[#5A002A]"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5z" />
+                                <polyline points="9 21 9 12 15 12 15 21" />
+                            </svg>
+                        </a>
+                        <button
+                            type="button"
+                            class="inline-flex h-11 flex-1 items-center justify-center border border-[#5A002A]/15 px-3 text-sm font-medium text-[#5A002A]/75 transition-colors hover:bg-[#F8E8EF] hover:text-[#5A002A]"
+                            @click="logout"
+                        >
+                            <span>Déconnexion</span>
+                        </button>
+                    </div>
                 </div>
             </div>
         </aside>
