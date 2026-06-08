@@ -60,7 +60,7 @@ async function handleSubmit() {
 </script>
 
 <template>
-    <section class="mx-auto max-w-2xl px-6 py-8 lg:py-16">
+    <section class="mx-auto max-w-2xl px-6 py-8 lg:py-10">
         <div v-if="!submitted">
 
             <form @submit.prevent="handleSubmit">
@@ -82,7 +82,7 @@ async function handleSubmit() {
                     <!-- Email -->
                     <div>
                         <label class="mb-1.5 block text-body text-martinique-800">
-                            Adresse e-mail professionnelle *
+                            Adresse e-mail *
                         </label>
                         <input
                             v-model="form.email"

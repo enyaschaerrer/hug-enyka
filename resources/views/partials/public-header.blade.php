@@ -49,19 +49,6 @@
             @endforeach
         </ul>
 
-        {{-- Lien admin (desktop uniquement) --}}
-        <a
-            href="/admin"
-            @class([
-                'hidden items-center justify-center rounded-full transition lg:inline-flex',
-                'bg-white text-martinique-700' => str_starts_with($currentPath, '/admin'),
-                'text-white hover:text-white/80' => ! str_starts_with($currentPath, '/admin'),
-            ])
-            aria-label="Espace admin"
-        >
-            <span class="material-symbols-outlined" style="font-size: 34px;" aria-hidden="true">account_circle</span>
-        </a>
-
         {{-- Bouton hamburger (mobile uniquement, aligné à droite) --}}
         <button
             type="button"
@@ -90,19 +77,6 @@
                     </a>
                 </li>
             @endforeach
-            <li class="mt-2 border-t border-white/20 pt-2">
-                <a
-                    href="/admin"
-                    @class([
-                        'flex items-center gap-3 rounded-lg px-4 py-2 text-body font-medium transition',
-                        'bg-white text-martinique-700' => str_starts_with($currentPath, '/admin'),
-                        'hover:bg-white/10' => ! str_starts_with($currentPath, '/admin'),
-                    ])
-                >
-                    <span class="material-symbols-outlined" style="font-size: 24px;" aria-hidden="true">account_circle</span>
-                    Espace admin
-                </a>
-            </li>
         </ul>
     </div>
 </nav>
