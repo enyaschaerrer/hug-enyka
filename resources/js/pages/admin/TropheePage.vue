@@ -151,6 +151,10 @@ function rankButtonClass(rank: number, isSelected: boolean): string {
     return styles[rank as keyof typeof styles] ?? styles[3];
 }
 
+function singleAwardButtonClass(): string {
+    return 'border-[var(--color-podium-gold)] bg-[var(--color-podium-gold-soft)] text-[var(--color-podium-gold-text)] hover:bg-[var(--color-podium-gold-soft-hover)]';
+}
+
 function rankCardClass(rank: number): string {
     const styles = {
         1: 'border-[var(--color-podium-gold)] bg-[var(--color-podium-gold-surface)]',
@@ -577,7 +581,8 @@ onMounted(fetchOverview);
                                 <button
                                     v-else
                                     type="button"
-                                    class="cursor-pointer rounded border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-medium text-emerald-700 transition hover:bg-emerald-100 font-cooper"
+                                    class="cursor-pointer rounded border px-3 py-1 text-xs font-medium transition font-cooper"
+                                    :class="singleAwardButtonClass()"
                                     :disabled="submittingKey === `${currentTabType}-${company.id}-1`"
                                     @click="assignPrize(company.id, 1)"
                                 >
