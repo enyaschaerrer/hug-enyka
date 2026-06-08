@@ -62,7 +62,7 @@ watch(() => props.active, async () => {
                         'shrink-0 rounded-full px-4 py-2 text-body font-medium lg:text-heading-t3 transition lg:px-6 lg:py-3',
                         active === tab.key
                             ? 'text-white'
-                            : 'text-catskillwhite-900',
+                            : 'text-black',
                     ]"
                     :style="active === tab.key
                         ? { backgroundColor: primaryColor ?? 'var(--color-razzmatazz-700)' }

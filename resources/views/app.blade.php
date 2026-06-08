@@ -8,6 +8,10 @@
 
         <title>{{ config('app.name', 'Laravel') }}</title>
 
+        @if($coBrandedCollecte ?? false)
+            <link rel="preload" as="image" href="/img/cobranded-background/bg-cobranded-clear.webp">
+        @endif
+
         @fonts
         @vite(['resources/css/app.css', 'resources/js/app.ts'])
         @php
@@ -23,7 +27,7 @@
             };
         </script>
     </head>
-    <body>
+    <body style="background-color: #ffffff;">
         <div id="app"></div>
     </body>
 </html>
