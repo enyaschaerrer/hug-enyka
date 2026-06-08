@@ -511,12 +511,10 @@ onUnmounted(() => {
                 <button v-if="mode === 'start'" type="button" class="btn btn-ghost btn-sm font-cooper" @click.stop="selectToday">
                     <span>Aujourd&#39;hui</span>
                 </button>
-                <p v-if="mode === 'end' && referenceDateTime" class="text-xs text-base-content/45">
-                    Début : {{ new Intl.DateTimeFormat('fr-CH', { day: '2-digit', month: '2-digit', year: 'numeric' }).format(parseLocalDateTime(referenceDateTime) ?? new Date()) }}
-                </p>
                 <select
                     v-model.number="selectedHour"
-                    class="select select-bordered select-sm font-cooper font-medium text-sm mx-auto"
+                    class="select select-bordered select-sm font-cooper font-medium text-sm"
+                    :class="mode === 'end' ? 'flex-1' : 'mx-auto'"
                     @click.stop
                     @mousedown.stop
                 >

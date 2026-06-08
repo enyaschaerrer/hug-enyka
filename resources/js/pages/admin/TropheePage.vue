@@ -75,6 +75,7 @@ const loading = ref(true);
 const loadError = ref<string | null>(null);
 const actionError = ref<string | null>(null);
 const submittingKey = ref<string | null>(null);
+const competitorSearch = ref('');
 
 const currentEditionYear = computed(() => overview.value?.editionYear ?? new Date().getFullYear());
 const currentTabType = computed<ApiTrophyType>(() => tabToApiType[activeTab.value]);
@@ -87,6 +88,25 @@ const currentTabData = computed<TrophyTabPayload | null>(() => {
 });
 
 const isCompetitorListDisabled = computed(() => currentTabData.value?.is_complete ?? false);
+const filteredCandidates = computed(() => {
+    const candidates = currentTabData.value?.candidates ?? [];
+    const query = competitorSearch.value.trim().toLowerCase();
+
+    if (!query) {
+        return candidates;
+    }
+
+    return candidates.filter((company) => {
+        return [
+            company.name,
+            company.address,
+            company.npa,
+            company.localite,
+        ]
+            .filter(Boolean)
+            .some((value) => value?.toLowerCase().includes(query));
+    });
+});
 
 function companyBadgeLabel(name: string): string {
     const sanitized = name.replace(/[^a-zA-Z0-9]/g, '');
@@ -138,39 +158,47 @@ function rankLabel(rank: number, type: ApiTrophyType): string {
 function rankButtonClass(rank: number, isSelected: boolean): string {
     const styles = {
         1: isSelected
-            ? 'border-[#d7ccb0] bg-[#d7ccb0] text-white'
-            : 'border-[#d7ccb0] bg-[#f4efe3] text-[#8b7a52] hover:bg-[#e7dcc2]',
+            ? 'border-[var(--color-podium-gold)] bg-[var(--color-podium-gold)] text-white'
+            : 'border-[var(--color-podium-gold)] bg-[var(--color-podium-gold-soft)] text-[var(--color-podium-gold-text)] hover:bg-[var(--color-podium-gold-soft-hover)]',
         2: isSelected
-            ? 'border-[#c48772] bg-[#c48772] text-white'
-            : 'border-[#c48772] bg-[#f4e2db] text-[#9e5f4d] hover:bg-[#ebd2c8]',
+            ? 'border-[var(--color-podium-silver)] bg-[var(--color-podium-silver)] text-white'
+            : 'border-[var(--color-podium-silver)] bg-[var(--color-podium-silver-soft)] text-[var(--color-podium-silver-text)] hover:bg-[var(--color-podium-silver-soft-hover)]',
         3: isSelected
-            ? 'border-[#56627e] bg-[#56627e] text-white'
-            : 'border-[#56627e] bg-[#e4e8f0] text-[#44506b] hover:bg-[#d6dce8]',
+            ? 'border-[var(--color-podium-bronze)] bg-[var(--color-podium-bronze)] text-white'
+            : 'border-[var(--color-podium-bronze)] bg-[var(--color-podium-bronze-soft)] text-[var(--color-podium-bronze-text)] hover:bg-[var(--color-podium-bronze-soft-hover)]',
     } as const;
 
     return styles[rank as keyof typeof styles] ?? styles[3];
 }
 
+function singleAwardButtonClass(): string {
+    return 'border-[var(--color-podium-gold)] bg-[var(--color-podium-gold-soft)] text-[var(--color-podium-gold-text)] hover:bg-[var(--color-podium-gold-soft-hover)]';
+}
+
 function rankCardClass(rank: number): string {
     const styles = {
-        1: 'border-[#d7ccb0] bg-[#fbf8f0]',
-        2: 'border-[#c48772] bg-[#fbf1ec]',
-        3: 'border-[#56627e] bg-[#f2f4f8]',
+        1: 'border-[var(--color-podium-gold)] bg-[var(--color-podium-gold-surface)]',
+        2: 'border-[var(--color-podium-silver)] bg-[var(--color-podium-silver-surface)]',
+        3: 'border-[var(--color-podium-bronze)] bg-[var(--color-podium-bronze-surface)]',
     } as const;
 
     return styles[rank as keyof typeof styles] ?? styles[3];
 }
 
 function rankDividerColor(rank: number): string {
-    const colors = { 1: '#d7ccb0', 2: '#c48772', 3: '#56627e' } as const;
+    const colors = {
+        1: 'var(--color-podium-gold)',
+        2: 'var(--color-podium-silver)',
+        3: 'var(--color-podium-bronze)',
+    } as const;
     return colors[rank as keyof typeof colors] ?? colors[3];
 }
 
 function rankAccentClass(rank: number): string {
     const styles = {
-        1: 'text-[#8b7a52]',
-        2: 'text-[#9e5f4d]',
-        3: 'text-[#44506b]',
+        1: 'text-[var(--color-podium-gold-text)]',
+        2: 'text-[var(--color-podium-silver-text)]',
+        3: 'text-[var(--color-podium-bronze-text)]',
     } as const;
 
     return styles[rank as keyof typeof styles] ?? styles[3];
@@ -440,7 +468,7 @@ onMounted(fetchOverview);
                     </div>
                 </div>
 
-                <details v-if="currentTabData.history.length > 0" class="collapse mb-3">
+                <details v-if="currentTabData.history.length > 0" class="collapse mb-10">
                     <summary class="collapse-title flex cursor-pointer list-none items-center gap-1.5 px-0 pt-1 pb-3 text-sm font-medium text-base-content/60 [&::-webkit-details-marker]:hidden">
                         <span>Historique des gagnants ({{ currentTabData.history.length }})</span>
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 transition-transform duration-200 [[open]_&]:rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -451,18 +479,20 @@ onMounted(fetchOverview);
                         <div
                             v-for="edition in currentTabData.history"
                             :key="edition.year"
-                            class="py-1"
+                            class="mb-3 flex flex-wrap items-stretch gap-3 last:mb-0"
                         >
-                            <p class="mb-3 text-sm font-semibold text-base-content/65">
-                                {{ historySummary(edition, currentTabType) }}
-                            </p>
-                            <div class="grid gap-3 md:grid-cols-3">
+                            <div class="inline-flex min-w-[88px] items-center justify-center rounded-box border border-[#5a002a]/15 bg-[#f8e7ee] px-4 py-2 text-sm font-semibold text-[#5a002a]">
+                                {{ edition.year }}
+                            </div>
+                            <div class="flex min-w-0 flex-1 flex-wrap gap-3">
                                 <div
                                     v-for="winner in edition.winners"
                                     :key="`${edition.year}-${winner.rank}-${winner.id}`"
-                                    class="rounded-box border border-base-content/20 bg-base-200/60 px-4 py-3"
+                                    class="flex min-w-[220px] flex-1 items-center gap-3 rounded-box border border-[#5a002a]/15 bg-white px-4 py-3"
                                 >
-                                    <div class="flex items-center gap-3">
+                                    <div
+                                        class="flex h-10 w-20 shrink-0 items-center justify-center"
+                                    >
                                         <img
                                             v-if="winner.logo"
                                             :src="winner.logo"
@@ -479,13 +509,13 @@ onMounted(fetchOverview);
                                         >
                                             <span>{{ companyBadgeLabel(winner.name) }}</span>
                                         </div>
-                                        <div class="w-px -my-3 mx-3 self-stretch bg-base-300"></div>
-                                        <div>
-                                            <p class="text-xs font-semibold uppercase tracking-wider text-base-content/45">
-                                                {{ rankLabel(winner.rank, currentTabType) }}
-                                            </p>
-                                            <p class="font-semibold text-base-content -mb-[5px]">{{ winner.name }}</p>
-                                        </div>
+                                    </div>
+                                    <div class="w-px -my-3 mx-1 self-stretch bg-[#5a002a]/10"></div>
+                                    <div>
+                                        <p class="text-xs font-semibold uppercase tracking-wider text-base-content/45">
+                                            {{ rankLabel(winner.rank, currentTabType) }}
+                                        </p>
+                                        <p class="font-semibold text-base-content -mb-[5px]">{{ winner.name }}</p>
                                     </div>
                                 </div>
                             </div>
@@ -498,9 +528,28 @@ onMounted(fetchOverview);
                 </div>
 
                 <div v-else>
-                    <h3 class="mb-3 text-xl font-semibold text-[#5a002a]">
-                        Liste des concurrents
-                    </h3>
+                    <div class="mb-3 flex items-center justify-between gap-4">
+                        <h3 class="text-xl font-semibold text-[#5a002a]">
+                            Liste des concurrents
+                        </h3>
+                        <label class="input input-bordered flex w-full max-w-sm items-center gap-3 bg-white">
+                            <span
+                                class="material-symbols-outlined"
+                                :class="isCompetitorListDisabled ? 'text-base-content/25' : 'text-base-content/45'"
+                                aria-hidden="true"
+                            >
+                                search
+                            </span>
+                            <input
+                                v-model="competitorSearch"
+                                type="text"
+                                class="w-full font-cooper"
+                                :class="isCompetitorListDisabled ? 'cursor-not-allowed text-base-content/35' : ''"
+                                placeholder="Rechercher une entreprise"
+                                :disabled="isCompetitorListDisabled"
+                            />
+                        </label>
+                    </div>
 
                     <div
                         class="border border-base-300 bg-white transition-opacity"
@@ -517,7 +566,7 @@ onMounted(fetchOverview);
                         </div>
 
                         <div
-                            v-for="company in currentTabData.candidates"
+                            v-for="company in filteredCandidates"
                             :key="company.id"
                             class="flex items-center border-b border-base-200 px-5 py-3 last:border-b-0"
                         >
@@ -573,13 +622,18 @@ onMounted(fetchOverview);
                                 <button
                                     v-else
                                     type="button"
-                                    class="cursor-pointer rounded border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-medium text-emerald-700 transition hover:bg-emerald-100 font-cooper"
+                                    class="cursor-pointer rounded border px-3 py-1 text-xs font-medium transition font-cooper"
+                                    :class="singleAwardButtonClass()"
                                     :disabled="submittingKey === `${currentTabType}-${company.id}-1`"
                                     @click="assignPrize(company.id, 1)"
                                 >
                                     <span>{{ submittingKey === `${currentTabType}-${company.id}-1` ? '...' : 'Attribuer le prix' }}</span>
                                 </button>
                             </div>
+                        </div>
+
+                        <div v-if="filteredCandidates.length === 0" class="px-5 py-4 text-sm text-base-content/50">
+                            Aucune entreprise ne correspond à cette recherche.
                         </div>
                     </div>
                 </div>

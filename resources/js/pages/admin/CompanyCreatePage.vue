@@ -45,6 +45,17 @@ type CompanyFormPayload = {
 };
 
 const ONEDOC_PREFIX = 'https://www.onedoc.ch/';
+const SOURCE_OPTIONS = [
+    'Réseaux sociaux',
+    'Recherche web / site HUG',
+    "Recommandation d'une entreprise",
+    "Recommandation d'un collaborateur",
+    'Contact direct des HUG / CTS',
+    'Événement / présentation',
+    'Bouche à oreille',
+    'Autre',
+] as const;
+type SourceOption = typeof SOURCE_OPTIONS[number];
 
 const appState = (window as unknown as { __APP__?: AppState }).__APP__;
 const csrfToken = appState?.csrfToken ?? '';
@@ -61,6 +72,33 @@ function slugify(input: string): string {
 
 function isHexColor(value: string): boolean {
     return /^#[0-9a-fA-F]{6}$/.test(value.trim());
+}
+
+function hydrateSourceFields(
+    value: string | null | undefined,
+    selectedSourceOption: { value: SourceOption | '' },
+    sourceOther: { value: string },
+    target: { source: string },
+): void {
+    const normalized = value?.trim() ?? '';
+
+    if (!normalized) {
+        selectedSourceOption.value = '';
+        sourceOther.value = '';
+        target.source = '';
+        return;
+    }
+
+    if (SOURCE_OPTIONS.includes(normalized as SourceOption) && normalized !== 'Autre') {
+        selectedSourceOption.value = normalized as SourceOption;
+        sourceOther.value = '';
+        target.source = normalized;
+        return;
+    }
+
+    selectedSourceOption.value = 'Autre';
+    sourceOther.value = normalized === 'Autre' ? '' : normalized;
+    target.source = sourceOther.value;
 }
 
 const form = reactive({
@@ -86,6 +124,8 @@ const form = reactive({
     collection_linkOneDoc: ONEDOC_PREFIX,
 });
 const sourceColor = ref('#c81e1e');
+const selectedSourceOption = ref<SourceOption | ''>('');
+const sourceOther = ref('');
 const logoFile = ref<File | null>(null);
 const createLogoInputId = 'company-logo-upload-create';
 
@@ -136,6 +176,15 @@ function selectPendingForm(pending: PendingForm) {
 function clearPendingSelection() {
     selectedFormId.value = null;
     pendingSearch.value = '';
+    pendingOpen.value = false;
+    form.name = '';
+    form.email = '';
+    form.telephone = '';
+    form.address = '';
+    form.npa = '';
+    form.localite = '';
+    form.trophy = false;
+    slugTouched.value = false;
 }
 
 async function fetchPendingForms() {
@@ -180,6 +229,12 @@ watch(sourceColor, (baseColor) => {
     form.secondaryColor = palette.secondaryColor;
     form.thirdColor = palette.thirdColor;
 }, { immediate: true });
+
+watch(selectedSourceOption, (option) => {
+    if (option !== 'Autre') {
+        sourceOther.value = '';
+    }
+});
 
 function onSlugInput(event: Event) {
     slugTouched.value = true;
@@ -244,6 +299,9 @@ async function submit() {
     submitting.value = true;
     errors.value = {};
 
+    form.source = selectedSourceOption.value === 'Autre'
+        ? sourceOther.value.trim()
+        : selectedSourceOption.value;
     const payload = { ...form } as CompanyFormPayload;
 
     try {
@@ -502,11 +560,18 @@ async function submit() {
 
                     <label class="flex w-full flex-col gap-2">
                         <span class="label-text">Où avez-vous entendu parler de nous ?</span>
+                        <select v-model="selectedSourceOption" class="select select-bordered w-full">
+                            <option value="">Sélectionner une option</option>
+                            <option v-for="option in SOURCE_OPTIONS" :key="option" :value="option">
+                                {{ option }}
+                            </option>
+                        </select>
                         <input
-                            v-model="form.source"
+                            v-if="selectedSourceOption === 'Autre'"
+                            v-model="sourceOther"
                             type="text"
                             class="input input-bordered w-full"
-                            placeholder="Recommandation, salon, ..."
+                            placeholder="Précisez la source"
                         />
                         <p v-if="firstError('source')" class="mt-1 text-sm text-error">{{ firstError('source') }}</p>
                     </label>
