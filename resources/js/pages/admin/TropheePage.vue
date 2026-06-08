@@ -468,7 +468,7 @@ onMounted(fetchOverview);
                     </div>
                 </div>
 
-                <details v-if="currentTabData.history.length > 0" class="collapse mb-3">
+                <details v-if="currentTabData.history.length > 0" class="collapse mb-10">
                     <summary class="collapse-title flex cursor-pointer list-none items-center gap-1.5 px-0 pt-1 pb-3 text-sm font-medium text-base-content/60 [&::-webkit-details-marker]:hidden">
                         <span>Historique des gagnants ({{ currentTabData.history.length }})</span>
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 transition-transform duration-200 [[open]_&]:rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -488,25 +488,29 @@ onMounted(fetchOverview);
                                 <div
                                     v-for="winner in edition.winners"
                                     :key="`${edition.year}-${winner.rank}-${winner.id}`"
-                                    class="flex min-w-[220px] flex-1 items-center gap-3 rounded-box border border-base-content/20 bg-base-200/60 px-4 py-3"
+                                    class="flex min-w-[220px] flex-1 items-center gap-3 rounded-box border border-[#5a002a]/15 bg-white px-4 py-3"
                                 >
-                                    <img
-                                        v-if="winner.logo"
-                                        :src="winner.logo"
-                                        :alt="winner.name"
-                                        class="h-10 w-auto max-w-[5rem] object-contain"
-                                    />
                                     <div
-                                        v-else
-                                        class="flex h-10 w-10 items-center justify-center rounded-full text-sm font-semibold"
-                                        :style="{
-                                            backgroundColor: winner.primaryColor || '#E5E7EB',
-                                            color: readableTextColor(winner.primaryColor || '#E5E7EB'),
-                                        }"
+                                        class="flex h-10 w-20 shrink-0 items-center justify-center"
                                     >
-                                        <span>{{ companyBadgeLabel(winner.name) }}</span>
+                                        <img
+                                            v-if="winner.logo"
+                                            :src="winner.logo"
+                                            :alt="winner.name"
+                                            class="h-10 w-auto max-w-[5rem] object-contain"
+                                        />
+                                        <div
+                                            v-else
+                                            class="flex h-10 w-10 items-center justify-center rounded-full text-sm font-semibold"
+                                            :style="{
+                                                backgroundColor: winner.primaryColor || '#E5E7EB',
+                                                color: readableTextColor(winner.primaryColor || '#E5E7EB'),
+                                            }"
+                                        >
+                                            <span>{{ companyBadgeLabel(winner.name) }}</span>
+                                        </div>
                                     </div>
-                                    <div class="w-px -my-3 mx-1 self-stretch bg-base-300"></div>
+                                    <div class="w-px -my-3 mx-1 self-stretch bg-[#5a002a]/10"></div>
                                     <div>
                                         <p class="text-xs font-semibold uppercase tracking-wider text-base-content/45">
                                             {{ rankLabel(winner.rank, currentTabType) }}
