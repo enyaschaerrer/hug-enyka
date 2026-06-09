@@ -164,6 +164,19 @@
     --color-merino-900: #5e4230;
     --color-merino-950: #322118;
 
+    /* Pampas */
+    --color-merino-50: #F9F7F3;
+    --color-merino-100: #F5F1EB;
+    --color-merino-200: #E2D6C6;
+    --color-merino-300: #CFBAA2;
+    --color-merino-400: #BB9A7C;
+    --color-merino-500: #AD8362;
+    --color-merino-600: #A07156;
+    --color-merino-700: #855C49;
+    --color-merino-800: #6D4C3F;
+    --color-merino-900: #593F35;
+    --color-merino-950: #2F201B;
+
     /* Couleurs pour le podium avec variantes */
     --color-podium-gold: #E6C17B;
     --color-podium-gold-soft: #F8EEDB;
