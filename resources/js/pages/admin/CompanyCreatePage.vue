@@ -549,7 +549,7 @@ async function submit() {
                             :for="createLogoInputId"
                             class="group input input-bordered flex w-full cursor-pointer items-center gap-3 px-3 text-base-content/60"
                         >
-                            <span class="material-symbols-outlined shrink-0 text-base-content/70 transition-colors duration-200 ease-in-out group-hover:text-primary" aria-hidden="true">upload</span>
+                            <span class="material-symbols-outlined shrink-0 text-base-content/70 transition-colors duration-200 ease-in-out group-hover:text-[var(--color-razzmatazz-700)]" aria-hidden="true">upload</span>
                             <span class="min-w-0 truncate text-sm">
                                 {{ logoFile?.name || 'Aucun fichier sélectionné' }}
                             </span>
@@ -560,12 +560,17 @@ async function submit() {
 
                     <label class="flex w-full flex-col gap-2">
                         <span class="label-text">Où avez-vous entendu parler de nous ?</span>
-                        <select v-model="selectedSourceOption" class="select select-bordered w-full">
-                            <option value="">Sélectionner une option</option>
-                            <option v-for="option in SOURCE_OPTIONS" :key="option" :value="option">
-                                {{ option }}
-                            </option>
-                        </select>
+                        <div class="relative">
+                            <select v-model="selectedSourceOption" class="select select-bordered w-full bg-none pr-10">
+                                <option value="">Sélectionner une option</option>
+                                <option v-for="option in SOURCE_OPTIONS" :key="option" :value="option">
+                                    {{ option }}
+                                </option>
+                            </select>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--color-pampas-950)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="m6 9 6 6 6-6" />
+                            </svg>
+                        </div>
                         <input
                             v-if="selectedSourceOption === 'Autre'"
                             v-model="sourceOther"
@@ -638,7 +643,7 @@ async function submit() {
                         <input
                             v-model="anonymousParticipation"
                             type="checkbox"
-                            class="checkbox checked:[--input-color:var(--color-primary)] checked:[color:var(--color-primary-content)]"
+                            class="checkbox checked:[--input-color:var(--color-razzmatazz-700)] checked:[color:white]"
                         />
                         <span class="text-sm font-medium text-base-content/75">Participation anonyme</span>
                     </label>
@@ -650,7 +655,7 @@ async function submit() {
                         <input
                             v-model="form.trophy"
                             type="checkbox"
-                            class="checkbox checked:[--input-color:var(--color-primary)] checked:[color:var(--color-primary-content)]"
+                            class="checkbox checked:[--input-color:var(--color-razzmatazz-700)] checked:[color:white]"
                             :disabled="!form.is_public"
                         />
                         <span class="text-sm font-medium text-base-content/75">Participation au Prix du Cœur</span>
@@ -708,7 +713,11 @@ async function submit() {
                     <a href="/admin/campagnes" @click="back" class="btn btn-ghost font-cooper">
                         <span>Annuler</span>
                     </a>
-                    <button type="submit" class="btn btn-primary font-cooper" :disabled="submitting">
+                    <button
+                        type="submit"
+                        class="btn border-[var(--color-razzmatazz-700)] bg-[var(--color-razzmatazz-700)] font-cooper text-white hover:border-[var(--color-razzmatazz-800)] hover:bg-[var(--color-razzmatazz-800)]"
+                        :disabled="submitting"
+                    >
                         <span>{{ submitting ? '...' : 'Créer la campagne' }}</span>
                     </button>
                 </div>

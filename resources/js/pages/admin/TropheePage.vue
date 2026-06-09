@@ -512,7 +512,7 @@ onMounted(fetchOverview);
                                     </div>
                                     <div class="w-px -my-3 mx-1 self-stretch bg-[var(--color-pampas-950)]/10"></div>
                                     <div>
-                                        <p class="text-xs font-semibold uppercase tracking-wider text-base-content/45">
+                                        <p class="text-xs font-medium uppercase tracking-wider text-base-content/45">
                                             {{ rankLabel(winner.rank, currentTabType) }}
                                         </p>
                                         <p class="font-semibold text-base-content -mb-[5px]">{{ winner.name }}</p>
@@ -532,10 +532,10 @@ onMounted(fetchOverview);
                         <h3 class="text-xl font-semibold text-[var(--color-pampas-950)]">
                             Liste des concurrents
                         </h3>
-                        <label class="input input-bordered flex w-full max-w-sm items-center gap-3 bg-white">
+                        <label class="input input-bordered group flex w-full max-w-sm items-center gap-3 bg-white">
                             <span
                                 class="material-symbols-outlined"
-                                :class="isCompetitorListDisabled ? 'text-base-content/25' : 'text-base-content/45'"
+                                :class="isCompetitorListDisabled ? 'text-base-content/25' : 'text-base-content/45 transition-colors group-focus-within:text-black'"
                                 aria-hidden="true"
                             >
                                 search
@@ -568,7 +568,7 @@ onMounted(fetchOverview);
                         <div
                             v-for="company in filteredCandidates"
                             :key="company.id"
-                            class="flex items-center border-b border-base-200 px-5 py-3 last:border-b-0"
+                            class="flex items-center border-b border-base-200 px-5 py-3 hover:bg-[color:color-mix(in_srgb,var(--color-razzmatazz-50)_25%,transparent)] last:border-b-0"
                         >
                             <div class="flex w-[16%] items-center gap-3 pr-4">
                                 <div

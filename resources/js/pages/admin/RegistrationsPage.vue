@@ -199,7 +199,7 @@ onUnmounted(() => {
                         @click="activeTab = 'treated'"
                     >
                         <span>Historique</span>
-                        <span class="ml-1.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-stone-100 text-xs text-stone-500">
+                        <span class="ml-1.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-martinique-50 text-xs text-martinique-700">
                             <span>{{ registrations.filter(r => r.treated).length }}</span>
                         </span>
                     </button>
@@ -224,7 +224,7 @@ onUnmounted(() => {
                     <div
                         v-for="reg in filteredRegistrations"
                         :key="reg.id"
-                        class="flex items-center border-b border-base-200 px-5 py-3 hover:bg-rose-50/40"
+                        class="flex items-center border-b border-base-200 px-5 py-3 hover:bg-[color:color-mix(in_srgb,var(--color-razzmatazz-50)_25%,transparent)]"
                         :class="[!reg.treated ? 'cursor-pointer' : '']"
                         @click="!reg.treated && openDetail(reg.id)"
                     >
@@ -253,7 +253,7 @@ onUnmounted(() => {
                                 <button
                                     class="cursor-pointer rounded border px-3 py-1 text-xs font-medium transition font-cooper"
                                     :class="reg.treated
-                                        ? 'border-amber-300 bg-amber-50 text-amber-700 hover:bg-amber-100'
+                                        ? 'border-martinique-300 bg-martinique-50 text-martinique-700 hover:bg-martinique-100'
                                         : 'border-emerald-200 bg-emerald-50 text-emerald-700 hover:bg-emerald-100'"
                                     @click="toggleTreated(reg)"
                                 >
@@ -261,7 +261,7 @@ onUnmounted(() => {
                                 </button>
                                 <button
                                     v-if="reg.treated"
-                                    class="cursor-pointer rounded border border-red-200 bg-red-50 px-3 py-1 text-xs font-medium text-red-600 transition hover:bg-red-100 font-cooper"
+                                    class="cursor-pointer rounded border border-red-300 bg-red-50 px-3 py-1 text-xs font-medium text-red-600 transition hover:bg-red-100 font-cooper"
                                     @click="deleteRegistration(reg)"
                                 >
                                     <span>Supprimer</span>

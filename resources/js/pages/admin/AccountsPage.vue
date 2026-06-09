@@ -311,15 +311,24 @@ onMounted(fetchAccounts);
 
                 <label class="flex flex-col gap-2">
                     <span class="label-text">Rôle</span>
-                    <select v-model="form.role" class="select select-bordered w-full">
-                        <option value="admin">Admin</option>
-                        <option value="superadmin">Superadmin</option>
-                    </select>
+                    <div class="relative">
+                        <select v-model="form.role" class="select select-bordered w-full bg-none pr-10">
+                            <option value="admin">Admin</option>
+                            <option value="superadmin">Superadmin</option>
+                        </select>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--color-pampas-950)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="m6 9 6 6 6-6" />
+                        </svg>
+                    </div>
                     <span v-if="firstError('role') && editingId === null" class="text-sm text-error">{{ firstError('role') }}</span>
                 </label>
 
                 <div class="flex items-end">
-                    <button type="submit" class="btn btn-primary w-full font-cooper" :disabled="submitting">
+                    <button
+                        type="submit"
+                        class="btn w-full border-[var(--color-razzmatazz-700)] bg-[var(--color-razzmatazz-700)] font-cooper text-white hover:border-[var(--color-razzmatazz-800)] hover:bg-[var(--color-razzmatazz-800)]"
+                        :disabled="submitting"
+                    >
                         <span>{{ submitting ? '...' : 'Créer' }}</span>
                     </button>
                 </div>
@@ -331,7 +340,7 @@ onMounted(fetchAccounts);
         <p v-else-if="accounts.length === 0" class="text-sm text-base-content/50">Aucun compte admin.</p>
 
             <section v-else class="rounded-box border border-base-300 bg-base-100">
-            <div class="grid grid-cols-[minmax(260px,1fr)_160px_130px_220px] border-b border-base-300 px-5 py-3 text-sm font-semibold text-base-content/50">
+            <div class="grid grid-cols-[minmax(260px,1fr)_160px_130px_220px] border-b border-base-300 bg-[var(--color-razzmatazz-100)] px-5 py-3 text-xs font-semibold uppercase tracking-wide text-[var(--color-pampas-950)]">
                 <span>Email</span>
                 <span>Rôle</span>
                 <span>Créé le</span>
@@ -341,7 +350,7 @@ onMounted(fetchAccounts);
             <div
                 v-for="account in accounts"
                 :key="account.id"
-                class="border-b border-base-200 px-5 py-4 last:border-b-0"
+                class="border-b border-base-200 px-5 py-4 hover:bg-[color:color-mix(in_srgb,var(--color-razzmatazz-50)_25%,transparent)] last:border-b-0"
             >
                 <form
                     v-if="editingId === account.id"
@@ -365,10 +374,15 @@ onMounted(fetchAccounts);
                         <span v-if="firstError('email')" class="mt-1 block text-sm text-error">{{ firstError('email') }}</span>
                     </div>
                     <div>
-                        <select v-model="editForm.role" class="select select-bordered w-full">
-                            <option value="admin">Admin</option>
-                            <option value="superadmin">Superadmin</option>
-                        </select>
+                        <div class="relative">
+                            <select v-model="editForm.role" class="select select-bordered w-full bg-none pr-10">
+                                <option value="admin">Admin</option>
+                                <option value="superadmin">Superadmin</option>
+                            </select>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--color-pampas-950)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="m6 9 6 6 6-6" />
+                            </svg>
+                        </div>
                         <span v-if="firstError('role')" class="mt-1 block text-sm text-error">{{ firstError('role') }}</span>
                     </div>
                     <div>
@@ -421,7 +435,11 @@ onMounted(fetchAccounts);
                         <button type="button" class="btn btn-ghost btn-sm font-cooper" @click="cancelEdit">
                             <span>Annuler</span>
                         </button>
-                        <button type="submit" class="btn btn-primary btn-sm font-cooper" :disabled="submitting">
+                        <button
+                            type="submit"
+                            class="btn btn-sm border-[var(--color-razzmatazz-700)] bg-[var(--color-razzmatazz-700)] font-cooper text-white hover:border-[var(--color-razzmatazz-800)] hover:bg-[var(--color-razzmatazz-800)]"
+                            :disabled="submitting"
+                        >
                             <span>Enregistrer</span>
                         </button>
                     </div>

@@ -335,7 +335,11 @@ onMounted(fetchCompanies);
 
         <div class="mb-4 flex items-center justify-between">
             <h1 class="text-2xl font-semibold">Campagnes</h1>
-            <a href="/admin/companies/create" class="btn btn-primary btn-sm font-cooper" @click="goToCreate">
+            <a
+                href="/admin/companies/create"
+                class="btn btn-sm border-[var(--color-razzmatazz-700)] bg-[var(--color-razzmatazz-700)] font-cooper text-white hover:border-[var(--color-razzmatazz-800)] hover:bg-[var(--color-razzmatazz-800)]"
+                @click="goToCreate"
+            >
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-[18px] w-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                     <path d="M5 12h14" />
                     <path d="M12 5v14" />
@@ -346,8 +350,8 @@ onMounted(fetchCompanies);
 
         <section class="mb-6 rounded-box border border-base-300 bg-white p-4">
             <div class="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
-                <label class="input input-bordered flex w-full max-w-xl items-center gap-3 bg-white">
-                    <span class="material-symbols-outlined text-base-content/45" aria-hidden="true">search</span>
+                <label class="input input-bordered group flex w-full max-w-xl items-center gap-3 bg-white">
+                    <span class="material-symbols-outlined text-base-content/45 transition-colors group-focus-within:text-black" aria-hidden="true">search</span>
                     <input
                         v-model="searchQuery"
                         type="text"
@@ -357,14 +361,18 @@ onMounted(fetchCompanies);
                 </label>
 
                 <label class="flex items-center gap-3 self-start lg:self-auto">
-                    <span class="text-sm font-medium text-base-content/55">Filtrer</span>
-                    <select v-model="companyFilter" class="select select-bordered bg-white font-cooper">
-                        <option value="active-first">Campagnes actives d'abord</option>
-                        <option value="active-only">Campagnes actives uniquement</option>
-                        <option value="incoming-only">Campagnes à venir uniquement</option>
-                        <option value="created-desc">Date de création · plus récentes</option>
-                        <option value="created-asc">Date de création · plus anciennes</option>
-                    </select>
+                    <div class="relative">
+                        <select v-model="companyFilter" class="select select-bordered bg-none bg-white pr-10 font-cooper">
+                            <option value="active-first">Campagnes actives d'abord</option>
+                            <option value="active-only">Campagnes actives uniquement</option>
+                            <option value="incoming-only">Campagnes à venir uniquement</option>
+                            <option value="created-desc">Date de création · plus récentes</option>
+                            <option value="created-asc">Date de création · plus anciennes</option>
+                        </select>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--color-pampas-950)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="m6 9 6 6 6-6" />
+                        </svg>
+                    </div>
                 </label>
             </div>
         </section>
@@ -599,8 +607,8 @@ onMounted(fetchCompanies);
                         type="button"
                         class="inline-flex h-10 min-w-10 items-center justify-center rounded-lg border-2 px-3 text-sm font-medium transition-colors"
                         :class="page === currentPage
-                            ? 'border-[#432ad5] bg-[#432ad5] text-white'
-                            : 'border-base-300 bg-white text-base-content hover:border-[#432ad5] hover:text-[#432ad5]'"
+                            ? 'border-[var(--color-razzmatazz-700)] bg-[var(--color-razzmatazz-700)] text-white'
+                            : 'border-base-300 bg-white text-base-content hover:border-[var(--color-razzmatazz-700)] hover:text-[var(--color-razzmatazz-700)]'"
                         @click="currentPage = page"
                     >
                         {{ page }}
