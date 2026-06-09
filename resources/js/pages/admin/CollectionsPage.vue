@@ -135,7 +135,7 @@ function companyActionPath(company: CompanyRow): string {
 }
 
 function companyActionLabel(company: CompanyRow): string {
-    return 'Nouvelle campagne';
+    return 'Nouvelle collecte';
 }
 
 function companyEditPath(company: CompanyRow): string {
@@ -337,10 +337,10 @@ onMounted(fetchCompanies);
             <h1 class="text-3xl font-semibold">Collectes co-brandées</h1>
             <a
                 href="/admin/companies/create"
-                class="btn btn-sm border-[var(--color-razzmatazz-700)] bg-[var(--color-razzmatazz-700)] font-cooper text-white hover:border-[var(--color-razzmatazz-800)] hover:bg-[var(--color-razzmatazz-800)]"
+                class="btn border-[var(--color-razzmatazz-700)] bg-[var(--color-razzmatazz-700)] font-cooper text-white hover:border-[var(--color-razzmatazz-800)] hover:bg-[var(--color-razzmatazz-800)]"
                 @click="goToCreate"
             >
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-[18px] w-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                     <path d="M5 12h14" />
                     <path d="M12 5v14" />
                 </svg>
@@ -404,8 +404,7 @@ onMounted(fetchCompanies);
                         <div>
                             <p class="font-semibold">{{ company.name }}</p>
                             <p class="mt-0.5 text-sm text-base-content/50">
-                                <span>{{ company.slug }}</span>
-                                · {{ company.email }}
+                                <span>{{ company.email }}</span>
                                 <span v-if="company.employee_count"> · {{ company.employee_count }} employés</span>
                             </p>
                         </div>
@@ -505,7 +504,7 @@ onMounted(fetchCompanies);
 
                     <div v-if="upcomingCollections(company).length > 0" class="mt-4">
                         <p class="mb-2 text-xs font-medium tracking-wider text-base-content/40 uppercase">
-                            Collecte à venir
+                            {{ upcomingCollections(company).length > 1 ? 'Collectes à venir' : 'Collecte à venir' }}
                         </p>
 
                         <div class="space-y-2.5">
