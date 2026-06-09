@@ -501,7 +501,7 @@ onMounted(fetchCompanies);
                     <div
                         v-for="col in activeCollections(company)"
                         :key="col.id"
-                        class="mt-1 rounded-lg border border-martinique-400 bg-martinique-100 px-4 py-3 text-sm"
+                        class="mt-1 rounded-lg border border-martinique-200 bg-martinique-100 px-4 py-3 text-sm"
                     >
                         <div class="flex items-center justify-between gap-3">
                             <div class="flex min-w-0 flex-1 items-center gap-4">
@@ -527,7 +527,7 @@ onMounted(fetchCompanies);
                                 <a
                                     v-if="company.trophy || !company.is_public"
                                     :href="companyParticipationPath(company)"
-                                    class="inline-flex items-center gap-1.5 rounded-full border border-martinique-400 bg-white px-3 py-1.5 text-xs font-medium text-[var(--color-pampas-950)] transition-colors hover:border-martinique-500 hover:bg-martinique-100/80"
+                                    class="inline-flex items-center gap-1.5 rounded-full border border-martinique-200 bg-white px-3 py-1.5 text-xs font-medium text-[var(--color-pampas-950)] transition-colors hover:border-martinique-300 hover:bg-martinique-100/80"
                                     @click.prevent="navigate(companyParticipationPath(company))"
                                 >
                                     <svg v-if="company.trophy" xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5"/></svg>
@@ -537,7 +537,7 @@ onMounted(fetchCompanies);
                                 <a
                                     :href="`/admin/companies/${company.id}/edit?collection=${col.id}`"
                                     title="Modifier la collecte"
-                                    class="inline-flex items-center gap-1.5 rounded-full border border-transparent bg-transparent px-3 py-1.5 text-xs font-medium text-martinique-950 transition-colors hover:border-martinique-400 hover:bg-white hover:text-martinique-950"
+                                    class="inline-flex items-center gap-1.5 rounded-full border border-transparent bg-transparent px-3 py-1.5 text-xs font-medium text-martinique-950 transition-colors hover:border-martinique-200 hover:bg-white hover:text-martinique-950"
                                     @click.prevent="navigate(`/admin/companies/${company.id}/edit?collection=${col.id}`)"
                                 >
                                     <span class="material-symbols-outlined" style="font-size: 18px;" aria-hidden="true">edit</span>
@@ -571,7 +571,7 @@ onMounted(fetchCompanies);
                             <div
                                 v-for="col in upcomingCollections(company)"
                                 :key="col.id"
-                                class="rounded-lg border border-pampas-300 bg-pampas-100 px-4 py-3 text-sm"
+                                class="rounded-lg border border-pampas-200 bg-pampas-100 px-4 py-3 text-sm"
                             >
                                 <div class="flex items-center justify-between gap-3">
                                     <div class="flex min-w-0 flex-1 items-center gap-4">
@@ -611,7 +611,7 @@ onMounted(fetchCompanies);
                                         <a
                                             v-if="col.is_public_link_enabled && (company.trophy || !company.is_public)"
                                             :href="companyParticipationPath(company)"
-                                            class="inline-flex items-center gap-1.5 rounded-full border border-pampas-300 bg-white px-3 py-1.5 text-xs font-medium text-[var(--color-pampas-950)] transition-colors hover:border-pampas-400 hover:bg-pampas-200/80"
+                                            class="inline-flex items-center gap-1.5 rounded-full border border-pampas-200 bg-white px-3 py-1.5 text-xs font-medium text-[var(--color-pampas-950)] transition-colors hover:border-pampas-300 hover:bg-pampas-200/80"
                                             @click.prevent="navigate(companyParticipationPath(company))"
                                         >
                                     <svg v-if="company.trophy" xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5"/></svg>
@@ -621,7 +621,7 @@ onMounted(fetchCompanies);
                                 <a
                                     :href="`/admin/companies/${company.id}/edit?collection=${col.id}`"
                                     title="Modifier la collecte"
-                                    class="inline-flex items-center gap-1.5 rounded-full border border-transparent bg-transparent px-3 py-1.5 text-xs font-medium text-pampas-950 transition-colors hover:border-pampas-300 hover:bg-white"
+                                    class="inline-flex items-center gap-1.5 rounded-full border border-transparent bg-transparent px-3 py-1.5 text-xs font-medium text-pampas-950 transition-colors hover:border-pampas-200 hover:bg-white"
                                     @click.prevent="navigate(`/admin/companies/${company.id}/edit?collection=${col.id}`)"
                                 >
                                     <span class="material-symbols-outlined" style="font-size: 18px;" aria-hidden="true">edit</span>

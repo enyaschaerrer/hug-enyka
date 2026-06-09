@@ -429,8 +429,8 @@ watch(loading, async (isLoading) => {
                     v-if="editedCollection"
                     class="mt-4 rounded-lg border px-4 py-3 text-sm"
                     :class="editedCollection.is_active
-                        ? 'border-martinique-400 bg-martinique-100'
-                        : 'border-pampas-300 bg-pampas-100'"
+                        ? 'border-martinique-200 bg-martinique-100'
+                        : 'border-pampas-200 bg-pampas-100'"
                 >
                     <p
                         class="mb-2 text-xs font-medium tracking-wider uppercase"
