@@ -302,7 +302,7 @@ onMounted(fetchOverview);
 
 <template>
     <AdminLayout>
-        <section class="min-h-full rounded-sm bg-[#FAF8F2] p-1 pr-4 text-[#1f1f22]">
+        <section class="min-h-full rounded-sm bg-[var(--color-pampas-50)] p-1 pr-4 text-[#1f1f22]">
             <div class="mb-6">
                 <h1 class="text-3xl font-semibold">Trophée - Édition {{ currentEditionYear }}</h1>
                 <p class="mt-1 text-lg text-base-content/60">

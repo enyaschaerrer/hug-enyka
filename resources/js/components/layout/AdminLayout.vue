@@ -17,7 +17,7 @@ function navLinkClasses(active: boolean): string {
         'flex min-h-16 items-center px-8 text-[1.35rem] font-medium transition-colors',
         active
             ? 'bg-[#F8E8EF] text-[#9B2F5C]'
-            : 'text-[#2F2F36] hover:bg-[#FAF8F2] hover:text-[#9B2F5C]',
+            : 'text-[#2F2F36] hover:bg-[var(--color-pampas-50)] hover:text-[#9B2F5C]',
     ].join(' ');
 }
 
@@ -45,7 +45,7 @@ async function logout() {
 </script>
 
 <template>
-    <div data-theme="light" class="font-cooper flex h-screen overflow-hidden bg-[#FAF8F2] text-[#2F2F36]">
+    <div data-theme="light" class="font-cooper flex h-screen overflow-hidden bg-[var(--color-pampas-50)] text-[#2F2F36]">
         <!-- Sidebar -->
         <aside class="flex h-screen w-72 shrink-0 flex-col border-r border-[#EFE8DD] bg-white">
             <div class="flex min-h-24 items-center px-8">
@@ -130,7 +130,7 @@ async function logout() {
         </aside>
 
         <!-- Content -->
-        <main class="min-w-0 flex-1 overflow-y-auto bg-[#FAF8F2] p-8">
+        <main class="min-w-0 flex-1 overflow-y-auto bg-[var(--color-pampas-50)] p-8">
             <slot />
         </main>
     </div>
