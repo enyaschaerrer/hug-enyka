@@ -408,7 +408,7 @@ async function submit() {
             <form @submit.prevent="submit" class="space-y-6 font-cooper">
                 <section class="grid gap-x-4 gap-y-6 md:grid-cols-2">
                     <label class="flex w-full flex-col gap-2">
-                        <span class="label-text">Nom <span style="color: #9B2F5C;">*</span></span>
+                        <span class="label-text">Nom <span style="color: var(--color-razzmatazz-700);">*</span></span>
                         <input
                             v-model="form.name"
                             type="text"
@@ -419,7 +419,7 @@ async function submit() {
                     </label>
 
                     <label class="flex w-full flex-col gap-2">
-                        <span class="label-text">Email <span style="color: #9B2F5C;">*</span></span>
+                        <span class="label-text">Email <span style="color: var(--color-razzmatazz-700);">*</span></span>
                         <input
                             v-model="form.email"
                             type="email"
@@ -430,7 +430,7 @@ async function submit() {
                     </label>
 
                     <label class="flex w-full flex-col gap-2">
-                        <span class="label-text">Slug URL <span style="color: #9B2F5C;">*</span></span>
+                        <span class="label-text">Slug URL <span style="color: var(--color-razzmatazz-700);">*</span></span>
                         <input
                             v-model="form.slug"
                             type="text"
@@ -470,7 +470,7 @@ async function submit() {
 
                 <section class="grid gap-x-4 gap-y-6 md:grid-cols-3">
                     <label class="flex w-full flex-col gap-2 md:col-span-2">
-                        <span class="label-text">Adresse <span style="color: #9B2F5C;">*</span></span>
+                        <span class="label-text">Adresse <span style="color: var(--color-razzmatazz-700);">*</span></span>
                         <input
                             v-model="form.address"
                             type="text"
@@ -482,7 +482,7 @@ async function submit() {
                     </label>
 
                     <label class="flex w-full flex-col gap-2">
-                        <span class="label-text">NPA <span style="color: #9B2F5C;">*</span></span>
+                        <span class="label-text">NPA <span style="color: var(--color-razzmatazz-700);">*</span></span>
                         <input
                             v-model="form.npa"
                             type="text"
@@ -497,7 +497,7 @@ async function submit() {
                     </label>
 
                     <label class="flex w-full flex-col gap-2 md:col-span-3">
-                        <span class="label-text">Localité <span style="color: #9B2F5C;">*</span></span>
+                        <span class="label-text">Localité <span style="color: var(--color-razzmatazz-700);">*</span></span>
                         <input
                             v-model="form.localite"
                             type="text"
@@ -511,7 +511,7 @@ async function submit() {
 
                 <section class="grid gap-x-4 gap-y-6 md:grid-cols-2">
                     <label class="flex w-full flex-col gap-2">
-                        <span class="label-text">Nombre d'employés <span style="color: #9B2F5C;">*</span></span>
+                        <span class="label-text">Nombre d'employés <span style="color: var(--color-razzmatazz-700);">*</span></span>
                         <input
                             v-model="form.employee_count"
                             type="number"
@@ -523,7 +523,7 @@ async function submit() {
                     </label>
 
                     <label class="flex w-full flex-col gap-2">
-                        <span class="label-text">Domaines email autorisés (séparés par ",") <span style="color: #9B2F5C;">*</span></span>
+                        <span class="label-text">Domaines email autorisés (séparés par ",") <span style="color: var(--color-razzmatazz-700);">*</span></span>
                         <input
                             v-model="form.allowed_email_domains"
                             type="text"
@@ -537,7 +537,7 @@ async function submit() {
 
                 <section class="space-y-6">
                     <div class="flex w-full flex-col gap-2">
-                        <span class="label-text">Logo de l'entreprise <span style="color: #9B2F5C;">*</span></span>
+                        <span class="label-text">Logo de l'entreprise <span style="color: var(--color-razzmatazz-700);">*</span></span>
                         <input
                             :id="createLogoInputId"
                             type="file"
@@ -579,7 +579,7 @@ async function submit() {
 
                 <section>
                     <label class="flex w-full flex-col gap-2">
-                        <span class="label-text">Couleur de l'entreprise <span style="color: #9B2F5C;">*</span></span>
+                        <span class="label-text">Couleur de l'entreprise <span style="color: var(--color-razzmatazz-700);">*</span></span>
                         <div class="flex w-full">
                             <span
                                 class="input input-bordered rounded-r-none border-r-0 group relative h-12 w-14 shrink-0 overflow-hidden p-0 transition-colors duration-200 ease-out"
@@ -665,7 +665,7 @@ async function submit() {
 
                     <div class="grid gap-x-4 gap-y-6 md:grid-cols-2">
                         <div class="flex w-full flex-col gap-2">
-                            <span class="label-text">Début <span style="color: #9B2F5C;">*</span></span>
+                            <span class="label-text">Début <span style="color: var(--color-razzmatazz-700);">*</span></span>
                             <AdminDateTimePicker
                                 v-model="form.collection_start"
                                 label="Choisir une date de début"
@@ -676,7 +676,7 @@ async function submit() {
                         </div>
 
                         <div class="flex w-full flex-col gap-2">
-                            <span class="label-text">Fin <span style="color: #9B2F5C;">*</span></span>
+                            <span class="label-text">Fin <span style="color: var(--color-razzmatazz-700);">*</span></span>
                             <AdminDateTimePicker
                                 v-model="form.collection_end"
                                 label="Choisir une date de fin"
@@ -690,7 +690,7 @@ async function submit() {
                         </div>
 
                         <label class="flex w-full flex-col gap-2 md:col-span-2">
-                            <span class="label-text">Lien OneDoc <span style="color: #9B2F5C;">*</span></span>
+                            <span class="label-text">Lien OneDoc <span style="color: var(--color-razzmatazz-700);">*</span></span>
                             <input
                                 v-model="form.collection_linkOneDoc"
                                 type="text"

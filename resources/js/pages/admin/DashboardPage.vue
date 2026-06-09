@@ -169,41 +169,6 @@ onUnmounted(() => {
                     </article>
                 </div>
 
-                <section class="mt-6 border border-base-300 bg-white p-6">
-                    <div class="mb-5 flex flex-wrap items-center gap-3">
-                        <h2 class="text-2xl font-semibold">Entonnoir de conversion</h2>
-                        <span class="rounded-full bg-emerald-50 px-3 py-1 text-sm font-medium text-emerald-700">
-                            <span>objectif : réduire le différentiel de 30%</span>
-                        </span>
-                    </div>
-
-                    <div class="space-y-5">
-                        <div v-for="(step, index) in kpis.funnel" :key="step.label">
-                            <div
-                                class="flex min-h-12 items-center justify-between rounded-lg px-5"
-                                :class="[
-                                    step.available ? ['bg-[#efb7cd]', index === 2 ? 'bg-[#d24c82] text-white' : 'text-[var(--color-pampas-950)]'] : 'bg-base-200 text-base-content/40',
-                                ]"
-                                :style="{ width: barWidth(step.rate) }"
-                            >
-                                <span class="text-lg font-medium">{{ step.label }}</span>
-                                <span class="flex items-baseline gap-3">
-                                    <strong class="text-2xl">{{ displayValue(step.value, 'number') }}</strong>
-                                    <span v-if="step.rate !== null" class="text-lg">{{ step.rate }}%</span>
-                                </span>
-                            </div>
-                            <p
-                                v-if="index < kpis.funnel.length - 1"
-                                class="mt-2 text-sm"
-                                :class="step.available ? 'text-red-500' : 'text-base-content/40'"
-                            >
-                                ▼ différentiel non disponible
-                            </p>
-                            <p v-if="step.note" class="mt-2 text-xs text-base-content/45">{{ step.note }}</p>
-                        </div>
-                    </div>
-                </section>
-
                 <section class="mt-6 pb-2">
                     <h2 class="text-sm font-semibold uppercase tracking-wide text-base-content/60">Engagement digital</h2>
                     <div class="mt-4 grid gap-4 md:grid-cols-2 xl:grid-cols-5">

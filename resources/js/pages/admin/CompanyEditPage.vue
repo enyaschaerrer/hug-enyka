@@ -473,19 +473,19 @@ watch(loading, async (isLoading) => {
                 <template v-if="!isCollectionMode">
                 <section class="grid gap-x-4 gap-y-6 md:grid-cols-2">
                     <label class="flex w-full flex-col gap-2">
-                        <span class="label-text">Nom <span style="color: #9B2F5C;">*</span></span>
+                        <span class="label-text">Nom <span style="color: var(--color-razzmatazz-700);">*</span></span>
                         <input v-model="form.name" type="text" class="input input-bordered w-full" required />
                         <p v-if="firstError('name')" class="mt-1 text-sm text-error">{{ firstError('name') }}</p>
                     </label>
 
                     <label class="flex w-full flex-col gap-2">
-                        <span class="label-text">Email <span style="color: #9B2F5C;">*</span></span>
+                        <span class="label-text">Email <span style="color: var(--color-razzmatazz-700);">*</span></span>
                         <input v-model="form.email" type="email" class="input input-bordered w-full" required />
                         <p v-if="firstError('email')" class="mt-1 text-sm text-error">{{ firstError('email') }}</p>
                     </label>
 
                     <label class="flex w-full flex-col gap-2">
-                        <span class="label-text">Slug URL <span style="color: #9B2F5C;">*</span></span>
+                        <span class="label-text">Slug URL <span style="color: var(--color-razzmatazz-700);">*</span></span>
                         <input
                             v-model="form.slug"
                             type="text"
@@ -516,19 +516,19 @@ watch(loading, async (isLoading) => {
 
                 <section class="grid gap-x-4 gap-y-6 md:grid-cols-3">
                     <label class="flex w-full flex-col gap-2 md:col-span-2">
-                        <span class="label-text">Adresse <span style="color: #9B2F5C;">*</span></span>
+                        <span class="label-text">Adresse <span style="color: var(--color-razzmatazz-700);">*</span></span>
                         <input v-model="form.address" type="text" class="input input-bordered w-full" maxlength="500" required />
                         <p v-if="firstError('address')" class="mt-1 text-sm text-error">{{ firstError('address') }}</p>
                     </label>
 
                     <label class="flex w-full flex-col gap-2">
-                        <span class="label-text">NPA <span style="color: #9B2F5C;">*</span></span>
+                        <span class="label-text">NPA <span style="color: var(--color-razzmatazz-700);">*</span></span>
                         <input v-model="form.npa" type="text" class="input input-bordered w-full" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" @input="onNpaInput" required />
                         <p v-if="firstError('npa')" class="mt-1 text-sm text-error">{{ firstError('npa') }}</p>
                     </label>
 
                     <label class="flex w-full flex-col gap-2 md:col-span-3">
-                        <span class="label-text">Localité <span style="color: #9B2F5C;">*</span></span>
+                        <span class="label-text">Localité <span style="color: var(--color-razzmatazz-700);">*</span></span>
                         <input v-model="form.localite" type="text" class="input input-bordered w-full" maxlength="100" required />
                         <p v-if="firstError('localite')" class="mt-1 text-sm text-error">{{ firstError('localite') }}</p>
                     </label>
@@ -536,13 +536,13 @@ watch(loading, async (isLoading) => {
 
                 <section class="grid gap-x-4 gap-y-6 md:grid-cols-2">
                     <label class="flex w-full flex-col gap-2">
-                        <span class="label-text">Nombre d'employés <span style="color: #9B2F5C;">*</span></span>
+                        <span class="label-text">Nombre d'employés <span style="color: var(--color-razzmatazz-700);">*</span></span>
                         <input v-model="form.employee_count" type="number" min="0" class="input input-bordered w-full" required />
                         <p v-if="firstError('employee_count')" class="mt-1 text-sm text-error">{{ firstError('employee_count') }}</p>
                     </label>
 
                     <label class="flex w-full flex-col gap-2">
-                        <span class="label-text">Domaines email autorisés (séparés par ",") <span style="color: #9B2F5C;">*</span></span>
+                        <span class="label-text">Domaines email autorisés (séparés par ",") <span style="color: var(--color-razzmatazz-700);">*</span></span>
                         <input v-model="form.allowed_email_domains" type="text" class="input input-bordered w-full" placeholder="rolex.com,rolex.ch" required />
                         <p v-if="firstError('allowed_email_domains')" class="mt-1 text-sm text-error">{{ firstError('allowed_email_domains') }}</p>
                     </label>
@@ -550,7 +550,7 @@ watch(loading, async (isLoading) => {
 
                 <section class="space-y-6">
                     <div class="flex w-full flex-col gap-2">
-                        <span class="label-text">Logo de l'entreprise <span style="color: #9B2F5C;">*</span></span>
+                        <span class="label-text">Logo de l'entreprise <span style="color: var(--color-razzmatazz-700);">*</span></span>
                         <input
                             :id="editLogoInputId"
                             type="file"
@@ -598,7 +598,7 @@ watch(loading, async (isLoading) => {
 
                 <section>
                     <label class="flex w-full flex-col gap-2">
-                        <span class="label-text">Couleur de l'entreprise <span style="color: #9B2F5C;">*</span></span>
+                        <span class="label-text">Couleur de l'entreprise <span style="color: var(--color-razzmatazz-700);">*</span></span>
                         <div class="flex w-full">
                             <span
                                 class="input input-bordered rounded-r-none border-r-0 group relative h-12 w-14 shrink-0 overflow-hidden p-0 transition-colors duration-200 ease-out"
@@ -668,7 +668,7 @@ watch(loading, async (isLoading) => {
                 <section v-if="isCollectionMode" class="space-y-4">
                     <div class="grid gap-x-4 gap-y-6 md:grid-cols-2">
                         <div class="flex w-full flex-col gap-2">
-                            <span class="label-text">Début <span style="color: #9B2F5C;">*</span></span>
+                            <span class="label-text">Début <span style="color: var(--color-razzmatazz-700);">*</span></span>
                             <AdminDateTimePicker
                                 v-model="form.collection_start"
                                 label="Choisir une date de début"
@@ -681,7 +681,7 @@ watch(loading, async (isLoading) => {
                         </div>
 
                         <div class="flex w-full flex-col gap-2">
-                            <span class="label-text">Fin <span style="color: #9B2F5C;">*</span></span>
+                            <span class="label-text">Fin <span style="color: var(--color-razzmatazz-700);">*</span></span>
                             <AdminDateTimePicker
                                 v-model="form.collection_end"
                                 label="Choisir une date de fin"
@@ -697,7 +697,7 @@ watch(loading, async (isLoading) => {
                         </div>
 
                         <label class="flex w-full flex-col gap-2 md:col-span-2">
-                            <span class="label-text">Lien OneDoc <span style="color: #9B2F5C;">*</span></span>
+                            <span class="label-text">Lien OneDoc <span style="color: var(--color-razzmatazz-700);">*</span></span>
                             <input v-model="form.collection_linkOneDoc" type="text" class="input input-bordered w-full" placeholder="https://www.onedoc.ch/..." pattern="https://(www\.)?onedoc\.ch/.*" required />
                             <p v-if="firstError('collection_linkOneDoc')" class="mt-1 text-sm text-error">{{ firstError('collection_linkOneDoc') }}</p>
                         </label>
