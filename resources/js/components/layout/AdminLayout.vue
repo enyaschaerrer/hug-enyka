@@ -14,7 +14,7 @@ const { currentPath, navigate } = useAdminRouter();
 
 function navLinkClasses(active: boolean): string {
     return [
-        'flex min-h-16 items-center px-8 text-[1.35rem] font-medium transition-colors',
+        'flex min-h-16 items-center px-8 text-[1.26rem] font-medium transition-colors',
         active
             ? 'bg-[var(--color-razzmatazz-50)] text-[var(--color-razzmatazz-700)]'
             : 'text-[#2F2F36] hover:bg-[var(--color-pampas-50)] hover:text-[var(--color-razzmatazz-700)]',
@@ -60,7 +60,7 @@ async function logout() {
                             :class="navLinkClasses(currentPath === '/admin')"
                             @click="goTo('/admin', $event)"
                         >
-                            <span>Dashboard</span>
+                            <span>Tableau de bord</span>
                         </a>
                     </li>
                     <li class="m-0 p-0">
@@ -69,7 +69,7 @@ async function logout() {
                             :class="navLinkClasses(currentPath === '/admin/registrations')"
                             @click="goTo('/admin/registrations', $event)"
                         >
-                            <span>Inscriptions</span>
+                            <span>Demandes de collecte</span>
                         </a>
                     </li>
                     <li class="m-0 p-0">
@@ -78,7 +78,7 @@ async function logout() {
                             :class="navLinkClasses(currentPath === '/admin/campagnes' || currentPath.startsWith('/admin/companies'))"
                             @click="goTo('/admin/campagnes', $event)"
                         >
-                            <span>Campagnes</span>
+                            <span>Collectes</span>
                         </a>
                     </li>
                     <li class="m-0 p-0">
@@ -87,7 +87,7 @@ async function logout() {
                             :class="navLinkClasses(currentPath === '/admin/trophee')"
                             @click="goTo('/admin/trophee', $event)"
                         >
-                            <span>Trophée</span>
+                            <span>Gestion des gagnants</span>
                         </a>
                     </li>
                     <li v-if="isSuperAdmin" class="m-0 p-0">
@@ -96,7 +96,7 @@ async function logout() {
                             :class="navLinkClasses(currentPath === '/admin/comptes')"
                             @click="goTo('/admin/comptes', $event)"
                         >
-                            <span>Comptes</span>
+                            <span>Gestion de comptes</span>
                         </a>
                     </li>
                 </ul>

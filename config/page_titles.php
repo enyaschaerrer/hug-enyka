@@ -15,13 +15,13 @@ return [
 
     'admin' => [
         'login' => 'Connexion - Administration CTS',
-        'dashboard' => 'Dashboard - Administration CTS',
-        'registrations' => 'Inscriptions - Administration CTS',
-        'campaigns' => 'Campagnes - Administration CTS',
-        'company_create' => 'Créer une campagne - Administration CTS',
-        'company_edit' => 'Modifier une campagne - Administration CTS',
-        'trophee' => 'Trophée - Administration CTS',
-        'accounts' => 'Comptes - Administration CTS',
+        'dashboard' => 'Tableau de bord - Administration CTS',
+        'registrations' => 'Demandes de collecte - Administration CTS',
+        'campaigns' => 'Collectes - Administration CTS',
+        'company_create' => 'Créer une collecte - Administration CTS',
+        'company_edit' => 'Modifier une collecte - Administration CTS',
+        'trophee' => 'Gestion des gagnants - Administration CTS',
+        'accounts' => 'Gestion de comptes - Administration CTS',
     ],
 
     'cobranded' => [

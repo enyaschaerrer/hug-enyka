@@ -334,7 +334,7 @@ onMounted(fetchCompanies);
         </div>
 
         <div class="mb-4 flex items-center justify-between">
-            <h1 class="text-2xl font-semibold">Campagnes</h1>
+            <h1 class="text-2xl font-semibold">Collectes</h1>
             <a
                 href="/admin/companies/create"
                 class="btn btn-sm border-[var(--color-razzmatazz-700)] bg-[var(--color-razzmatazz-700)] font-cooper text-white hover:border-[var(--color-razzmatazz-800)] hover:bg-[var(--color-razzmatazz-800)]"
@@ -344,7 +344,7 @@ onMounted(fetchCompanies);
                     <path d="M5 12h14" />
                     <path d="M12 5v14" />
                 </svg>
-                <span>Créer une nouvelle campagne</span>
+                <span>Créer une nouvelle collecte</span>
             </a>
         </div>
 

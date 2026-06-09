@@ -158,7 +158,7 @@ onUnmounted(() => {
         <section class="min-h-full rounded-sm bg-[var(--color-pampas-50)] p-1 pr-4 text-[#1f1f22]">
             <div class="mb-6 flex items-center justify-between">
                 <div>
-                    <h1 class="text-3xl font-semibold">Inscriptions</h1>
+                    <h1 class="text-3xl font-semibold">Demandes de collecte</h1>
                     <p class="mt-1 text-lg text-base-content/60">
                         Nouvelles demandes reçues via le formulaire
                     </p>

@@ -423,7 +423,7 @@ watch(loading, async (isLoading) => {
                     <span>Retour</span>
                 </a>
                 <h1 class="text-2xl font-semibold">
-                    {{ isCollectionMode ? (shouldCreateNewCollection ? `Nouvelle campagne : ${form.name}` : `Modifier la collecte : ${form.name}`) : `Modifier l’entreprise : ${form.name}` }}
+                    {{ isCollectionMode ? (shouldCreateNewCollection ? `Nouvelle collecte : ${form.name}` : `Modifier la collecte : ${form.name}`) : `Modifier l’entreprise : ${form.name}` }}
                 </h1>
                 <div
                     v-if="editedCollection"

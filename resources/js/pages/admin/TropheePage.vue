@@ -304,7 +304,7 @@ onMounted(fetchOverview);
     <AdminLayout>
         <section class="min-h-full rounded-sm bg-[var(--color-pampas-50)] p-1 pr-4 text-[#1f1f22]">
             <div class="mb-6">
-                <h1 class="text-3xl font-semibold">Trophée - Édition {{ currentEditionYear }}</h1>
+                <h1 class="text-3xl font-semibold">Gestion des gagnants - Édition {{ currentEditionYear }}</h1>
                 <p class="mt-1 text-lg text-base-content/60">
                     Attribution des trophées aux entreprises candidates dans les différentes catégories.
                 </p>

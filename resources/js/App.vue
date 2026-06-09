@@ -16,12 +16,12 @@ import AccountsPage from './pages/admin/AccountsPage.vue';
 const { currentPath } = useAdminRouter();
 const { company } = useCoBrandedCollecte();
 const adminTitles = {
-    '/admin': 'Dashboard - Administration CTS',
-    '/admin/campagnes': 'Campagnes - Administration CTS',
-    '/admin/companies/create': 'Créer une campagne - Administration CTS',
-    '/admin/registrations': 'Inscriptions - Administration CTS',
-    '/admin/trophee': 'Trophée - Administration CTS',
-    '/admin/comptes': 'Comptes - Administration CTS',
+    '/admin': 'Tableau de bord - Administration CTS',
+    '/admin/campagnes': 'Collectes - Administration CTS',
+    '/admin/companies/create': 'Créer une collecte - Administration CTS',
+    '/admin/registrations': 'Demandes de collecte - Administration CTS',
+    '/admin/trophee': 'Gestion des gagnants - Administration CTS',
+    '/admin/comptes': 'Gestion de comptes - Administration CTS',
 } as const;
 
 const pages = {
@@ -66,7 +66,7 @@ watchEffect(() => {
     }
 
     if (/^\/admin\/companies\/\d+\/edit$/.test(currentPath.value)) {
-        document.title = 'Modifier une campagne - Administration CTS';
+        document.title = 'Modifier une collecte - Administration CTS';
         return;
     }
 
