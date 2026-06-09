@@ -20,7 +20,7 @@ defineEmits<{
 
 <template>
     <header class="sticky top-0 z-40 bg-catskillwhite-800 px-4 py-2 font-cooper shadow-sm lg:px-12">
-        <div class="mx-auto flex max-w-3xl items-center justify-between gap-3">
+        <div class="mx-auto flex max-w-6xl items-center justify-between gap-3">
             <button
                 type="button"
                 class="flex items-center gap-1.5 rounded-full bg-white px-3 py-1.5 transition hover:bg-catskillwhite-100"
@@ -29,7 +29,7 @@ defineEmits<{
             >
                 <img
                     v-if="company.logo"
-                    class="h-4 w-auto max-w-[90px] object-contain"
+                    class="h-4 lg:h-7 w-auto max-w-[90px] object-contain"
                     :src="company.logo"
                     :alt="company.name"
                 />
@@ -37,7 +37,7 @@ defineEmits<{
 
                 <span class="text-sm font-bold text-catskillwhite-900">X</span>
 
-                <img class="h-4 w-auto max-w-[90px] object-contain" :src="'/img/logo_HUG.png'" alt="HUG" />
+                <img class="h-4 lg:h-7 w-auto max-w-[90px] object-contain" :src="'/img/logo_HUG.png'" alt="HUG" />
             </button>
 
             <button

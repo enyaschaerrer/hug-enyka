@@ -14,6 +14,13 @@ const props = withDefaults(defineProps<{
     modules: () => [],
 });
 
+type Reason = { title: string; detail: string; status: 'warning' | 'blocker' };
+
+const emit = defineEmits<{
+    /** Le chat conclut à une non-éligibilité (définitive ou délais) → écran « Pas éligible ». */
+    ineligible: [reasons: Reason[]];
+}>();
+
 const scenario = scenarioData as SmsScenario;
 const sanguyImages: Record<SanguyEmotion, string> = {
     happy: '/img/mascots/sanguy_thumbs_up.webp',
@@ -48,11 +55,20 @@ const travelCountOptions = [
 ];
 
 // Agrégation des issues pour le verdict final
-const collectedDelays = ref<{ months: number | null; label: string }[]>([]);
+const collectedDelays = ref<{ months: number | null; label: string; cause: string }[]>([]);
 const hasPermanent = ref(false);
-// Écran final : 'reminder' = on propose un rappel ; 'done' = conversation terminée
-const resultStage = ref<'none' | 'reminder' | 'done'>('none');
-const finalDelayLabel = ref('');
+
+// Libellé lisible de chaque module, pour afficher la cause du délai
+const MODULE_LABELS: Record<string, string> = {
+    voyage: 'Voyage',
+    soins_medicaux: 'Soins médicaux',
+    medicaments_vaccins: 'Médicaments / vaccins',
+    piqures: 'Piqûre de tique',
+    plaies_operation: 'Plaie / opération',
+    relations_sexuelles: 'Relations sexuelles',
+    ist: 'Infection sexuellement transmissible',
+};
+const currentModuleLabel = ref('');
 
 // Convertit un libellé de délai (« 4 mois », « 28 jours »…) en mois, pour comparer.
 function labelToMonths(label: string): number | null {
@@ -65,8 +81,8 @@ function labelToMonths(label: string): number | null {
     return null;
 }
 
-function recordDelay(months: number | null, label: string) {
-    collectedDelays.value.push({ months, label });
+function recordDelay(months: number | null, label: string, cause: string) {
+    collectedDelays.value.push({ months, label, cause });
 }
 
 const currentNode = computed(() => scenario.nodes[currentNodeId.value]);
@@ -157,7 +173,8 @@ async function advanceToNextModule(nextEmotion?: SanguyEmotion) {
     const nextModule = moduleQueue.value.shift();
     const entry = nextModule ? scenario.moduleEntries[nextModule] : undefined;
 
-    if (entry) {
+    if (entry && nextModule) {
+        currentModuleLabel.value = MODULE_LABELS[nextModule] ?? '';
         await pushBotNode(entry, nextEmotion);
         return;
     }
@@ -165,72 +182,27 @@ async function advanceToNextModule(nextEmotion?: SanguyEmotion) {
     await showFinalVerdict();
 }
 
-// Écran final : inéligibilité définitive, délai (avec rappel), ou rien (rendez-vous).
+// Verdict final : non éligible (définitif ou délais) → écran « Pas éligible » ; sinon → rendez-vous.
 async function showFinalVerdict() {
     currentNodeId.value = '';
 
-    if (hasPermanent.value) {
-        await pushBotText(
-            "D'après tes réponses, le don de sang n'est malheureusement pas possible. Merci beaucoup pour ta démarche 💛",
-            'alt-angry',
-        );
-        resultStage.value = 'done';
-        return;
-    }
-
-    if (collectedDelays.value.length > 0) {
-        const known = collectedDelays.value.filter((delay) => delay.months !== null) as { months: number; label: string }[];
-        const hasUnknown = collectedDelays.value.some((delay) => delay.months === null);
-        const worst = known.length
-            ? known.reduce((max, delay) => (delay.months > max.months ? delay : max))
-            : null;
-
-        if (worst) {
-            finalDelayLabel.value = worst.label;
-            let text = `D'après tes réponses, tu pourras donner ton sang dans environ ${worst.label}.`;
-            if (hasUnknown) {
-                text += ` Un autre point reste à confirmer avec l'infirmier·ère.`;
-            }
-            text += ' Veux-tu qu\'on te rappelle dès que tu pourras donner ?';
-            await pushBotText(text, 'alt-happy');
-        } else {
-            finalDelayLabel.value = '';
-            await pushBotText(
-                "D'après tes réponses, un délai s'applique avant de pouvoir donner — l'infirmier·ère te confirmera la durée exacte. Veux-tu qu'on te recontacte ?",
-                'alt-happy',
-            );
+    if (hasPermanent.value || collectedDelays.value.length > 0) {
+        const reasons: Reason[] = [];
+        if (hasPermanent.value) {
+            reasons.push({ title: 'Infection sexuellement transmissible', detail: 'Don non possible', status: 'blocker' });
         }
-
-        resultStage.value = 'reminder';
+        for (const delay of collectedDelays.value) {
+            reasons.push({
+                title: delay.cause || 'Autre',
+                detail: delay.months === null ? 'Délai à confirmer' : `Attente : ${delay.label}`,
+                status: 'warning',
+            });
+        }
+        emit('ineligible', reasons);
         return;
     }
 
     await pushBotNode(scenario.appointment, 'happy');
-    resultStage.value = 'done';
-}
-
-function chooseReminder(wantsReminder: boolean) {
-    resultStage.value = 'done';
-
-    messages.value.push({
-        id: createMessageId('user'),
-        speaker: 'user',
-        text: wantsReminder ? 'Oui, je veux un rappel' : 'Non merci',
-    });
-
-    isTyping.value = true;
-    void scrollToLastMessage();
-
-    window.setTimeout(async () => {
-        if (wantsReminder) {
-            const when = finalDelayLabel.value ? ` dans ${finalDelayLabel.value}` : '';
-            await pushBotText(`Parfait, on te préviendra${when} pour donner ton sang 👍`, 'happy');
-        } else {
-            await pushBotText('Pas de souci, reviens quand tu veux 💛', 'happy');
-        }
-        isTyping.value = false;
-        await scrollToLastMessage();
-    }, 650);
 }
 
 async function answerQuestion(answer: SmsAnswer) {
@@ -245,7 +217,7 @@ async function answerQuestion(answer: SmsAnswer) {
         if (answer.outcome.severity === 'permanent') {
             hasPermanent.value = true;
         } else {
-            recordDelay(answer.outcome.months ?? null, answer.outcome.label ?? 'à confirmer');
+            recordDelay(answer.outcome.months ?? null, answer.outcome.label ?? 'à confirmer', currentModuleLabel.value);
         }
     }
 
@@ -400,7 +372,7 @@ function confirmTravel(recent: boolean) {
     window.setTimeout(async () => {
         if (recent) {
             // Délai non écoulé pour ce pays : on enregistre le délai et on continue.
-            recordDelay(labelToMonths(travelWaitLabel.value), travelWaitLabel.value);
+            recordDelay(labelToMonths(travelWaitLabel.value), travelWaitLabel.value, currentModuleLabel.value || 'Voyage');
             travelStage.value = 'done';
             isTyping.value = false;
             await scrollToLastMessage();
@@ -608,33 +580,6 @@ if (scenario.intro) {
                     </div>
                 </div>
 
-                <!-- Écran final : proposition de rappel (si délai) -->
-                <div v-if="resultStage === 'reminder' && !isTyping" class="chat chat-end chat-active">
-                    <div class="chat-image avatar avatar-placeholder">
-                        <div class="w-10 rounded-full bg-razzmatazz-500 text-white">
-                            <span class="text-xs font-semibold">LB</span>
-                        </div>
-                    </div>
-                    <div class="chat-header chat-label-end font-medium text-razzmatazz-950/70">
-                        <span>Moi</span>
-                    </div>
-                    <div class="flex max-w-[78vw] flex-col items-end gap-2 md:max-w-[620px]">
-                        <button
-                            class="answer-option w-fit max-w-full cursor-pointer rounded-2xl bg-razzmatazz-50 px-4 py-2 text-left text-base font-medium leading-relaxed text-razzmatazz-950 shadow-sm hover:bg-razzmatazz-100"
-                            type="button"
-                            @click="chooseReminder(true)"
-                        >
-                            <span class="block">Oui, je veux un rappel</span>
-                        </button>
-                        <button
-                            class="answer-option w-fit max-w-full cursor-pointer rounded-2xl bg-razzmatazz-50 px-4 py-2 text-left text-base font-medium leading-relaxed text-razzmatazz-950 shadow-sm hover:bg-razzmatazz-100"
-                            type="button"
-                            @click="chooseReminder(false)"
-                        >
-                            <span class="block">Non merci</span>
-                        </button>
-                    </div>
-                </div>
             </div>
         </div>
     </section>

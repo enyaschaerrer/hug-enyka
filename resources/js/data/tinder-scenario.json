@@ -12,7 +12,7 @@
             "tone": "red",
             "leftOutcome": {
                 "status": "blocker",
-                "label": "Tranche d'âge non éligible"
+                "label": "Il faut avoir entre 18 et 60 ans, ou 75 ans si habitué.e, pour donner son sang."
             },
             "rightOutcome": {
                 "status": "clear",

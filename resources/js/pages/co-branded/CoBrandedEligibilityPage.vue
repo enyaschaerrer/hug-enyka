@@ -16,6 +16,13 @@ const qrModalOpen = ref(false);
 const isDesktop = ref(false);
 const exitModalOpen = ref(false);
 const showNonEligible = ref(false);
+const ineligibleReasons = ref<{ title: string; detail: string; status: 'warning' | 'blocker' }[]>([]);
+
+function onIneligible(reasons: { title: string; detail: string; status: 'warning' | 'blocker' }[]) {
+    ineligibleReasons.value = reasons;
+    showSms.value = false;
+    showNonEligible.value = true;
+}
 const showSms = ref(false);
 const showConfetti = ref(false);
 const smsModules = ref<string[]>([]);
@@ -230,7 +237,7 @@ onBeforeUnmount(() => {
                 style="background-image: url('/img/cobranded-background/bg-cobranded.webp');"
             >
                 <div class="flex w-full justify-center px-6 py-4 lg:px-12" style="transform: translateY(-20px);">
-                    <TinderEligibilityPrototype contained @ineligible="showNonEligible = true" @match="onMatch" />
+                    <TinderEligibilityPrototype contained @ineligible="onIneligible" @match="onMatch" />
                 </div>
             </main>
 
@@ -245,12 +252,12 @@ onBeforeUnmount(() => {
                     class="flex flex-col flex-1 min-h-0 overflow-hidden bg-cover bg-center bg-no-repeat"
                     style="background-image: url('/img/cobranded-background/bg-cobranded.webp');"
                 >
-                    <SmsConversationPrototype :modules="smsModules" />
+                    <SmsConversationPrototype :modules="smsModules" @ineligible="onIneligible" />
                 </div>
             </Transition>
 
             <!-- Non éligible -->
-            <CoBrandedNonEligibleView v-if="showNonEligible" class="flex-1" />
+            <CoBrandedNonEligibleView v-if="showNonEligible" :reasons="ineligibleReasons" class="flex-1" />
 
             <Transition
                 enter-active-class="transition duration-200 ease-out"

@@ -55,7 +55,7 @@ async function logout() {
             >
                 <img
                     v-if="company.logo"
-                    class="h-4 w-auto object-contain lg:h-5"
+                    class="h-4 w-auto object-contain lg:h-7"
                     :src="company.logo"
                     :alt="company.name"
                 />
@@ -63,7 +63,7 @@ async function logout() {
 
                 <span class="text-caption font-bold text-catskillwhite-900 lg:text-body">X</span>
 
-                <img class="h-4 w-auto object-contain lg:h-5" :src="'/img/logo_HUG.png'" alt="HUG" />
+                <img class="h-4 w-auto object-contain lg:h-7" :src="'/img/logo_HUG.png'" alt="HUG" />
             </button>
 
             <!-- Nav droite -->

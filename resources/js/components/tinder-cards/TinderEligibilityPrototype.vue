@@ -11,8 +11,10 @@ const props = withDefaults(defineProps<{
     contained: false,
 });
 
+type Reason = { title: string; detail: string; status: 'warning' | 'blocker' };
+
 const emit = defineEmits<{
-    ineligible: [];
+    ineligible: [reasons: Reason[]];
     match: [modules: string[]];
 }>();
 
@@ -137,20 +139,32 @@ function handleSwipe(item: Card, direction: SwipeDirection) {
         },
     ];
 
-    if (outcome.status === 'blocker') {
-        emit('ineligible');
+    // Cartes à critère éliminatoire (les 5 premières). On les passe TOUTES, puis on décide.
+    const eligibilityIds = tinderScenario.cards
+        .filter((card) => card.leftOutcome.status === 'blocker' || card.rightOutcome.status === 'blocker')
+        .map((card) => card.id);
+    const eligibilityDone = eligibilityIds.every((id) => answers.value.some((answer) => answer.cardId === id));
+
+    // Fin des 5 premières : si au moins une était éliminatoire → page « Pas éligible » (on ne continue pas).
+    if (eligibilityDone && answers.value.some((answer) => answer.status === 'blocker')) {
+        const reasons: Reason[] = tinderScenario.cards
+            .filter((card) => answers.value.some((a) => a.cardId === card.id && a.status === 'blocker'))
+            .map((card) => ({
+                title: card.theme,
+                detail: answers.value.find((a) => a.cardId === card.id)?.label ?? '',
+                status: 'blocker' as const,
+            }));
+        emit('ineligible', reasons);
         return;
     }
 
+    // Sinon on continue ; à la fin du swipe → carte « match » puis chat (si modules à préciser).
     const allAnswered = answers.value.length === totalCards.value;
     if (allAnswered) {
-        // Modules de messagerie « enregistrés » : cartes swipées vers un avertissement (oui),
-        // dans l'ordre des cartes du scénario.
         pendingModules.value = tinderScenario.cards
             .filter((card) => typeof card.module === 'string'
                 && answers.value.some((answer) => answer.cardId === card.id && answer.status === 'warning'))
             .map((card) => card.module as string);
-        // On affiche d'abord la carte « match » avant de passer au chat.
         showMatch.value = true;
     }
 }
