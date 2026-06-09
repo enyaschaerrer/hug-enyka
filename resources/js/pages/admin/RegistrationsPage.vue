@@ -97,7 +97,7 @@ function formatDate(dateStr: string): string {
 }
 
 function formatFullAddress(address?: string | null, npa?: string | null, localite?: string | null): string {
-    return [address, [npa, localite].filter(Boolean).join(' ')].filter(Boolean).join(', ') || '—';
+    return [address, [npa, localite].filter(Boolean).join(' ')].filter(Boolean).join(', ') || 'Non renseigné';
 }
 
 type FormDetail = {
@@ -297,7 +297,7 @@ onUnmounted(() => {
                         </div>
                         <div class="flex gap-4">
                             <dt class="w-32 shrink-0 font-medium text-black"><span>Téléphone</span></dt>
-                            <dd class="text-stone-900"><span>{{ selectedForm.phone ?? '—' }}</span></dd>
+                            <dd class="text-stone-900"><span>{{ selectedForm.phone ?? 'Non renseigné' }}</span></dd>
                         </div>
                         <div class="flex gap-4">
                             <dt class="w-32 shrink-0 font-medium text-black"><span>Adresse</span></dt>
@@ -325,11 +325,11 @@ onUnmounted(() => {
                     </dl>
 
                     <div class="mt-6">
-                        <p class="mb-2 text-xs font-semibold uppercase tracking-wide text-black">
-                            Entreprises similaires dans la base
+                        <p class="mb-2 text-[0.95rem] font-semibold text-black">
+                            Collecte similaire existante
                         </p>
                         <div v-if="matchingCompanies.length === 0" class="text-sm text-stone-400">
-                            Aucune entreprise similaire trouvée.
+                            Aucune collecte similaire trouvée.
                         </div>
                         <ul v-else class="space-y-2">
                             <li

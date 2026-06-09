@@ -96,7 +96,7 @@ async function logout() {
                             :class="navLinkClasses(currentPath === '/admin/comptes')"
                             @click="goTo('/admin/comptes', $event)"
                         >
-                            <span>Gestion de comptes</span>
+                            <span>Gestion des comptes</span>
                         </a>
                     </li>
                 </ul>

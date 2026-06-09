@@ -231,7 +231,7 @@ onMounted(fetchAccounts);
 <template>
     <AdminLayout>
         <div class="mb-6">
-            <h1 class="text-3xl font-semibold">Gestion de comptes</h1>
+            <h1 class="text-3xl font-semibold">Gestion des comptes</h1>
         </div>
 
         <div v-if="flashMessage" class="alert alert-success mb-6">

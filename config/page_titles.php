@@ -21,7 +21,7 @@ return [
         'company_create' => 'Créer une collecte - Administration CTS',
         'company_edit' => 'Modifier une collecte - Administration CTS',
         'trophee' => 'Gestion des gagnants - Administration CTS',
-        'accounts' => 'Gestion de comptes - Administration CTS',
+        'accounts' => 'Gestion des comptes - Administration CTS',
     ],
 
     'cobranded' => [
