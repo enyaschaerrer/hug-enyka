@@ -89,9 +89,17 @@ const primaryTextStyle = {
 
 <template>
     <section class="mx-auto max-w-5xl px-6 py-10">
-        <h2 class="text-left text-display text-catskillwhite-900 sm:text-center sm:text-display">
+        <h2 class="text-left text-[2.2rem] font-bold text-catskillwhite-900 sm:text-center sm:text-display lg:text-display">
             Votre <span :style="primaryTextStyle">entreprise</span> se mobilise pour le don du sang
         </h2>
+
+        <button
+            type="button"
+            class="rounded-2xl bg-razzmatazz-800 px-10 py-4 mt-5 mx-auto table text-heading-t3 text-center text-white transition hover:bg-razzmatazz-600 lg:hidden"
+            @click="$emit('goToTest')"
+        >
+            Tester votre éligibilité
+        </button>
 
         <!-- 3 cards Date / Lieu / Deadline -->
         <div class="mt-10 grid gap-4 sm:grid-cols-3">
@@ -108,24 +116,24 @@ const primaryTextStyle = {
                     >
                         <span class="material-symbols-outlined" style="font-size: 24px;" aria-hidden="true">{{ card.icon }}</span>
                     </div>
-                    <h3 class="text-heading-t3 text-catskillwhite-900">{{ card.title }}</h3>
+                    <h3 class="text-[0.9rem] font-medium text-catskillwhite-900 lg:text-heading-t3">{{ card.title }}</h3>
                 </div>
-                <p class="mt-3 text-body text-catskillwhite-800">{{ card.text }}</p>
+                <p class="mt-3 text-[0.9rem] text-catskillwhite-800 lg:text-body">{{ card.text }}</p>
             </article>
         </div>
 
         <!-- CTA mascots — texte + bouton en haut, mascottes en dessous -->
         <div class="mt-16 flex flex-col items-center gap-6">
-            <p class="text-heading-t2 text-catskillwhite-900">Vous êtes intéressé·e·s ?</p>
+            <p class="text-heading-t2 text-catskillwhite-900 hidden lg:block">Vous êtes intéressé·e·s ?</p>
             <button
                 type="button"
-                class="rounded-2xl bg-razzmatazz-800 px-10 py-4 text-heading-t3 text-white transition hover:bg-razzmatazz-900"
+                class="rounded-2xl bg-razzmatazz-800 px-10 py-4 text-heading-t3 text-white transition hover:bg-razzmatazz-600 hidden lg:block"
                 @click="$emit('goToTest')"
             >
                 Tester votre éligibilité
             </button>
 
-            <div class="mt-2 flex justify-center">
+            <div class="mt-2 flex justify-center hidden lg:block">
                 <img :src="'/img/mascots/blutly_sanguy_hey.webp'" alt="" class="h-32 w-auto sm:h-40" />
             </div>
         </div>

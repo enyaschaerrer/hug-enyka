@@ -70,7 +70,7 @@ async function logout() {
             <div class="flex items-center gap-2 lg:gap-6">
                 <button
                     type="button"
-                    class="rounded-full bg-razzmatazz-800 px-3 py-1.5 text-caption font-medium text-white transition hover:bg-razzmatazz-900 lg:px-5 lg:py-2 lg:text-heading-t3"
+                    class="rounded-full bg-razzmatazz-800 px-3 py-1.5 text-caption font-medium text-white transition hover:bg-razzmatazz-600 hidden lg:block lg:px-5 lg:py-2 lg:text-heading-t3"
                     @click="$emit('goTest')"
                 >
                     Test d'éligibilité

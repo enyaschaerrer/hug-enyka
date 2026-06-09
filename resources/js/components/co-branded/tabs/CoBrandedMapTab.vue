@@ -33,7 +33,7 @@ const suggestions = ref<Country[]>([]);
 const showSuggestions = ref(false);
 
 // Zoom / pan
-const INITIAL_SCALE = 1.2;
+const INITIAL_SCALE = (window.innerWidth < 768 ? 1.5 : 1.2)
 // Décalages initiaux : pousse la carte vers le bas et vers la gauche pour que tous les pays rentrent
 const INITIAL_TY_OFFSET = 50;
 const INITIAL_TX_OFFSET = -40;
@@ -290,12 +290,14 @@ function closePopup() {
 </script>
 
 <template>
-    <section class="mx-auto max-w-5xl px-6 py-10">
+    <section class="mx-auto max-w-5xl px-5 py-5 lg:py-10">
         <!-- Disposition : carte à gauche, panneau (note / recherche / délais) à droite.
              Sur mobile : empilé, panneau au-dessus de la carte. -->
-        <div class="flex flex-col-reverse gap-6 lg:flex-row">
+        <div class="flex flex-col gap-6 lg:flex-row h-[600px] lg:h-[372px]">
             <!-- Carte (gauche) -->
-            <div class="relative h-[340px] flex-1 overflow-hidden rounded-2xl border-2 border-catskillwhite-300 bg-white lg:h-[400px]">
+            <div
+                class="relative flex-1 overflow-hidden rounded-2xl border-2 border-catskillwhite-300 bg-white"
+            >
                 <svg
                     ref="svgRef"
                     :viewBox="`0 0 ${VB_W} ${VB_H}`"
@@ -385,7 +387,7 @@ function closePopup() {
             <!-- Panneau (droite) -->
             <div class="flex w-full shrink-0 flex-col gap-4 lg:w-72">
                 <!-- Recherche -->
-                <div class="relative w-full">
+                <div class="relative w-full order-1">
                     <span
                         class="material-symbols-outlined pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-catskillwhite-700"
                         style="font-size: 20px;"
@@ -416,21 +418,21 @@ function closePopup() {
                 </div>
 
                 <!-- Note « à vérifier » -->
-                <div class="rounded-xl border border-catskillwhite-300 bg-white/90 p-4 text-body text-catskillwhite-800">
+                <div class="order-4 rounded-xl border border-catskillwhite-300 bg-white/90 p-4 text-body text-catskillwhite-800">
                     Les zones épidémiques (Zika, Dengue, Ebola selon période) peuvent entraîner une exclusion variable. À vérifier au cas par cas.
                 </div>
 
                 <!-- Délais (légende) -->
-                <div class="rounded-xl border border-catskillwhite-300 bg-white/95 p-4 text-body shadow-sm">
+                <div class="order-3 rounded-xl border border-catskillwhite-300 bg-white/95 p-4 text-body shadow-sm">
                     <p class="mb-2 font-medium text-catskillwhite-900">Délais</p>
-                    <div class="space-y-1.5">
+                    <div class="grid grid-cols-2 gap-2 lg:grid-cols-1 lg:space-y-1.5">
                         <div
                             v-for="item in legendItems"
                             :key="item.label"
                             class="flex items-center gap-2"
                         >
                             <div
-                                class="h-3 w-3 rounded border border-catskillwhite-800"
+                                class="h-3 w-3 shrink-0 rounded border border-catskillwhite-800"
                                 :style="{ backgroundColor: item.color }"
                             ></div>
                             <span class="text-catskillwhite-900">{{ item.label }}</span>

@@ -17,9 +17,9 @@ function startQuestionnaire() {
 </script>
 
 <template>
-    <section class="mx-auto max-w-3xl px-6 pt-10 pb-32">
+    <section class="mx-auto max-w-3xl px-6 pt-5 pb-32 lg:pt-10">
         <!-- Mobile : juste les 3 infos en pastilles, sans boîte ni sous-titres -->
-        <div class="flex flex-wrap justify-center gap-2 sm:hidden">
+        <div class="flex flex-wrap justify-center gap-2 mb-5 lg:hidden">
             <span
                 v-for="(item, idx) in criteria"
                 :key="idx"
@@ -30,7 +30,7 @@ function startQuestionnaire() {
         </div>
 
         <!-- Desktop : carte « critères éliminatoires » avec bandeau de titre + 3 colonnes -->
-        <div class="hidden overflow-hidden rounded-2xl border-2 border-catskillwhite-800 sm:block">
+        <div class="hidden overflow-hidden rounded-2xl border-2 border-catskillwhite-800 lg:block">
             <div class="bg-catskillwhite-800 px-6 py-2 text-center">
                 <h3 class="text-body font-semibold text-white">Les critères éliminatoires</h3>
             </div>
@@ -47,11 +47,11 @@ function startQuestionnaire() {
         </div>
 
         <!-- Card "Prêt·e à savoir..." — pb-0 + boutons translatés pour dépasser à moitié en bas -->
-        <div class="mt-10 rounded-2xl bg-razzmatazz-200 px-6 pt-10 pb-0 text-center sm:px-12">
-            <h2 class="text-display text-catskillwhite-900">
+        <div class="rounded-2xl bg-razzmatazz-200 px-6 pt-10 pb-0 text-center lg:mt-10 lg:px-12">
+            <h2 class="text-[1.3rem] font-semibold text-razzmatazz-950 lg:text-display">
                 Prêt·e à savoir si vous<br>pouvez donner votre sang ?
             </h2>
-            <p class="mt-3 text-body text-catskillwhite-800">
+            <p class="mt-3 text-[0.8rem] text-razzmatazz-950 lg:text-body">
                 Passez au test d'éligibilité !
             </p>
 
@@ -62,16 +62,16 @@ function startQuestionnaire() {
             </div>
 
             <!-- Boutons Non / Oui : très gros, translate-y-1/2 → dépassent à moitié en bas de la carte -->
-            <div class="-mt-6 flex translate-y-1/2 justify-center gap-4 sm:gap-6">
+            <div class="-mt-6 flex translate-y-1/2 justify-center gap-4 lg:gap-6">
                 <a
                     href="/"
-                    class="min-w-44 rounded-2xl bg-razzmatazz-800 px-12 py-6 text-heading-t1 font-semibold text-white transition hover:bg-razzmatazz-900 sm:min-w-56 sm:px-16 sm:py-7"
+                    class="min-w-30 rounded-2xl bg-razzmatazz-800 text-[1rem] py-2 font-semibold text-white transition hover:bg-razzmatazz-400 lg:min-w-56 sm:px-16 lg:py-7 lg:min-w-44 lg:text-heading-t1"
                 >
                     Non
                 </a>
                 <button
                     type="button"
-                    class="min-w-44 rounded-2xl bg-razzmatazz-800 px-12 py-6 text-heading-t1 font-semibold text-white transition hover:bg-razzmatazz-900 sm:min-w-56 sm:px-16 sm:py-7"
+                    class="min-w-30 rounded-2xl bg-razzmatazz-800 text-[1rem] py-2 font-semibold text-white transition hover:bg-razzmatazz-400 lg:min-w-56 lg:px-16 lg:py-7 lg:min-w-44 lg:text-heading-t1"
                     @click="startQuestionnaire"
                 >
                     Oui
