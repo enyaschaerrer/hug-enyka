@@ -17,7 +17,7 @@ return [
         'login' => 'Connexion - Administration CTS',
         'dashboard' => 'Tableau de bord - Administration CTS',
         'registrations' => 'Demandes de collecte - Administration CTS',
-        'campaigns' => 'Collectes - Administration CTS',
+        'campaigns' => 'Collectes co-brandées - Administration CTS',
         'company_create' => 'Créer une collecte - Administration CTS',
         'company_edit' => 'Modifier une collecte - Administration CTS',
         'trophee' => 'Gestion des gagnants - Administration CTS',

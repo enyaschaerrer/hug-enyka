@@ -231,7 +231,10 @@ onMounted(fetchAccounts);
 <template>
     <AdminLayout>
         <div class="mb-6">
-            <h1 class="text-3xl font-semibold">Gestion des comptes</h1>
+            <h1 class="text-3xl font-semibold">Gestion des comptes d'administration</h1>
+            <p class="mt-2 text-sm text-base-content/60">
+                Les admin gèrent la plateforme d'administration. Les superadmin disposent des mêmes droits d'accès et peuvent également gérer la création, modification et suppression des comptes admin.
+            </p>
         </div>
 
         <div v-if="flashMessage" class="alert alert-success mb-6">
@@ -340,11 +343,11 @@ onMounted(fetchAccounts);
         <p v-else-if="accounts.length === 0" class="text-sm text-base-content/50">Aucun compte admin.</p>
 
             <section v-else class="rounded-box border border-base-300 bg-base-100">
-            <div class="grid grid-cols-[minmax(260px,1fr)_160px_130px_220px] border-b border-base-300 bg-[var(--color-razzmatazz-100)] px-5 py-3 text-xs font-semibold uppercase tracking-wide text-[var(--color-pampas-950)]">
-                <span>Email</span>
-                <span>Rôle</span>
-                <span>Créé le</span>
-                <span class="text-right">Actions</span>
+            <div class="grid grid-cols-[2.2fr_0.9fr_0.9fr_1fr] border-b border-base-300 bg-[var(--color-razzmatazz-100)] px-5 py-3 text-xs font-semibold uppercase tracking-wide text-[var(--color-pampas-950)]">
+                <div class="text-left"><span>Email</span></div>
+                <div class="text-left"><span>Rôle</span></div>
+                <div class="text-left"><span>Créé le</span></div>
+                <div class="text-right"><span>Actions</span></div>
             </div>
 
             <div
@@ -445,10 +448,14 @@ onMounted(fetchAccounts);
                     </div>
                 </form>
 
-                <div v-else class="grid grid-cols-[minmax(260px,1fr)_160px_130px_220px] items-center gap-3">
+                <div v-else class="grid grid-cols-[2.2fr_0.9fr_0.9fr_1fr] items-center">
                     <p class="font-semibold">{{ account.email }}</p>
-                    <p class="text-sm">{{ roleLabel(account.role) }}</p>
-                    <p class="text-sm text-base-content/50">{{ formatDate(account.created_at) }}</p>
+                    <div class="text-left">
+                        <p class="text-sm">{{ roleLabel(account.role) }}</p>
+                    </div>
+                    <div class="text-left">
+                        <p class="text-sm text-base-content/50">{{ formatDate(account.created_at) }}</p>
+                    </div>
                     <div class="flex justify-end gap-2">
                         <button type="button" class="btn btn-ghost btn-sm font-cooper" @click="startEdit(account)">
                             <span>Modifier</span>

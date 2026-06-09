@@ -78,7 +78,7 @@ async function logout() {
                             :class="navLinkClasses(currentPath === '/admin/campagnes' || currentPath.startsWith('/admin/companies'))"
                             @click="goTo('/admin/campagnes', $event)"
                         >
-                            <span>Collectes</span>
+                            <span>Collectes co-brandées</span>
                         </a>
                     </li>
                     <li class="m-0 p-0">
