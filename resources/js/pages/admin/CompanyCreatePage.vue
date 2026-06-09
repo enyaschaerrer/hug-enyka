@@ -362,8 +362,8 @@ async function submit() {
                 <h1 class="text-2xl font-semibold">Créer une campagne</h1>
             </div>
 
-            <div v-if="pendingForms.length > 0" class="mb-6 rounded-box border border-amber-200 bg-amber-50 p-5">
-                <p class="mb-3 text-sm font-semibold text-amber-900">
+            <div v-if="pendingForms.length > 0" class="mb-6 rounded-box border border-martinique-200 bg-martinique-50 p-5">
+                <p class="mb-3 text-sm font-semibold text-martinique-900">
                     Pré-remplir depuis une inscription en attente
                 </p>
                 <div class="relative">
@@ -400,7 +400,7 @@ async function submit() {
                         </li>
                     </ul>
                 </div>
-                <p v-if="selectedFormId !== null" class="mt-2 text-xs text-amber-700">
+                <p v-if="selectedFormId !== null" class="mt-2 text-xs text-martinique-700">
                     Champs pré-remplis. L&#39;inscription sera archivée à la création de la campagne.
                 </p>
             </div>
