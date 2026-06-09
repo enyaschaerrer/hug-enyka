@@ -28,20 +28,22 @@ class KpiController extends Controller
             ->distinct('company_id')
             ->count('company_id');
 
-        $recommendedCompanies = Company::query()
+        $sourcesBreakdown = DB::table('companies')
             ->whereNotNull('source')
             ->where('source', '!=', '')
-            ->count();
+            ->select('source', DB::raw('count(*) as total'))
+            ->groupBy('source')
+            ->orderByDesc('total')
+            ->pluck('total', 'source');
 
-        $questionnaireRows = DB::table('collections_users')->count();
-        $questionnaireAbandonments = DB::table('collections_users')
-            ->where('abandonment', true)
-            ->count();
+        $sourcesList = $sourcesBreakdown->map(fn ($count, $source) => $source . ' (' . $count . ')')
+            ->values()
+            ->join(', ');
 
         return response()->json([
             'live' => [
                 'activeVisitors' => [
-                    'label' => 'Nombre d’utilisateurs connectés',
+                    'label' => 'Nombre d\'utilisateurs connectés',
                     'value' => $activeVisitors,
                     'available' => true,
                     'note' => 'Sessions actives sur les 5 dernières minutes.',
@@ -87,53 +89,60 @@ class KpiController extends Controller
                     'value' => null,
                     'rate' => null,
                     'available' => false,
-                    'note' => 'Aucun statut de présence n’est encore stocké.',
+                    'note' => 'Aucun statut de présence n\'est encore stocké.',
                 ],
                 [
                     'label' => 'Dons effectifs',
                     'value' => null,
                     'rate' => null,
                     'available' => false,
-                    'note' => 'Aucune donnée de don effectif n’est encore stockée.',
+                    'note' => 'Aucune donnée de don effectif n\'est encore stockée.',
                 ],
             ],
             'engagement' => [
-                'questionnaireAbandonRate' => [
-                    'label' => 'Abandon questionnaire',
-                    'value' => $this->percentage($questionnaireAbandonments, $questionnaireRows),
-                    'available' => $questionnaireRows > 0,
-                    'note' => $questionnaireRows > 0
-                        ? $questionnaireAbandonments . ' abandons / ' . $questionnaireRows . ' parcours.'
-                        : 'La table collections_users existe, mais aucun parcours n’est encore enregistré.',
-                    'tone' => 'warning',
-                ],
-                'recommendedCompanies' => [
-                    'label' => 'Entreprises recommandées',
-                    'value' => $recommendedCompanies,
+                'labelledCompanies' => [
+                    'label' => 'Entreprises labellisées',
+                    'value' => $labelledCompanies,
                     'available' => true,
-                    'note' => 'Entreprises avec une source/référent renseigné.',
+                    'note' => 'Entreprises présentes dans les prix/trophées.',
                     'tone' => 'success',
                 ],
-                'qrScans' => [
-                    'label' => 'QR codes scannés',
-                    'value' => null,
-                    'available' => false,
-                    'note' => 'Aucun tracking de scan QR pour le moment.',
+                'companySources' => [
+                    'label' => 'Sources des entreprises',
+                    'value' => $sourcesBreakdown->count(),
+                    'available' => $sourcesBreakdown->isNotEmpty(),
+                    'note' => $sourcesBreakdown->isEmpty()
+                        ? 'Aucune source renseignée pour le moment.'
+                        : $sourcesList,
                     'tone' => 'success',
                 ],
-                'mailClicks' => [
-                    'label' => 'Clics sur le mail',
+                'pageVisits' => [
+                    'label' => 'Visites du site public',
                     'value' => null,
                     'available' => false,
-                    'note' => 'Aucun tracking d’email pour le moment.',
+                    'note' => 'Nécessite la migration de la table page_visits.',
                     'tone' => 'success',
                 ],
-                'bannerUsage' => [
-                    'label' => 'Bannière utilisée',
+                'participationRate' => [
+                    'label' => 'Taux de participation',
                     'value' => null,
                     'available' => false,
-                    'note' => 'Aucun événement bannière n’est encore stocké.',
+                    'note' => 'Nécessite la migration first_connected_at sur collections_users.',
                     'tone' => 'success',
+                ],
+                'conversionRate' => [
+                    'label' => 'Conversion connexion → inscription',
+                    'value' => null,
+                    'available' => false,
+                    'note' => 'Tracking des clics OneDoc non encore implémenté.',
+                    'tone' => 'success',
+                ],
+                'questionnaireAbandonRate' => [
+                    'label' => 'Taux d\'abandon questionnaire',
+                    'value' => null,
+                    'available' => false,
+                    'note' => 'Tracking du questionnaire non encore implémenté.',
+                    'tone' => 'warning',
                 ],
             ],
         ]);
