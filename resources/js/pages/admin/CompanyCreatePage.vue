@@ -359,7 +359,7 @@ async function submit() {
                     </svg>
                     <span>Retour</span>
                 </a>
-                <h1 class="text-2xl font-semibold">Créer une collecte</h1>
+                <h1 class="text-3xl font-semibold">Créer une collecte</h1>
             </div>
 
             <div v-if="pendingForms.length > 0" class="mb-6 rounded-box border border-martinique-200 bg-martinique-50 p-5">
