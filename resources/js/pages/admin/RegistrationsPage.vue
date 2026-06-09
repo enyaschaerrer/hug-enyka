@@ -97,7 +97,7 @@ function formatDate(dateStr: string): string {
 }
 
 function formatFullAddress(address?: string | null, npa?: string | null, localite?: string | null): string {
-    return [address, [npa, localite].filter(Boolean).join(' ')].filter(Boolean).join(', ') || '—';
+    return [address, [npa, localite].filter(Boolean).join(' ')].filter(Boolean).join(', ') || 'Non renseigné';
 }
 
 type FormDetail = {
@@ -158,10 +158,7 @@ onUnmounted(() => {
         <section class="min-h-full rounded-sm bg-[var(--color-pampas-50)] p-1 pr-4 text-[#1f1f22]">
             <div class="mb-6 flex items-center justify-between">
                 <div>
-                    <h1 class="text-3xl font-semibold">Inscriptions</h1>
-                    <p class="mt-1 text-lg text-base-content/60">
-                        Nouvelles demandes reçues via le formulaire
-                    </p>
+                    <h1 class="text-3xl font-semibold">Demandes de collecte</h1>
                 </div>
                 <div
                     v-if="hasNew"
@@ -174,7 +171,7 @@ onUnmounted(() => {
             </div>
 
             <div v-if="loading" class="text-sm text-base-content/50">Chargement...</div>
-            <div v-else-if="loadError" class="alert alert-error"><span>{{ loadError }}</span></div>
+            <div v-else-if="loadError" class="alert border-0 bg-red-600 text-white"><span>{{ loadError }}</span></div>
 
             <template v-else>
                 <!-- Onglets -->
@@ -182,24 +179,24 @@ onUnmounted(() => {
                     <button
                         class="cursor-pointer px-5 py-2.5 text-sm font-medium transition font-cooper"
                         :class="activeTab === 'pending'
-                            ? 'border-b-2 border-[#5a002a] text-[#5a002a]'
+                            ? 'border-b-2 border-[var(--color-pampas-950)] text-[var(--color-pampas-950)]'
                             : 'text-base-content/50 hover:text-base-content'"
                         @click="activeTab = 'pending'"
                     >
                         <span>En attente</span>
-                        <span class="ml-1.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-rose-100 text-xs text-[#5a002a]">
+                        <span class="ml-1.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-rose-100 text-xs text-[var(--color-pampas-950)]">
                             <span>{{ registrations.filter(r => !r.treated).length }}</span>
                         </span>
                     </button>
                     <button
                         class="cursor-pointer px-5 py-2.5 text-sm font-medium transition font-cooper"
                         :class="activeTab === 'treated'
-                            ? 'border-b-2 border-[#5a002a] text-[#5a002a]'
+                            ? 'border-b-2 border-[var(--color-pampas-950)] text-[var(--color-pampas-950)]'
                             : 'text-base-content/50 hover:text-base-content'"
                         @click="activeTab = 'treated'"
                     >
                         <span>Historique</span>
-                        <span class="ml-1.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-stone-100 text-xs text-stone-500">
+                        <span class="ml-1.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-martinique-50 text-xs text-martinique-700">
                             <span>{{ registrations.filter(r => r.treated).length }}</span>
                         </span>
                     </button>
@@ -212,7 +209,7 @@ onUnmounted(() => {
 
                 <div v-else class="border border-base-300 bg-white">
                     <!-- Header -->
-                    <div class="flex border-b border-base-300 bg-[#f8e7ee] px-5 py-3 text-xs font-semibold uppercase tracking-wide text-[#5a002a]">
+                    <div class="flex border-b border-base-300 bg-[var(--color-razzmatazz-100)] px-5 py-3 text-xs font-semibold uppercase tracking-wide text-[var(--color-pampas-950)]">
                         <div class="w-1/5"><span>Entreprise</span></div>
                         <div class="w-1/5"><span>Email</span></div>
                         <div class="w-1/5"><span>Date</span></div>
@@ -224,8 +221,10 @@ onUnmounted(() => {
                     <div
                         v-for="reg in filteredRegistrations"
                         :key="reg.id"
-                        class="flex items-center border-b border-base-200 px-5 py-3 hover:bg-rose-50/40"
-                        :class="[!reg.treated ? 'cursor-pointer' : '']"
+                        class="flex items-center border-b border-base-200 px-5 py-3"
+                        :class="[
+                            !reg.treated ? 'cursor-pointer hover:bg-[color:color-mix(in_srgb,var(--color-razzmatazz-50)_25%,transparent)]' : '',
+                        ]"
                         @click="!reg.treated && openDetail(reg.id)"
                     >
                         <div class="flex w-4/5 items-center" :class="reg.treated ? 'opacity-50' : ''">
@@ -253,7 +252,7 @@ onUnmounted(() => {
                                 <button
                                     class="cursor-pointer rounded border px-3 py-1 text-xs font-medium transition font-cooper"
                                     :class="reg.treated
-                                        ? 'border-amber-300 bg-amber-50 text-amber-700 hover:bg-amber-100'
+                                        ? 'border-martinique-300 bg-martinique-50 text-martinique-700 hover:bg-martinique-100'
                                         : 'border-emerald-200 bg-emerald-50 text-emerald-700 hover:bg-emerald-100'"
                                     @click="toggleTreated(reg)"
                                 >
@@ -261,7 +260,7 @@ onUnmounted(() => {
                                 </button>
                                 <button
                                     v-if="reg.treated"
-                                    class="cursor-pointer rounded border border-red-200 bg-red-50 px-3 py-1 text-xs font-medium text-red-600 transition hover:bg-red-100 font-cooper"
+                                    class="cursor-pointer rounded border border-red-300 bg-red-50 px-3 py-1 text-xs font-medium text-red-600 transition hover:bg-red-100 font-cooper"
                                     @click="deleteRegistration(reg)"
                                 >
                                     <span>Supprimer</span>
@@ -283,29 +282,29 @@ onUnmounted(() => {
                 <div v-if="loadingDetail" class="text-sm text-base-content/50">Chargement...</div>
 
                 <template v-else>
-                    <h2 class="mb-6 text-lg font-semibold text-[#5a002a]">
+                    <h2 class="mb-6 text-lg font-semibold text-[var(--color-pampas-950)]">
                         Détail de la demande
                     </h2>
 
                     <dl class="space-y-3 text-sm">
                         <div class="flex gap-4">
-                            <dt class="w-32 shrink-0 font-medium text-stone-500"><span>Entreprise</span></dt>
+                            <dt class="w-32 shrink-0 font-medium text-black"><span>Entreprise</span></dt>
                             <dd class="text-stone-900"><span>{{ selectedForm.name }}</span></dd>
                         </div>
                         <div class="flex gap-4">
-                            <dt class="w-32 shrink-0 font-medium text-stone-500"><span>Email</span></dt>
+                            <dt class="w-32 shrink-0 font-medium text-black"><span>Email</span></dt>
                             <dd class="text-stone-900"><span>{{ selectedForm.email }}</span></dd>
                         </div>
                         <div class="flex gap-4">
-                            <dt class="w-32 shrink-0 font-medium text-stone-500"><span>Téléphone</span></dt>
-                            <dd class="text-stone-900"><span>{{ selectedForm.phone ?? '—' }}</span></dd>
+                            <dt class="w-32 shrink-0 font-medium text-black"><span>Téléphone</span></dt>
+                            <dd class="text-stone-900"><span>{{ selectedForm.phone ?? 'Non renseigné' }}</span></dd>
                         </div>
                         <div class="flex gap-4">
-                            <dt class="w-32 shrink-0 font-medium text-stone-500"><span>Adresse</span></dt>
+                            <dt class="w-32 shrink-0 font-medium text-black"><span>Adresse</span></dt>
                             <dd class="text-stone-900"><span>{{ formatFullAddress(selectedForm.address, selectedForm.npa, selectedForm.localite) }}</span></dd>
                         </div>
                         <div class="flex gap-4">
-                            <dt class="w-32 shrink-0 font-medium text-stone-500"><span>Trophée</span></dt>
+                            <dt class="w-32 shrink-0 font-medium text-black"><span>Trophée</span></dt>
                             <dd>
                                 <span
                                     class="rounded-full px-2 py-1 text-xs font-medium"
@@ -316,37 +315,37 @@ onUnmounted(() => {
                             </dd>
                         </div>
                         <div v-if="selectedForm.message" class="flex gap-4">
-                            <dt class="w-32 shrink-0 font-medium text-stone-500"><span>Message</span></dt>
+                            <dt class="w-32 shrink-0 font-medium text-black"><span>Message</span></dt>
                             <dd class="whitespace-pre-wrap text-stone-900"><span>{{ selectedForm.message }}</span></dd>
                         </div>
                         <div class="flex gap-4">
-                            <dt class="w-32 shrink-0 font-medium text-stone-500"><span>Date</span></dt>
+                            <dt class="w-32 shrink-0 font-medium text-black"><span>Date</span></dt>
                             <dd class="text-stone-900"><span>{{ formatDate(selectedForm.created_at) }}</span></dd>
                         </div>
                     </dl>
 
                     <div class="mt-6">
-                        <p class="mb-2 text-xs font-semibold uppercase tracking-wide text-stone-500">
-                            Entreprises similaires dans la base
+                        <p class="mb-2 text-[0.95rem] font-semibold text-black">
+                            Collecte similaire existante
                         </p>
                         <div v-if="matchingCompanies.length === 0" class="text-sm text-stone-400">
-                            Aucune entreprise similaire trouvée.
+                            Aucune collecte similaire trouvée.
                         </div>
                         <ul v-else class="space-y-2">
                             <li
                                 v-for="company in matchingCompanies"
                                 :key="company.id"
-                                class="flex items-center justify-between rounded-lg bg-amber-50 px-4 py-2 text-sm"
+                                class="flex items-center justify-between rounded-lg bg-martinique-50 px-4 py-2 text-sm"
                             >
-                                <span class="font-medium text-amber-800">{{ company.name }}</span>
-                                <span class="text-amber-600">{{ company.email }}</span>
+                                <span class="font-medium text-martinique-800">{{ company.name }}</span>
+                                <span class="text-martinique-600">{{ company.email }}</span>
                             </li>
                         </ul>
                     </div>
 
                     <div class="mt-6 flex justify-end">
                         <button
-                            class="rounded-xl bg-[#5a002a] px-5 py-2 text-sm font-medium text-white hover:bg-[#7a0038] font-cooper"
+                            class="rounded-xl bg-[var(--color-razzmatazz-700)] px-5 py-2 text-sm font-medium text-white hover:bg-[var(--color-razzmatazz-800)] font-cooper"
                             @click="selectedForm = null"
                         >
                             <span>Fermer</span>

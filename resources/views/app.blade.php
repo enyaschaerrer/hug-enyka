@@ -34,6 +34,7 @@
         @vite(['resources/css/app.css', 'resources/js/app.ts'])
         @php
             $authUser = auth()->user()?->only(['id', 'name', 'email', 'role']);
+            $pageTitles = config('page_titles');
         @endphp
         <script>
             window.__APP__ = {
@@ -42,6 +43,7 @@
                 },
                 csrfToken: @json(csrf_token()),
                 coBrandedCollecte: @json($coBrandedCollecte ?? null),
+                pageTitles: @json($pageTitles),
             };
         </script>
     </head>

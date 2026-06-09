@@ -13,15 +13,39 @@ import RegistrationsPage from './pages/admin/RegistrationsPage.vue';
 import TropheePage from './pages/admin/TropheePage.vue';
 import AccountsPage from './pages/admin/AccountsPage.vue';
 
+type PageTitles = {
+    defaults?: { site?: string };
+    admin?: {
+        dashboard?: string;
+        campaigns?: string;
+        company_create?: string;
+        company_edit?: string;
+        registrations?: string;
+        trophee?: string;
+        accounts?: string;
+    };
+    cobranded?: {
+        collection?: string;
+        eligibility?: string;
+    };
+};
+
+type AppWindowState = {
+    __APP__?: {
+        pageTitles?: PageTitles;
+    };
+};
+
 const { currentPath } = useAdminRouter();
 const { company } = useCoBrandedCollecte();
+const pageTitles = ((window as unknown as AppWindowState).__APP__?.pageTitles ?? {}) as PageTitles;
 const adminTitles = {
-    '/admin': 'Dashboard - Administration CTS',
-    '/admin/campagnes': 'Campagnes - Administration CTS',
-    '/admin/companies/create': 'Créer une campagne - Administration CTS',
-    '/admin/registrations': 'Inscriptions - Administration CTS',
-    '/admin/trophee': 'Trophée - Administration CTS',
-    '/admin/comptes': 'Comptes - Administration CTS',
+    '/admin': pageTitles.admin?.dashboard,
+    '/admin/campagnes': pageTitles.admin?.campaigns,
+    '/admin/companies/create': pageTitles.admin?.company_create,
+    '/admin/registrations': pageTitles.admin?.registrations,
+    '/admin/trophee': pageTitles.admin?.trophee,
+    '/admin/comptes': pageTitles.admin?.accounts,
 } as const;
 
 const pages = {
@@ -56,17 +80,19 @@ const cookieAccentColor = computed(() => {
 
 watchEffect(() => {
     if (/^\/collecte\/[^/]+\/[^/]+\/questionnaire$/.test(currentPath.value)) {
-        document.title = `${company.name || 'Cœur d’Honneur'} - Questionnaire d’éligibilité`;
+        document.title = (pageTitles.cobranded?.eligibility ?? ':company - Questionnaire d’éligibilité')
+            .replace(':company', company.name || pageTitles.defaults?.site || 'Cœur d’Honneur');
         return;
     }
 
     if (/^\/collecte\/[^/]+\/[^/]+$/.test(currentPath.value)) {
-        document.title = `${company.name || 'Cœur d’Honneur'} - Collecte de sang`;
+        document.title = (pageTitles.cobranded?.collection ?? ':company - Collecte de sang')
+            .replace(':company', company.name || pageTitles.defaults?.site || 'Cœur d’Honneur');
         return;
     }
 
     if (/^\/admin\/companies\/\d+\/edit$/.test(currentPath.value)) {
-        document.title = 'Modifier une campagne - Administration CTS';
+        document.title = pageTitles.admin?.company_edit ?? document.title;
         return;
     }
 

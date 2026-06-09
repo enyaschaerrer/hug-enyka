@@ -304,17 +304,14 @@ onMounted(fetchOverview);
     <AdminLayout>
         <section class="min-h-full rounded-sm bg-[var(--color-pampas-50)] p-1 pr-4 text-[#1f1f22]">
             <div class="mb-6">
-                <h1 class="text-3xl font-semibold">Trophée - Édition {{ currentEditionYear }}</h1>
-                <p class="mt-1 text-lg text-base-content/60">
-                    Attribution des trophées aux entreprises candidates dans les différentes catégories.
-                </p>
+                <h1 class="text-3xl font-semibold">Gestion des gagnants - Édition {{ currentEditionYear }}</h1>
             </div>
 
             <div class="mb-4 flex flex-wrap gap-2 border-b border-base-300">
                 <button
                     class="cursor-pointer px-5 py-2.5 text-sm font-medium transition font-cooper"
                     :class="activeTab === 'donneur'
-                        ? 'border-b-2 border-[#5a002a] text-[#5a002a]'
+                        ? 'border-b-2 border-[var(--color-pampas-950)] text-[var(--color-pampas-950)]'
                         : 'text-base-content/50 hover:text-base-content'"
                     @click="activeTab = 'donneur'"
                 >
@@ -323,7 +320,7 @@ onMounted(fetchOverview);
                 <button
                     class="cursor-pointer px-5 py-2.5 text-sm font-medium transition font-cooper"
                     :class="activeTab === 'ambassadeur'
-                        ? 'border-b-2 border-[#5a002a] text-[#5a002a]'
+                        ? 'border-b-2 border-[var(--color-pampas-950)] text-[var(--color-pampas-950)]'
                         : 'text-base-content/50 hover:text-base-content'"
                     @click="activeTab = 'ambassadeur'"
                 >
@@ -332,7 +329,7 @@ onMounted(fetchOverview);
                 <button
                     class="cursor-pointer px-5 py-2.5 text-sm font-medium transition font-cooper"
                     :class="activeTab === 'jury'
-                        ? 'border-b-2 border-[#5a002a] text-[#5a002a]'
+                        ? 'border-b-2 border-[var(--color-pampas-950)] text-[var(--color-pampas-950)]'
                         : 'text-base-content/50 hover:text-base-content'"
                     @click="activeTab = 'jury'"
                 >
@@ -341,21 +338,21 @@ onMounted(fetchOverview);
             </div>
 
             <div v-if="loading" class="text-sm text-base-content/50">Chargement...</div>
-            <div v-else-if="loadError" class="alert alert-error"><span>{{ loadError }}</span></div>
+            <div v-else-if="loadError" class="alert border-0 bg-red-600 text-white"><span>{{ loadError }}</span></div>
 
             <template v-else-if="currentTabData">
                 <div class="mb-5">
-                    <h2 class="text-xl font-semibold text-[#5a002a]">
+                    <h2 class="text-xl font-semibold text-[var(--color-pampas-950)]">
                         Attribution du prix : {{ currentTrophyTitle[activeTab] }}
                     </h2>
                 </div>
 
-                <div v-if="actionError" class="alert alert-error mb-5">
+                <div v-if="actionError" class="alert mb-5 border-0 bg-red-600 text-white">
                     <span>{{ actionError }}</span>
                 </div>
 
                 <div v-if="currentTabData.current_winners.length === 0" class="mb-5">
-                    <p class="text-sm text-base-content/55">Aucun vainqueur pour le moment.</p>
+                    <p class="text-sm text-base-content/55">Aucun classement pour le moment. Vous pouvez sélectionner les gagnants en cliquant sur les boutons d'action dans la liste ci-dessous.</p>
                 </div>
 
                 <div
@@ -481,14 +478,14 @@ onMounted(fetchOverview);
                             :key="edition.year"
                             class="mb-3 flex flex-wrap items-stretch gap-3 last:mb-0"
                         >
-                            <div class="inline-flex min-w-[88px] items-center justify-center rounded-box border border-[#5a002a]/15 bg-[#f8e7ee] px-4 py-2 text-sm font-semibold text-[#5a002a]">
+                            <div class="inline-flex min-w-[88px] items-center justify-center rounded-box border border-[var(--color-pampas-950)]/15 bg-[var(--color-razzmatazz-100)] px-4 py-2 text-sm font-semibold text-[var(--color-pampas-950)]">
                                 {{ edition.year }}
                             </div>
                             <div class="flex min-w-0 flex-1 flex-wrap gap-3">
                                 <div
                                     v-for="winner in edition.winners"
                                     :key="`${edition.year}-${winner.rank}-${winner.id}`"
-                                    class="flex min-w-[220px] flex-1 items-center gap-3 rounded-box border border-[#5a002a]/15 bg-white px-4 py-3"
+                                    class="flex min-w-[220px] flex-1 items-center gap-3 rounded-box border border-[var(--color-pampas-950)]/15 bg-white px-4 py-3"
                                 >
                                     <div
                                         class="flex h-10 w-20 shrink-0 items-center justify-center"
@@ -510,9 +507,9 @@ onMounted(fetchOverview);
                                             <span>{{ companyBadgeLabel(winner.name) }}</span>
                                         </div>
                                     </div>
-                                    <div class="w-px -my-3 mx-1 self-stretch bg-[#5a002a]/10"></div>
+                                    <div class="w-px -my-3 mx-1 self-stretch bg-[var(--color-pampas-950)]/10"></div>
                                     <div>
-                                        <p class="text-xs font-semibold uppercase tracking-wider text-base-content/45">
+                                        <p class="text-xs font-medium uppercase tracking-wider text-base-content/45">
                                             {{ rankLabel(winner.rank, currentTabType) }}
                                         </p>
                                         <p class="font-semibold text-base-content -mb-[5px]">{{ winner.name }}</p>
@@ -529,13 +526,13 @@ onMounted(fetchOverview);
 
                 <div v-else>
                     <div class="mb-3 flex items-center justify-between gap-4">
-                        <h3 class="text-xl font-semibold text-[#5a002a]">
+                        <h3 class="text-xl font-semibold text-[var(--color-pampas-950)]">
                             Liste des concurrents
                         </h3>
-                        <label class="input input-bordered flex w-full max-w-sm items-center gap-3 bg-white">
+                        <label class="input input-bordered group flex w-full max-w-sm items-center gap-3 bg-white">
                             <span
                                 class="material-symbols-outlined"
-                                :class="isCompetitorListDisabled ? 'text-base-content/25' : 'text-base-content/45'"
+                                :class="isCompetitorListDisabled ? 'text-base-content/25' : 'text-base-content/45 transition-colors group-focus-within:text-black'"
                                 aria-hidden="true"
                             >
                                 search
@@ -555,7 +552,7 @@ onMounted(fetchOverview);
                         class="border border-base-300 bg-white transition-opacity"
                         :class="isCompetitorListDisabled ? 'pointer-events-none opacity-45' : ''"
                     >
-                        <div class="flex border-b border-base-300 bg-[#f8e7ee] px-5 py-3 text-xs font-semibold uppercase tracking-wide text-[#5a002a]">
+                        <div class="flex border-b border-base-300 bg-[var(--color-razzmatazz-100)] px-5 py-3 text-xs font-semibold uppercase tracking-wide text-[var(--color-pampas-950)]">
                             <div class="w-[16%] pr-4"><span>Entreprise</span></div>
                             <div class="w-[12%] pr-4"><span>Inscription</span></div>
                             <div class="w-[24%] pr-4"><span>Adresse</span></div>
@@ -568,7 +565,7 @@ onMounted(fetchOverview);
                         <div
                             v-for="company in filteredCandidates"
                             :key="company.id"
-                            class="flex items-center border-b border-base-200 px-5 py-3 last:border-b-0"
+                            class="flex items-center border-b border-base-200 px-5 py-3 hover:bg-[color:color-mix(in_srgb,var(--color-razzmatazz-50)_25%,transparent)] last:border-b-0"
                         >
                             <div class="flex w-[16%] items-center gap-3 pr-4">
                                 <div

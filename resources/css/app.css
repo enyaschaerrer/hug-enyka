@@ -307,6 +307,18 @@ a {
     -webkit-tap-highlight-color: transparent;
 }
 
+.select option {
+    background-color: white;
+    color: inherit;
+}
+
+.select option:hover,
+.select option:focus,
+.select option:checked {
+    background-color: var(--color-razzmatazz-50);
+    color: inherit;
+}
+
 .banner-copy-fade {
     animation: banner-copy-fade-in 520ms ease-out both;
 }

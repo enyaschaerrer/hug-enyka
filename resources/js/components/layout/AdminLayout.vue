@@ -14,10 +14,10 @@ const { currentPath, navigate } = useAdminRouter();
 
 function navLinkClasses(active: boolean): string {
     return [
-        'flex min-h-16 items-center px-8 text-[1.35rem] font-medium transition-colors',
+        'flex min-h-16 items-center px-8 text-[1.26rem] font-medium transition-colors',
         active
-            ? 'bg-[#F8E8EF] text-[#9B2F5C]'
-            : 'text-[#2F2F36] hover:bg-[var(--color-pampas-50)] hover:text-[#9B2F5C]',
+            ? 'bg-[var(--color-razzmatazz-50)] text-[var(--color-razzmatazz-700)]'
+            : 'text-[#2F2F36] hover:bg-[var(--color-pampas-50)] hover:text-[var(--color-razzmatazz-700)]',
     ].join(' ');
 }
 
@@ -49,7 +49,7 @@ async function logout() {
         <!-- Sidebar -->
         <aside class="flex h-screen w-72 shrink-0 flex-col border-r border-[#EFE8DD] bg-white">
             <div class="flex min-h-24 items-center px-8">
-                <p class="text-lg font-semibold text-[#5A002A]">Administration CTS</p>
+                <p class="text-lg font-semibold text-[var(--color-pampas-950)]">Administration CTS</p>
             </div>
 
             <nav class="-mt-px flex-1">
@@ -60,7 +60,7 @@ async function logout() {
                             :class="navLinkClasses(currentPath === '/admin')"
                             @click="goTo('/admin', $event)"
                         >
-                            <span>Dashboard</span>
+                            <span>Tableau de bord</span>
                         </a>
                     </li>
                     <li class="m-0 p-0">
@@ -69,7 +69,7 @@ async function logout() {
                             :class="navLinkClasses(currentPath === '/admin/registrations')"
                             @click="goTo('/admin/registrations', $event)"
                         >
-                            <span>Inscriptions</span>
+                            <span>Demandes de collecte</span>
                         </a>
                     </li>
                     <li class="m-0 p-0">
@@ -78,7 +78,7 @@ async function logout() {
                             :class="navLinkClasses(currentPath === '/admin/campagnes' || currentPath.startsWith('/admin/companies'))"
                             @click="goTo('/admin/campagnes', $event)"
                         >
-                            <span>Campagnes</span>
+                            <span>Collectes co-brandées</span>
                         </a>
                     </li>
                     <li class="m-0 p-0">
@@ -87,7 +87,7 @@ async function logout() {
                             :class="navLinkClasses(currentPath === '/admin/trophee')"
                             @click="goTo('/admin/trophee', $event)"
                         >
-                            <span>Trophée</span>
+                            <span>Gestion des gagnants</span>
                         </a>
                     </li>
                     <li v-if="isSuperAdmin" class="m-0 p-0">
@@ -96,7 +96,7 @@ async function logout() {
                             :class="navLinkClasses(currentPath === '/admin/comptes')"
                             @click="goTo('/admin/comptes', $event)"
                         >
-                            <span>Comptes</span>
+                            <span>Gestion des comptes</span>
                         </a>
                     </li>
                 </ul>
@@ -110,7 +110,7 @@ async function logout() {
                         <a
                             href="/"
                             title="Retour au site"
-                            class="inline-flex h-11 w-11 shrink-0 items-center justify-center border border-[#5A002A]/15 p-0 leading-none text-[#5A002A]/75 transition-colors hover:bg-[#F8E8EF] hover:text-[#5A002A]"
+                            class="inline-flex h-11 w-11 shrink-0 items-center justify-center border border-[var(--color-razzmatazz-200)] p-0 leading-none text-[var(--color-razzmatazz-700)] transition-colors hover:bg-[var(--color-razzmatazz-50)] hover:text-[var(--color-razzmatazz-800)]"
                         >
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                                 <path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5z" />
@@ -119,7 +119,7 @@ async function logout() {
                         </a>
                         <button
                             type="button"
-                            class="inline-flex h-11 flex-1 items-center justify-center border border-[#5A002A]/15 px-3 text-sm font-medium text-[#5A002A]/75 transition-colors hover:bg-[#F8E8EF] hover:text-[#5A002A]"
+                            class="inline-flex h-11 flex-1 items-center justify-center border border-[var(--color-razzmatazz-200)] px-3 text-sm font-medium text-[var(--color-razzmatazz-700)] transition-colors hover:bg-[var(--color-razzmatazz-50)] hover:text-[var(--color-razzmatazz-800)]"
                             @click="logout"
                         >
                             <span>Déconnexion</span>

@@ -327,16 +327,16 @@ function dayClasses(day: Date | null): string {
     }
 
     if (isSameDate(day, selectedDate.value)) {
-        return 'btn-primary';
+        return 'border-[var(--color-razzmatazz-700)] bg-[var(--color-razzmatazz-700)] text-white';
     }
 
     if (props.mode === 'end') {
         if (isSameDate(day, hoveredDate.value)) {
-            return 'bg-primary/25 text-primary';
+            return 'bg-[var(--color-razzmatazz-50)] text-[var(--color-razzmatazz-700)]';
         }
 
         if (isInRange(day)) {
-            return 'bg-primary/10 text-primary rounded-none';
+            return 'bg-[var(--color-razzmatazz-50)] text-[var(--color-razzmatazz-700)] rounded-none';
         }
     }
 
@@ -430,7 +430,7 @@ onUnmounted(() => {
                 class="truncate transition-colors duration-200 ease-out"
                 :class="[
                     displayValue ? 'text-base-content' : 'text-base-content/35',
-                    props.disabled ? '!text-base-content/35' : 'group-hover:text-primary',
+                    props.disabled ? '!text-base-content/35' : 'group-hover:text-[var(--color-razzmatazz-700)]',
                 ]"
             >
                 {{ displayValue || label }}
@@ -438,7 +438,7 @@ onUnmounted(() => {
             <svg
                 xmlns="http://www.w3.org/2000/svg"
                 class="h-5 w-5 shrink-0 text-base-content/55 transition-colors duration-200 ease-out"
-                :class="props.disabled ? 'cursor-not-allowed !text-base-content/35' : 'cursor-pointer group-hover:text-primary'"
+                :class="props.disabled ? 'cursor-not-allowed !text-base-content/35' : 'cursor-pointer group-hover:text-[var(--color-razzmatazz-700)]'"
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
@@ -522,7 +522,11 @@ onUnmounted(() => {
                         {{ String(h - 1).padStart(2, '0') }}h00
                     </option>
                 </select>
-                <button type="button" class="btn btn-primary btn-sm font-cooper" @click.stop="isOpen = false">
+                <button
+                    type="button"
+                    class="btn btn-sm border-[var(--color-razzmatazz-700)] bg-[var(--color-razzmatazz-700)] font-cooper text-white hover:border-[var(--color-razzmatazz-800)] hover:bg-[var(--color-razzmatazz-800)]"
+                    @click.stop="isOpen = false"
+                >
                     <span>Valider</span>
                 </button>
             </div>
