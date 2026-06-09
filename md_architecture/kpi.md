@@ -1,20 +1,26 @@
 [KPI]
 
+Nombre d’entreprises labellisées (et nb entreprises voulant pas être affichées) - Phase 3.0
+
+Sources des entreprises sous forme de liste - Phase 3.0
+
 Nb de visites (site public) - Phase 3.1
 
 Taux de participation (nb connectés/ nb de collaborateurs), * et filtrer par entreprise - Phase 3.1
 
 connectés = réussi a se connecter sur le site co-brandé avec le code au moins 1x - Phase 3.1
 
-Nombre d’entreprises labellisées (et nb entreprises voulant pas être affichées) - Phase 3.1
-
-Sources des entreprises sous forme de liste - Phase 3.1
-
 Conversion connexion → inscription (click lien OneDoc) - Phase 3.2
 
 Taux d’abandon sur le questionnaire (swipe ou messagerie) - Phase 3.2
 
 [Migration]
+
+--
+- ajouter dans bdd (abandonné) si c’est dans swipe ou messagerie
+- ajouter dans bdd compteur de visites
+- ajouter a la bdd si ils ont cliqué sur le lien
+--
 
 Migrations nécessaires pour couvrir les KPIs de la phase 3.1.
 

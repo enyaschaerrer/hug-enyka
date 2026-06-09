@@ -24,9 +24,17 @@ class KpiController extends Controller
         $totalCollaborators = (int) Company::query()->sum('employee_count');
         $participationRate = $this->percentage($registeredUsers, $totalCollaborators);
 
-        $labelledCompanies = DB::table('prizes')
-            ->distinct('company_id')
-            ->count('company_id');
+        $labelledCompanies = DB::table('companies')
+            ->whereExists(function ($query) {
+                $query->select(DB::raw(1))
+                    ->from('collections')
+                    ->whereColumn('collections.company_id', 'companies.id');
+            })
+            ->count();
+
+        $anonymousCompanies = DB::table('companies')
+            ->where('is_public', false)
+            ->count();
 
         $sourcesBreakdown = DB::table('companies')
             ->whereNotNull('source')
@@ -104,7 +112,9 @@ class KpiController extends Controller
                     'label' => 'Entreprises labellisées',
                     'value' => $labelledCompanies,
                     'available' => true,
-                    'note' => 'Entreprises présentes dans les prix/trophées.',
+                    'note' => $anonymousCompanies > 0
+                        ? $anonymousCompanies . ' en participation anonyme.'
+                        : 'Aucune en participation anonyme.',
                     'tone' => 'success',
                 ],
                 'companySources' => [

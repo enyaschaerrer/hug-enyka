@@ -7,7 +7,6 @@ type KpiValue = {
     value: number | null;
     available: boolean;
     note?: string;
-    tone?: 'success' | 'warning';
 };
 
 type KpiPayload = {
@@ -42,13 +41,6 @@ function displayValue(value: number | null, format: string): string {
     return format === 'percent' ? `${value}%` : value.toLocaleString('fr-CH');
 }
 
-function progressWidth(value: number | null): string {
-    if (value === null) {
-        return '0%';
-    }
-
-    return `${Math.max(4, Math.min(value, 100))}%`;
-}
 
 async function fetchKpis() {
     const showInitialLoader = !kpis.value;
@@ -107,13 +99,6 @@ onUnmounted(() => {
                 >
                     <p class="min-h-11 text-lg text-base-content/65">{{ card.label }}</p>
                     <p class="mt-2 text-4xl font-bold">{{ displayValue(card.value, card.format) }}</p>
-                    <div class="mt-4 h-2 rounded-full bg-base-200">
-                        <div
-                            class="h-full rounded-full"
-                            :class="card.tone === 'warning' ? 'bg-orange-400' : 'bg-emerald-600'"
-                            :style="{ width: progressWidth(card.value) }"
-                        ></div>
-                    </div>
                     <p class="mt-3 text-xs text-base-content/45">{{ card.note }}</p>
                 </article>
             </div>
