@@ -248,8 +248,10 @@ watch(currentPage, async () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
 });
 
-function showDisabledLinkMessage() {
-    disabledLinkMessage.value = "Le lien public s'active un mois avant le début de la collecte.";
+function showDisabledLinkMessage(reason: 'upcoming' | 'inactive' = 'upcoming') {
+    disabledLinkMessage.value = reason === 'inactive'
+        ? 'Cette campagne est terminée, le lien a été désactivé.'
+        : "Le lien public s'active un mois avant le début de la collecte.";
 
     if (disabledLinkTimer) {
         window.clearTimeout(disabledLinkTimer);
@@ -542,7 +544,7 @@ onMounted(fetchCompanies);
                                             <span class="min-w-0 truncate text-sm text-pampas-900/70">
                                                 {{ col.url }}
                                             </span>
-                                            <button type="button" class="btn btn-ghost btn-xs cursor-not-allowed border-transparent font-cooper text-pampas-900/70 hover:border-transparent hover:bg-pampas-200 hover:text-pampas-950" @click="showDisabledLinkMessage">
+                                            <button type="button" class="btn btn-ghost btn-xs cursor-not-allowed border-transparent font-cooper text-pampas-900/70 hover:border-transparent hover:bg-pampas-200 hover:text-pampas-950" @click="showDisabledLinkMessage('upcoming')">
                                                 <span>Lien désactivé</span>
                                             </button>
                                         </template>
@@ -588,7 +590,7 @@ onMounted(fetchCompanies);
                                         {{ formatDate(col.start) }} → {{ formatDate(col.end) }}
                                     </span>
                                     <span class="min-w-0 truncate text-xs text-base-content/35">{{ col.url }}</span>
-                                    <button type="button" class="btn btn-ghost btn-xs cursor-not-allowed font-cooper opacity-50" @click="showDisabledLinkMessage">
+                                    <button type="button" class="btn btn-ghost btn-xs cursor-not-allowed font-cooper opacity-50" @click="showDisabledLinkMessage('inactive')">
                                         <span>Lien désactivé</span>
                                     </button>
                                 </div>
