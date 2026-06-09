@@ -475,7 +475,7 @@ onMounted(fetchCompanies);
                                 <a
                                     v-if="company.trophy || !company.is_public"
                                     :href="companyParticipationPath(company)"
-                                    class="inline-flex items-center gap-1.5 rounded-full border border-emerald-100 bg-white px-3 py-1.5 text-xs font-medium text-[#5A002A] transition-colors hover:border-emerald-200 hover:bg-emerald-100/70"
+                                    class="inline-flex items-center gap-1.5 rounded-full border border-emerald-100 bg-white px-3 py-1.5 text-xs font-medium text-[var(--color-pampas-950)] transition-colors hover:border-emerald-200 hover:bg-emerald-100/70"
                                     @click.prevent="navigate(companyParticipationPath(company))"
                                 >
                                     <svg v-if="company.trophy" xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5"/></svg>
@@ -544,7 +544,7 @@ onMounted(fetchCompanies);
                                         <a
                                             v-if="col.is_public_link_enabled && (company.trophy || !company.is_public)"
                                             :href="companyParticipationPath(company)"
-                                            class="inline-flex items-center gap-1.5 rounded-full border border-amber-200 bg-white px-3 py-1.5 text-xs font-medium text-[#5A002A] transition-colors hover:border-amber-300 hover:bg-amber-100/70"
+                                            class="inline-flex items-center gap-1.5 rounded-full border border-amber-200 bg-white px-3 py-1.5 text-xs font-medium text-[var(--color-pampas-950)] transition-colors hover:border-amber-300 hover:bg-amber-100/70"
                                             @click.prevent="navigate(companyParticipationPath(company))"
                                 >
                                     <svg v-if="company.trophy" xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5"/></svg>

@@ -182,19 +182,19 @@ onUnmounted(() => {
                     <button
                         class="cursor-pointer px-5 py-2.5 text-sm font-medium transition font-cooper"
                         :class="activeTab === 'pending'
-                            ? 'border-b-2 border-[#5a002a] text-[#5a002a]'
+                            ? 'border-b-2 border-[var(--color-pampas-950)] text-[var(--color-pampas-950)]'
                             : 'text-base-content/50 hover:text-base-content'"
                         @click="activeTab = 'pending'"
                     >
                         <span>En attente</span>
-                        <span class="ml-1.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-rose-100 text-xs text-[#5a002a]">
+                        <span class="ml-1.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-rose-100 text-xs text-[var(--color-pampas-950)]">
                             <span>{{ registrations.filter(r => !r.treated).length }}</span>
                         </span>
                     </button>
                     <button
                         class="cursor-pointer px-5 py-2.5 text-sm font-medium transition font-cooper"
                         :class="activeTab === 'treated'
-                            ? 'border-b-2 border-[#5a002a] text-[#5a002a]'
+                            ? 'border-b-2 border-[var(--color-pampas-950)] text-[var(--color-pampas-950)]'
                             : 'text-base-content/50 hover:text-base-content'"
                         @click="activeTab = 'treated'"
                     >
@@ -212,7 +212,7 @@ onUnmounted(() => {
 
                 <div v-else class="border border-base-300 bg-white">
                     <!-- Header -->
-                    <div class="flex border-b border-base-300 bg-[#f8e7ee] px-5 py-3 text-xs font-semibold uppercase tracking-wide text-[#5a002a]">
+                    <div class="flex border-b border-base-300 bg-[var(--color-razzmatazz-100)] px-5 py-3 text-xs font-semibold uppercase tracking-wide text-[var(--color-pampas-950)]">
                         <div class="w-1/5"><span>Entreprise</span></div>
                         <div class="w-1/5"><span>Email</span></div>
                         <div class="w-1/5"><span>Date</span></div>
@@ -283,7 +283,7 @@ onUnmounted(() => {
                 <div v-if="loadingDetail" class="text-sm text-base-content/50">Chargement...</div>
 
                 <template v-else>
-                    <h2 class="mb-6 text-lg font-semibold text-[#5a002a]">
+                    <h2 class="mb-6 text-lg font-semibold text-[var(--color-pampas-950)]">
                         Détail de la demande
                     </h2>
 
@@ -346,7 +346,7 @@ onUnmounted(() => {
 
                     <div class="mt-6 flex justify-end">
                         <button
-                            class="rounded-xl bg-[#5a002a] px-5 py-2 text-sm font-medium text-white hover:bg-[#7a0038] font-cooper"
+                            class="rounded-xl bg-[var(--color-pampas-950)] px-5 py-2 text-sm font-medium text-white hover:opacity-90 font-cooper"
                             @click="selectedForm = null"
                         >
                             <span>Fermer</span>

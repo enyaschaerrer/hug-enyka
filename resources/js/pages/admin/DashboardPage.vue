@@ -137,9 +137,9 @@ onUnmounted(() => {
 
                 <article
                     v-if="kpis?.live.activeVisitors"
-                    class="flex w-full items-center justify-between gap-4 border border-[#5a002a]/10 bg-white px-4 py-2.5 text-[#5a002a] shadow-sm sm:w-80"
+                    class="flex w-full items-center justify-between gap-4 border border-[var(--color-pampas-950)]/10 bg-white px-4 py-2.5 text-[var(--color-pampas-950)] shadow-sm sm:w-80"
                 >
-                    <p class="text-sm font-medium leading-tight text-[#5a002a]/65">
+                    <p class="text-sm font-medium leading-tight text-[var(--color-pampas-950)]/65">
                         Nombre d’utilisateurs connectés
                     </p>
                     <p class="text-2xl font-bold leading-none">
@@ -158,8 +158,8 @@ onUnmounted(() => {
                     <article
                         v-for="card in summaryCards"
                         :key="card.label"
-                        class="border-2 bg-[#f8e7ee] p-5"
-                        :class="card.available ? 'border-[#5a002a] text-[#5a002a]' : 'border-[#8b7f86] text-[#8b7f86] opacity-60 grayscale'"
+                        class="border-2 bg-[var(--color-razzmatazz-50)] p-5"
+                        :class="card.available ? 'border-[var(--color-pampas-950)] text-[var(--color-pampas-950)]' : 'border-[#8b7f86] text-[#8b7f86] opacity-60 grayscale'"
                     >
                         <p class="text-xl font-medium">{{ card.label }}</p>
                         <p class="mt-3 text-4xl font-bold leading-none">
@@ -182,7 +182,7 @@ onUnmounted(() => {
                             <div
                                 class="flex min-h-12 items-center justify-between rounded-lg px-5"
                                 :class="[
-                                    step.available ? ['bg-[#efb7cd]', index === 2 ? 'bg-[#d24c82] text-white' : 'text-[#5a002a]'] : 'bg-base-200 text-base-content/40',
+                                    step.available ? ['bg-[#efb7cd]', index === 2 ? 'bg-[#d24c82] text-white' : 'text-[var(--color-pampas-950)]'] : 'bg-base-200 text-base-content/40',
                                 ]"
                                 :style="{ width: barWidth(step.rate) }"
                             >
