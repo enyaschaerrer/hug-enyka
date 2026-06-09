@@ -44,6 +44,7 @@ const searchQuery = ref('');
 const companyFilter = ref<CompanyFilter>('active-first');
 const currentPage = ref(1);
 const deletingCompanyId = ref<number | null>(null);
+const deletingCollectionKey = ref<string | null>(null);
 const disabledLinkMessage = ref<string | null>(null);
 const copyMessage = ref<string | null>(null);
 const pageSize = 10;
@@ -315,6 +316,48 @@ async function deleteCompany(company: CompanyRow) {
     }
 }
 
+async function deleteCollection(company: CompanyRow, collection: CollectionRow) {
+    if (!window.confirm(`Supprimer cette collecte de "${company.name}" ?`)) {
+        return;
+    }
+
+    deletingCollectionKey.value = `${company.id}:${collection.id}`;
+    loadError.value = null;
+
+    try {
+        const res = await fetch(`/admin/companies/${company.id}/collections/${collection.id}`, {
+            method: 'DELETE',
+            headers: {
+                'Accept': 'application/json',
+                'X-CSRF-TOKEN': csrfToken,
+                'X-Requested-With': 'XMLHttpRequest',
+            },
+        });
+
+        if (res.ok) {
+            const data = await res.json();
+            const nextCollections = company.collections.filter((item) => item.id !== collection.id);
+            const companyIndex = companies.value.findIndex((item) => item.id === company.id);
+
+            if (companyIndex !== -1) {
+                companies.value[companyIndex] = {
+                    ...companies.value[companyIndex],
+                    collections: nextCollections,
+                };
+            }
+
+            flashMessage.value = data.message ?? 'Collecte supprimée.';
+            return;
+        }
+
+        loadError.value = 'Erreur lors de la suppression de la collecte.';
+    } catch {
+        loadError.value = 'Erreur réseau.';
+    } finally {
+        deletingCollectionKey.value = null;
+    }
+}
+
 onMounted(fetchCompanies);
 </script>
 
@@ -480,7 +523,7 @@ onMounted(fetchCompanies);
                                     </svg>
                                 </button>
                             </div>
-                            <div class="flex shrink-0 items-center gap-3">
+                            <div class="flex shrink-0 items-center gap-1">
                                 <a
                                     v-if="company.trophy || !company.is_public"
                                     :href="companyParticipationPath(company)"
@@ -500,6 +543,21 @@ onMounted(fetchCompanies);
                                     <span class="material-symbols-outlined" style="font-size: 18px;" aria-hidden="true">edit</span>
                                     <span>Modifier la collecte</span>
                                 </a>
+                                <button
+                                    type="button"
+                                    title="Supprimer la collecte"
+                                    class="inline-flex h-9 w-9 items-center justify-center rounded-full text-martinique-950 transition-colors hover:bg-white hover:text-martinique-950 disabled:cursor-not-allowed disabled:opacity-40"
+                                    :disabled="deletingCollectionKey === `${company.id}:${col.id}`"
+                                    @click="deleteCollection(company, col)"
+                                >
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                        <path d="M10 11v6" />
+                                        <path d="M14 11v6" />
+                                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6" />
+                                        <path d="M3 6h18" />
+                                        <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                                    </svg>
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -569,6 +627,21 @@ onMounted(fetchCompanies);
                                     <span class="material-symbols-outlined" style="font-size: 18px;" aria-hidden="true">edit</span>
                                     <span>Modifier la collecte</span>
                                 </a>
+                                <button
+                                    type="button"
+                                    title="Supprimer la collecte"
+                                    class="inline-flex h-9 w-9 items-center justify-center rounded-full text-pampas-950 transition-colors hover:bg-white hover:text-pampas-950 disabled:cursor-not-allowed disabled:opacity-40"
+                                    :disabled="deletingCollectionKey === `${company.id}:${col.id}`"
+                                    @click="deleteCollection(company, col)"
+                                >
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                        <path d="M10 11v6" />
+                                        <path d="M14 11v6" />
+                                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6" />
+                                        <path d="M3 6h18" />
+                                        <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                                    </svg>
+                                </button>
                             </div>
                         </div>
                     </div>

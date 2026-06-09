@@ -54,4 +54,15 @@ class CollectionController extends Controller
             ],
         ]);
     }
+
+    public function destroy(Company $company, Collection $collection): JsonResponse
+    {
+        abort_unless((int) $collection->company_id === (int) $company->id, 404);
+
+        $collection->delete();
+
+        return response()->json([
+            'message' => 'Collecte supprimée.',
+        ]);
+    }
 }
