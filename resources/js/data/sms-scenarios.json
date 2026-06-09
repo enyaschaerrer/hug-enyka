@@ -1,451 +1,294 @@
 {
-    "start": "welcome",
+    "intro": "welcome",
+    "appointment": "appointment",
+    "moduleEntries": {
+        "voyage": "q_voyage_start",
+        "soins_medicaux": "q6_start",
+        "medicaments_vaccins": "q7_start",
+        "piqures": "q8_start",
+        "plaies_operation": "q9_start",
+        "relations_sexuelles": "q10_start",
+        "ist": "q11_start"
+    },
     "nodes": {
+        "q_voyage_start": {
+            "id": "q_voyage_start",
+            "type": "travel",
+            "speaker": "bot",
+            "text": "Tu as voyagé hors de Suisse. Dans combien de pays es-tu allé·e récemment ?"
+        },
+
         "welcome": {
             "id": "welcome",
             "type": "question",
             "speaker": "bot",
-            "text": "Je vais te poser quelques questions rapides pour voir comment te guider vers le don du sang.",
+            "text": "Quelques questions rapides pour préciser ce que tu as indiqué juste avant. À la fin, je te dirai où tu en es pour ton don.",
             "answers": [
-                {
-                    "id": "start",
-                    "label": "C'est parti",
-                    "next": "already_donated",
-                    "sanguyEmotion": "happy"
-                }
+                { "id": "start", "label": "C'est parti", "next": "__next__", "sanguyEmotion": "happy" }
             ]
         },
-        "already_donated": {
-            "id": "already_donated",
+
+        "q6_start": {
+            "id": "q6_start",
             "type": "question",
             "speaker": "bot",
-            "text": "Tu as deja donne ton sang ?",
+            "text": "Tu as indiqué des soins médicaux ou une maladie récente. C'était lequel des deux ?",
             "answers": [
-                {
-                    "id": "yes",
-                    "label": "Oui, deja",
-                    "next": "last_donation",
-                    "sanguyEmotion": "happy"
-                },
-                {
-                    "id": "no",
-                    "label": "Non, jamais",
-                    "next": "first_time_feeling",
-                    "sanguyEmotion": "alt-happy"
-                },
-                {
-                    "id": "not_sure",
-                    "label": "Je ne sais plus",
-                    "next": "first_time_feeling",
-                    "sanguyEmotion": "alt-happy"
-                }
+                { "id": "care", "label": "Des soins médicaux", "next": "q6_care", "sanguyEmotion": "happy" },
+                { "id": "sick", "label": "J'étais malade", "next": "q6_sick", "sanguyEmotion": "alt-happy" },
+                { "id": "both", "label": "Les deux", "next": "q6_care_both", "sanguyEmotion": "alt-happy" }
             ]
         },
-        "last_donation": {
-            "id": "last_donation",
+        "q6_care": {
+            "id": "q6_care",
             "type": "question",
             "speaker": "bot",
-            "text": "Ton dernier don date d'environ quand ?",
+            "text": "Quels soins médicaux as-tu reçus ?",
             "answers": [
-                {
-                    "id": "recent",
-                    "label": "Moins de 3 mois",
-                    "next": "too_recent_context",
-                    "sanguyEmotion": "angry"
-                },
-                {
-                    "id": "ready",
-                    "label": "Plus de 3 mois",
-                    "next": "donor_experience",
-                    "sanguyEmotion": "happy"
-                },
-                {
-                    "id": "long_time",
-                    "label": "Ca fait longtemps",
-                    "next": "return_blocker",
-                    "sanguyEmotion": "alt-happy"
-                }
+                { "id": "dental", "label": "Soins dentaires", "next": "q6_dental", "sanguyEmotion": "happy" },
+                { "id": "gastro", "label": "Gastroscopie / coloscopie", "next": "__next__", "sanguyEmotion": "alt-angry", "outcome": { "severity": "delay", "label": "à confirmer" } },
+                { "id": "other", "label": "Un autre soin", "next": "__next__", "sanguyEmotion": "alt-happy" }
             ]
         },
-        "donor_experience": {
-            "id": "donor_experience",
+        "q6_dental": {
+            "id": "q6_dental",
             "type": "question",
             "speaker": "bot",
-            "text": "La derniere fois, tu l'as plutot vecu comment ?",
+            "text": "As-tu eu un traitement dentaire au cours des 2 dernières semaines, ou une extraction au cours de la dernière semaine ?",
             "answers": [
-                {
-                    "id": "good",
-                    "label": "Plutot bien",
-                    "next": "motivation",
-                    "sanguyEmotion": "happy"
-                },
-                {
-                    "id": "tiring",
-                    "label": "Un peu fatigant",
-                    "next": "comfort_tips",
-                    "sanguyEmotion": "alt-happy"
-                },
-                {
-                    "id": "stressful",
-                    "label": "Un peu stressant",
-                    "next": "reassurance",
-                    "sanguyEmotion": "alt-angry"
-                }
+                { "id": "yes", "label": "Oui", "next": "__next__", "sanguyEmotion": "alt-angry", "outcome": { "severity": "delay", "label": "à confirmer" } },
+                { "id": "no", "label": "Non", "next": "__next__", "sanguyEmotion": "happy" }
             ]
         },
-        "return_blocker": {
-            "id": "return_blocker",
+        "q6_sick": {
+            "id": "q6_sick",
             "type": "question",
             "speaker": "bot",
-            "text": "Qu'est-ce qui t'a surtout empeche d'y retourner ?",
+            "text": "Au cours du mois dernier, as-tu eu la grippe, un rhume, de la toux ou de la fièvre ?",
             "answers": [
-                {
-                    "id": "forgot",
-                    "label": "J'ai oublie",
-                    "next": "reminder_preference",
-                    "sanguyEmotion": "alt-happy"
-                },
-                {
-                    "id": "schedule",
-                    "label": "Pas le bon moment",
-                    "next": "availability",
-                    "sanguyEmotion": "happy"
-                },
-                {
-                    "id": "bad_memory",
-                    "label": "Mauvais souvenir",
-                    "next": "reassurance",
-                    "sanguyEmotion": "alt-angry"
-                }
+                { "id": "yes", "label": "Oui", "next": "__next__", "sanguyEmotion": "alt-angry", "outcome": { "severity": "delay", "months": 0.5, "label": "2 semaines" } },
+                { "id": "no", "label": "Non", "next": "__next__", "sanguyEmotion": "happy" }
             ]
         },
-        "first_time_feeling": {
-            "id": "first_time_feeling",
+        "q6_care_both": {
+            "id": "q6_care_both",
             "type": "question",
             "speaker": "bot",
-            "text": "Pour un premier don, tu te sens comment ?",
+            "text": "Ok, on regarde d'abord les soins médicaux. Lesquels as-tu reçus ?",
             "answers": [
-                {
-                    "id": "curious",
-                    "label": "Curieux",
-                    "next": "first_time_blocker",
-                    "sanguyEmotion": "happy"
-                },
-                {
-                    "id": "hesitant",
-                    "label": "Un peu hesitant",
-                    "next": "first_time_blocker",
-                    "sanguyEmotion": "alt-happy"
-                },
-                {
-                    "id": "worried",
-                    "label": "Franchement pas rassure",
-                    "next": "reassurance",
-                    "sanguyEmotion": "alt-angry"
-                }
+                { "id": "dental", "label": "Soins dentaires", "next": "q6_dental_both", "sanguyEmotion": "happy" },
+                { "id": "gastro", "label": "Gastroscopie / coloscopie", "next": "q6_sick", "sanguyEmotion": "alt-angry", "outcome": { "severity": "delay", "label": "à confirmer" } },
+                { "id": "other", "label": "Un autre soin", "next": "q6_sick", "sanguyEmotion": "alt-happy" }
             ]
         },
-        "first_time_blocker": {
-            "id": "first_time_blocker",
+        "q6_dental_both": {
+            "id": "q6_dental_both",
             "type": "question",
             "speaker": "bot",
-            "text": "Qu'est-ce qui te freine le plus ?",
+            "text": "As-tu eu un traitement dentaire au cours des 2 dernières semaines, ou une extraction au cours de la dernière semaine ?",
             "answers": [
-                {
-                    "id": "fear",
-                    "label": "La peur des aiguilles",
-                    "next": "needle_reassurance",
-                    "sanguyEmotion": "alt-angry"
-                },
-                {
-                    "id": "time",
-                    "label": "Je manque de temps",
-                    "next": "availability",
-                    "sanguyEmotion": "happy"
-                },
-                {
-                    "id": "eligibility",
-                    "label": "Je ne sais pas si je peux",
-                    "next": "eligibility_intro",
-                    "sanguyEmotion": "alt-happy"
-                },
-                {
-                    "id": "alone",
-                    "label": "Je n'ai pas envie d'y aller seul",
-                    "next": "team_context",
-                    "sanguyEmotion": "happy"
-                }
+                { "id": "yes", "label": "Oui", "next": "q6_sick", "sanguyEmotion": "alt-angry", "outcome": { "severity": "delay", "label": "à confirmer" } },
+                { "id": "no", "label": "Non", "next": "q6_sick", "sanguyEmotion": "happy" }
             ]
         },
-        "needle_reassurance": {
-            "id": "needle_reassurance",
+
+        "q7_start": {
+            "id": "q7_start",
             "type": "question",
             "speaker": "bot",
-            "text": "C'est une crainte tres courante. Sur place, l'equipe explique chaque etape et tu peux demander a etre accompagne.",
+            "text": "Tu as indiqué des médicaments ou des vaccins. C'était lequel des deux ?",
             "answers": [
-                {
-                    "id": "better",
-                    "label": "Ca me rassure",
-                    "next": "motivation",
-                    "sanguyEmotion": "happy"
-                },
-                {
-                    "id": "still_worried",
-                    "label": "J'ai encore des doutes",
-                    "next": "reassurance",
-                    "sanguyEmotion": "alt-happy"
-                }
+                { "id": "meds", "label": "Des médicaments", "next": "q7_med1", "sanguyEmotion": "happy" },
+                { "id": "vacc", "label": "Des vaccins", "next": "q7_vacc_only", "sanguyEmotion": "alt-happy" },
+                { "id": "both", "label": "Les deux", "next": "q7_vacc_both", "sanguyEmotion": "alt-happy" }
             ]
         },
-        "eligibility_intro": {
-            "id": "eligibility_intro",
+        "q7_med1": {
+            "id": "q7_med1",
             "type": "question",
             "speaker": "bot",
-            "text": "Il y a un questionnaire medical avant le don. Pour ce prototype, on reste sur l'orientation generale.",
+            "text": "Au cours des 2 dernières semaines, as-tu pris des antibiotiques ?",
             "answers": [
-                {
-                    "id": "ok",
-                    "label": "Ok, je veux continuer",
-                    "next": "availability",
-                    "sanguyEmotion": "happy"
-                },
-                {
-                    "id": "need_info",
-                    "label": "Je veux d'abord verifier",
-                    "next": "soft_end",
-                    "sanguyEmotion": "alt-happy"
-                }
+                { "id": "yes", "label": "Oui", "next": "__next__", "sanguyEmotion": "alt-angry", "outcome": { "severity": "delay", "months": 0.5, "label": "2 semaines" } },
+                { "id": "no", "label": "Non", "next": "q7_med2", "sanguyEmotion": "happy" }
             ]
         },
-        "comfort_tips": {
-            "id": "comfort_tips",
+        "q7_med2": {
+            "id": "q7_med2",
             "type": "question",
             "speaker": "bot",
-            "text": "Boire, manger avant, et prevoir un moment calme apres aide beaucoup pour mieux vivre l'experience.",
+            "text": "Au cours du mois dernier, as-tu pris des médicaments contre l'hyperplasie prostatique, la chute des cheveux, l'acné/eczéma, la dépression, la migraine ou les troubles bipolaires ?",
             "answers": [
-                {
-                    "id": "useful",
-                    "label": "Bon a savoir",
-                    "next": "availability",
-                    "sanguyEmotion": "happy"
-                },
-                {
-                    "id": "still_not_sure",
-                    "label": "Je suis encore indecis",
-                    "next": "motivation",
-                    "sanguyEmotion": "alt-happy"
-                }
+                { "id": "yes", "label": "Oui", "next": "__next__", "sanguyEmotion": "alt-angry", "outcome": { "severity": "delay", "months": 1, "label": "1 mois" } },
+                { "id": "no", "label": "Non", "next": "q7_med3", "sanguyEmotion": "happy" }
             ]
         },
-        "reassurance": {
-            "id": "reassurance",
+        "q7_med3": {
+            "id": "q7_med3",
             "type": "question",
             "speaker": "bot",
-            "text": "Tu peux prendre le temps. L'objectif n'est pas de forcer, mais de rendre le parcours plus clair et plus simple.",
+            "text": "Au cours des 2 derniers mois, as-tu pris des médicaments contre l'endométriose ?",
             "answers": [
-                {
-                    "id": "continue",
-                    "label": "Je continue",
-                    "next": "motivation",
-                    "sanguyEmotion": "happy"
-                },
-                {
-                    "id": "maybe_later",
-                    "label": "Peut-etre plus tard",
-                    "next": "soft_end",
-                    "sanguyEmotion": "alt-happy"
-                }
+                { "id": "yes", "label": "Oui", "next": "__next__", "sanguyEmotion": "alt-angry", "outcome": { "severity": "delay", "months": 2, "label": "2 mois" } },
+                { "id": "no", "label": "Non", "next": "q7_med4", "sanguyEmotion": "happy" }
             ]
         },
-        "motivation": {
-            "id": "motivation",
+        "q7_med4": {
+            "id": "q7_med4",
             "type": "question",
             "speaker": "bot",
-            "text": "Pour toi, le plus motivant serait quoi ?",
+            "text": "Au cours des 4 derniers mois, as-tu pris une thérapie antirétrovirale PEP/PrEP ou des médicaments fabriqués à partir de sang ?",
             "answers": [
-                {
-                    "id": "help",
-                    "label": "Aider directement",
-                    "next": "impact",
-                    "sanguyEmotion": "happy"
-                },
-                {
-                    "id": "team",
-                    "label": "Y aller avec des collegues",
-                    "next": "team_context",
-                    "sanguyEmotion": "alt-happy"
-                },
-                {
-                    "id": "simple",
-                    "label": "Que ce soit simple",
-                    "next": "availability",
-                    "sanguyEmotion": "happy"
-                }
+                { "id": "yes", "label": "Oui", "next": "__next__", "sanguyEmotion": "alt-angry", "outcome": { "severity": "delay", "months": 4, "label": "4 mois" } },
+                { "id": "no", "label": "Non", "next": "q7_med5", "sanguyEmotion": "happy" }
             ]
         },
-        "impact": {
-            "id": "impact",
+        "q7_med5": {
+            "id": "q7_med5",
             "type": "question",
             "speaker": "bot",
-            "text": "Le don sert a des patients qui en ont besoin rapidement. C'est concret, local, et utile.",
+            "text": "Au cours des 6 derniers mois, as-tu pris de l'Avodart®, du Duodart® ou reçu des cytostatiques ?",
             "answers": [
-                {
-                    "id": "strong",
-                    "label": "C'est ce qui me motive",
-                    "next": "availability",
-                    "sanguyEmotion": "happy"
-                },
-                {
-                    "id": "need_group",
-                    "label": "Je prefere venir en groupe",
-                    "next": "team_context",
-                    "sanguyEmotion": "alt-happy"
-                }
+                { "id": "yes", "label": "Oui", "next": "__next__", "sanguyEmotion": "alt-angry", "outcome": { "severity": "delay", "months": 6, "label": "6 mois" } },
+                { "id": "no", "label": "Non", "next": "__next__", "sanguyEmotion": "happy" }
             ]
         },
-        "team_context": {
-            "id": "team_context",
+        "q7_vacc_only": {
+            "id": "q7_vacc_only",
             "type": "question",
             "speaker": "bot",
-            "text": "Venir avec des collegues peut rendre le moment plus simple et plus motivant.",
+            "text": "Au cours des 2 dernières semaines, as-tu reçu un vaccin ?",
             "answers": [
-                {
-                    "id": "team_yes",
-                    "label": "Oui, bonne idee",
-                    "next": "availability",
-                    "sanguyEmotion": "happy"
-                },
-                {
-                    "id": "team_no",
-                    "label": "Je prefere seul",
-                    "next": "availability",
-                    "sanguyEmotion": "alt-happy"
-                }
+                { "id": "yes", "label": "Oui", "next": "__next__", "sanguyEmotion": "alt-happy" },
+                { "id": "no", "label": "Non", "next": "__next__", "sanguyEmotion": "happy" }
             ]
         },
-        "availability": {
-            "id": "availability",
+        "q7_vacc_both": {
+            "id": "q7_vacc_both",
             "type": "question",
             "speaker": "bot",
-            "text": "Tu prefererais quel type de moment pour donner ?",
+            "text": "On regarde d'abord les vaccins. Au cours des 2 dernières semaines, as-tu reçu un vaccin ?",
             "answers": [
-                {
-                    "id": "morning",
-                    "label": "Le matin",
-                    "next": "workplace",
-                    "sanguyEmotion": "happy"
-                },
-                {
-                    "id": "noon",
-                    "label": "Pause de midi",
-                    "next": "workplace",
-                    "sanguyEmotion": "alt-happy"
-                },
-                {
-                    "id": "afternoon",
-                    "label": "L'apres-midi",
-                    "next": "workplace",
-                    "sanguyEmotion": "happy"
-                },
-                {
-                    "id": "dont_know",
-                    "label": "Je ne sais pas encore",
-                    "next": "workplace",
-                    "sanguyEmotion": "alt-happy"
-                }
+                { "id": "yes", "label": "Oui", "next": "q7_med1", "sanguyEmotion": "alt-happy" },
+                { "id": "no", "label": "Non", "next": "q7_med1", "sanguyEmotion": "happy" }
             ]
         },
-        "workplace": {
-            "id": "workplace",
+
+        "q8_start": {
+            "id": "q8_start",
             "type": "question",
             "speaker": "bot",
-            "text": "Si ton entreprise organise une collecte, tu serais plus partant ?",
+            "text": "Tu as signalé une piqûre de tique. As-tu eu des symptômes (fièvre, rougeur qui s'étend, fatigue, douleurs articulaires…) ?",
             "answers": [
-                {
-                    "id": "yes_company",
-                    "label": "Oui, clairement",
-                    "next": "appointment",
-                    "sanguyEmotion": "happy"
-                },
-                {
-                    "id": "maybe_company",
-                    "label": "Peut-etre",
-                    "next": "appointment",
-                    "sanguyEmotion": "alt-happy"
-                },
-                {
-                    "id": "not_needed",
-                    "label": "Pas forcement",
-                    "next": "appointment",
-                    "sanguyEmotion": "happy"
-                }
+                { "id": "yes", "label": "Oui", "next": "__next__", "sanguyEmotion": "alt-angry", "outcome": { "severity": "delay", "months": 6, "label": "6 mois" } },
+                { "id": "no", "label": "Non", "next": "__next__", "sanguyEmotion": "happy" }
             ]
         },
-        "reminder_preference": {
-            "id": "reminder_preference",
+
+        "q9_start": {
+            "id": "q9_start",
             "type": "question",
             "speaker": "bot",
-            "text": "Un rappel simple t'aiderait a ne pas laisser passer le bon moment ?",
+            "text": "Tu as indiqué une plaie ouverte ou une opération. C'était lequel des deux ?",
             "answers": [
-                {
-                    "id": "yes_reminder",
-                    "label": "Oui",
-                    "next": "availability",
-                    "sanguyEmotion": "happy"
-                },
-                {
-                    "id": "no_reminder",
-                    "label": "Pas besoin",
-                    "next": "motivation",
-                    "sanguyEmotion": "alt-happy"
-                }
+                { "id": "wound", "label": "Une plaie ouverte", "next": "q9_wound", "sanguyEmotion": "happy" },
+                { "id": "op", "label": "Une opération", "next": "q9_op", "sanguyEmotion": "alt-happy" },
+                { "id": "both", "label": "Les deux", "next": "q9_wound_both", "sanguyEmotion": "alt-happy" }
             ]
         },
-        "too_recent_context": {
-            "id": "too_recent_context",
+        "q9_wound": {
+            "id": "q9_wound",
             "type": "question",
             "speaker": "bot",
-            "text": "Si le don est trop recent, il faut attendre le bon delai avant de recommencer.",
+            "text": "Quelle est la cause de la plaie ouverte ?",
             "answers": [
-                {
-                    "id": "check_dates",
-                    "label": "Je veux verifier une date",
-                    "next": "too_recent",
-                    "sanguyEmotion": "alt-happy"
-                },
-                {
-                    "id": "come_back",
-                    "label": "Je reviendrai plus tard",
-                    "next": "soft_end",
-                    "sanguyEmotion": "happy"
-                }
+                { "id": "piercing", "label": "Piercing", "next": "__next__", "sanguyEmotion": "alt-angry", "outcome": { "severity": "delay", "months": 4, "label": "4 mois" } },
+                { "id": "tattoo", "label": "Tatouage", "next": "__next__", "sanguyEmotion": "alt-angry", "outcome": { "severity": "delay", "months": 4, "label": "4 mois" } },
+                { "id": "makeup", "label": "Maquillage permanent", "next": "__next__", "sanguyEmotion": "alt-angry", "outcome": { "severity": "delay", "months": 4, "label": "4 mois" } },
+                { "id": "microblading", "label": "Microblading", "next": "__next__", "sanguyEmotion": "alt-angry", "outcome": { "severity": "delay", "months": 4, "label": "4 mois" } },
+                { "id": "blood", "label": "Contact avec du sang étranger", "next": "__next__", "sanguyEmotion": "alt-angry", "outcome": { "severity": "delay", "months": 4, "label": "4 mois" } },
+                { "id": "leeches", "label": "Utilisation de sangsues", "next": "__next__", "sanguyEmotion": "alt-angry", "outcome": { "severity": "delay", "months": 4, "label": "4 mois" } },
+                { "id": "other", "label": "Autre cause", "next": "__next__", "sanguyEmotion": "alt-happy" }
             ]
         },
-        "soft_end": {
-            "id": "soft_end",
-            "type": "appointment",
+        "q9_op": {
+            "id": "q9_op",
+            "type": "question",
             "speaker": "bot",
-            "text": "Pas de souci. Tu peux garder le lien sous la main et revenir quand tu veux avancer.",
-            "cta": {
-                "label": "Prendre RDV",
-                "href": "#"
-            }
+            "text": "As-tu reçu une transfusion sanguine, ou subi une autre intervention ?",
+            "answers": [
+                { "id": "transfusion", "label": "Une transfusion sanguine", "next": "__next__", "sanguyEmotion": "alt-angry", "outcome": { "severity": "delay", "months": 4, "label": "4 mois" } },
+                { "id": "other", "label": "Une autre intervention", "next": "__next__", "sanguyEmotion": "alt-happy" }
+            ]
         },
-        "too_recent": {
-            "id": "too_recent",
-            "type": "appointment",
+        "q9_wound_both": {
+            "id": "q9_wound_both",
+            "type": "question",
             "speaker": "bot",
-            "text": "Ton dernier don est peut-etre trop recent. Tu peux quand meme consulter les disponibilites et verifier le bon moment.",
-            "cta": {
-                "label": "Prendre RDV",
-                "href": "#"
-            }
+            "text": "On regarde d'abord la plaie ouverte. Quelle en est la cause ?",
+            "answers": [
+                { "id": "piercing", "label": "Piercing", "next": "q9_op", "sanguyEmotion": "alt-angry", "outcome": { "severity": "delay", "months": 4, "label": "4 mois" } },
+                { "id": "tattoo", "label": "Tatouage", "next": "q9_op", "sanguyEmotion": "alt-angry", "outcome": { "severity": "delay", "months": 4, "label": "4 mois" } },
+                { "id": "makeup", "label": "Maquillage permanent", "next": "q9_op", "sanguyEmotion": "alt-angry", "outcome": { "severity": "delay", "months": 4, "label": "4 mois" } },
+                { "id": "microblading", "label": "Microblading", "next": "q9_op", "sanguyEmotion": "alt-angry", "outcome": { "severity": "delay", "months": 4, "label": "4 mois" } },
+                { "id": "blood", "label": "Contact avec du sang étranger", "next": "q9_op", "sanguyEmotion": "alt-angry", "outcome": { "severity": "delay", "months": 4, "label": "4 mois" } },
+                { "id": "leeches", "label": "Utilisation de sangsues", "next": "q9_op", "sanguyEmotion": "alt-angry", "outcome": { "severity": "delay", "months": 4, "label": "4 mois" } },
+                { "id": "other", "label": "Autre cause", "next": "q9_op", "sanguyEmotion": "alt-happy" }
+            ]
         },
+
+        "q10_start": {
+            "id": "q10_start",
+            "type": "question",
+            "speaker": "bot",
+            "text": "Tu as signalé des relations sexuelles récentes. Au cours des 4 derniers mois, c'était avec un nouveau partenaire, ou avec plus de deux personnes ?",
+            "answers": [
+                { "id": "new", "label": "Un nouveau partenaire", "next": "__next__", "sanguyEmotion": "alt-angry", "outcome": { "severity": "delay", "months": 4, "label": "4 mois" } },
+                { "id": "multiple", "label": "Plus de deux personnes", "next": "__next__", "sanguyEmotion": "alt-angry", "outcome": { "severity": "delay", "months": 12, "label": "12 mois" } },
+                { "id": "both", "label": "Les deux", "next": "__next__", "sanguyEmotion": "alt-angry", "outcome": { "severity": "delay", "months": 12, "label": "12 mois" } },
+                { "id": "no", "label": "Ni l'un ni l'autre", "next": "__next__", "sanguyEmotion": "happy" }
+            ]
+        },
+
+        "q11_start": {
+            "id": "q11_start",
+            "type": "question",
+            "speaker": "bot",
+            "text": "Tu as signalé une infection sexuellement transmissible. Laquelle ?",
+            "answers": [
+                { "id": "hiv", "label": "VIH / Sida", "next": "__next__", "sanguyEmotion": "angry", "outcome": { "severity": "permanent" } },
+                { "id": "hepatitis", "label": "Hépatite B ou C", "next": "__next__", "sanguyEmotion": "angry", "outcome": { "severity": "permanent" } },
+                { "id": "syphilis", "label": "Syphilis", "next": "__next__", "sanguyEmotion": "angry", "outcome": { "severity": "permanent" } },
+                { "id": "other_ist", "label": "Chlamydia, gonorrhée, herpès génital ou autre IST", "next": "q11_other_ist", "sanguyEmotion": "alt-angry" },
+                { "id": "hpv", "label": "HPV", "next": "q11_hpv", "sanguyEmotion": "alt-angry" }
+            ]
+        },
+        "q11_other_ist": {
+            "id": "q11_other_ist",
+            "type": "question",
+            "speaker": "bot",
+            "text": "Ton infection est-elle guérie et ton traitement terminé depuis au moins 4 mois ?",
+            "answers": [
+                { "id": "yes", "label": "Oui", "next": "__next__", "sanguyEmotion": "happy" },
+                { "id": "no", "label": "Non", "next": "__next__", "sanguyEmotion": "alt-angry", "outcome": { "severity": "delay", "months": 4, "label": "4 mois" } }
+            ]
+        },
+        "q11_hpv": {
+            "id": "q11_hpv",
+            "type": "question",
+            "speaker": "bot",
+            "text": "Ton infection est-elle guérie et ton traitement terminé depuis au moins 2 semaines ?",
+            "answers": [
+                { "id": "yes", "label": "Oui", "next": "__next__", "sanguyEmotion": "happy" },
+                { "id": "no", "label": "Non", "next": "__next__", "sanguyEmotion": "alt-angry", "outcome": { "severity": "delay", "months": 2, "label": "2 mois" } }
+            ]
+        },
+
         "appointment": {
             "id": "appointment",
             "type": "appointment",
             "speaker": "bot",
-            "text": "Tu as un profil interessant pour passer a l'etape suivante. Le plus simple est de choisir un moment qui te convient.",
+            "text": "Bonne nouvelle : rien ne s'oppose à ton don pour le moment ! 🎉 Le plus simple est de choisir un créneau qui te convient.",
             "cta": {
                 "label": "Prendre RDV",
                 "href": "#"

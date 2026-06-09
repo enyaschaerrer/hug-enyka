@@ -5,7 +5,7 @@
             "id": 1,
             "theme": "Âge",
             "title": "Tranche d'âge requise",
-            "question": "Avez-vous entre 18 et 60 ans ? (75 ans si vous êtes habitué-e à donner votre sang)",
+            "question": "Avez-vous entre 18 et 60 ans ? (75 ans si vous êtes habitué.e.s à donner votre sang)",
             "bio": "L'âge est une condition de base pour le don de sang.",
             "hint": "La limite est portée à 75 ans pour les donneurs réguliers.",
             "image": "/img/mascots/sanguy_hero.webp",
@@ -27,7 +27,7 @@
             "title": "Don des 4 derniers mois",
             "question": "Au cours des 4 derniers mois, avez-vous déjà donné votre sang ?",
             "bio": "Un délai minimum est requis entre deux dons.",
-            "hint": "Le délai standard est de 4 mois entre deux dons de sang total.",
+            "hint": "Le délai standard est de 4 mois entre deux dons de sang.",
             "image": "/img/mascots/sanguy_hero.webp",
             "tone": "violet",
             "leftDialogue": "",
@@ -45,8 +45,8 @@
             "id": 3,
             "theme": "Poids",
             "title": "Poids minimum",
-            "question": "Pesez-vous au moins 50 kg ?",
-            "bio": "Le poids minimum est requis pour la sécurité du donneur.",
+            "question": "Pesez-vous 50 kg ou plus ?",
+            "bio": "Un poids minimum de 50 kg est requis pour la sécurité du donneur.",
             "hint": "En dessous de 50 kg, le don peut être contre-indiqué.",
             "image": "/img/mascots/sanguy_hero.webp",
             "tone": "green",
@@ -63,49 +63,9 @@
         },
         {
             "id": 4,
-            "theme": "Relations sexuelles",
-            "title": "Relations sexuelles récentes",
-            "question": "Au cours des 4 derniers mois, avez-vous eu des relations sexuelles ?",
-            "bio": "Question nécessaire pour évaluer certains risques de transmission.",
-            "hint": "Certaines situations spécifiques peuvent imposer un délai.",
-            "image": "/img/mascots/sanguy_hero.webp",
-            "tone": "pink",
-            "leftDialogue": "Certaines situations rendent le don impossible pour des raisons de sécurité.",
-            "rightDialogue": "",
-            "leftOutcome": {
-                "status": "clear",
-                "label": "Aucune relation récente"
-            },
-            "rightOutcome": {
-                "status": "warning",
-                "label": "Relations récentes à préciser"
-            }
-        },
-        {
-            "id": 5,
-            "theme": "IST",
-            "title": "Infection sexuellement transmissible",
-            "question": "Avez-vous déjà contracté et/ou testé positif à une maladie sexuellement transmissible ?",
-            "bio": "Certaines IST peuvent affecter l'éligibilité au don.",
-            "hint": "Selon la maladie et son traitement, un délai peut s'appliquer.",
-            "image": "/img/mascots/sanguy_hero.webp",
-            "tone": "emerald",
-            "leftDialogue": "Cette information est essentielle pour protéger les receveurs.",
-            "rightDialogue": "Merci pour votre sincérité, chaque réponse compte.",
-            "leftOutcome": {
-                "status": "clear",
-                "label": "Aucune IST signalée"
-            },
-            "rightOutcome": {
-                "status": "warning",
-                "label": "IST à préciser avec le médecin"
-            }
-        },
-        {
-            "id": 6,
             "theme": "Drogues",
             "title": "Consommation de drogues",
-            "question": "Au cours des 12 derniers mois, avez-vous consommé ou injecté de la drogue ?",
+            "question": "Au cours des 12 derniers mois, avez-vous consommé ou vous êtes injecté de la drogue ?",
             "bio": "La sécurité du receveur est prioritaire.",
             "hint": "Toute consommation de drogues impose une période d'exclusion.",
             "image": "/img/mascots/sanguy_hero.webp",
@@ -122,16 +82,16 @@
             }
         },
         {
-            "id": 7,
+            "id": 5,
             "theme": "Grossesse",
             "title": "Grossesse ou accouchement",
-            "question": "Êtes-vous actuellement enceinte ou cela fait-il moins d'un an depuis la dernière naissance ?",
+            "question": "Êtes-vous actuellement enceinte ou avez-vous eu un enfant il y a moins d'un an ?",
             "bio": "Cette question ne concerne que les personnes concernées.",
             "hint": "Un délai d'un an après l'accouchement est requis.",
             "image": "/img/mascots/sanguy_hero.webp",
             "tone": "pink",
             "leftDialogue": "Vous prenez déjà soin d'une petite vie, c'est une belle mission !",
-            "rightDialogue": "Je reviendrais quand le moment sera venu.",
+            "rightDialogue": "Je reviendrai quand le moment sera venu.",
             "leftOutcome": {
                 "status": "clear",
                 "label": "Non concerné(e) ou délai écoulé"
@@ -142,7 +102,8 @@
             }
         },
         {
-            "id": 8,
+            "id": 6,
+            "module": "voyage",
             "theme": "Voyage",
             "title": "Voyage hors Suisse",
             "question": "Au cours des 6 derniers mois, avez-vous voyagé hors de la Suisse ?",
@@ -162,10 +123,11 @@
             }
         },
         {
-            "id": 9,
+            "id": 7,
+            "module": "soins_medicaux",
             "theme": "Santé",
             "title": "Soins médicaux ou maladie",
-            "question": "Au cours du mois dernier, avez-vous reçu des soins médicaux ou étiez-vous malade ?",
+            "question": "Au cours du mois dernier, avez-vous reçu des soins médicaux ou avez-vous été malade ?",
             "bio": "Une maladie récente peut nécessiter un report du don.",
             "hint": "Fièvre, infection ou traitement récent sont des points à signaler.",
             "image": "/img/mascots/sanguy_hero.webp",
@@ -182,10 +144,11 @@
             }
         },
         {
-            "id": 10,
+            "id": 8,
+            "module": "medicaments_vaccins",
             "theme": "Médicaments",
             "title": "Médicaments ou vaccins",
-            "question": "Au cours des 6 derniers mois, avez-vous pris des médicaments et/ou vaccins ?",
+            "question": "Au cours des 6 derniers mois, avez-vous pris des médicaments et/ou vous êtes fait vacciné.e ?",
             "bio": "Certains traitements imposent un délai avant de donner.",
             "hint": "Les antibiotiques, anticoagulants et certains vaccins sont à signaler.",
             "image": "/img/mascots/sanguy_hero.webp",
@@ -202,10 +165,11 @@
             }
         },
         {
-            "id": 11,
+            "id": 9,
+            "module": "piqures",
             "theme": "Tique",
             "title": "Piqûre de tique",
-            "question": "Au cours du dernier mois, avez-vous été piqué(e) par une tique ?",
+            "question": "Au cours du dernier mois, avez-vous été piqué.e par une tique ?",
             "bio": "Une piqûre de tique peut nécessiter une vérification.",
             "hint": "En cas de maladie de Lyme, un délai s'applique.",
             "image": "/img/mascots/sanguy_hero.webp",
@@ -222,15 +186,16 @@
             }
         },
         {
-            "id": 12,
+            "id": 10,
+            "module": "plaies_operation",
             "theme": "Blessures",
             "title": "Plaie ouverte ou opération",
-            "question": "Au cours du dernier mois, avez-vous une plaie ouverte (blessure, tatouage, piercing…) ou avez-vous effectué une opération ?",
+            "question": "Au cours du dernier mois, avez-vous eu une plaie ouverte (blessure, tatouage, piercing…) ou avez-vous subi une opération médicale ?",
             "bio": "Ces situations peuvent nécessiter un délai selon le contexte.",
-            "hint": "Un tatouage ou piercing récent impose généralement un délai de 4 mois.",
+            "hint": "Un tatouage ou piercing récent imposent généralement un délai de 4 mois.",
             "image": "/img/mascots/sanguy_hero.webp",
             "tone": "violet",
-            "leftDialogue": "Je peux pas faire un don actuellement, mais regarde mon nouveau tatouage !",
+            "leftDialogue": "Je ne peux pas faire un don actuellement, mais regarde mon nouveau tatouage !",
             "rightDialogue": "",
             "leftOutcome": {
                 "status": "clear",
@@ -240,6 +205,49 @@
                 "status": "warning",
                 "label": "Plaie ou opération à préciser"
             }
+        },
+        {
+            "id": 11,
+            "module": "relations_sexuelles",
+            "theme": "Relations sexuelles",
+            "title": "Relations sexuelles récentes",
+            "question": "Au cours des 4 derniers mois, avez-vous eu des relations sexuelles ?",
+            "bio": "Question nécessaire pour évaluer certains risques de transmission.",
+            "hint": "Certaines situations spécifiques peuvent imposer un délai.",
+            "image": "/img/mascots/sanguy_hero.webp",
+            "tone": "pink",
+            "leftDialogue": "Certaines situations rendent le don impossible pour des raisons de sécurité.",
+            "rightDialogue": "",
+            "leftOutcome": {
+                "status": "clear",
+                "label": "Aucune relation récente"
+            },
+            "rightOutcome": {
+                "status": "warning",
+                "label": "Relations récentes à préciser"
+            }
+        },
+        {
+            "id": 12,
+            "module": "ist",
+            "theme": "IST",
+            "title": "Infection sexuellement transmissible",
+            "question": "Avez-vous déjà contracté et/ou testé positif.ve à une maladie sexuellement transmissible ?",
+            "bio": "Certaines IST peuvent affecter l'éligibilité au don.",
+            "hint": "Selon la maladie et son traitement, un délai peut s'appliquer.",
+            "image": "/img/mascots/sanguy_hero.webp",
+            "tone": "emerald",
+            "leftDialogue": "Cette information est essentielle pour protéger les receveur.se.s.",
+            "rightDialogue": "Merci pour votre sincérité, chaque réponse compte.",
+            "leftOutcome": {
+                "status": "clear",
+                "label": "Aucune IST signalée"
+            },
+            "rightOutcome": {
+                "status": "warning",
+                "label": "IST à préciser avec le médecin"
+            }
         }
+        
     ]
 }

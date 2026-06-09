@@ -13,7 +13,7 @@ const props = withDefaults(defineProps<{
 
 const emit = defineEmits<{
     ineligible: [];
-    match: [];
+    match: [modules: string[]];
 }>();
 
 type SwipeDirection = 'left' | 'right';
@@ -21,6 +21,7 @@ type TriageStatus = 'clear' | 'warning' | 'blocker';
 
 type Card = Record<string, unknown> & {
     id: number;
+    module?: string;
     theme: string;
     title: string;
     question: string;
@@ -125,7 +126,13 @@ function handleSwipe(item: Card, direction: SwipeDirection) {
 
     const allAnswered = answers.value.length === totalCards.value;
     if (allAnswered) {
-        emit('match');
+        // Modules de messagerie « enregistrés » : cartes swipées vers un avertissement (oui),
+        // dans l'ordre des cartes du scénario.
+        const registeredModules = tinderScenario.cards
+            .filter((card) => typeof card.module === 'string'
+                && answers.value.some((answer) => answer.cardId === card.id && answer.status === 'warning'))
+            .map((card) => card.module as string);
+        emit('match', registeredModules);
     }
 }
 
@@ -192,7 +199,7 @@ onBeforeUnmount(() => {
                         <div
                             class="-rotate-12 inline-flex items-center rounded-2xl border-4 border-[#ef4444] bg-white px-3 py-1.5 text-xl font-bold leading-none uppercase text-[#ef4444] shadow-lg sm:px-5 sm:py-2.5 sm:text-3xl"
                         >
-                            <span>C'est faux</span>
+                            <span>NON</span>
                         </div>
                     </div>
                 </template>
@@ -205,7 +212,7 @@ onBeforeUnmount(() => {
                         <div
                             class="inline-flex rotate-12 items-center rounded-2xl border-4 border-[#22c55e] bg-white px-3 py-1.5 text-xl font-bold leading-none uppercase text-[#22c55e] shadow-lg sm:px-5 sm:py-2.5 sm:text-3xl"
                         >
-                            <span>Je valide</span>
+                            <span>OUI</span>
                         </div>
                     </div>
                 </template>
@@ -282,7 +289,7 @@ onBeforeUnmount(() => {
                         :style="{ opacity: Math.min(Math.abs(delta), 0.92) }"
                     >
                         <div class="-rotate-12 inline-flex items-center rounded-2xl border-4 border-[#ef4444] bg-white px-3 py-1.5 text-xl font-bold leading-none uppercase text-[#ef4444] shadow-lg">
-                            <span>C'est faux</span>
+                            <span>NON</span>
                         </div>
                     </div>
                 </template>
@@ -293,7 +300,7 @@ onBeforeUnmount(() => {
                         :style="{ opacity: Math.min(Math.abs(delta), 0.92) }"
                     >
                         <div class="inline-flex rotate-12 items-center rounded-2xl border-4 border-[#22c55e] bg-white px-3 py-1.5 text-xl font-bold leading-none uppercase text-[#22c55e] shadow-lg">
-                            <span>Je valide</span>
+                            <span>OUI</span>
                         </div>
                     </div>
                 </template>
@@ -368,7 +375,7 @@ onBeforeUnmount(() => {
                     :style="{ opacity: Math.min(Math.abs(delta), 0.92) }"
                 >
                     <div class="-rotate-12 inline-flex items-center rounded-2xl border-4 border-[#ef4444] bg-white px-3 py-1.5 text-lg font-bold leading-none uppercase text-[#ef4444] shadow-lg">
-                        <span>C'est faux</span>
+                        <span>NON</span>
                     </div>
                 </div>
             </template>
@@ -379,7 +386,7 @@ onBeforeUnmount(() => {
                     :style="{ opacity: Math.min(Math.abs(delta), 0.92) }"
                 >
                     <div class="inline-flex rotate-12 items-center rounded-2xl border-4 border-[#22c55e] bg-white px-3 py-1.5 text-lg font-bold leading-none uppercase text-[#22c55e] shadow-lg">
-                        <span>Je valide</span>
+                        <span>OUI</span>
                     </div>
                 </div>
             </template>
