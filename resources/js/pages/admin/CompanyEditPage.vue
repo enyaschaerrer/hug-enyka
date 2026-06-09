@@ -429,12 +429,12 @@ watch(loading, async (isLoading) => {
                     v-if="editedCollection"
                     class="mt-4 rounded-lg border px-4 py-3 text-sm"
                     :class="editedCollection.is_active
-                        ? 'border-emerald-100 bg-emerald-50'
-                        : 'border-amber-200 bg-amber-50'"
+                        ? 'border-martinique-400 bg-martinique-100'
+                        : 'border-pampas-300 bg-pampas-100'"
                 >
                     <p
                         class="mb-2 text-xs font-medium tracking-wider uppercase"
-                        :class="editedCollection.is_active ? 'text-emerald-700/70' : 'text-amber-800/65'"
+                        :class="editedCollection.is_active ? 'text-martinique-800/70' : 'text-pampas-800/65'"
                     >
                         {{ editedCollection.is_active ? 'Collecte active' : 'Collecte à venir' }}
                     </p>
@@ -443,7 +443,7 @@ watch(loading, async (isLoading) => {
                             <span
                                 v-if="editedCollection.start && editedCollection.end"
                                 class="shrink-0 text-sm font-medium"
-                                :class="editedCollection.is_active ? 'text-emerald-800' : 'text-amber-900'"
+                                :class="editedCollection.is_active ? 'text-martinique-950' : 'text-pampas-950'"
                             >
                                 {{ formatDate(editedCollection.start) }} → {{ formatDate(editedCollection.end) }}
                             </span>
@@ -451,13 +451,13 @@ watch(loading, async (isLoading) => {
                                 v-if="editedCollection.is_active"
                                 :href="editedCollection.url"
                                 target="_blank"
-                                class="link link-primary min-w-0 truncate text-sm"
+                                class="min-w-0 truncate text-sm text-martinique-950 underline-offset-2 hover:underline"
                             >
                                 <span>{{ editedCollection.url }}</span>
                             </a>
                             <span
                                 v-else
-                                class="min-w-0 truncate text-sm text-amber-800/70"
+                                class="min-w-0 truncate text-sm text-pampas-900/70"
                             >
                                 {{ editedCollection.url }}
                             </span>
