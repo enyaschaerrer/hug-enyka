@@ -6,9 +6,9 @@ const { navigate } = useAdminRouter();
 const { collection } = useCoBrandedCollecte();
 
 const criteria = [
-    { title: 'Âge', description: 'Vous êtes âgé·e entre 18 et 60 ans.' },
-    { title: 'Poids', description: 'Vous pesez minimum 50 kg.' },
-    { title: 'Globale', description: 'Vous êtes en bonne santé globale et vous n\'êtes pas enceinte.' },
+    { title: 'Âge', description: 'Vous êtes âgé·e entre 18 et 60 ans.', short: '18-60 ans' },
+    { title: 'Poids', description: 'Vous pesez minimum 50 kg.', short: 'Min. 50 kg' },
+    { title: 'Globale', description: 'Vous êtes en bonne santé globale et vous n\'êtes pas enceinte.', short: 'Pas enceinte' },
 ];
 
 function startQuestionnaire() {
@@ -18,8 +18,19 @@ function startQuestionnaire() {
 
 <template>
     <section class="mx-auto max-w-3xl px-6 pt-10 pb-32">
-        <!-- Critères éliminatoires : carte avec bandeau de titre catskillwhite-800 + 3 colonnes -->
-        <div class="overflow-hidden rounded-2xl border-2 border-catskillwhite-800">
+        <!-- Mobile : juste les 3 infos en pastilles, sans boîte ni sous-titres -->
+        <div class="flex flex-wrap justify-center gap-2 sm:hidden">
+            <span
+                v-for="(item, idx) in criteria"
+                :key="idx"
+                class="rounded-full border-2 border-catskillwhite-800 bg-white px-4 py-2 text-body font-medium text-catskillwhite-900"
+            >
+                {{ item.short }}
+            </span>
+        </div>
+
+        <!-- Desktop : carte « critères éliminatoires » avec bandeau de titre + 3 colonnes -->
+        <div class="hidden overflow-hidden rounded-2xl border-2 border-catskillwhite-800 sm:block">
             <div class="bg-catskillwhite-800 px-6 py-2 text-center">
                 <h3 class="text-body font-semibold text-white">Les critères éliminatoires</h3>
             </div>

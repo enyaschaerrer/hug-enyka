@@ -115,7 +115,7 @@ const primaryTextStyle = {
         </div>
 
         <!-- CTA mascots — texte + bouton en haut, mascottes en dessous -->
-        <div class="mt-12 flex flex-col items-center gap-6">
+        <div class="mt-16 flex flex-col items-center gap-6">
             <p class="text-heading-t2 text-catskillwhite-900">Vous êtes intéressé·e·s ?</p>
             <button
                 type="button"
@@ -125,9 +125,8 @@ const primaryTextStyle = {
                 Tester votre éligibilité
             </button>
 
-            <div class="-mt-8 flex items-end justify-center gap-2 sm:gap-16">
-                <img :src="'/img/mascots/blutly_hero.webp'" alt="" class="h-32 w-auto sm:h-40" />
-                <img :src="'/img/mascots/sanguy_satisfied.webp'" alt="" class="h-40 w-auto translate-y-4 sm:h-48 sm:translate-y-0" />
+            <div class="mt-2 flex justify-center">
+                <img :src="'/img/mascots/blutly_sanguy_hey.webp'" alt="" class="h-32 w-auto sm:h-40" />
             </div>
         </div>
     </section>
