@@ -17,17 +17,18 @@ function startQuestionnaire() {
 </script>
 
 <template>
-    <section class="mx-auto max-w-3xl px-6 pt-5 pb-32 lg:pt-10">
-        <!-- Mobile : juste les 3 infos en pastilles, sans boîte ni sous-titres -->
-        <div class="flex flex-wrap justify-center gap-2 mb-5 lg:hidden">
-            <span
+    <section class="mx-auto max-w-3xl px-6 pt-6 pb-32 sm:pt-10">
+        <!-- Mobile : juste les 3 infos, sans boîte ni sous-titres -->
+        <ul class="flex flex-col items-center gap-2 sm:hidden">
+            <li
                 v-for="(item, idx) in criteria"
                 :key="idx"
-                class="rounded-full border-2 border-catskillwhite-800 bg-white px-4 py-2 text-body font-medium text-catskillwhite-900"
+                class="flex items-center gap-2 text-body font-medium text-catskillwhite-900"
             >
+                <span class="material-symbols-outlined text-razzmatazz-700" style="font-size: 20px;" aria-hidden="true">check_circle</span>
                 {{ item.short }}
-            </span>
-        </div>
+            </li>
+        </ul>
 
         <!-- Desktop : carte « critères éliminatoires » avec bandeau de titre + 3 colonnes -->
         <div class="hidden overflow-hidden rounded-2xl border-2 border-catskillwhite-800 lg:block">
@@ -56,9 +57,9 @@ function startQuestionnaire() {
             </p>
 
             <!-- Mascottes au-dessus, qui débordent légèrement sur les boutons -->
-            <div class="-mt-8 flex items-end justify-center gap-16 sm:-mt-16 sm:gap-28">
-                <img :src="'/img/mascots/sanguy_devastated.webp'" alt="" class="h-32 w-auto translate-y-6 sm:h-56 sm:translate-y-10" />
-                <img :src="'/img/mascots/blutly_run.webp'" alt="" class="h-24 w-auto sm:h-36" />
+            <div class="-mt-6 flex items-end justify-center gap-12 sm:-mt-16 sm:gap-28">
+                <img :src="'/img/mascots/sanguy_devastated.webp'" alt="" class="h-32 w-auto translate-y-3 sm:h-56 sm:translate-y-10" />
+                <img :src="'/img/mascots/blutly_hero.webp'" alt="" class="h-20 w-auto -translate-y-4 sm:h-36 sm:-translate-y-6" />
             </div>
 
             <!-- Boutons Non / Oui : très gros, translate-y-1/2 → dépassent à moitié en bas de la carte -->
@@ -67,11 +68,11 @@ function startQuestionnaire() {
                     href="/"
                     class="min-w-30 rounded-2xl bg-razzmatazz-800 text-[1rem] py-2 font-semibold text-white transition hover:bg-razzmatazz-400 lg:min-w-56 sm:px-16 lg:py-7 lg:min-w-44 lg:text-heading-t1"
                 >
-                    Non
+                    Pas encore
                 </a>
                 <button
                     type="button"
-                    class="min-w-30 rounded-2xl bg-razzmatazz-800 text-[1rem] py-2 font-semibold text-white transition hover:bg-razzmatazz-400 lg:min-w-56 lg:px-16 lg:py-7 lg:min-w-44 lg:text-heading-t1"
+                    class="min-w-28 rounded-2xl bg-razzmatazz-800 px-8 py-3 text-heading-t3 font-semibold text-white transition hover:bg-razzmatazz-900 sm:min-w-40 sm:px-12 sm:py-4"
                     @click="startQuestionnaire"
                 >
                     Oui
