@@ -221,8 +221,10 @@ onUnmounted(() => {
                     <div
                         v-for="reg in filteredRegistrations"
                         :key="reg.id"
-                        class="flex items-center border-b border-base-200 px-5 py-3 hover:bg-[color:color-mix(in_srgb,var(--color-razzmatazz-50)_25%,transparent)]"
-                        :class="[!reg.treated ? 'cursor-pointer' : '']"
+                        class="flex items-center border-b border-base-200 px-5 py-3"
+                        :class="[
+                            !reg.treated ? 'cursor-pointer hover:bg-[color:color-mix(in_srgb,var(--color-razzmatazz-50)_25%,transparent)]' : '',
+                        ]"
                         @click="!reg.treated && openDetail(reg.id)"
                     >
                         <div class="flex w-4/5 items-center" :class="reg.treated ? 'opacity-50' : ''">
