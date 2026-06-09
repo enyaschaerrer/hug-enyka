@@ -6,13 +6,18 @@ defineProps<{
     isEnd: boolean;
     canRestore: boolean;
     pill?: boolean;
+    restoreOnly?: boolean;
 }>();
 </script>
 
 <template>
-    <div class="relative z-20 mt-[-4.9rem] flex w-full items-center justify-center px-4 sm:mt-[-5.4rem] sm:px-8">
+    <div
+        class="relative z-20 flex w-full items-center justify-center px-4"
+        :class="restoreOnly ? '-mt-4' : 'mt-[-4.9rem] sm:mt-[-5.4rem] sm:px-8'"
+    >
         <button
-            class="btn btn-ghost absolute -top-8 left-4 h-7 w-7 rounded-full border border-[#b81e62]/20 bg-white/90 p-0 text-[#7d2d53] shadow-[0_8px_18px_rgba(109,0,46,0.08)] transition hover:-translate-y-0.5 hover:bg-white hover:text-[#5f0f35] disabled:border-[#b81e62]/10 disabled:bg-white/60 disabled:text-[#b894a8] disabled:opacity-100 sm:left-8 sm:h-8 sm:w-8"
+            class="btn btn-ghost h-7 w-7 rounded-full border border-[var(--color-razzmatazz-700)]/20 bg-white/90 p-0 text-[var(--color-razzmatazz-800)] shadow-[0_8px_18px_rgba(109,0,46,0.08)] transition hover:-translate-y-0.5 hover:bg-white hover:text-[var(--color-razzmatazz-950)] disabled:border-[var(--color-razzmatazz-700)]/10 disabled:bg-white/60 disabled:text-[var(--color-razzmatazz-300)] disabled:opacity-100 sm:h-8 sm:w-8"
+            :class="restoreOnly ? '' : 'absolute -top-8 left-4 sm:left-8'"
             type="button"
             :disabled="!canRestore"
             aria-label="Revenir a la carte precedente"
@@ -23,10 +28,10 @@ defineProps<{
             </svg>
         </button>
 
-        <div class="grid w-full max-w-[520px] grid-cols-2 gap-3 sm:max-w-[560px] sm:gap-4">
+        <div v-if="!restoreOnly" class="grid w-full max-w-[520px] grid-cols-2 gap-3 sm:max-w-[560px] sm:gap-4">
             <button
                 :class="pill ? 'rounded-full' : 'rounded-[0.95rem]'"
-            class="group inline-flex min-h-[50px] items-center justify-center gap-2 border border-[#f6a0bb] bg-[#f68eaf] px-3 py-3 text-left text-[#5f0f35] shadow-[0_14px_28px_rgba(246,142,175,0.24)] transition-transform hover:-translate-y-0.5 disabled:opacity-35 sm:min-h-[56px] sm:px-5"
+            class="group inline-flex min-h-[50px] items-center justify-center gap-2 bg-[var(--color-razzmatazz-300)] px-3 py-3 text-left text-[var(--color-razzmatazz-950)] shadow-[0_14px_28px_rgba(246,142,175,0.24)] transition-transform hover:-translate-y-0.5 disabled:opacity-35 sm:min-h-[56px] sm:px-5"
                 type="button"
                 :disabled="isEnd"
                 aria-label="Refuser la carte"
@@ -38,7 +43,7 @@ defineProps<{
 
             <button
                 :class="pill ? 'rounded-full' : 'rounded-[0.95rem]'"
-            class="group inline-flex min-h-[50px] items-center justify-center gap-2 border border-[#6d002e] bg-[#6d002e] px-3 py-3 text-left text-white shadow-[0_14px_28px_rgba(109,0,46,0.24)] transition-transform hover:-translate-y-0.5 disabled:opacity-35 sm:min-h-[56px] sm:px-5"
+            class="group inline-flex min-h-[50px] items-center justify-center gap-2 bg-[var(--color-razzmatazz-900)] px-3 py-3 text-left text-white shadow-[0_14px_28px_rgba(109,0,46,0.24)] transition-transform hover:-translate-y-0.5 disabled:opacity-35 sm:min-h-[56px] sm:px-5"
                 type="button"
                 :disabled="isEnd"
                 aria-label="Valider la carte"

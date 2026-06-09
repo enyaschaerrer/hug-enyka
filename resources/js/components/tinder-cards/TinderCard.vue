@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue';
+import { ref, watch } from 'vue';
 import { Vue3Lottie } from 'vue3-lottie';
 import swipeLottieData from '../../data/swipe-lottie.json';
 
@@ -11,8 +11,8 @@ type TinderItem = {
     bio: string;
     hint: string;
     tone: 'red' | 'green' | 'blue' | 'violet' | 'orange' | 'turquoise' | 'pink' | 'emerald';
-    leftDialogue: string;
-    rightDialogue: string;
+    dialogue: string;
+    mascot: string;
 };
 
 const props = defineProps<{
@@ -25,40 +25,13 @@ const props = defineProps<{
 
 const emit = defineEmits<{
     introStart: [];
+    swipeLeft: [];
+    swipeRight: [];
 }>();
 
 const emoteAnimationKey = ref(0);
-const leftTypedText = ref('');
-const rightTypedText = ref('');
-let leftTypingTimeout: number | null = null;
-let rightTypingTimeout: number | null = null;
-
-const sanguyVariants = [
-    '/img/mascots/sanguy_hero.webp',
-    '/img/mascots/sanguy_thumbs_up.webp',
-    '/img/mascots/sanguy_satisfied.webp',
-    '/img/mascots/sanguy_above.webp',
-];
-
-const blutlyVariants = [
-    '/img/mascots/blutly_hero.webp',
-    '/img/mascots/blutly_thumbs_up.webp',
-    '/img/mascots/blutly_above.webp',
-    '/img/mascots/blutly_sanguy_hey.webp',
-];
-
-const sanguyImage = computed(() => sanguyVariants[props.item.id % sanguyVariants.length]);
-const blutlyImage = computed(() => blutlyVariants[(props.item.id + 1) % blutlyVariants.length]);
-
-const mobileMascot = computed(() => {
-    if (props.item.leftDialogue) {
-        return { image: sanguyImage.value, alt: 'Sanguy', isLeft: true };
-    }
-    if (props.item.rightDialogue) {
-        return { image: blutlyImage.value, alt: 'Blutly', isLeft: false };
-    }
-    return { image: sanguyImage.value, alt: 'Sanguy', isLeft: true };
-});
+const typedText = ref('');
+let typingTimeout: number | null = null;
 
 watch(
     () => props.active,
@@ -72,99 +45,74 @@ watch(
 );
 
 const toneClasses: Record<TinderItem['tone'], string> = {
-    red: 'bg-[#f8eef1]',
-    green: 'bg-[#f8eef1]',
-    blue: 'bg-[#f8eef1]',
-    violet: 'bg-[#f8eef1]',
-    orange: 'bg-[#f8eef1]',
-    turquoise: 'bg-[#f8eef1]',
-    pink: 'bg-[#f8eef1]',
-    emerald: 'bg-[#f8eef1]',
+    red: 'bg-[var(--color-razzmatazz-50)]',
+    green: 'bg-[var(--color-razzmatazz-50)]',
+    blue: 'bg-[var(--color-razzmatazz-50)]',
+    violet: 'bg-[var(--color-razzmatazz-50)]',
+    orange: 'bg-[var(--color-razzmatazz-50)]',
+    turquoise: 'bg-[var(--color-razzmatazz-50)]',
+    pink: 'bg-[var(--color-razzmatazz-50)]',
+    emerald: 'bg-[var(--color-razzmatazz-50)]',
 };
 
-function clearTypingTimers() {
-    if (leftTypingTimeout !== null) {
-        window.clearTimeout(leftTypingTimeout);
-        leftTypingTimeout = null;
+function startTypewriter() {
+    if (typingTimeout !== null) {
+        window.clearTimeout(typingTimeout);
+        typingTimeout = null;
     }
 
-    if (rightTypingTimeout !== null) {
-        window.clearTimeout(rightTypingTimeout);
-        rightTypingTimeout = null;
-    }
-}
-
-function animateText(target: typeof leftTypedText, fullText: string, delay = 24) {
+    typedText.value = '';
+    const fullText = props.item.dialogue;
     let index = 0;
 
     const tick = () => {
-        target.value = fullText.slice(0, index);
+        typedText.value = fullText.slice(0, index);
         index += 1;
-
-        if (index <= fullText.length) {
-            return window.setTimeout(tick, delay);
-        }
-
-        return null;
+        typingTimeout = index <= fullText.length ? window.setTimeout(tick, 22) : null;
     };
 
-    return tick();
-}
-
-function startTypewriter() {
-    clearTypingTimers();
-    leftTypedText.value = '';
-    rightTypedText.value = '';
-    leftTypingTimeout = animateText(leftTypedText, props.item.leftDialogue, 22);
-    rightTypingTimeout = window.setTimeout(() => {
-        rightTypingTimeout = animateText(rightTypedText, props.item.rightDialogue, 20);
-    }, 220);
+    tick();
 }
 </script>
 
 <template>
     <article
-        class="font-cooper relative z-10 flex w-full flex-col overflow-hidden rounded-[2rem] border-2 px-4 text-red-950 shadow-[0_24px_70px_rgba(109,0,46,0.14)]"
+        class="font-cooper relative z-10 flex w-full flex-col overflow-hidden rounded-[2rem] border-2 px-4 text-razzmatazz-900 shadow-[0_24px_70px_rgba(109,0,46,0.14)]"
         :class="[
             toneClasses[item.tone],
             layout === 'mobile'
-                ? 'h-[28rem] pb-16 pt-4'
+                ? 'h-[16rem] pb-6 pt-6'
                 : layout === 'compact'
                     ? 'h-[23rem] pb-16 pt-3'
                     : 'h-[27rem] pb-18 pt-4 sm:h-[28rem] sm:px-6 sm:pb-20 sm:pt-5 lg:h-[29rem] lg:px-7 lg:pb-22',
         ]"
-        :style="{ borderColor: '#b81e62' }"
+        :style="{ borderColor: 'var(--color-razzmatazz-900)' }"
     >
         <!-- Carte intro (id === 0) -->
         <template v-if="item.id === 0">
-            <!-- Mobile : lottie réduit, bouton absolu comme desktop -->
+            <!-- Mobile : intro centrée -->
             <template v-if="layout === 'mobile'">
-                <div class="absolute inset-x-0 bottom-[8.5rem] flex flex-col items-center px-4">
+                <div class="flex h-full flex-col items-center justify-start px-4 pt-4 text-center">
                     <Vue3Lottie
                         :animation-data="swipeLottieData"
-                        :height="120"
+                        :height="84"
                         :loop="true"
                         :auto-play="true"
                     />
-                    <div class="mt-11 text-center">
-                        <p class="text-xl font-bold text-[#5f0f35]">Comment ça marche ?</p>
-                        <p class="mt-3 text-xs font-semibold leading-snug text-[#7a4b62]">
-                            Swipez à <span class="text-[#ef4444]">gauche</span> si vous n'êtes pas concerné(e),
-                            à <span class="text-[#22c55e]">droite</span> si oui.
-                        </p>
-                        <p class="mt-1.5 text-xs font-semibold leading-snug text-[#7a4b62]">
-                            Lisez bien chaque question avant de répondre.
-                        </p>
-                    </div>
+                    <p class="mt-2 text-heading-t1 font-bold text-[var(--color-razzmatazz-950)]">Comment ça marche ?</p>
+                    <p class="mt-2 text-body font-semibold leading-snug text-[var(--color-razzmatazz-900)]">
+                        Touchez <span class="text-[var(--color-geraldine-500)]">Non</span> si vous n'êtes pas concerné(e),
+                        <span class="text-[var(--color-vistablue-500)]">Oui</span> si oui.
+                    </p>
+                    <button
+                        type="button"
+                        class="mt-4 w-44 rounded-2xl py-3 text-sm font-bold text-white transition hover:opacity-90"
+                        style="background-color: var(--color-razzmatazz-900);"
+                        @click="emit('introStart')"
+                    >
+                        C'est parti !
+                    </button>
                 </div>
-                <button
-                    type="button"
-                    class="absolute bottom-8 left-1/2 -translate-x-1/2 w-44 rounded-2xl py-3 text-sm font-bold text-white transition hover:opacity-90"
-                    style="background-color: #6d002e;"
-                    @click="emit('introStart')"
-                >
-                    C'est parti !
-                </button>
             </template>
 
             <!-- Tablet (compact) -->
@@ -178,12 +126,12 @@ function startTypewriter() {
                         class="mt-3"
                     />
                     <div class="absolute inset-x-4 bottom-[6.5rem] px-2 text-center">
-                        <p class="text-2xl font-bold text-[#5f0f35]">Comment ça marche ?</p>
-                        <p class="mt-3 text-base font-semibold leading-snug text-[#7a4b62]">
-                            Swipez à <span class="text-[#ef4444]">gauche</span> si vous n'êtes pas concerné(e),
-                            à <span class="text-[#22c55e]">droite</span> si oui.
+                        <p class="text-2xl font-bold text-[var(--color-razzmatazz-950)]">Comment ça marche ?</p>
+                        <p class="mt-3 text-base font-semibold leading-snug text-[var(--color-razzmatazz-900)]">
+                            Swipez à <span class="text-[var(--color-geraldine-500)]">gauche</span> si vous souhaitez répondre non,
+                            à <span class="text-[var(--color-vistablue-500)]">droite</span> si oui.
                         </p>
-                        <p class="mt-1 text-base font-semibold leading-snug text-[#7a4b62]">
+                        <p class="mt-1 text-base font-semibold leading-snug text-[var(--color-razzmatazz-900)]">
                             Lisez bien chaque question avant de répondre.
                         </p>
                     </div>
@@ -191,7 +139,7 @@ function startTypewriter() {
                 <button
                     type="button"
                     class="absolute bottom-6 left-1/2 -translate-x-1/2 w-44 rounded-2xl py-3 text-sm font-bold text-white transition hover:opacity-90"
-                    style="background-color: #6d002e;"
+                    style="background-color: var(--color-razzmatazz-900);"
                     @click="emit('introStart')"
                 >
                     C'est parti !
@@ -209,12 +157,12 @@ function startTypewriter() {
                         class="mt-6"
                     />
                     <div class="absolute inset-x-4 bottom-[8rem] px-2 text-center">
-                        <p class="text-3xl font-bold text-[#5f0f35]">Comment ça marche ?</p>
-                        <p class="mt-4 text-lg font-semibold leading-snug text-[#7a4b62]">
-                            Swipez à <span class="text-[#ef4444]">gauche</span> si vous n'êtes pas concerné(e),
-                            à <span class="text-[#22c55e]">droite</span> si oui.
+                        <p class="text-3xl font-bold text-[var(--color-razzmatazz-950)]">Comment ça marche ?</p>
+                        <p class="mt-4 text-lg font-semibold leading-snug text-[var(--color-razzmatazz-900)]">
+                            Swipez à <span class="text-[var(--color-geraldine-500)]">gauche</span> si vous souhaitez répondre non,
+                            à <span class="text-[var(--color-vistablue-500)]">droite</span> si oui.
                         </p>
-                        <p class="mt-1 text-lg font-semibold leading-snug text-[#7a4b62]">
+                        <p class="mt-1 text-lg font-semibold leading-snug text-[var(--color-razzmatazz-900)]">
                             Lisez bien chaque question avant de répondre.
                         </p>
                     </div>
@@ -222,7 +170,7 @@ function startTypewriter() {
                 <button
                     type="button"
                     class="absolute bottom-8 left-1/2 -translate-x-1/2 w-48 rounded-2xl py-3.5 text-base font-bold text-white transition hover:opacity-90"
-                    style="background-color: #6d002e;"
+                    style="background-color: var(--color-razzmatazz-900);"
                     @click="emit('introStart')"
                 >
                     C'est parti !
@@ -231,82 +179,65 @@ function startTypewriter() {
         </template>
 
         <template v-else-if="active">
-            <!-- Layout desktop / tablet : 2 mascottes côte à côte -->
+            <!-- Layout desktop / tablet : question centrée dans l'espace dispo, mascotte en bas -->
             <template v-if="layout !== 'mobile'">
-                <div class="mt-[15px] px-2 text-center sm:mt-[15px] sm:px-6">
-                    <h2 class="text-[1.8rem] font-bold leading-[1.32] text-[#5f0f35]">
+                <div class="flex flex-1 items-center justify-center px-2 text-center sm:px-6">
+                    <h2 class="text-heading-t1 font-bold leading-[1.32] text-[var(--color-razzmatazz-950)]">
                         {{ item.question }}
                     </h2>
                 </div>
 
-                <div class="relative mt-2 flex min-h-0 flex-1 items-center justify-center">
-                    <div class="grid w-full grid-cols-2 gap-3 sm:gap-4">
-                        <div class="flex min-h-0 flex-col items-center justify-end">
-                            <div v-if="item.leftDialogue !== ''" class="speech-bubble speech-bubble-left relative ml-auto mr-3 min-h-[52px] w-full max-w-[148px] rounded-[1.1rem] border border-[#2f1725] bg-white px-3 py-2 text-left text-[11px] font-semibold leading-snug text-[#2f1725] shadow-[0_10px_24px_rgba(47,23,37,0.08)] sm:min-h-[58px] sm:max-w-[168px] sm:text-[12px]">
-                                <span class="invisible">{{ item.leftDialogue }}</span>
-                                <span class="absolute inset-0 px-3 py-2 text-[11px] leading-snug sm:text-[12px]">{{ leftTypedText }}</span>
-                            </div>
-                            <div :key="`${item.id}-${emoteAnimationKey}-left`" class="sanguy-card-emote relative mt-1 flex w-full items-end justify-center" :class="layout === 'compact' ? 'h-[88px]' : 'h-[108px] sm:h-[124px] lg:h-[136px]'">
-                                <img
-                                    class="pointer-events-none h-full select-none object-contain drop-shadow-[0_12px_22px_rgba(109,0,46,0.18)]"
-                                    :src="sanguyImage"
-                                    alt="Sanguy"
-                                    draggable="false"
-                                />
-                            </div>
-                        </div>
-
-                        <div class="flex min-h-0 flex-col items-center justify-end">
-                            <div v-if="item.rightDialogue !== ''" class="speech-bubble speech-bubble-right relative mr-auto ml-3 min-h-[52px] w-full max-w-[148px] rounded-[1.1rem] border border-[#2f1725] bg-white px-3 py-2 text-left text-[11px] font-semibold leading-snug text-[#2f1725] shadow-[0_10px_24px_rgba(47,23,37,0.08)] sm:min-h-[58px] sm:max-w-[168px] sm:text-[12px]">
-                                <span class="invisible">{{ item.rightDialogue }}</span>
-                                <span class="absolute inset-0 px-3 py-2 text-[11px] leading-snug sm:text-[12px]">{{ rightTypedText }}</span>
-                            </div>
-                            <div :key="`${item.id}-${emoteAnimationKey}-right`" class="sanguy-card-emote relative mt-1 flex w-full items-end justify-center" :class="layout === 'compact' ? 'h-[88px]' : 'h-[108px] sm:h-[124px] lg:h-[136px]'">
-                                <img
-                                    class="pointer-events-none h-full select-none object-contain drop-shadow-[0_12px_22px_rgba(109,0,46,0.18)]"
-                                    :src="blutlyImage"
-                                    alt="Blutly"
-                                    draggable="false"
-                                />
-                            </div>
-                        </div>
+                <div class="relative flex flex-col items-center">
+                    <div v-if="item.dialogue !== ''" class="speech-bubble speech-bubble-center relative mb-3 min-h-[52px] w-full max-w-[320px] shrink-0 rounded-[1.1rem] border border-[var(--color-razzmatazz-950)] bg-white px-4 py-2 text-center text-[12px] font-medium leading-snug text-[var(--color-razzmatazz-950)] shadow-[0_10px_24px_rgba(47,23,37,0.08)] sm:text-[13px]">
+                        {{ typedText }}
+                    </div>
+                    <div :key="`${item.id}-${emoteAnimationKey}-emote`" class="sanguy-card-emote relative flex shrink-0 items-end justify-center" :class="layout === 'compact' ? 'h-[92px]' : 'h-[104px] sm:h-[118px] lg:h-[128px]'">
+                        <img
+                            class="pointer-events-none h-full select-none object-contain drop-shadow-[0_12px_22px_rgba(109,0,46,0.18)]"
+                            :src="item.mascot"
+                            alt="Mascotte"
+                            draggable="false"
+                        />
                     </div>
                 </div>
             </template>
 
-            <!-- Layout mobile : 1 mascotte centrée -->
+            <!-- Layout mobile : hauteur fixe, question centrée, boutons en bas -->
             <template v-else>
-                <div class="px-4 pt-8 text-center">
-                    <h2 class="text-[1.15rem] font-bold leading-[1.3] text-[#5f0f35]">
-                        {{ item.question }}
-                    </h2>
-                </div>
-
-                <div class="relative flex flex-1 flex-col items-center justify-end pb-2">
-                    <div
-                        v-if="mobileMascot.isLeft ? item.leftDialogue : item.rightDialogue"
-                        class="speech-bubble speech-bubble-center relative mb-1 min-h-[48px] w-full max-w-[160px] rounded-[1.1rem] border border-[#2f1725] bg-white px-3 py-2 text-center text-[11.5px] font-semibold leading-snug text-[#2f1725] shadow-[0_10px_24px_rgba(47,23,37,0.08)]"
-                    >
-                        <span class="invisible">{{ mobileMascot.isLeft ? item.leftDialogue : item.rightDialogue }}</span>
-                        <span class="absolute inset-0 px-3 py-2 text-[11.5px] leading-snug">{{ mobileMascot.isLeft ? leftTypedText : rightTypedText }}</span>
+                <div class="flex h-full flex-col">
+                    <div class="flex flex-1 items-center justify-center px-3 pt-3 text-center">
+                        <h2 class="text-heading-t3 font-bold leading-snug text-[var(--color-razzmatazz-950)]">
+                            {{ item.question }}
+                        </h2>
                     </div>
-                    <div :key="`${item.id}-${emoteAnimationKey}-mobile`" class="sanguy-card-emote relative mt-1 flex h-[148px] w-full items-end justify-center">
-                        <img
-                            class="pointer-events-none h-full select-none object-contain drop-shadow-[0_12px_22px_rgba(109,0,46,0.18)]"
-                            :src="mobileMascot.image"
-                            :alt="mobileMascot.alt"
-                            draggable="false"
-                        />
+
+                    <div class="flex justify-center gap-3">
+                        <button
+                            type="button"
+                            class="inline-flex items-center gap-2 rounded-2xl bg-[var(--color-razzmatazz-300)] px-6 py-3 text-body font-semibold text-[var(--color-razzmatazz-950)] transition hover:-translate-y-0.5"
+                            @click="emit('swipeLeft')"
+                        >
+                            <span class="material-symbols-outlined text-[20px]" aria-hidden="true">close</span>
+                            <span>Non</span>
+                        </button>
+                        <button
+                            type="button"
+                            class="inline-flex items-center gap-2 rounded-2xl bg-[var(--color-razzmatazz-900)] px-6 py-3 text-body font-semibold text-white transition hover:-translate-y-0.5"
+                            @click="emit('swipeRight')"
+                        >
+                            <span class="material-symbols-outlined text-[20px]" aria-hidden="true">check</span>
+                            <span>Oui</span>
+                        </button>
                     </div>
                 </div>
             </template>
         </template>
 
         <template v-else>
-            <div class="h-full w-full bg-[#f8eef1]"></div>
+            <div class="h-full w-full bg-[var(--color-razzmatazz-50)]"></div>
         </template>
 
-        <div v-if="item.id !== 0" class="absolute right-4 top-4 rounded-full bg-[#6d002e] px-2.5 py-0.5 text-xs font-bold text-white">
+        <div v-if="item.id !== 0" class="absolute right-4 top-4 rounded-full bg-[var(--color-razzmatazz-900)] px-2.5 py-0.5 text-xs font-bold text-white">
             {{ current }}/{{ total }}
         </div>
 
@@ -331,8 +262,8 @@ function startTypewriter() {
     width: 11px;
     height: 11px;
     background: #ffffff;
-    border-right: 1px solid #2f1725;
-    border-bottom: 1px solid #2f1725;
+    border-right: 1px solid var(--color-razzmatazz-950);
+    border-bottom: 1px solid var(--color-razzmatazz-950);
     transform: rotate(45deg);
 }
 

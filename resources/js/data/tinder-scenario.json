@@ -10,8 +10,6 @@
             "hint": "La limite est portée à 75 ans pour les donneurs réguliers.",
             "image": "/img/mascots/sanguy_hero.webp",
             "tone": "red",
-            "leftDialogue": "Pour donner son sang, il faut avoir l'âge requis !",
-            "rightDialogue": "C'est une mesure qui protège les donneurs comme les receveurs.",
             "leftOutcome": {
                 "status": "blocker",
                 "label": "Tranche d'âge non éligible"
@@ -19,7 +17,9 @@
             "rightOutcome": {
                 "status": "clear",
                 "label": "Âge OK"
-            }
+            },
+            "dialogue": "Pour donner son sang, il faut avoir l'âge requis ! C'est une mesure qui protège les donneurs comme les receveurs.",
+            "mascot": "/img/mascots/sanguy_thumbs_up.webp"
         },
         {
             "id": 2,
@@ -30,8 +30,6 @@
             "hint": "Le délai standard est de 4 mois entre deux dons de sang.",
             "image": "/img/mascots/sanguy_hero.webp",
             "tone": "violet",
-            "leftDialogue": "",
-            "rightDialogue": "Votre corps a besoin de temps pour refaire ses réserves.",
             "leftOutcome": {
                 "status": "clear",
                 "label": "Pas de don récent"
@@ -39,7 +37,9 @@
             "rightOutcome": {
                 "status": "blocker",
                 "label": "Don de sang récent — attente 4 mois"
-            }
+            },
+            "dialogue": "Votre corps a besoin de temps pour refaire ses réserves.",
+            "mascot": "/img/mascots/blutly_hero.webp"
         },
         {
             "id": 3,
@@ -50,8 +50,6 @@
             "hint": "En dessous de 50 kg, le don peut être contre-indiqué.",
             "image": "/img/mascots/sanguy_hero.webp",
             "tone": "green",
-            "leftDialogue": "Pour donner votre sang, il faut peser au moins 50 kg.",
-            "rightDialogue": "C'est une question de sécurité pour vous avant tout.",
             "leftOutcome": {
                 "status": "blocker",
                 "label": "Poids insuffisant pour donner"
@@ -59,7 +57,9 @@
             "rightOutcome": {
                 "status": "clear",
                 "label": "Poids OK"
-            }
+            },
+            "dialogue": "Pour donner votre sang, il faut peser au moins 50 kg. C'est une question de sécurité pour vous avant tout.",
+            "mascot": "/img/mascots/sanguy_hips.webp"
         },
         {
             "id": 4,
@@ -70,8 +70,6 @@
             "hint": "Toute consommation de drogues impose une période d'exclusion.",
             "image": "/img/mascots/sanguy_hero.webp",
             "tone": "orange",
-            "leftDialogue": "",
-            "rightDialogue": "Cette question nous aide à garantir la sécurité des dons.",
             "leftOutcome": {
                 "status": "clear",
                 "label": "Aucune consommation signalée"
@@ -79,7 +77,9 @@
             "rightOutcome": {
                 "status": "blocker",
                 "label": "Consommation de drogues — attente 12 mois"
-            }
+            },
+            "dialogue": "Cette question nous aide à garantir la sécurité des dons.",
+            "mascot": "/img/mascots/blutly_hips.webp"
         },
         {
             "id": 5,
@@ -90,8 +90,6 @@
             "hint": "Un délai d'un an après l'accouchement est requis.",
             "image": "/img/mascots/sanguy_hero.webp",
             "tone": "pink",
-            "leftDialogue": "Vous prenez déjà soin d'une petite vie, c'est une belle mission !",
-            "rightDialogue": "Je reviendrai quand le moment sera venu.",
             "leftOutcome": {
                 "status": "clear",
                 "label": "Non concerné(e) ou délai écoulé"
@@ -99,7 +97,9 @@
             "rightOutcome": {
                 "status": "blocker",
                 "label": "Grossesse ou accouchement récent"
-            }
+            },
+            "dialogue": "Vous prenez déjà soin d'une petite vie, c'est une belle mission ! Un délai d'un an après l'accouchement est requis.",
+            "mascot": "/img/mascots/blutly_pregnant.webp"
         },
         {
             "id": 6,
@@ -111,8 +111,6 @@
             "hint": "La carte monde vous aidera à préciser votre situation.",
             "image": "/img/mascots/sanguy_hero.webp",
             "tone": "blue",
-            "leftDialogue": "",
-            "rightDialogue": "Certains voyages nécessitent quelques vérifications supplémentaires...",
             "leftOutcome": {
                 "status": "clear",
                 "label": "Aucun voyage récent"
@@ -120,7 +118,9 @@
             "rightOutcome": {
                 "status": "warning",
                 "label": "Voyage à préciser"
-            }
+            },
+            "dialogue": "Certains voyages nécessitent quelques vérifications supplémentaires...",
+            "mascot": "/img/mascots/sanguy_travel.webp"
         },
         {
             "id": 7,
@@ -132,8 +132,6 @@
             "hint": "Fièvre, infection ou traitement récent sont des points à signaler.",
             "image": "/img/mascots/sanguy_hero.webp",
             "tone": "turquoise",
-            "leftDialogue": "Quelques soins ou maladies récentes peuvent nécessiter un délai.",
-            "rightDialogue": "",
             "leftOutcome": {
                 "status": "clear",
                 "label": "Rien à signaler"
@@ -141,7 +139,9 @@
             "rightOutcome": {
                 "status": "warning",
                 "label": "Soins récents à préciser"
-            }
+            },
+            "dialogue": "Quelques soins ou maladies récentes peuvent nécessiter un délai.",
+            "mascot": "/img/mascots/sanguy_doctor.webp"
         },
         {
             "id": 8,
@@ -153,8 +153,6 @@
             "hint": "Les antibiotiques, anticoagulants et certains vaccins sont à signaler.",
             "image": "/img/mascots/sanguy_hero.webp",
             "tone": "emerald",
-            "leftDialogue": "C'est bien que vous preniez soin de vous.",
-            "rightDialogue": "Votre santé passe avant tout. Le don pourra attendre quelques semaines.",
             "leftOutcome": {
                 "status": "clear",
                 "label": "Aucun traitement récent"
@@ -162,7 +160,9 @@
             "rightOutcome": {
                 "status": "warning",
                 "label": "Traitement à préciser"
-            }
+            },
+            "dialogue": "C'est bien que vous preniez soin de vous. Votre santé passe avant tout. Le don pourra attendre quelques semaines.",
+            "mascot": "/img/mascots/blutly_thumbs_up.webp"
         },
         {
             "id": 9,
@@ -174,8 +174,6 @@
             "hint": "En cas de maladie de Lyme, un délai s'applique.",
             "image": "/img/mascots/sanguy_hero.webp",
             "tone": "red",
-            "leftDialogue": "",
-            "rightDialogue": "",
             "leftOutcome": {
                 "status": "clear",
                 "label": "Pas de piqûre signalée"
@@ -183,7 +181,9 @@
             "rightOutcome": {
                 "status": "warning",
                 "label": "Piqûre de tique à signaler"
-            }
+            },
+            "dialogue": "Une piqûre de tique demande parfois une petite vérification, on regarde ça ensemble.",
+            "mascot": "/img/mascots/sanguy_hips.webp"
         },
         {
             "id": 10,
@@ -195,8 +195,6 @@
             "hint": "Un tatouage ou piercing récent imposent généralement un délai de 4 mois.",
             "image": "/img/mascots/sanguy_hero.webp",
             "tone": "violet",
-            "leftDialogue": "Je ne peux pas faire un don actuellement, mais regarde mon nouveau tatouage !",
-            "rightDialogue": "",
             "leftOutcome": {
                 "status": "clear",
                 "label": "Aucune plaie ou opération récente"
@@ -204,7 +202,9 @@
             "rightOutcome": {
                 "status": "warning",
                 "label": "Plaie ou opération à préciser"
-            }
+            },
+            "dialogue": "Je ne peux pas faire un don actuellement, mais regarde mon nouveau tatouage !",
+            "mascot": "/img/mascots/sanguy_tattoo.webp"
         },
         {
             "id": 11,
@@ -216,8 +216,6 @@
             "hint": "Certaines situations spécifiques peuvent imposer un délai.",
             "image": "/img/mascots/sanguy_hero.webp",
             "tone": "pink",
-            "leftDialogue": "Certaines situations rendent le don impossible pour des raisons de sécurité.",
-            "rightDialogue": "",
             "leftOutcome": {
                 "status": "clear",
                 "label": "Aucune relation récente"
@@ -225,7 +223,9 @@
             "rightOutcome": {
                 "status": "warning",
                 "label": "Relations récentes à préciser"
-            }
+            },
+            "dialogue": "Certaines situations rendent le don impossible pour des raisons de sécurité.",
+            "mascot": "/img/mascots/blutly_love.webp"
         },
         {
             "id": 12,
@@ -237,8 +237,6 @@
             "hint": "Selon la maladie et son traitement, un délai peut s'appliquer.",
             "image": "/img/mascots/sanguy_hero.webp",
             "tone": "emerald",
-            "leftDialogue": "Cette information est essentielle pour protéger les receveur.se.s.",
-            "rightDialogue": "Merci pour votre sincérité, chaque réponse compte.",
             "leftOutcome": {
                 "status": "clear",
                 "label": "Aucune IST signalée"
@@ -246,8 +244,9 @@
             "rightOutcome": {
                 "status": "warning",
                 "label": "IST à préciser avec le médecin"
-            }
+            },
+            "dialogue": "Cette information est essentielle pour protéger les receveur.se.s. Merci pour votre sincérité, chaque réponse compte.",
+            "mascot": "/img/mascots/blutly_sanguy_love.webp"
         }
-        
     ]
 }

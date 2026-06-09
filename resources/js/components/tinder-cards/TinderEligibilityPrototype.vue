@@ -29,8 +29,8 @@ type Card = Record<string, unknown> & {
     hint: string;
     image: string;
     tone: 'red' | 'green' | 'blue' | 'violet' | 'orange' | 'turquoise' | 'pink' | 'emerald';
-    leftDialogue: string;
-    rightDialogue: string;
+    dialogue: string;
+    mascot: string;
     leftOutcome: {
         status: TriageStatus;
         label: string;
@@ -62,8 +62,8 @@ const introCard: Card = {
     hint: '',
     image: '',
     tone: 'red',
-    leftDialogue: '',
-    rightDialogue: '',
+    dialogue: '',
+    mascot: '',
     leftOutcome: { status: 'clear', label: '' },
     rightOutcome: { status: 'clear', label: '' },
 };
@@ -74,14 +74,32 @@ const answers = ref<TriageAnswer[]>([]);
 const introSwiped = ref(false);
 const introCardActive = computed(() => !introSwiped.value);
 const storedSwipeRight = ref<(() => void) | null>(null);
+const storedSwipeLeft = ref<(() => void) | null>(null);
+const storedRestore = ref<(() => void) | null>(null);
+const showMatch = ref(false);
+const pendingModules = ref<string[]>([]);
 const viewportWidth = ref(0);
 const viewportHeight = ref(0);
+
 const totalCards = computed(() => items.value.filter(item => item.id !== 0).length);
 const answeredCount = computed(() => answers.value.length);
 const blockerCount = computed(() => answers.value.filter((answer) => answer.status === 'blocker').length);
 const warningCount = computed(() => answers.value.filter((answer) => answer.status === 'warning').length);
 const hasMatch = computed(() => blockerCount.value === 0);
 const progressSegments = computed(() => Array.from({ length: totalCards.value }, (_, index) => introSwiped.value && index <= answeredCount.value));
+
+// Carte (question) actuellement au sommet de la pile = première non répondue
+const activeItem = computed<Card | null>(() => {
+    if (!introSwiped.value) return null;
+    const answered = new Set(answers.value.map((a) => a.cardId));
+    return tinderScenario.cards.find((c) => !answered.has(c.id)) ?? null;
+});
+// Mobile : la mascotte de la carte active + sa bulle
+const activeMascot = computed(() => {
+    const item = activeItem.value;
+    if (!item) return null;
+    return { image: item.mascot, dialogue: item.dialogue };
+});
 const layoutMode = computed<'mobile' | 'tablet' | 'desktop'>(() => {
     const width = viewportWidth.value;
     const height = viewportHeight.value;
@@ -128,12 +146,17 @@ function handleSwipe(item: Card, direction: SwipeDirection) {
     if (allAnswered) {
         // Modules de messagerie « enregistrés » : cartes swipées vers un avertissement (oui),
         // dans l'ordre des cartes du scénario.
-        const registeredModules = tinderScenario.cards
+        pendingModules.value = tinderScenario.cards
             .filter((card) => typeof card.module === 'string'
                 && answers.value.some((answer) => answer.cardId === card.id && answer.status === 'warning'))
             .map((card) => card.module as string);
-        emit('match', registeredModules);
+        // On affiche d'abord la carte « match » avant de passer au chat.
+        showMatch.value = true;
     }
+}
+
+function continueToChat() {
+    emit('match', pendingModules.value);
 }
 
 function handleRestore(item: Card) {
@@ -155,8 +178,35 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
+    <!-- Carte « match » : fin du swipe sans exclusion -->
     <section
-        v-if="layoutMode === 'desktop'"
+        v-if="showMatch"
+        class="font-cooper flex w-full items-center justify-center px-4 py-4"
+        :class="props.contained ? 'min-h-0 flex-1' : 'min-h-[100svh] w-screen bg-rose-50'"
+    >
+        <div class="relative w-full max-w-[420px] rounded-[2rem] border-2 border-razzmatazz-900 bg-razzmatazz-200 px-6 py-10 text-center shadow-[0_24px_70px_rgba(109,0,46,0.14)]">
+            <img
+                :src="'/img/mascots/blutly_sanguy_love.webp'"
+                alt="Match"
+                class="mx-auto h-44 w-auto object-contain drop-shadow-[0_12px_22px_rgba(109,0,46,0.18)]"
+                draggable="false"
+            />
+            <h2 class="mt-4 text-heading-t1 font-bold text-razzmatazz-800">Tu as un match !</h2>
+            <p class="mt-3 text-body leading-snug text-razzmatazz-800">
+                Nous allons te poser quelques questions de plus dans le chat pour préciser ta situation.
+            </p>
+            <button
+                type="button"
+                class="mt-6 inline-flex items-center gap-2 rounded-2xl bg-razzmatazz-800 px-8 py-3 text-base font-semibold text-white transition hover:bg-razzmatazz-600"
+                @click="continueToChat"
+            >
+                <span>Aller au chat</span>
+            </button>
+        </div>
+    </section>
+
+    <section
+        v-else-if="layoutMode === 'desktop'"
         class="font-cooper flex w-full items-center px-3 py-2 sm:px-4 sm:py-3"
         :class="props.contained ? 'min-h-0 w-full bg-transparent pb-0' : 'min-h-[100svh] w-screen bg-rose-50 pb-12'"
     >
@@ -335,7 +385,7 @@ onBeforeUnmount(() => {
 
     <section
         v-else
-        class="font-cooper flex w-full flex-col px-4 pt-3"
+        class="font-cooper flex w-full flex-col px-2 pt-4"
         :class="props.contained ? 'min-h-0 w-full bg-transparent' : 'min-h-[100svh] w-screen bg-rose-50 pb-6'"
     >
         <div class="mb-[22px] flex items-center justify-center gap-1.5 px-2">
@@ -347,7 +397,22 @@ onBeforeUnmount(() => {
             ></span>
         </div>
 
-        <FlashCards
+        <div class="relative">
+            <!-- Flèche retour : coin haut-gauche de la carte -->
+            <button
+                v-if="!introCardActive"
+                type="button"
+                class="absolute left-4 top-4 z-30 inline-flex h-8 w-8 items-center justify-center rounded-full border border-razzmatazz-700/20 bg-white/90 text-razzmatazz-800 shadow transition hover:bg-white disabled:opacity-40"
+                :disabled="answeredCount === 0"
+                aria-label="Revenir à la carte précédente"
+                @click="storedRestore?.()"
+            >
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.25">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 14 4 9m0 0 5-5M4 9h10.5A5.5 5.5 0 0 1 20 14.5v0A5.5 5.5 0 0 1 14.5 20H11" />
+                </svg>
+            </button>
+
+            <FlashCards
             :items="items"
             :swipe-direction="['left', 'right']"
             :swipe-threshold="100"
@@ -366,6 +431,8 @@ onBeforeUnmount(() => {
                     :total="totalCards"
                     layout="mobile"
                     @intro-start="storedSwipeRight?.()"
+                    @swipe-left="storedSwipeLeft?.()"
+                    @swipe-right="storedSwipeRight?.()"
                 />
             </template>
 
@@ -395,27 +462,45 @@ onBeforeUnmount(() => {
                 <div />
             </template>
 
-            <template
-                #actions="{
-                    restore,
-                    swipeLeft,
-                    swipeRight,
-                    isEnd,
-                    canRestore,
-                }"
-            >
-                <div :ref="() => storedSwipeRight = swipeRight">
-                    <TinderActions
-                        v-if="!introCardActive"
-                        :left="swipeLeft"
-                        :right="swipeRight"
-                        :restore="restore"
-                        :is-end="isEnd"
-                        :can-restore="canRestore && answeredCount > 0"
-                        pill
-                    />
-                </div>
+            <!-- Boutons Non/Oui = dans la carte ; flèche retour = au-dessus de la carte -->
+            <template #actions="{ restore, swipeLeft, swipeRight }">
+                <span
+                    class="hidden"
+                    :ref="() => { storedSwipeRight = swipeRight; storedSwipeLeft = swipeLeft; storedRestore = restore; }"
+                />
             </template>
-        </FlashCards>
+            </FlashCards>
+        </div>
+
+        <!-- Mascotte unique + bulle large à côté -->
+        <div v-if="activeMascot" class="mt-8 flex h-32 items-center justify-center gap-2 px-1">
+            <img :src="activeMascot.image" alt="Mascotte" class="h-20 w-auto shrink-0 object-contain" draggable="false" />
+            <div
+                v-if="activeMascot.dialogue"
+                class="mascot-bubble flex-1 rounded-2xl border border-razzmatazz-950 bg-white px-3 py-2 text-caption font-semibold leading-snug text-razzmatazz-950"
+            >
+                {{ activeMascot.dialogue }}
+            </div>
+        </div>
     </section>
 </template>
+
+<style scoped>
+.mascot-bubble {
+    position: relative;
+}
+
+/* Pointe vers la gauche (vers la mascotte) */
+.mascot-bubble::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: -7px;
+    width: 12px;
+    height: 12px;
+    background: #ffffff;
+    border-left: 1px solid #2f1725;
+    border-bottom: 1px solid #2f1725;
+    transform: translateY(-50%) rotate(45deg);
+}
+</style>

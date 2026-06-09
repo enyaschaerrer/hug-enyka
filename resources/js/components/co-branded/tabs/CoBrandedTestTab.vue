@@ -17,17 +17,18 @@ function startQuestionnaire() {
 </script>
 
 <template>
-    <section class="mx-auto max-w-3xl px-6 pt-10 pb-32">
-        <!-- Mobile : juste les 3 infos en pastilles, sans boîte ni sous-titres -->
-        <div class="flex flex-wrap justify-center gap-2 sm:hidden">
-            <span
+    <section class="mx-auto max-w-3xl px-6 pt-6 pb-32 sm:pt-10">
+        <!-- Mobile : juste les 3 infos, sans boîte ni sous-titres -->
+        <ul class="flex flex-col items-center gap-2 sm:hidden">
+            <li
                 v-for="(item, idx) in criteria"
                 :key="idx"
-                class="rounded-full border-2 border-catskillwhite-800 bg-white px-4 py-2 text-body font-medium text-catskillwhite-900"
+                class="flex items-center gap-2 text-body font-medium text-catskillwhite-900"
             >
+                <span class="material-symbols-outlined text-razzmatazz-700" style="font-size: 20px;" aria-hidden="true">check_circle</span>
                 {{ item.short }}
-            </span>
-        </div>
+            </li>
+        </ul>
 
         <!-- Desktop : carte « critères éliminatoires » avec bandeau de titre + 3 colonnes -->
         <div class="hidden overflow-hidden rounded-2xl border-2 border-catskillwhite-800 sm:block">
@@ -47,8 +48,8 @@ function startQuestionnaire() {
         </div>
 
         <!-- Card "Prêt·e à savoir..." — pb-0 + boutons translatés pour dépasser à moitié en bas -->
-        <div class="mt-10 rounded-2xl bg-razzmatazz-200 px-6 pt-10 pb-0 text-center sm:px-12">
-            <h2 class="text-display text-catskillwhite-900">
+        <div class="mt-6 rounded-2xl bg-razzmatazz-200 px-6 pt-10 pb-0 text-center sm:mt-10 sm:px-12">
+            <h2 class="text-heading-t1 text-catskillwhite-900">
                 Prêt·e à savoir si vous<br>pouvez donner votre sang ?
             </h2>
             <p class="mt-3 text-body text-catskillwhite-800">
@@ -56,22 +57,22 @@ function startQuestionnaire() {
             </p>
 
             <!-- Mascottes au-dessus, qui débordent légèrement sur les boutons -->
-            <div class="-mt-8 flex items-end justify-center gap-16 sm:-mt-16 sm:gap-28">
-                <img :src="'/img/mascots/sanguy_devastated.webp'" alt="" class="h-32 w-auto translate-y-6 sm:h-56 sm:translate-y-10" />
-                <img :src="'/img/mascots/blutly_run.webp'" alt="" class="h-24 w-auto sm:h-36" />
+            <div class="-mt-6 flex items-end justify-center gap-12 sm:-mt-16 sm:gap-28">
+                <img :src="'/img/mascots/sanguy_devastated.webp'" alt="" class="h-32 w-auto translate-y-3 sm:h-56 sm:translate-y-10" />
+                <img :src="'/img/mascots/blutly_hero.webp'" alt="" class="h-20 w-auto -translate-y-4 sm:h-36 sm:-translate-y-6" />
             </div>
 
             <!-- Boutons Non / Oui : très gros, translate-y-1/2 → dépassent à moitié en bas de la carte -->
-            <div class="-mt-6 flex translate-y-1/2 justify-center gap-4 sm:gap-6">
+            <div class="-mt-8 flex translate-y-1/2 justify-center gap-4 sm:gap-6">
                 <a
                     href="/"
-                    class="min-w-44 rounded-2xl bg-razzmatazz-800 px-12 py-6 text-heading-t1 font-semibold text-white transition hover:bg-razzmatazz-900 sm:min-w-56 sm:px-16 sm:py-7"
+                    class="min-w-28 rounded-2xl bg-razzmatazz-300 px-8 py-3 text-heading-t3 font-semibold text-razzmatazz-900 transition hover:bg-razzmatazz-400 hover:text-white sm:min-w-40 sm:px-12 sm:py-4"
                 >
-                    Non
+                    Pas encore
                 </a>
                 <button
                     type="button"
-                    class="min-w-44 rounded-2xl bg-razzmatazz-800 px-12 py-6 text-heading-t1 font-semibold text-white transition hover:bg-razzmatazz-900 sm:min-w-56 sm:px-16 sm:py-7"
+                    class="min-w-28 rounded-2xl bg-razzmatazz-800 px-8 py-3 text-heading-t3 font-semibold text-white transition hover:bg-razzmatazz-900 sm:min-w-40 sm:px-12 sm:py-4"
                     @click="startQuestionnaire"
                 >
                     Oui

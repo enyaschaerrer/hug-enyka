@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
-import CoBrandedFooter from '../../components/co-branded/CoBrandedFooter.vue';
 import TinderEligibilityPrototype from '../../components/tinder-cards/TinderEligibilityPrototype.vue';
 import CoBrandedPhoneModal from '../../components/co-branded/CoBrandedPhoneModal.vue';
 import QuestionnaireExitModal from '../../components/modals/QuestionnaireExitModal.vue';
@@ -50,10 +49,6 @@ function goHome() {
     navigate(collection.publicUrl);
 }
 
-function goToEligibilityPage() {
-    navigate(collection.eligibilityUrl);
-}
-
 function syncPhoneModal(event?: MediaQueryListEvent) {
     isDesktop.value = event?.matches ?? desktopMediaQuery?.matches ?? false;
 
@@ -85,28 +80,6 @@ async function confirmExit() {
             bypassExitGuard = false;
         }, 0);
     }
-}
-
-async function logout() {
-    try {
-        const res = await fetch(auth.logoutUrl, {
-            method: 'POST',
-            headers: {
-                Accept: 'application/json',
-                'X-CSRF-TOKEN': csrfToken,
-                'X-Requested-With': 'XMLHttpRequest',
-            },
-        });
-
-        if (res.ok) {
-            window.location.reload();
-            return;
-        }
-    } catch {
-        // Fall through to reload the page and let the server state decide.
-    }
-
-    window.location.reload();
 }
 
 function interceptPageExit(event: MouseEvent) {
@@ -229,11 +202,7 @@ onBeforeUnmount(() => {
 
             <CoBrandedModuleHeader
                 :company="company"
-                :csrf-token="csrfToken"
-                :logout-url="auth.logoutUrl"
                 @go-home="goHome"
-                @go-test="goToEligibilityPage"
-                @logout="openExitModal(logout)"
             />
 
             <!-- Confetti overlay -->
@@ -364,8 +333,6 @@ onBeforeUnmount(() => {
                     </svg>
                 </button>
             </Transition>
-
-            <CoBrandedFooter />
         </template>
     </div>
 </template>
