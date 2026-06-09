@@ -237,10 +237,10 @@ onMounted(fetchAccounts);
             </p>
         </div>
 
-        <div v-if="flashMessage" class="alert alert-success mb-6">
+        <div v-if="flashMessage" class="alert mb-6 border-0 bg-[var(--color-razzmatazz-700)] text-white">
             <span>{{ flashMessage }}</span>
         </div>
-        <div v-if="firstError('account')" class="alert alert-error mb-6">
+        <div v-if="firstError('account')" class="alert mb-6 border-0 bg-red-600 text-white">
             <span>{{ firstError('account') }}</span>
         </div>
 
@@ -339,7 +339,7 @@ onMounted(fetchAccounts);
         </section>
 
         <div v-if="loading" class="text-sm text-base-content/50">Chargement...</div>
-        <div v-else-if="loadError" class="alert alert-error"><span>{{ loadError }}</span></div>
+        <div v-else-if="loadError" class="alert border-0 bg-red-600 text-white"><span>{{ loadError }}</span></div>
         <p v-else-if="accounts.length === 0" class="text-sm text-base-content/50">Aucun compte admin.</p>
 
             <section v-else class="rounded-box border border-base-300 bg-base-100">

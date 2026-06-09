@@ -467,7 +467,7 @@ watch(loading, async (isLoading) => {
             </div>
 
             <div v-if="loading" class="text-sm text-base-content/60">Chargement...</div>
-            <div v-else-if="loadError" class="alert alert-error"><span>{{ loadError }}</span></div>
+            <div v-else-if="loadError" class="alert border-0 bg-red-600 text-white"><span>{{ loadError }}</span></div>
 
             <form v-else @submit.prevent="submit" class="space-y-6 font-cooper">
                 <template v-if="!isCollectionMode">

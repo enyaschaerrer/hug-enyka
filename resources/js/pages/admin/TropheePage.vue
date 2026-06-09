@@ -338,7 +338,7 @@ onMounted(fetchOverview);
             </div>
 
             <div v-if="loading" class="text-sm text-base-content/50">Chargement...</div>
-            <div v-else-if="loadError" class="alert alert-error"><span>{{ loadError }}</span></div>
+            <div v-else-if="loadError" class="alert border-0 bg-red-600 text-white"><span>{{ loadError }}</span></div>
 
             <template v-else-if="currentTabData">
                 <div class="mb-5">
@@ -347,7 +347,7 @@ onMounted(fetchOverview);
                     </h2>
                 </div>
 
-                <div v-if="actionError" class="alert alert-error mb-5">
+                <div v-if="actionError" class="alert mb-5 border-0 bg-red-600 text-white">
                     <span>{{ actionError }}</span>
                 </div>
 

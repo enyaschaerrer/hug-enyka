@@ -171,7 +171,7 @@ onUnmounted(() => {
             </div>
 
             <div v-if="loading" class="text-sm text-base-content/50">Chargement...</div>
-            <div v-else-if="loadError" class="alert alert-error"><span>{{ loadError }}</span></div>
+            <div v-else-if="loadError" class="alert border-0 bg-red-600 text-white"><span>{{ loadError }}</span></div>
 
             <template v-else>
                 <!-- Onglets -->

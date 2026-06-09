@@ -319,16 +319,16 @@ onMounted(fetchCompanies);
 <template>
     <AdminLayout>
         <!-- Header -->
-        <div v-if="flashMessage" class="alert alert-success mb-6">
+        <div v-if="flashMessage" class="alert mb-6 border-0 bg-[var(--color-razzmatazz-700)] text-white">
             <span>{{ flashMessage }}</span>
         </div>
         <div v-if="disabledLinkMessage" class="toast toast-end toast-top z-50">
-            <div class="alert alert-warning shadow-sm">
+            <div class="alert border-0 bg-martinique-700 text-white shadow-sm">
                 <span>{{ disabledLinkMessage }}</span>
             </div>
         </div>
         <div v-if="copyMessage" class="toast toast-end toast-top z-50">
-            <div class="alert alert-success shadow-sm">
+            <div class="alert border-0 bg-[var(--color-razzmatazz-700)] text-white shadow-sm">
                 <span>{{ copyMessage }}</span>
             </div>
         </div>
@@ -379,7 +379,7 @@ onMounted(fetchCompanies);
 
         <!-- List -->
         <div v-if="loadingCompanies" class="text-sm text-base-content/50">Chargement...</div>
-        <div v-else-if="loadError" class="alert alert-error"><span>{{ loadError }}</span></div>
+        <div v-else-if="loadError" class="alert border-0 bg-red-600 text-white"><span>{{ loadError }}</span></div>
         <p v-else-if="companies.length === 0" class="text-sm text-base-content/50">Aucune campagne. Créez-en une.</p>
         <p v-else-if="displayedCompanies.length === 0" class="text-sm text-base-content/50">Aucun résultat pour ce filtre.</p>
 
