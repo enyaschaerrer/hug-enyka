@@ -116,7 +116,7 @@ async function handleSubmit() {
                     class="mt-8 rounded-2xl border-2 border-martinique-300 p-8 text-center"
                 >
                     <p class="text-body text-martinique-800">
-                        Pour pouvoir participer au Prix du Coeur, il faut être labellisé "Cœur d'Honneur".
+                        Pour pouvoir participer au Prix du Cœur, il faut être labellisé "Cœur d'Honneur".
                     </p>
                     <p class="mt-2 text-heading-t3 font-semibold text-martinique-950">
                         Mettez en place une collecte et obtenez notre label !

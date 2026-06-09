@@ -31,7 +31,7 @@ function startQuestionnaire() {
         </ul>
 
         <!-- Desktop : carte « critères éliminatoires » avec bandeau de titre + 3 colonnes -->
-        <div class="hidden overflow-hidden rounded-2xl border-2 border-catskillwhite-800 sm:block">
+        <div class="hidden overflow-hidden rounded-2xl border-2 border-catskillwhite-800 lg:block">
             <div class="bg-catskillwhite-800 px-6 py-2 text-center">
                 <h3 class="text-body font-semibold text-white">Les critères éliminatoires</h3>
             </div>
@@ -48,11 +48,11 @@ function startQuestionnaire() {
         </div>
 
         <!-- Card "Prêt·e à savoir..." — pb-0 + boutons translatés pour dépasser à moitié en bas -->
-        <div class="mt-6 rounded-2xl bg-razzmatazz-200 px-6 pt-10 pb-0 text-center sm:mt-10 sm:px-12">
-            <h2 class="text-heading-t1 text-catskillwhite-900">
+        <div class="rounded-2xl bg-razzmatazz-200 px-6 pt-10 pb-0 text-center lg:mt-10 lg:px-12">
+            <h2 class="text-[1.3rem] font-semibold text-razzmatazz-950 lg:text-display">
                 Prêt·e à savoir si vous<br>pouvez donner votre sang ?
             </h2>
-            <p class="mt-3 text-body text-catskillwhite-800">
+            <p class="mt-3 text-[0.8rem] text-razzmatazz-950 lg:text-body">
                 Passez au test d'éligibilité !
             </p>
 
@@ -63,10 +63,10 @@ function startQuestionnaire() {
             </div>
 
             <!-- Boutons Non / Oui : très gros, translate-y-1/2 → dépassent à moitié en bas de la carte -->
-            <div class="-mt-8 flex translate-y-1/2 justify-center gap-4 sm:gap-6">
+            <div class="-mt-6 flex translate-y-1/2 justify-center gap-4 lg:gap-6">
                 <a
                     href="/"
-                    class="min-w-28 rounded-2xl bg-razzmatazz-300 px-8 py-3 text-heading-t3 font-semibold text-razzmatazz-900 transition hover:bg-razzmatazz-400 hover:text-white sm:min-w-40 sm:px-12 sm:py-4"
+                    class="min-w-30 rounded-2xl bg-razzmatazz-800 text-[1rem] py-2 font-semibold text-white transition hover:bg-razzmatazz-400 lg:min-w-56 sm:px-16 lg:py-7 lg:min-w-44 lg:text-heading-t1"
                 >
                     Pas encore
                 </a>

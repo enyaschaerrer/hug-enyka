@@ -1,12 +1,12 @@
 @extends('layouts.public')
 
-@section('title', 'Collecte')
+@section('title', config('page_titles.public.collecte'))
 @section('banner', '/img/banners/banni_re_collecte.webp')
 @section('banner_content')
     <h1 class="text-[1rem] font-semibold leading-none text-white lg:text-[2.5rem] lg:leading-[1.1]">
         Organisez votre collecte
     </h1>
-    <p class="mt-2 max-w-xl text-[0.5rem] leading-[1.12] font-semibold text-white hidden lg:block lg:mt-4 lg:max-w-none lg:text-[1.13rem] lg:leading-snug lg:whitespace-nowrap">
+    <p class="hidden lg:block lg:mt-4 lg:max-w-none lg:text-[1.13rem] lg:leading-snug lg:whitespace-nowrap">
         Le CTS vous accompagne pour mettre en place une collecte de sang dans votre entreprise.
     </p>
 @endsection
@@ -28,7 +28,12 @@
                 Comment organiser une collecte ?
             </h1>
 
-            <div class="mt-16 grid grid-cols-1 items-start gap-8 lg:grid-cols-2">
+            <div class="mt-8 grid grid-cols-1 items-start gap-8 lg:grid-cols-2 lg:mt-16">
+                <img
+                    src="/img/mascots/sanguy_satisfied.webp"
+                    alt=""
+                    class="pointer-events-none -my-4 h-48  mx-auto w-auto object-contain lg:hidden"
+                />
 
                 {{-- Card 1 --}}
                 <article class="rounded-2xl bg-razzmatazz-900 px-8 pb-9 pt-5 text-white shadow-sm">
@@ -37,7 +42,7 @@
                     </div>
                     <p class="text-body">
                         Échangez avec le CTS afin de définir votre projet de collecte, vos besoins et
-                        le format le plus adapté à votre entreprise. Cette première étape permet de
+                        le lieu le plus adapté, que ce soit dans votre entreprise ou au CTS. Cela permet de
                         poser les bases de la collaboration.
                     </p>
                 </article>
@@ -47,7 +52,7 @@
                     <img
                         src="/img/mascots/sanguy_satisfied.webp"
                         alt=""
-                        class="pointer-events-none -my-4 h-48 w-auto object-contain"
+                        class="pointer-events-none -my-4 h-48 w-auto object-contain hidden lg:block"
                     />
                     <article class="w-full rounded-2xl bg-razzmatazz-900 px-8 pb-9 pt-5 text-white shadow-sm">
                         <div class="mb-5 w-fit rounded-full bg-razzmatazz-50 px-5 py-1.5 text-body font-medium text-razzmatazz-900">
@@ -82,7 +87,7 @@
                     <img
                         src="/img/mascots/blutly_hero.webp"
                         alt=""
-                        class="pointer-events-none -my-4 h-48 w-auto object-contain"
+                        class="pointer-events-none -my-4 h-48 w-auto object-contain hidden lg:block"
                     />
 
                     <article class="w-full rounded-2xl bg-razzmatazz-900 px-8 pb-9 pt-5 text-white shadow-sm">
@@ -91,7 +96,7 @@
                         </div>
                         <p class="text-body">
                             Votre collecte prend vie avec l'accompagnement des équipes CTS. Les
-                            installations, l'accueil des donneurs et le déroulement de la journée sont
+                            installations, l'accueil des donneur.euses et le déroulement de la journée sont
                             coordonnés pour offrir une expérience fluide et rassurante.
                         </p>
                     </article>
@@ -103,11 +108,17 @@
                         Inscriptions
                     </div>
                     <p class="text-body">
-                        Les collaborateurs accèdent à un lien dédié à votre entreprise afin de
+                        Les collaborateur.rices accèdent à un lien dédié à votre entreprise afin de
                         réserver leur créneau. Ce système facilite l'organisation et le suivi de
                         la collecte.
                     </p>
                 </article>
+
+                <img
+                    src="/img/mascots/blutly_hero.webp"
+                    alt=""
+                    class="pointer-events-none -my-4 h-48 mx-auto w-auto object-contain lg:hidden"
+                />
 
             </div>
 
@@ -124,8 +135,8 @@
         </div>
     </section>
 
-    <div class="mx-auto max-w-2xl px-6">
-        <h3 class="text-[1.5rem] font-semibold mt-24 text-display text-martinique-950 lg:display">
+    <div class="mx-auto max-w-2xl px-6 mt-10">
+        <h3 class="text-[1.5rem] font-semibold text-left text-martinique-950 lg:text-display">
             Envie d'organiser une collecte ?
         </h3>
     </div>

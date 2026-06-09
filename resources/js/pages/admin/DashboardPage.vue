@@ -128,18 +128,17 @@ onUnmounted(() => {
 
 <template>
     <AdminLayout>
-        <section class="min-h-full rounded-sm bg-[#FAF8F2] p-1 pr-4 text-[#1f1f22]">
+        <section class="min-h-full rounded-sm bg-[var(--color-pampas-50)] p-1 pr-4 text-[#1f1f22]">
             <div class="mb-6 flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
                 <div>
-                    <h1 class="text-3xl font-semibold">Bienvenue dans votre dashboard</h1>
-                    <p class="mt-1 text-lg text-base-content/60">Campagne 2026 · vue globale CTS</p>
+                    <h1 class="text-3xl font-semibold">Tableau de bord</h1>
                 </div>
 
                 <article
                     v-if="kpis?.live.activeVisitors"
-                    class="flex w-full items-center justify-between gap-4 border border-[#5a002a]/10 bg-white px-4 py-2.5 text-[#5a002a] shadow-sm sm:w-80"
+                    class="flex w-full items-center justify-between gap-4 border border-[var(--color-pampas-950)]/10 bg-white px-4 py-2.5 text-[var(--color-pampas-950)] shadow-sm sm:w-80"
                 >
-                    <p class="text-sm font-medium leading-tight text-[#5a002a]/65">
+                    <p class="text-sm font-medium leading-tight text-[var(--color-pampas-950)]/65">
                         Nombre d’utilisateurs connectés
                     </p>
                     <p class="text-2xl font-bold leading-none">
@@ -149,7 +148,7 @@ onUnmounted(() => {
             </div>
 
             <div v-if="loading" class="text-sm text-base-content/50">Chargement des KPIs...</div>
-            <div v-else-if="loadError" class="alert alert-error">
+            <div v-else-if="loadError" class="alert border-0 bg-red-600 text-white">
                 <span>{{ loadError }}</span>
             </div>
 
@@ -158,8 +157,8 @@ onUnmounted(() => {
                     <article
                         v-for="card in summaryCards"
                         :key="card.label"
-                        class="border-2 bg-[#f8e7ee] p-5"
-                        :class="card.available ? 'border-[#5a002a] text-[#5a002a]' : 'border-[#8b7f86] text-[#8b7f86] opacity-60 grayscale'"
+                        class="border-2 bg-[var(--color-razzmatazz-50)] p-5"
+                        :class="card.available ? 'border-[var(--color-pampas-950)] text-[var(--color-pampas-950)]' : 'border-[#8b7f86] text-[#8b7f86] opacity-60 grayscale'"
                     >
                         <p class="text-xl font-medium">{{ card.label }}</p>
                         <p class="mt-3 text-4xl font-bold leading-none">
@@ -168,41 +167,6 @@ onUnmounted(() => {
                         <p class="mt-3 min-h-9 text-xs opacity-70">{{ card.note }}</p>
                     </article>
                 </div>
-
-                <section class="mt-6 border border-base-300 bg-white p-6">
-                    <div class="mb-5 flex flex-wrap items-center gap-3">
-                        <h2 class="text-2xl font-semibold">Entonnoir de conversion</h2>
-                        <span class="rounded-full bg-emerald-50 px-3 py-1 text-sm font-medium text-emerald-700">
-                            <span>objectif : réduire le différentiel de 30%</span>
-                        </span>
-                    </div>
-
-                    <div class="space-y-5">
-                        <div v-for="(step, index) in kpis.funnel" :key="step.label">
-                            <div
-                                class="flex min-h-12 items-center justify-between rounded-lg px-5"
-                                :class="[
-                                    step.available ? ['bg-[#efb7cd]', index === 2 ? 'bg-[#d24c82] text-white' : 'text-[#5a002a]'] : 'bg-base-200 text-base-content/40',
-                                ]"
-                                :style="{ width: barWidth(step.rate) }"
-                            >
-                                <span class="text-lg font-medium">{{ step.label }}</span>
-                                <span class="flex items-baseline gap-3">
-                                    <strong class="text-2xl">{{ displayValue(step.value, 'number') }}</strong>
-                                    <span v-if="step.rate !== null" class="text-lg">{{ step.rate }}%</span>
-                                </span>
-                            </div>
-                            <p
-                                v-if="index < kpis.funnel.length - 1"
-                                class="mt-2 text-sm"
-                                :class="step.available ? 'text-red-500' : 'text-base-content/40'"
-                            >
-                                ▼ différentiel non disponible
-                            </p>
-                            <p v-if="step.note" class="mt-2 text-xs text-base-content/45">{{ step.note }}</p>
-                        </div>
-                    </div>
-                </section>
 
                 <section class="mt-6 pb-2">
                     <h2 class="text-sm font-semibold uppercase tracking-wide text-base-content/60">Engagement digital</h2>
