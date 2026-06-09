@@ -289,23 +289,23 @@ onUnmounted(() => {
 
                     <dl class="space-y-3 text-sm">
                         <div class="flex gap-4">
-                            <dt class="w-32 shrink-0 font-medium text-stone-500"><span>Entreprise</span></dt>
+                            <dt class="w-32 shrink-0 font-medium text-black"><span>Entreprise</span></dt>
                             <dd class="text-stone-900"><span>{{ selectedForm.name }}</span></dd>
                         </div>
                         <div class="flex gap-4">
-                            <dt class="w-32 shrink-0 font-medium text-stone-500"><span>Email</span></dt>
+                            <dt class="w-32 shrink-0 font-medium text-black"><span>Email</span></dt>
                             <dd class="text-stone-900"><span>{{ selectedForm.email }}</span></dd>
                         </div>
                         <div class="flex gap-4">
-                            <dt class="w-32 shrink-0 font-medium text-stone-500"><span>Téléphone</span></dt>
+                            <dt class="w-32 shrink-0 font-medium text-black"><span>Téléphone</span></dt>
                             <dd class="text-stone-900"><span>{{ selectedForm.phone ?? '—' }}</span></dd>
                         </div>
                         <div class="flex gap-4">
-                            <dt class="w-32 shrink-0 font-medium text-stone-500"><span>Adresse</span></dt>
+                            <dt class="w-32 shrink-0 font-medium text-black"><span>Adresse</span></dt>
                             <dd class="text-stone-900"><span>{{ formatFullAddress(selectedForm.address, selectedForm.npa, selectedForm.localite) }}</span></dd>
                         </div>
                         <div class="flex gap-4">
-                            <dt class="w-32 shrink-0 font-medium text-stone-500"><span>Trophée</span></dt>
+                            <dt class="w-32 shrink-0 font-medium text-black"><span>Trophée</span></dt>
                             <dd>
                                 <span
                                     class="rounded-full px-2 py-1 text-xs font-medium"
@@ -316,17 +316,17 @@ onUnmounted(() => {
                             </dd>
                         </div>
                         <div v-if="selectedForm.message" class="flex gap-4">
-                            <dt class="w-32 shrink-0 font-medium text-stone-500"><span>Message</span></dt>
+                            <dt class="w-32 shrink-0 font-medium text-black"><span>Message</span></dt>
                             <dd class="whitespace-pre-wrap text-stone-900"><span>{{ selectedForm.message }}</span></dd>
                         </div>
                         <div class="flex gap-4">
-                            <dt class="w-32 shrink-0 font-medium text-stone-500"><span>Date</span></dt>
+                            <dt class="w-32 shrink-0 font-medium text-black"><span>Date</span></dt>
                             <dd class="text-stone-900"><span>{{ formatDate(selectedForm.created_at) }}</span></dd>
                         </div>
                     </dl>
 
                     <div class="mt-6">
-                        <p class="mb-2 text-xs font-semibold uppercase tracking-wide text-stone-500">
+                        <p class="mb-2 text-xs font-semibold uppercase tracking-wide text-black">
                             Entreprises similaires dans la base
                         </p>
                         <div v-if="matchingCompanies.length === 0" class="text-sm text-stone-400">
@@ -336,17 +336,17 @@ onUnmounted(() => {
                             <li
                                 v-for="company in matchingCompanies"
                                 :key="company.id"
-                                class="flex items-center justify-between rounded-lg bg-amber-50 px-4 py-2 text-sm"
+                                class="flex items-center justify-between rounded-lg bg-martinique-50 px-4 py-2 text-sm"
                             >
-                                <span class="font-medium text-amber-800">{{ company.name }}</span>
-                                <span class="text-amber-600">{{ company.email }}</span>
+                                <span class="font-medium text-martinique-800">{{ company.name }}</span>
+                                <span class="text-martinique-600">{{ company.email }}</span>
                             </li>
                         </ul>
                     </div>
 
                     <div class="mt-6 flex justify-end">
                         <button
-                            class="rounded-xl bg-[var(--color-pampas-950)] px-5 py-2 text-sm font-medium text-white hover:opacity-90 font-cooper"
+                            class="rounded-xl bg-[var(--color-razzmatazz-700)] px-5 py-2 text-sm font-medium text-white hover:bg-[var(--color-razzmatazz-800)] font-cooper"
                             @click="selectedForm = null"
                         >
                             <span>Fermer</span>
