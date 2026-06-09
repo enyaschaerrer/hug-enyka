@@ -430,7 +430,7 @@ async function submit() {
                     </label>
 
                     <label class="flex w-full flex-col gap-2">
-                        <span class="label-text">Slug URL <span style="color: var(--color-razzmatazz-700);">*</span></span>
+                        <span class="label-text">URL de collecte <span style="color: var(--color-razzmatazz-700);">*</span></span>
                         <input
                             v-model="form.slug"
                             type="text"
@@ -528,7 +528,7 @@ async function submit() {
                             v-model="form.allowed_email_domains"
                             type="text"
                             class="input input-bordered w-full"
-                            placeholder="rolex.com,rolex.ch"
+                            placeholder="domaine.com, domaine.ch"
                             required
                         />
                         <p v-if="firstError('allowed_email_domains')" class="mt-1 text-sm text-error">{{ firstError('allowed_email_domains') }}</p>
