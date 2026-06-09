@@ -352,7 +352,7 @@ onMounted(fetchOverview);
                 </div>
 
                 <div v-if="currentTabData.current_winners.length === 0" class="mb-5">
-                    <p class="text-sm text-base-content/55">Aucun vainqueur pour le moment.</p>
+                    <p class="text-sm text-base-content/55">Aucun classement pour le moment. Vous pouvez sélectionner les gagnants en cliquant sur les boutons d'action dans la liste ci-dessous.</p>
                 </div>
 
                 <div
