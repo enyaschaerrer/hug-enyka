@@ -41,6 +41,49 @@ function onListScroll(event: Event, key: string) {
     listsAtBottom.value[key] = el.scrollTop + el.clientHeight >= el.scrollHeight - 4;
 }
 
+const selectedCompanies = ref<Set<string>>(new Set());
+const companySearch = ref('');
+
+const allCompanies = computed((): ParticipationCompany[] => {
+    if (!kpis.value) return [];
+    const seen = new Set<string>();
+    const result: ParticipationCompany[] = [];
+    for (const key of ['connectedUsers', 'participationRate', 'conversionRate']) {
+        for (const c of (kpis.value.engagement[key]?.companies ?? []) as ParticipationCompany[]) {
+            if (!seen.has(c.name)) { seen.add(c.name); result.push(c); }
+        }
+    }
+    return result.sort((a, b) => a.name.localeCompare(b.name));
+});
+
+const searchedCompanies = computed(() => {
+    const q = companySearch.value.toLowerCase().trim();
+    return q ? allCompanies.value.filter(c => c.name.toLowerCase().includes(q)) : allCompanies.value;
+});
+
+function toggleCompany(name: string) {
+    const next = new Set(selectedCompanies.value);
+    if (next.has(name)) next.delete(name); else next.add(name);
+    selectedCompanies.value = next;
+}
+
+function filterCompanies(companies: ParticipationCompany[]): ParticipationCompany[] {
+    if (selectedCompanies.value.size === 0) return companies;
+    return companies.filter(c => selectedCompanies.value.has(c.name));
+}
+
+function computeFilteredValue(card: KpiValue & { format?: string }): number | string | null {
+    if (!card.companies) return card.value;
+    const filtered = filterCompanies(card.companies);
+    if (filtered.length === 0) return null;
+    if (card.format === 'percent') {
+        const num = filtered.reduce((s, c) => s + c.connected, 0);
+        const den = filtered.reduce((s, c) => s + c.total, 0);
+        return den > 0 ? Math.round((num / den) * 1000) / 10 : null;
+    }
+    return filtered.reduce((s, c) => s + c.connected, 0);
+}
+
 const VISIT_PERIODS = [
     { key: '30d',  label: 'Mois en cours', minMonth: 1 },
     { key: '3m',   label: '3m',            minMonth: 4 },
@@ -156,8 +199,47 @@ onUnmounted(() => {
                     class="flex flex-col rounded-2xl border border-base-300 bg-white p-5 shadow-sm"
                     :class="card.available ? '' : 'opacity-45 grayscale'"
                 >
-                    <!-- Card vide spacer -->
-                    <template v-if="card.isSpacer" />
+                    <!-- Card filtre KPIs co-brandés -->
+                    <template v-if="card.isSpacer">
+                        <div class="flex items-center justify-between">
+                            <p class="text-lg font-semibold text-base-content/80">KPIs co-brandés</p>
+                            <button
+                                v-if="selectedCompanies.size > 0"
+                                type="button"
+                                class="text-xs text-base-content/40 hover:text-base-content/70 transition"
+                                @click="selectedCompanies = new Set()"
+                            >Tout effacer</button>
+                        </div>
+                        <input
+                            v-model="companySearch"
+                            type="search"
+                            placeholder="Rechercher une entreprise…"
+                            class="mt-3 w-full rounded-lg border border-base-200 bg-base-100 px-3 py-1.5 text-sm outline-none focus:border-base-300"
+                        />
+                        <div class="relative mt-2 -mb-5">
+                            <div class="max-h-48 overflow-y-auto pb-4 border-t border-base-200" @scroll="onListScroll($event, '__filter__')">
+                                <div
+                                    v-for="company in searchedCompanies"
+                                    :key="company.name"
+                                    class="flex cursor-pointer items-center gap-3 py-2 transition-opacity"
+                                    :class="selectedCompanies.size > 0 && !selectedCompanies.has(company.name) ? 'opacity-35' : ''"
+                                    @click="toggleCompany(company.name)"
+                                >
+                                    <div
+                                        class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-xs font-medium text-white"
+                                        :style="{ backgroundColor: company.primaryColor }"
+                                    >{{ company.name.slice(0, 2).toUpperCase() }}</div>
+                                    <span class="min-w-0 flex-1 truncate text-sm font-semibold text-base-content/80">{{ company.name }}</span>
+                                    <svg v-if="selectedCompanies.has(company.name)" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 shrink-0 text-[var(--color-razzmatazz-700)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+                                </div>
+                                <p v-if="searchedCompanies.length === 0" class="py-4 text-center text-xs text-base-content/40">Aucun résultat</p>
+                            </div>
+                            <div
+                                class="pointer-events-none absolute bottom-0 left-0 right-0 h-14 bg-gradient-to-t from-white to-transparent transition-opacity duration-300"
+                                :class="listsAtBottom['__filter__'] ? 'opacity-0' : 'opacity-100'"
+                            ></div>
+                        </div>
+                    </template>
 
                     <template v-else>
                     <p class="text-lg text-base-content/65">{{ card.label }}</p>
@@ -186,14 +268,16 @@ onUnmounted(() => {
                     <!-- Card connectés / participation / conversion : liste scrollable par entreprise -->
                     <template v-else-if="card.companies !== undefined">
                         <p class="mt-2 text-4xl font-bold">
-                            {{ card.value !== null ? (card.format === 'percent' ? card.value + '%' : displayValue(card.value, 'number')) : 'N/A' }}
+                            {{ computeFilteredValue(card) !== null ? (card.format === 'percent' ? computeFilteredValue(card) + '%' : displayValue(computeFilteredValue(card) as number, 'number')) : 'N/A' }}
                         </p>
                         <div v-if="card.available && card.companies.length > 0" class="relative mt-3 -mb-5">
                             <div class="max-h-48 overflow-y-auto pr-1 pb-4 border-t border-base-200" @scroll="onListScroll($event, card.label)">
                             <div
-                                v-for="company in card.companies"
+                                v-for="company in filterCompanies(card.companies)"
                                 :key="company.name"
-                                class="flex items-center gap-3 py-2"
+                                class="flex cursor-pointer items-center gap-3 py-2 transition-opacity"
+                                :class="selectedCompanies.size > 0 && !selectedCompanies.has(company.name) ? 'opacity-35' : ''"
+                                @click="toggleCompany(company.name)"
                             >
                                 <div
                                     class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-xs font-medium text-white"
