@@ -265,7 +265,8 @@ onUnmounted(() => {
                 >
                     <!-- Card filtre KPIs co-brandés -->
                     <template v-if="card.isSpacer">
-                        <div class="relative mt-1">
+                        <p class="text-lg font-semibold text-[#000]">Site co-brandé</p>
+                        <div class="relative mt-1.5">
                             <svg
                                 xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                                 class="absolute left-3 top-1/2 -translate-y-1/2 transition ease-in-out"
@@ -351,7 +352,7 @@ onUnmounted(() => {
 
                     <!-- Card connectés / participation / conversion : liste scrollable par entreprise -->
                     <template v-else-if="card.companies !== undefined">
-                        <p class="mt-2 text-4xl font-bold">
+                        <p class="mt-2 text-4xl font-bold" :class="card.isCobranded ? 'text-[var(--color-martinique-700)]' : ''">
                             {{ computeFilteredValue(card) !== null ? (card.format === 'percent' ? computeFilteredValue(card) + '%' : displayValue(computeFilteredValue(card) as number, 'number')) : 'N/A' }}
                         </p>
                         <div v-if="card.available && card.companies.length > 0" class="relative mt-3 -mb-5">
@@ -412,7 +413,7 @@ onUnmounted(() => {
 
                     <!-- Card abandon questionnaire -->
                     <template v-else-if="card.abandonSteps !== undefined">
-                        <p class="mt-2 text-4xl font-bold">
+                        <p class="mt-2 text-4xl font-bold text-[var(--color-martinique-700)]">
                             {{ card.available ? (card.value !== null ? card.value + '%' : 'N/A') : 'N/A' }}
                         </p>
                         <div v-if="card.available" class="mt-3 space-y-2">
