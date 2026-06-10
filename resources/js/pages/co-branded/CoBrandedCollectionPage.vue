@@ -103,7 +103,7 @@ const canNext = computed(() => activeTab.value !== tabs[tabs.length - 1].key);
                 <CoBrandedStatisticsTab v-else-if="activeTab === 'stats'" />
                 <CoBrandedStepsTab      v-else-if="activeTab === 'etapes'" />
                 <CoBrandedMapTab        v-else-if="activeTab === 'map'" />
-                <CoBrandedTestTab       v-else-if="activeTab === 'test'" />
+                <CoBrandedTestTab       v-else-if="activeTab === 'test'" @go-to-informations="goToTab('informations')" />
             </main>
 
             <!-- Précédent / Suivant — sticky bas sur desktop uniquement (caché sur mobile) -->

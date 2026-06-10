@@ -5,6 +5,11 @@ import { useCoBrandedCollecte } from '../../../composables/useCoBrandedCollecte'
 const { navigate } = useAdminRouter();
 const { collection } = useCoBrandedCollecte();
 
+const emit = defineEmits<{
+    /** Retour vers l'onglet « Informations » de la page collecte. */
+    goToInformations: [];
+}>();
+
 const criteria = [
     { title: 'Âge', description: 'Vous êtes âgé·e entre 18 et 60 ans.', short: '18-60 ans' },
     { title: 'Poids', description: 'Vous pesez minimum 50 kg.', short: 'Min. 50 kg' },
@@ -63,12 +68,13 @@ function startQuestionnaire() {
 
             <!-- Boutons Non / Oui : très gros, translate-y-1/2 → dépassent à moitié en bas de la carte -->
             <div class="mt-2 flex translate-y-1/2 justify-center gap-4 lg:gap-6">
-                <a
-                    href="/"
+                <button
+                    type="button"
                     class="min-w-30 rounded-2xl border-razzmatazz-800 border-2 bg-white text-heading-t3 py-3 font-semibold text-razzmatazz-800 transition hover:bg-razzmatazz-100 lg:min-w-40 lg:px-12 sm:py-4"
+                    @click="emit('goToInformations')"
                 >
                     Pas encore
-                </a>
+                </button>
                 <button
                     type="button"
                     class="min-w-28 rounded-2xl bg-razzmatazz-800 px-8 py-3 text-heading-t3 font-semibold text-white transition hover:bg-razzmatazz-600 lg:min-w-40 lg:px-12 lg:py-4"
