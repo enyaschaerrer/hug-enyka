@@ -289,13 +289,16 @@ onUnmounted(() => {
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
                             </button>
                         </div>
-                        <button
-                            v-if="selectedCompanies.size > 0"
-                            type="button"
-                            class="mt-1.5 text-xs text-base-content/40 transition hover:text-base-content/70"
-                            @click="selectedCompanies = new Set()"
-                        >Tout effacer</button>
-                        <div class="relative mt-2 -mb-5">
+                        <div class="mt-2 flex items-center justify-between">
+                            <span class="text-xs font-medium text-[#000]">Filtrer</span>
+                            <button
+                                v-if="selectedCompanies.size > 0"
+                                type="button"
+                                class="text-xs font-medium text-[var(--color-martinique-700)] transition hover:opacity-70"
+                                @click="selectedCompanies = new Set()"
+                            >Réinitialiser</button>
+                        </div>
+                        <div class="relative -mb-5">
                             <div class="max-h-48 overflow-y-auto pb-4" @scroll="onListScroll($event, '__filter__')">
                                 <div
                                     v-for="company in searchedCompanies"
@@ -309,7 +312,14 @@ onUnmounted(() => {
                                         :style="{ backgroundColor: company.primaryColor }"
                                     >{{ company.name.slice(0, 2).toUpperCase() }}</div>
                                     <span class="min-w-0 flex-1 truncate text-sm font-semibold text-base-content/80">{{ company.name }}</span>
-                                    <svg v-if="selectedCompanies.has(company.name)" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 shrink-0 text-[var(--color-razzmatazz-700)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+                                    <div
+                                        class="h-4 w-4 shrink-0 rounded-sm border transition"
+                                        :class="selectedCompanies.has(company.name)
+                                            ? 'border-[var(--color-martinique-700)] bg-[var(--color-martinique-700)]'
+                                            : 'border-[var(--color-martinique-100)] bg-white'"
+                                    >
+                                        <svg v-if="selectedCompanies.has(company.name)" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+                                    </div>
                                 </div>
                                 <p v-if="searchedCompanies.length === 0" class="py-4 text-center text-xs text-base-content/40">Aucun résultat</p>
                             </div>
