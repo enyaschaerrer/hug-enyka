@@ -99,6 +99,8 @@ class KpiController extends Controller
             ->select(
                 'companies.name',
                 'companies.primaryColor',
+                DB::raw("COUNT(DISTINCT CASE WHEN collections_users.quiz_step = 'quiz' THEN collections_users.user_id END) as quiz_count"),
+                DB::raw("COUNT(DISTINCT CASE WHEN collections_users.quiz_step = 'chat' THEN collections_users.user_id END) as chat_count"),
                 DB::raw("COUNT(DISTINCT CASE WHEN collections_users.quiz_step IN ('quiz', 'chat') THEN collections_users.user_id END) as abandon_count"),
                 DB::raw('COUNT(DISTINCT collections_users.user_id) as total_count'),
             )
@@ -114,6 +116,8 @@ class KpiController extends Controller
                     'connected'    => (int) $c->abandon_count,
                     'total'        => (int) $c->total_count,
                     'rate'         => $rate,
+                    'quizRate'     => $c->total_count > 0 ? (int) round($c->quiz_count / $c->total_count * 100) : null,
+                    'chatRate'     => $c->total_count > 0 ? (int) round($c->chat_count / $c->total_count * 100) : null,
                 ];
             })
             ->sortByDesc('rate')
@@ -207,7 +211,7 @@ class KpiController extends Controller
                     'companies' => $conversionByCompany,
                 ],
                 'questionnaireAbandonRate' => [
-                    'label'        => 'Abandon questionnaire',
+                    'label'        => 'Taux d\'abandon au questionnaire',
                     'value'        => $abandonSteps['totalRate'],
                     'available'    => $abandonSteps['total'] > 0,
                     'note'         => $abandonSteps['total'] > 0 ? null : 'Aucun parcours enregistré.',
