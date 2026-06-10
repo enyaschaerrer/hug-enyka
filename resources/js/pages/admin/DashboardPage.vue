@@ -22,12 +22,15 @@ const kpis = ref<KpiPayload | null>(null);
 let refreshTimer: number | undefined;
 
 const VISIT_PERIODS = [
-    { key: '30d', label: 'Mois en cours' },
-    { key: '3m',  label: '3m' },
-    { key: '6m',  label: '6m' },
-    { key: 'year', label: 'Année en cours' },
+    { key: '30d',  label: 'Mois en cours', minMonth: 1 },
+    { key: '3m',   label: '3m',            minMonth: 4 },
+    { key: '6m',   label: '6m',            minMonth: 7 },
+    { key: 'year', label: 'Année en cours', minMonth: 1 },
 ] as const;
 type VisitPeriod = typeof VISIT_PERIODS[number]['key'];
+
+const currentMonth = new Date().getMonth() + 1;
+const availableVisitPeriods = VISIT_PERIODS.filter((p) => currentMonth >= p.minMonth);
 
 const visitsPeriod = ref<VisitPeriod>('30d');
 const visitsCount = ref<number | null>(null);
@@ -137,7 +140,7 @@ onUnmounted(() => {
                     <template v-if="card.isVisits">
                         <div class="mt-3 flex gap-1">
                             <button
-                                v-for="p in VISIT_PERIODS"
+                                v-for="p in availableVisitPeriods"
                                 :key="p.key"
                                 type="button"
                                 class="rounded-md px-2.5 py-1 text-xs font-medium transition"
