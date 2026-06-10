@@ -38,7 +38,7 @@ defineProps<{
                 @click="left"
             >
                 <span class="material-symbols-outlined text-[20px] transition-transform group-hover:scale-110 sm:text-[22px]" aria-hidden="true">close</span>
-                <span class="text-sm font-semibold sm:text-base">Non</span>
+                <span class="text-body font-semibold">Non</span>
             </button>
 
             <button
@@ -50,7 +50,7 @@ defineProps<{
                 @click="right"
             >
                 <span class="material-symbols-outlined text-[20px] transition-transform group-hover:scale-110 sm:text-[22px]" aria-hidden="true">check</span>
-                <span class="text-sm font-semibold sm:text-base">Oui</span>
+                <span class="text-body font-semibold">Oui</span>
             </button>
         </div>
     </div>
