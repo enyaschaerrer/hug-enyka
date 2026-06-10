@@ -1,14 +1,15 @@
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, ref } from 'vue';
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
 import AdminLayout from '../../components/layout/AdminLayout.vue';
 
 type KpiValue = {
     label: string;
     value: number | null;
     available: boolean;
-    note?: string;
+    note?: string | null;
     predefined?: { source: string; count: number }[];
     freeText?: string[];
+    isVisits?: boolean;
 };
 
 type KpiPayload = {
@@ -20,6 +21,34 @@ const loadError = ref<string | null>(null);
 const kpis = ref<KpiPayload | null>(null);
 let refreshTimer: number | undefined;
 
+const VISIT_PERIODS = [
+    { key: '30d', label: 'Mois en cours' },
+    { key: '3m',  label: '3m' },
+    { key: '6m',  label: '6m' },
+    { key: 'year', label: 'Année en cours' },
+] as const;
+type VisitPeriod = typeof VISIT_PERIODS[number]['key'];
+
+const visitsPeriod = ref<VisitPeriod>('30d');
+const visitsCount = ref<number | null>(null);
+const visitsLoading = ref(false);
+
+async function fetchVisits() {
+    visitsLoading.value = true;
+    try {
+        const res = await fetch(
+            `/admin/api/kpis/page-visits?period=${visitsPeriod.value}`,
+            { headers: { 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' } },
+        );
+        if (res.ok) {
+            const data = await res.json();
+            visitsCount.value = data.count;
+        }
+    } finally {
+        visitsLoading.value = false;
+    }
+}
+
 const engagementCards = computed(() => {
     if (!kpis.value) {
         return [];
@@ -28,7 +57,7 @@ const engagementCards = computed(() => {
     return [
         { ...kpis.value.engagement.labelledCompanies, format: 'number' },
         { ...kpis.value.engagement.companySources, format: 'number' },
-        { ...kpis.value.engagement.pageVisits, format: 'number' },
+        { ...kpis.value.engagement.pageVisits, format: 'number', isVisits: true },
         { ...kpis.value.engagement.participationRate, format: 'percent' },
         { ...kpis.value.engagement.conversionRate, format: 'percent' },
         { ...kpis.value.engagement.questionnaireAbandonRate, format: 'percent' },
@@ -70,8 +99,11 @@ async function fetchKpis() {
     }
 }
 
+watch(visitsPeriod, fetchVisits);
+
 onMounted(() => {
     fetchKpis();
+    fetchVisits();
     refreshTimer = window.setInterval(fetchKpis, 30000);
 });
 
@@ -101,8 +133,29 @@ onUnmounted(() => {
                 >
                     <p class="text-lg text-base-content/65">{{ card.label }}</p>
 
+                    <!-- Card visites : période type GA -->
+                    <template v-if="card.isVisits">
+                        <div class="mt-3 flex gap-1">
+                            <button
+                                v-for="p in VISIT_PERIODS"
+                                :key="p.key"
+                                type="button"
+                                class="rounded-md px-2.5 py-1 text-xs font-medium transition"
+                                :class="visitsPeriod === p.key
+                                    ? 'bg-[var(--color-razzmatazz-700)] text-white'
+                                    : 'text-base-content/60 hover:bg-base-200'"
+                                @click="visitsPeriod = p.key"
+                            >
+                                {{ p.label }}
+                            </button>
+                        </div>
+                        <p class="mt-2 text-4xl font-bold">
+                            {{ visitsLoading ? '…' : visitsCount !== null ? visitsCount.toLocaleString('fr-CH') : 'N/A' }}
+                        </p>
+                    </template>
+
                     <!-- Card sources : liste scrollable -->
-                    <template v-if="card.predefined !== undefined">
+                    <template v-else-if="card.predefined !== undefined">
                         <div v-if="card.available" class="mt-3 max-h-40 overflow-y-auto pr-1">
                             <div
                                 v-for="item in card.predefined"

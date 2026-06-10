@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class KpiController extends Controller
@@ -71,8 +72,8 @@ class KpiController extends Controller
                 'pageVisits' => [
                     'label' => 'Visites du site public',
                     'value' => null,
-                    'available' => false,
-                    'note' => 'Migration non encore appliquée (table page_visits).',
+                    'available' => true,
+                    'note' => null,
                 ],
                 'participationRate' => [
                     'label' => 'Taux de participation',
@@ -94,5 +95,23 @@ class KpiController extends Controller
                 ],
             ],
         ]);
+    }
+
+    public function pageVisits(Request $request): JsonResponse
+    {
+        $period = $request->string('period', '30d')->toString();
+
+        $from = match ($period) {
+            '3m'   => now()->subMonths(3),
+            '6m'   => now()->subMonths(6),
+            'year' => now()->startOfYear(),
+            default => now()->startOfMonth(),
+        };
+
+        $count = DB::table('page_visits')
+            ->where('created_at', '>=', $from)
+            ->count();
+
+        return response()->json(['count' => $count]);
     }
 }

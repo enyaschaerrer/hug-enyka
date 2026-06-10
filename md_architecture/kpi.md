@@ -2,7 +2,7 @@
 
 Nombre d’entreprises labellisées (et nb entreprises voulant pas être affichées) - Done
 
-Sources des entreprises sous forme de liste : classement / liste scrollable  - Go
+Sources des entreprises sous forme de liste : classement / liste scrollable  - Done
 
 Nb de visites (site public) - Phase 3.1 -> filtre mois + années
 
