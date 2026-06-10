@@ -451,16 +451,18 @@ watch(loading, async (isLoading) => {
                                 v-if="editedCollection.is_active"
                                 :href="editedCollection.url"
                                 target="_blank"
-                                class="min-w-0 truncate text-sm text-martinique-950 underline-offset-2 hover:underline"
+                                class="link link-primary min-w-0 truncate text-sm font-medium"
                             >
                                 <span>{{ editedCollection.url }}</span>
                             </a>
-                            <span
+                            <a
                                 v-else
-                                class="min-w-0 truncate text-sm text-pampas-900/70"
+                                :href="editedCollection.url"
+                                target="_blank"
+                                class="link link-primary min-w-0 truncate text-sm font-medium"
                             >
                                 {{ editedCollection.url }}
-                            </span>
+                            </a>
                         </div>
                     </div>
                 </div>
