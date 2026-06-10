@@ -1,10 +1,14 @@
 <script setup lang="ts">
-import { onMounted, reactive, ref } from 'vue';
+import { computed, onMounted, reactive, ref } from 'vue';
+
+const props = defineProps<{
+    reasons?: { title: string; detail: string; status?: 'warning' | 'blocker' }[];
+}>();
 
 const form = reactive({
     nom: '',
     prenom: '',
-    telephone: '',
+    email: '',
 });
 
 const bubbleText = 'Vous n\'avez malheureusement pas un match pour le moment. Voici la raison. Cependant, nous vous envoyons volontiers un rappel par message pour repasser le test !';
@@ -26,11 +30,8 @@ onMounted(() => {
     animateText();
 });
 
-const placeholderReasons = [
-    { title: 'Don de sang', detail: 'Attente : 4 mois' },
-    { title: 'Consommation ou injection de drogues', detail: 'Attente : 12 mois' },
-    { title: 'Prise d\'antibiotiques', detail: 'Attente : 2 semaines' },
-];
+// Causes réelles transmises par le quiz / chat (plus de raisons en dur).
+const displayReasons = computed(() => props.reasons ?? []);
 </script>
 
 <template>
@@ -40,67 +41,67 @@ const placeholderReasons = [
 
                 <!-- Gauche : bulle + Sanguy -->
                 <div class="flex shrink-0 flex-col items-center lg:w-80">
-                    <div class="non-eligible-bubble relative mt-16 w-full rounded-2xl border border-[#2f1725] bg-white px-4 py-3 text-sm font-semibold leading-snug text-[#2f1725] shadow-sm">
+                    <div class="non-eligible-bubble relative mt-36 w-full rounded-2xl border border-[#2f1725] bg-white px-4 py-3 text-sm font-semibold leading-snug text-[#2f1725] shadow-sm">
                         <span class="invisible">{{ bubbleText }}</span>
                         <span class="absolute inset-0 px-4 py-3 text-sm font-semibold leading-snug">{{ typedText }}</span>
                     </div>
                     <img
-                        :src="'/img/mascots/sanguy_hero.webp'"
+                        :src="'/img/mascots/sanguy_devastated.webp'"
                         alt="Sanguy"
-                        class="mt-4 w-full object-contain drop-shadow-[0_12px_22px_rgba(109,0,46,0.18)]"
+                        class="-mt-12 w-full object-contain drop-shadow-[0_12px_22px_rgba(109,0,46,0.18)]"
                     />
                 </div>
 
                 <!-- Droite : contenu -->
                 <div class="flex-1">
-                    <h1 class="mb-6 text-4xl font-bold text-[#5f0f35]">Pas éligible</h1>
+                    <h1 class="mb-6 text-4xl font-bold text-[#5f0f35]">Inéligible</h1>
 
                     <!-- Cartes raisons -->
                     <div class="mb-8 grid grid-cols-1 gap-3 sm:grid-cols-3">
                         <div
-                            v-for="reason in placeholderReasons"
-                            :key="reason.title"
-                            class="rounded-2xl border-2 border-[#b81e62] bg-white px-4 py-4 text-center"
+                            v-for="(reason, index) in displayReasons"
+                            :key="index"
+                            class="rounded-2xl border-1 border-razzmatazz-950 bg-razzmatazz-50 px-4 py-4 text-center"
                         >
-                            <p class="font-bold leading-snug text-[#5f0f35]">{{ reason.title }}</p>
-                            <p class="mt-2 text-sm text-[#7a4b62]">{{ reason.detail }}</p>
+                            <p class="font-bold text-heading-t3 text-razzmatazz-900">{{ reason.title }}</p>
+                            <p class="mt-2 text-body text-razzmatazz-900">{{ reason.detail }}</p>
                         </div>
                     </div>
 
                     <!-- Formulaire rappel -->
                     <h2 class="mb-4 text-xl font-bold text-[#2f1725]">Vous aimeriez un rappel ?</h2>
-                    <form class="rounded-2xl bg-white px-6 py-6 space-y-4 shadow-[0_8px_40px_rgba(109,0,46,0.10)]" @submit.prevent>
+                    <form class="rounded-2xl bg-razzmatazz-800 px-6 py-6 space-y-4 shadow-[0_8px_40px_rgba(109,0,46,0.10)]" @submit.prevent>
                         <label class="flex flex-col gap-1.5">
-                            <span class="text-sm font-semibold text-[#2f1725]">Nom</span>
+                            <span class="text-sm font-semibold text-razzmatazz-50">Nom</span>
                             <input
                                 v-model="form.nom"
                                 type="text"
-                                class="w-full rounded-xl border-2 border-[#355755] bg-white px-4 py-2.5 text-sm font-semibold text-[#2f1725] placeholder:text-[#c9a0b4] outline-none focus:border-black focus:text-black"
+                                class="w-full rounded-xl border-2 border-razzmatazz-950 bg-razzmatazz-50 px-4 py-2.5 text-sm font-semibold text-[#2f1725] placeholder:text-[#c9a0b4] outline-none focus:border-black focus:text-black"
                                 placeholder="Nom"
                             />
                         </label>
                         <label class="flex flex-col gap-1.5">
-                            <span class="text-sm font-semibold text-[#2f1725]">Prénom</span>
+                            <span class="text-sm font-semibold text-razzmatazz-50">Prénom</span>
                             <input
                                 v-model="form.prenom"
                                 type="text"
-                                class="w-full rounded-xl border-2 border-[#355755] bg-white px-4 py-2.5 text-sm font-semibold text-[#2f1725] placeholder:text-[#c9a0b4] outline-none focus:border-black focus:text-black"
+                                class="w-full rounded-xl border-2 border-razzmatazz-950 bg-razzmatazz-50 px-4 py-2.5 text-sm font-semibold text-[#2f1725] placeholder:text-[#c9a0b4] outline-none focus:border-black focus:text-black"
                                 placeholder="Prénom"
                             />
                         </label>
                         <label class="flex flex-col gap-1.5">
-                            <span class="text-sm font-semibold text-[#2f1725]">Numéro de téléphone</span>
+                            <span class="text-sm font-semibold text-razzmatazz-50">Email</span>
                             <input
-                                v-model="form.telephone"
-                                type="tel"
-                                class="w-full rounded-xl border-2 border-[#355755] bg-white px-4 py-2.5 text-sm font-semibold text-[#2f1725] placeholder:text-[#c9a0b4] outline-none focus:border-black focus:text-black"
-                                placeholder="+41"
+                                v-model="form.email"
+                                type="email"
+                                class="w-full rounded-xl border-2 border-razzmatazz-950 bg-razzmatazz-50 px-4 py-2.5 text-sm font-semibold text-[#2f1725] placeholder:text-[#c9a0b4] outline-none focus:border-black focus:text-black"
+                                placeholder="ton@email.com"
                             />
                         </label>
                         <div class="flex justify-center pt-1">
                             <button
                                 type="submit"
-                                class="rounded-xl bg-[#b81e62] px-8 py-2.5 text-sm font-bold text-white transition hover:opacity-90"
+                                class="rounded-xl bg-razzmatazz-950 px-8 py-2.5 text-body font-medium text-razzmatazz-50 transition hover:bg-razzmatazz-400 hover:text-white"
                             >
                                 S'inscrire pour un rappel
                             </button>

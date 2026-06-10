@@ -44,18 +44,18 @@ async function logout() {
 </script>
 
 <template>
-    <header class="sticky top-0 z-40 bg-catskillwhite-800 px-3 py-2 font-cooper shadow-sm lg:px-12 lg:py-4">
+    <header class="sticky top-0 z-40 bg-catskillwhite-800 px-3 py-2 font-cooper shadow-sm lg:px-12 lg:py-2.5">
         <div class="mx-auto flex max-w-6xl items-center justify-between gap-2 lg:gap-4">
             <!-- Pill blanche cliquable : logo entreprise X logo HUG → retour à la première page -->
             <button
                 type="button"
-                class="flex items-center gap-2 rounded-full bg-white px-3 py-1.5 transition hover:bg-catskillwhite-100 lg:gap-3 lg:px-5 lg:py-2"
+                class="flex items-center gap-2 rounded-full bg-white px-3 py-1.5 transition hover:bg-catskillwhite-100 lg:gap-3 lg:px-5"
                 aria-label="Retour à l'accueil"
                 @click="$emit('goHome')"
             >
                 <img
                     v-if="company.logo"
-                    class="h-5 w-auto object-contain lg:h-8"
+                    class="h-4 w-auto object-contain lg:h-7"
                     :src="company.logo"
                     :alt="company.name"
                 />
@@ -63,7 +63,7 @@ async function logout() {
 
                 <span class="text-caption font-bold text-catskillwhite-900 lg:text-body">X</span>
 
-                <img class="h-5 w-auto object-contain lg:h-8" :src="'/img/logo_HUG.png'" alt="HUG" />
+                <img class="h-4 w-auto object-contain lg:h-7" :src="'/img/logo_HUG.png'" alt="HUG" />
             </button>
 
             <!-- Nav droite -->
@@ -73,17 +73,18 @@ async function logout() {
                     class="rounded-full bg-razzmatazz-800 px-3 py-1.5 text-caption font-medium text-white transition hover:bg-razzmatazz-600 hidden lg:block lg:px-5 lg:py-2 lg:text-heading-t3"
                     @click="$emit('goTest')"
                 >
-                    Test d'éligibilité
+                    <span class="lg:hidden">Test</span>
+                    <span class="hidden lg:inline">Test d'éligibilité</span>
                 </button>
 
                 <button
                     type="button"
-                    class="inline-flex h-8 w-8 items-center justify-center rounded-full text-white transition hover:bg-white/10 lg:h-11 lg:w-11"
+                    class="inline-flex h-8 w-8 items-center justify-center rounded-full text-white transition hover:bg-white/10 lg:h-9 lg:w-9"
                     title="Déconnexion"
                     aria-label="Déconnexion"
                     @click="logout"
                 >
-                    <span class="material-symbols-outlined" style="font-size: 26px;" aria-hidden="true">logout</span>
+                    <span class="material-symbols-outlined" style="font-size: 22px;" aria-hidden="true">logout</span>
                 </button>
             </div>
         </div>

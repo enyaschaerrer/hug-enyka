@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
-import CoBrandedFooter from '../../components/co-branded/CoBrandedFooter.vue';
 import TinderEligibilityPrototype from '../../components/tinder-cards/TinderEligibilityPrototype.vue';
 import CoBrandedPhoneModal from '../../components/co-branded/CoBrandedPhoneModal.vue';
 import QuestionnaireExitModal from '../../components/modals/QuestionnaireExitModal.vue';
@@ -17,6 +16,13 @@ const qrModalOpen = ref(false);
 const isDesktop = ref(false);
 const exitModalOpen = ref(false);
 const showNonEligible = ref(false);
+const ineligibleReasons = ref<{ title: string; detail: string; status: 'warning' | 'blocker' }[]>([]);
+
+function onIneligible(reasons: { title: string; detail: string; status: 'warning' | 'blocker' }[]) {
+    ineligibleReasons.value = reasons;
+    showSms.value = false;
+    showNonEligible.value = true;
+}
 const showSms = ref(false);
 const showConfetti = ref(false);
 const smsModules = ref<string[]>([]);
@@ -50,10 +56,6 @@ function goHome() {
     navigate(collection.publicUrl);
 }
 
-function goToEligibilityPage() {
-    navigate(collection.eligibilityUrl);
-}
-
 function syncPhoneModal(event?: MediaQueryListEvent) {
     isDesktop.value = event?.matches ?? desktopMediaQuery?.matches ?? false;
 
@@ -85,28 +87,6 @@ async function confirmExit() {
             bypassExitGuard = false;
         }, 0);
     }
-}
-
-async function logout() {
-    try {
-        const res = await fetch(auth.logoutUrl, {
-            method: 'POST',
-            headers: {
-                Accept: 'application/json',
-                'X-CSRF-TOKEN': csrfToken,
-                'X-Requested-With': 'XMLHttpRequest',
-            },
-        });
-
-        if (res.ok) {
-            window.location.reload();
-            return;
-        }
-    } catch {
-        // Fall through to reload the page and let the server state decide.
-    }
-
-    window.location.reload();
 }
 
 function interceptPageExit(event: MouseEvent) {
@@ -229,11 +209,7 @@ onBeforeUnmount(() => {
 
             <CoBrandedModuleHeader
                 :company="company"
-                :csrf-token="csrfToken"
-                :logout-url="auth.logoutUrl"
                 @go-home="goHome"
-                @go-test="goToEligibilityPage"
-                @logout="openExitModal(logout)"
             />
 
             <!-- Confetti overlay -->
@@ -261,7 +237,7 @@ onBeforeUnmount(() => {
                 style="background-image: url('/img/cobranded-background/bg-cobranded.webp');"
             >
                 <div class="flex w-full justify-center px-6 py-4 lg:px-12" style="transform: translateY(-20px);">
-                    <TinderEligibilityPrototype contained @ineligible="showNonEligible = true" @match="onMatch" />
+                    <TinderEligibilityPrototype contained @ineligible="onIneligible" @match="onMatch" />
                 </div>
             </main>
 
@@ -276,12 +252,12 @@ onBeforeUnmount(() => {
                     class="flex flex-col flex-1 min-h-0 overflow-hidden bg-cover bg-center bg-no-repeat"
                     style="background-image: url('/img/cobranded-background/bg-cobranded.webp');"
                 >
-                    <SmsConversationPrototype :modules="smsModules" />
+                    <SmsConversationPrototype :modules="smsModules" @ineligible="onIneligible" />
                 </div>
             </Transition>
 
             <!-- Non éligible -->
-            <CoBrandedNonEligibleView v-if="showNonEligible" class="flex-1" />
+            <CoBrandedNonEligibleView v-if="showNonEligible" :reasons="ineligibleReasons" class="flex-1" />
 
             <Transition
                 enter-active-class="transition duration-200 ease-out"
@@ -364,8 +340,6 @@ onBeforeUnmount(() => {
                     </svg>
                 </button>
             </Transition>
-
-            <CoBrandedFooter />
         </template>
     </div>
 </template>

@@ -47,6 +47,10 @@ class KpiController extends Controller
         $sourcesList = $sourcesBreakdown->map(fn ($count, $source) => $source . ' (' . $count . ')')
             ->values()
             ->join(', ');
+        $questionnaireRows = DB::table('collections_users')->count();
+        $questionnaireAbandonments = DB::table('collections_users')
+            ->where('quiz_step', '!=', 'done')
+            ->count();
 
         return response()->json([
             'live' => [
