@@ -125,14 +125,11 @@ class KpiController extends Controller
             ->pluck('total', 'source');
 
         $predefinedSources = $sourcesBreakdown
-            ->filter(fn ($count, $source) => in_array($source, $predefinedOptions))
             ->map(fn ($count, $source) => ['source' => $source, 'count' => $count])
+            ->sortByDesc('count')
             ->values();
 
-        $freeTextSources = $sourcesBreakdown
-            ->filter(fn ($count, $source) => ! in_array($source, $predefinedOptions))
-            ->keys()
-            ->values();
+        $freeTextSources = collect();
 
         return response()->json([
             'engagement' => [

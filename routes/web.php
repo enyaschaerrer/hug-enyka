@@ -12,11 +12,13 @@ use App\Http\Controllers\Public\CompanyFormController;
 use App\Http\Controllers\PublicSiteController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', [PublicSiteController::class, 'home'])->name('public.home');
-Route::get('/collecte', fn () => view('public.collection'))->name('public.collecte');
-Route::get('/prix', fn () => view('public.prize'))->name('public.prix');
-Route::get('/label', [PublicSiteController::class, 'label'])->name('public.label');
-Route::get('/contact', fn () => view('public.contact'))->name('public.contact');
+Route::middleware(\App\Http\Middleware\TrackPageVisit::class)->group(function () {
+    Route::get('/', [PublicSiteController::class, 'home'])->name('public.home');
+    Route::get('/collecte', fn () => view('public.collection'))->name('public.collecte');
+    Route::get('/prix', fn () => view('public.prize'))->name('public.prix');
+    Route::get('/label', [PublicSiteController::class, 'label'])->name('public.label');
+    Route::get('/contact', fn () => view('public.contact'))->name('public.contact');
+});
 Route::post('/collecte/inscription', [CompanyFormController::class, 'store'])->name('public.collecte.inscription');
 Route::get('/collecte/{brand}/{token}', [CoBrandedCollecteController::class, 'show'])->name('public.collecte.cobranded');
 Route::get('/collecte/{brand}/{token}/questionnaire', [CoBrandedCollecteController::class, 'show'])->name('public.collecte.cobranded.eligibility');

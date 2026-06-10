@@ -332,27 +332,22 @@ onUnmounted(() => {
 
                     <!-- Card sources : liste scrollable -->
                     <template v-else-if="card.predefined !== undefined">
-                        <p class="mt-2 text-4xl font-bold" :class="card.isHighlighted ? 'text-[var(--color-razzmatazz-700)]' : ''">{{ displayValue(card.value, card.format) }}</p>
-                        <div v-if="card.available" class="mt-3 max-h-40 overflow-y-auto pr-1">
-                            <div
-                                v-for="item in card.predefined"
-                                :key="item.source"
-                                class="flex items-center justify-between gap-2 py-1 text-sm"
-                            >
-                                <span class="text-base-content/80">{{ item.source }}</span>
-                                <span class="shrink-0 font-semibold">{{ item.count }}</span>
-                            </div>
-                            <template v-if="card.freeText && card.freeText.length > 0">
-                                <hr v-if="card.predefined.length > 0" class="my-2 border-base-200" />
+                        <div v-if="card.available" class="relative mt-3">
+                            <div class="h-40 overflow-y-auto pr-1" @scroll="onListScroll($event, card.label)">
                                 <div
-                                    v-for="text in card.freeText"
-                                    :key="text"
-                                    class="flex items-center justify-between gap-2 py-1 text-sm"
+                                    v-for="item in card.predefined"
+                                    :key="item.source"
+                                    class="flex items-center justify-between gap-2 py-1.5 text-sm"
                                 >
-                                    <span class="text-base-content/80">{{ text }}</span>
-                                    <span class="shrink-0 text-xs text-base-content/40">Autre</span>
+                                    <span class="font-semibold text-[#000]">{{ item.source }}</span>
+                                    <span class="shrink-0 font-semibold text-[var(--color-razzmatazz-700)]">{{ item.count }}</span>
                                 </div>
-                            </template>
+                            </div>
+                            <div
+                                class="pointer-events-none absolute bottom-0 left-0 right-0 h-14 transition-opacity duration-300"
+                                :style="{ background: `linear-gradient(to top, ${card.isHighlighted ? 'var(--color-razzmatazz-50)' : 'white'}, transparent)` }"
+                                :class="listsAtBottom[card.label] ? 'opacity-0' : 'opacity-100'"
+                            ></div>
                         </div>
                         <p v-else class="mt-3 text-xs text-base-content/45">{{ card.note }}</p>
                     </template>
