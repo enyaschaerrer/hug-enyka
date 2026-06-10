@@ -230,7 +230,7 @@ onBeforeUnmount(() => {
     <section
         v-if="showMatch"
         class="font-cooper flex w-full items-center justify-center px-4 py-4"
-        :class="props.contained ? 'min-h-0 flex-1' : 'min-h-[100svh] w-screen bg-rose-50'"
+        :class="props.contained ? 'min-h-0 flex-1' : 'min-h-[100svh] w-screen bg-[var(--color-razzmatazz-50)]'"
     >
         <div class="relative w-full max-w-[420px] rounded-[2rem] border-2 border-razzmatazz-900 bg-razzmatazz-200 px-6 py-10 text-center shadow-[0_24px_70px_rgba(109,0,46,0.14)]">
             <img
@@ -256,7 +256,7 @@ onBeforeUnmount(() => {
     <section
         v-else-if="layoutMode === 'desktop'"
         class="font-cooper flex w-full items-center px-3 py-2 sm:px-4 sm:py-3"
-        :class="props.contained ? 'min-h-0 w-full bg-transparent pb-0' : 'min-h-[100svh] w-screen bg-rose-50 pb-12'"
+        :class="props.contained ? 'min-h-0 w-full bg-transparent pb-0' : 'min-h-[100svh] w-screen bg-[var(--color-razzmatazz-50)] pb-12'"
     >
         <div class="relative mx-auto w-full max-w-[680px]" :class="props.contained ? '' : '-mt-10 sm:-mt-12'">
             <div class="mb-[33px] flex items-center justify-center gap-2 px-6 sm:mb-[34px] sm:gap-3 sm:px-10">
@@ -264,7 +264,7 @@ onBeforeUnmount(() => {
                     v-for="(isCompleted, index) in progressSegments"
                     :key="index"
                     class="h-2 flex-1 rounded-full transition-colors duration-200 sm:h-2.5"
-                    :class="isCompleted ? 'bg-[#6d002e]' : 'bg-[#f4b5ca]'"
+                    :class="isCompleted ? 'bg-[var(--color-razzmatazz-950)]' : 'bg-[var(--color-razzmatazz-200)]'"
                 ></span>
             </div>
 
@@ -295,7 +295,7 @@ onBeforeUnmount(() => {
                         :style="{ opacity: Math.min(Math.abs(delta), 0.92) }"
                     >
                         <div
-                            class="-rotate-12 inline-flex items-center rounded-2xl border-4 border-[#ef4444] bg-white px-3 py-1.5 text-xl font-bold leading-none uppercase text-[#ef4444] shadow-lg sm:px-5 sm:py-2.5 sm:text-3xl"
+                            class="-rotate-12 inline-flex items-center rounded-2xl border-4 border-[var(--color-geraldine-500)] bg-white px-3 py-1.5 text-xl font-bold leading-none uppercase text-[var(--color-geraldine-500)] shadow-lg sm:px-5 sm:py-2.5 sm:text-3xl"
                         >
                             <span>NON</span>
                         </div>
@@ -308,7 +308,7 @@ onBeforeUnmount(() => {
                         :style="{ opacity: Math.min(Math.abs(delta), 0.92) }"
                     >
                         <div
-                            class="inline-flex rotate-12 items-center rounded-2xl border-4 border-[#22c55e] bg-white px-3 py-1.5 text-xl font-bold leading-none uppercase text-[#22c55e] shadow-lg sm:px-5 sm:py-2.5 sm:text-3xl"
+                            class="inline-flex rotate-12 items-center rounded-2xl border-4 border-[var(--color-vistablue-500)] bg-white px-3 py-1.5 text-xl font-bold leading-none uppercase text-[var(--color-vistablue-500)] shadow-lg sm:px-5 sm:py-2.5 sm:text-3xl"
                         >
                             <span>OUI</span>
                         </div>
@@ -347,7 +347,7 @@ onBeforeUnmount(() => {
     <section
         v-else-if="layoutMode === 'tablet'"
         class="font-cooper flex w-full items-center px-3 py-2"
-        :class="props.contained ? 'min-h-0 w-full bg-transparent pb-0' : 'min-h-[100svh] w-screen bg-rose-50 pb-12'"
+        :class="props.contained ? 'min-h-0 w-full bg-transparent pb-0' : 'min-h-[100svh] w-screen bg-[var(--color-razzmatazz-50)] pb-12'"
     >
         <div class="relative mx-auto w-full max-w-[600px]" :class="props.contained ? '' : '-mt-8'">
             <div class="mb-[20px] flex items-center justify-center gap-2 px-6">
@@ -355,7 +355,7 @@ onBeforeUnmount(() => {
                     v-for="(isCompleted, index) in progressSegments"
                     :key="index"
                     class="h-2 flex-1 rounded-full transition-colors duration-200"
-                    :class="isCompleted ? 'bg-[#6d002e]' : 'bg-[#f4b5ca]'"
+                    :class="isCompleted ? 'bg-[var(--color-razzmatazz-950)]' : 'bg-[var(--color-razzmatazz-200)]'"
                 ></span>
             </div>
 
@@ -386,7 +386,7 @@ onBeforeUnmount(() => {
                         class="pointer-events-none absolute inset-0 z-10 flex items-center justify-center rounded-[2rem] bg-white/25"
                         :style="{ opacity: Math.min(Math.abs(delta), 0.92) }"
                     >
-                        <div class="-rotate-12 inline-flex items-center rounded-2xl border-4 border-[#ef4444] bg-white px-3 py-1.5 text-xl font-bold leading-none uppercase text-[#ef4444] shadow-lg">
+                        <div class="-rotate-12 inline-flex items-center rounded-2xl border-4 border-[var(--color-geraldine-500)] bg-white px-3 py-1.5 text-xl font-bold leading-none uppercase text-[var(--color-geraldine-500)] shadow-lg">
                             <span>NON</span>
                         </div>
                     </div>
@@ -397,7 +397,7 @@ onBeforeUnmount(() => {
                         class="pointer-events-none absolute inset-0 z-10 flex items-center justify-center rounded-[2rem] bg-white/25"
                         :style="{ opacity: Math.min(Math.abs(delta), 0.92) }"
                     >
-                        <div class="inline-flex rotate-12 items-center rounded-2xl border-4 border-[#22c55e] bg-white px-3 py-1.5 text-xl font-bold leading-none uppercase text-[#22c55e] shadow-lg">
+                        <div class="inline-flex rotate-12 items-center rounded-2xl border-4 border-[var(--color-vistablue-500)] bg-white px-3 py-1.5 text-xl font-bold leading-none uppercase text-[var(--color-vistablue-500)] shadow-lg">
                             <span>OUI</span>
                         </div>
                     </div>
@@ -434,14 +434,14 @@ onBeforeUnmount(() => {
     <section
         v-else
         class="font-cooper flex w-full flex-col px-2 pt-4"
-        :class="props.contained ? 'min-h-0 w-full bg-transparent' : 'min-h-[100svh] w-screen bg-rose-50 pb-6'"
+        :class="props.contained ? 'min-h-0 w-full bg-transparent' : 'min-h-[100svh] w-screen bg-[var(--color-razzmatazz-50)] pb-6'"
     >
         <div class="mb-[22px] flex items-center justify-center gap-1.5 px-2">
             <span
                 v-for="(isCompleted, index) in progressSegments"
                 :key="index"
                 class="h-1.5 flex-1 rounded-full transition-colors duration-200"
-                :class="isCompleted ? 'bg-[#6d002e]' : 'bg-[#f4b5ca]'"
+                :class="isCompleted ? 'bg-[var(--color-razzmatazz-950)]' : 'bg-[var(--color-razzmatazz-200)]'"
             ></span>
         </div>
 
@@ -489,7 +489,7 @@ onBeforeUnmount(() => {
                     class="pointer-events-none absolute inset-0 z-10 flex items-center justify-center rounded-[2rem] bg-white/25"
                     :style="{ opacity: Math.min(Math.abs(delta), 0.92) }"
                 >
-                    <div class="-rotate-12 inline-flex items-center rounded-2xl border-4 border-[#ef4444] bg-white px-3 py-1.5 text-lg font-bold leading-none uppercase text-[#ef4444] shadow-lg">
+                    <div class="-rotate-12 inline-flex items-center rounded-2xl border-4 border-[var(--color-geraldine-500)] bg-white px-3 py-1.5 text-lg font-bold leading-none uppercase text-[var(--color-geraldine-500)] shadow-lg">
                         <span>NON</span>
                     </div>
                 </div>
@@ -500,7 +500,7 @@ onBeforeUnmount(() => {
                     class="pointer-events-none absolute inset-0 z-10 flex items-center justify-center rounded-[2rem] bg-white/25"
                     :style="{ opacity: Math.min(Math.abs(delta), 0.92) }"
                 >
-                    <div class="inline-flex rotate-12 items-center rounded-2xl border-4 border-[#22c55e] bg-white px-3 py-1.5 text-lg font-bold leading-none uppercase text-[#22c55e] shadow-lg">
+                    <div class="inline-flex rotate-12 items-center rounded-2xl border-4 border-[var(--color-vistablue-500)] bg-white px-3 py-1.5 text-lg font-bold leading-none uppercase text-[var(--color-vistablue-500)] shadow-lg">
                         <span>OUI</span>
                     </div>
                 </div>
@@ -562,8 +562,8 @@ onBeforeUnmount(() => {
     width: 12px;
     height: 12px;
     background: #ffffff;
-    border-left: 1px solid #2f1725;
-    border-bottom: 1px solid #2f1725;
+    border-left: 1px solid var(--color-razzmatazz-950);
+    border-bottom: 1px solid var(--color-razzmatazz-950);
     transform: translateY(-50%) rotate(45deg);
 }
 </style>

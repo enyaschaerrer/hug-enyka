@@ -29,12 +29,7 @@ const emit = defineEmits<{
 }>();
 
 const scenario = scenarioData as SmsScenario;
-const sanguyImages: Record<SanguyEmotion, string> = {
-    happy: '/img/mascots/sanguy_thumbs_up.webp',
-    angry: '/img/mascots/sanguy_hero.webp',
-    'alt-happy': '/img/mascots/sanguy_satisfied.webp',
-    'alt-angry': '/img/mascots/sanguy_above.webp',
-};
+const sanguyImage = '/img/mascots/sanguy_hips.webp';
 
 const countries = countriesJson as Country[];
 
@@ -93,7 +88,6 @@ function recordDelay(months: number | null, label: string, cause: string) {
 }
 
 const currentNode = computed(() => scenario.nodes[currentNodeId.value]);
-const currentSanguyImage = computed(() => sanguyImages[sanguyEmotion.value]);
 const activeBotMessageId = computed(() => {
     return [...messages.value].reverse().find((message) => message.speaker === 'bot')?.id;
 });
@@ -107,6 +101,11 @@ const currentAnswers = computed<SmsAnswer[]>(() => {
 
     return currentNode.value.answers;
 });
+
+// Aide affichée au tout premier choix : tant que l'utilisateur n'a jamais répondu.
+const showChatHint = computed(() =>
+    currentAnswers.value.length > 0 && !messages.value.some((message) => message.speaker === 'user'),
+);
 
 function createMessageId(prefix: string) {
     return `${prefix}-${Date.now()}-${messages.value.length}`;
@@ -458,9 +457,9 @@ if (scenario.intro) {
                     ]"
                 >
                     <div v-if="message.speaker === 'bot' && message.id === activeBotMessageId" class="chat-image avatar active-sanguy">
-                        <div class="flex w-24 items-center justify-center md:w-28">
+                        <div class="flex w-16 items-center justify-center md:w-20">
                             <Transition name="sanguy-face" mode="out-in">
-                                <img class="w-full object-contain" :key="sanguyEmotion" :src="currentSanguyImage" alt="Sanguy" />
+                                <img class="w-full object-contain" :key="sanguyEmotion" :src="sanguyImage" alt="Sanguy" />
                             </Transition>
                         </div>
                     </div>
@@ -468,7 +467,7 @@ if (scenario.intro) {
                         v-if="message.speaker === 'user' && message.id === activeUserMessageId && isTyping"
                         class="chat-image avatar avatar-placeholder"
                     >
-                        <div class="w-10 rounded-full bg-razzmatazz-500 text-white">
+                        <div class="w-10 rounded-full bg-razzmatazz-800 text-white">
                             <span class="text-xs font-semibold">M</span>
                         </div>
                     </div>
@@ -484,17 +483,15 @@ if (scenario.intro) {
                         class="chat-bubble message-bubble max-w-[78vw] text-base font-medium leading-relaxed md:max-w-[620px]"
                         :class="
                             message.speaker === 'bot'
-                                ? message.nodeType === 'appointment'
-                                    ? 'bg-razzmatazz-950 text-white'
-                                    : 'bg-razzmatazz-800 text-white'
-                                : 'bg-razzmatazz-500 text-white'
+                                ? 'bg-razzmatazz-100 text-razzmatazz-950'
+                                : 'bg-razzmatazz-800 text-white'
                         "
                     >
                         <p>{{ message.text }}</p>
 
                         <a
                             v-if="message.cta"
-                            class="btn mt-4 border-razzmatazz-200 bg-white font-semibold text-razzmatazz-950 hover:border-white hover:bg-razzmatazz-100"
+                            class="btn mt-4 border-razzmatazz-800 bg-razzmatazz-800 font-semibold text-white hover:border-razzmatazz-900 hover:bg-razzmatazz-900"
                             :href="(message.nodeType === 'appointment' && appointmentUrl) ? appointmentUrl : message.cta.href"
                             target="_blank"
                             rel="noopener"
@@ -510,14 +507,14 @@ if (scenario.intro) {
                     <div class="chat-header chat-label-start font-medium text-razzmatazz-950/70">
                         <span>Sanguy</span>
                     </div>
-                    <div class="chat-bubble bg-razzmatazz-800 text-white">
+                    <div class="chat-bubble bg-razzmatazz-50 text-razzmatazz-950">
                         <span class="loading loading-dots loading-sm"></span>
                     </div>
                 </div>
 
                 <div v-if="currentAnswers.length > 0" class="chat chat-end chat-active">
                     <div class="chat-image avatar avatar-placeholder">
-                        <div class="w-10 rounded-full bg-razzmatazz-500 text-white">
+                        <div class="w-10 rounded-full bg-razzmatazz-800 text-white">
                             <span class="text-xs font-semibold">M</span>
                         </div>
                     </div>
@@ -525,10 +522,17 @@ if (scenario.intro) {
                         <span>Moi</span>
                     </div>
                     <div class="flex max-w-[78vw] flex-col items-end gap-2 md:max-w-[620px]">
+                        <div
+                            v-if="showChatHint"
+                            class="flex animate-pulse items-center gap-1.5 text-caption font-semibold text-razzmatazz-800"
+                        >
+                            <span class="material-symbols-outlined text-[18px]" aria-hidden="true">touch_app</span>
+                            <span>Touche une réponse pour répondre à Sanguy</span>
+                        </div>
                         <button
                             v-for="answer in currentAnswers"
                             :key="answer.id"
-                            class="answer-option w-fit max-w-full cursor-pointer rounded-2xl bg-razzmatazz-50 px-4 py-2 text-left text-base font-medium leading-relaxed text-razzmatazz-950 shadow-sm hover:bg-razzmatazz-100"
+                            class="answer-option w-fit max-w-full cursor-pointer rounded-2xl bg-razzmatazz-300 px-4 py-2 text-left text-base font-medium leading-relaxed text-razzmatazz-950 shadow-sm hover:bg-razzmatazz-400"
                             type="button"
                             @click="answerQuestion(answer)"
                         >
@@ -540,7 +544,7 @@ if (scenario.intro) {
                 <!-- Module voyage : nombre de pays -->
                 <div v-if="showTravelCount" class="chat chat-end chat-active">
                     <div class="chat-image avatar avatar-placeholder">
-                        <div class="w-10 rounded-full bg-razzmatazz-500 text-white">
+                        <div class="w-10 rounded-full bg-razzmatazz-800 text-white">
                             <span class="text-xs font-semibold">M</span>
                         </div>
                     </div>
@@ -551,7 +555,7 @@ if (scenario.intro) {
                         <button
                             v-for="option in travelCountOptions"
                             :key="option.value"
-                            class="answer-option w-fit max-w-full cursor-pointer rounded-2xl bg-razzmatazz-50 px-4 py-2 text-left text-base font-medium leading-relaxed text-razzmatazz-950 shadow-sm hover:bg-razzmatazz-100"
+                            class="answer-option w-fit max-w-full cursor-pointer rounded-2xl bg-razzmatazz-300 px-4 py-2 text-left text-base font-medium leading-relaxed text-razzmatazz-950 shadow-sm hover:bg-razzmatazz-400"
                             type="button"
                             @click="chooseCountryCount(option)"
                         >
@@ -563,7 +567,7 @@ if (scenario.intro) {
                 <!-- Module voyage : sélecteur de pays -->
                 <div v-if="showCountryPicker" class="chat chat-end chat-active">
                     <div class="chat-image avatar avatar-placeholder">
-                        <div class="w-10 rounded-full bg-razzmatazz-500 text-white">
+                        <div class="w-10 rounded-full bg-razzmatazz-800 text-white">
                             <span class="text-xs font-semibold">M</span>
                         </div>
                     </div>
@@ -576,7 +580,7 @@ if (scenario.intro) {
                                 v-model="countryQuery"
                                 type="text"
                                 placeholder="Rechercher un pays"
-                                class="w-full rounded-2xl border-2 border-razzmatazz-200 bg-razzmatazz-50 px-4 py-2 text-base font-medium text-razzmatazz-950 placeholder-red-300 shadow-sm outline-none focus:border-razzmatazz-400"
+                                class="w-full rounded-2xl border-2 border-razzmatazz-200 bg-razzmatazz-100 px-4 py-2 text-base font-medium text-razzmatazz-950 placeholder-razzmatazz-300 shadow-sm outline-none focus:border-razzmatazz-400"
                                 @input="onCountryInput"
                                 @focus="onCountryInput"
                             />
@@ -604,7 +608,7 @@ if (scenario.intro) {
                 <!-- Module voyage : confirmation de la date du retour -->
                 <div v-if="showTravelConfirm" class="chat chat-end chat-active">
                     <div class="chat-image avatar avatar-placeholder">
-                        <div class="w-10 rounded-full bg-razzmatazz-500 text-white">
+                        <div class="w-10 rounded-full bg-razzmatazz-800 text-white">
                             <span class="text-xs font-semibold">M</span>
                         </div>
                     </div>
@@ -613,14 +617,14 @@ if (scenario.intro) {
                     </div>
                     <div class="flex max-w-[78vw] flex-col items-end gap-2 md:max-w-[620px]">
                         <button
-                            class="answer-option w-fit max-w-full cursor-pointer rounded-2xl bg-razzmatazz-50 px-4 py-2 text-left text-base font-medium leading-relaxed text-razzmatazz-950 shadow-sm hover:bg-razzmatazz-100"
+                            class="answer-option w-fit max-w-full cursor-pointer rounded-2xl bg-razzmatazz-300 px-4 py-2 text-left text-base font-medium leading-relaxed text-razzmatazz-950 shadow-sm hover:bg-razzmatazz-400"
                             type="button"
                             @click="confirmTravel(true)"
                         >
                             <span class="block">Oui, moins de {{ travelWaitLabel }}</span>
                         </button>
                         <button
-                            class="answer-option w-fit max-w-full cursor-pointer rounded-2xl bg-razzmatazz-50 px-4 py-2 text-left text-base font-medium leading-relaxed text-razzmatazz-950 shadow-sm hover:bg-razzmatazz-100"
+                            class="answer-option w-fit max-w-full cursor-pointer rounded-2xl bg-razzmatazz-300 px-4 py-2 text-left text-base font-medium leading-relaxed text-razzmatazz-950 shadow-sm hover:bg-razzmatazz-400"
                             type="button"
                             @click="confirmTravel(false)"
                         >
