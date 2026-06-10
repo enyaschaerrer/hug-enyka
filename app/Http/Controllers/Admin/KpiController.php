@@ -93,6 +93,32 @@ class KpiController extends Controller
         $quizTotal   = $quizStepCounts->sum();
         $quizAbandons = ($quizStepCounts->get('quiz') ?? 0) + ($quizStepCounts->get('chat') ?? 0);
 
+        $abandonByCompany = DB::table('companies')
+            ->join('collections', 'collections.company_id', '=', 'companies.id')
+            ->join('collections_users', 'collections_users.collection_id', '=', 'collections.id')
+            ->select(
+                'companies.name',
+                'companies.primaryColor',
+                DB::raw("COUNT(DISTINCT CASE WHEN collections_users.quiz_step IN ('quiz', 'chat') THEN collections_users.user_id END) as abandon_count"),
+                DB::raw('COUNT(DISTINCT collections_users.user_id) as total_count'),
+            )
+            ->groupBy('companies.id', 'companies.name', 'companies.primaryColor')
+            ->get()
+            ->map(function ($c) {
+                $rate = $c->total_count > 0
+                    ? (int) round($c->abandon_count / $c->total_count * 100)
+                    : null;
+                return [
+                    'name'         => $c->name,
+                    'primaryColor' => $c->primaryColor ?? '#888888',
+                    'connected'    => (int) $c->abandon_count,
+                    'total'        => (int) $c->total_count,
+                    'rate'         => $rate,
+                ];
+            })
+            ->sortByDesc('rate')
+            ->values();
+
         $abandonSteps = [
             'total'     => $quizTotal,
             'totalRate' => $quizTotal > 0 ? (int) round($quizAbandons / $quizTotal * 100) : null,
@@ -186,6 +212,7 @@ class KpiController extends Controller
                     'available'    => $abandonSteps['total'] > 0,
                     'note'         => $abandonSteps['total'] > 0 ? null : 'Aucun parcours enregistré.',
                     'abandonSteps' => $abandonSteps['steps'],
+                    'companies'    => $abandonByCompany,
                 ],
             ],
         ]);

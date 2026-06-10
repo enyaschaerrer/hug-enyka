@@ -299,7 +299,7 @@ onUnmounted(() => {
                             >Réinitialiser</button>
                         </div>
                         <div class="relative -mb-5">
-                            <div class="max-h-48 overflow-y-auto pb-4" @scroll="onListScroll($event, '__filter__')">
+                            <div class="min-h-48 max-h-48 overflow-y-auto pb-4" @scroll="onListScroll($event, '__filter__')">
                                 <div
                                     v-for="company in searchedCompanies"
                                     :key="company.name"
@@ -357,6 +357,24 @@ onUnmounted(() => {
                                 </p>
                             </Transition>
                         </div>
+                    </template>
+
+                    <!-- Card abandon questionnaire -->
+                    <template v-else-if="card.abandonSteps !== undefined">
+                        <p class="mt-2 text-4xl font-bold text-[var(--color-martinique-700)]">
+                            {{ card.available ? (computeFilteredValue(card) !== null ? computeFilteredValue(card) + '%' : 'N/A') : 'N/A' }}
+                        </p>
+                        <div v-if="card.available" class="mt-3 space-y-2">
+                            <div
+                                v-for="step in card.abandonSteps"
+                                :key="step.label"
+                                class="flex items-center justify-between gap-2"
+                            >
+                                <span class="text-sm text-base-content/70">{{ step.label }} : <span class="font-semibold text-[#000]">{{ step.rate !== null ? step.rate + '%' : '–' }}</span></span>
+                                <span class="text-sm font-semibold text-[var(--color-martinique-700)]">{{ step.count }}</span>
+                            </div>
+                        </div>
+                        <p class="mt-3 text-xs text-base-content/45">{{ card.note }}</p>
                     </template>
 
                     <!-- Card connectés / participation / conversion : liste scrollable par entreprise -->
@@ -417,24 +435,6 @@ onUnmounted(() => {
                             ></div>
                         </div>
                         <p v-else class="mt-3 text-xs text-base-content/45">{{ card.note }}</p>
-                    </template>
-
-                    <!-- Card abandon questionnaire -->
-                    <template v-else-if="card.abandonSteps !== undefined">
-                        <p class="mt-2 text-4xl font-bold text-[var(--color-martinique-700)]">
-                            {{ card.available ? (card.value !== null ? card.value + '%' : 'N/A') : 'N/A' }}
-                        </p>
-                        <div v-if="card.available" class="mt-3 space-y-2">
-                            <div
-                                v-for="step in card.abandonSteps"
-                                :key="step.label"
-                                class="flex items-center justify-between gap-2"
-                            >
-                                <span class="text-sm text-base-content/70">{{ step.label }} : <span class="font-semibold text-[#000]">{{ step.rate !== null ? step.rate + '%' : '–' }}</span></span>
-                                <span class="text-sm font-semibold text-[var(--color-martinique-700)]">{{ step.count }}</span>
-                            </div>
-                        </div>
-                        <p class="mt-3 text-xs text-base-content/45">{{ card.note }}</p>
                     </template>
 
                     <!-- Card entreprises labellisées -->
