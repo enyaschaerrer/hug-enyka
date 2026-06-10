@@ -166,6 +166,23 @@ class KpiController extends Controller
 
         $freeTextSources = collect();
 
+        // Funnel co-brandé : base = participations dont l'utilisateur s'est connecté au site.
+        $connectedRows = DB::table('collections_users')->where('connected', 1)->count();
+
+        // Conversion : connectés ayant cliqué sur le lien de prise de rendez-vous OneDoc.
+        $onedocClicks = DB::table('collections_users')
+            ->where('connected', 1)
+            ->where('clicked_onedoc', 1)
+            ->count();
+        $conversionRate = $this->percentage($onedocClicks, $connectedRows);
+
+        // Abandon : connectés restés bloqués dans le questionnaire (quiz ou chat, jamais 'done').
+        $questionnaireAbandons = DB::table('collections_users')
+            ->where('connected', 1)
+            ->whereIn('quiz_step', ['quiz', 'chat'])
+            ->count();
+        $questionnaireAbandonRate = $this->percentage($questionnaireAbandons, $connectedRows);
+
         return response()->json([
             'engagement' => [
                 'labelledCompanies' => [
@@ -205,19 +222,21 @@ class KpiController extends Controller
                     'companies' => $participationByCompany,
                 ],
                 'conversionRate' => [
-                    'label'     => 'Prise de rendez-vous OneDoc',
-                    'value'     => $this->globalRateFromCompanies($conversionByCompany),
-                    'available' => $connectedTotal > 0,
-                    'note'      => $connectedTotal > 0 ? $clickedTotal . ' clics / ' . $connectedTotal . ' connectés.' : 'Aucun connecté pour le moment.',
-                    'companies' => $conversionByCompany,
+                    'label' => 'Conversion connexion → inscription',
+                    'value' => $conversionRate,
+                    'available' => $connectedRows > 0,
+                    'note' => $connectedRows > 0
+                        ? $onedocClicks . ' clic(s) RDV OneDoc / ' . $connectedRows . ' connecté(s).'
+                        : 'Aucun collaborateur connecté pour le moment.',
                 ],
                 'questionnaireAbandonRate' => [
-                    'label'        => 'Taux d\'abandon au questionnaire',
-                    'value'        => $abandonSteps['totalRate'],
-                    'available'    => $abandonSteps['total'] > 0,
-                    'note'         => $abandonSteps['total'] > 0 ? null : 'Aucun parcours enregistré.',
-                    'abandonSteps' => $abandonSteps['steps'],
-                    'companies'    => $abandonByCompany,
+                    'label' => 'Taux d\'abandon questionnaire',
+                    'value' => $questionnaireAbandonRate,
+                    'available' => $connectedRows > 0,
+                    'note' => $connectedRows > 0
+                        ? $questionnaireAbandons . ' abandon(s) / ' . $connectedRows . ' connecté(s).'
+                        : 'Aucun collaborateur connecté pour le moment.',
+                    'tone' => 'warning',
                 ],
             ],
         ]);
@@ -249,5 +268,14 @@ class KpiController extends Controller
             ->count();
 
         return response()->json(['count' => $count]);
+    }
+
+    private function percentage(int $value, int $total): ?int
+    {
+        if ($total <= 0) {
+            return null;
+        }
+
+        return (int) round(($value / $total) * 100);
     }
 }

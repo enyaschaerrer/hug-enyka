@@ -92,12 +92,14 @@ function startTypewriter() {
         <template v-if="item.id === 0">
             <!-- Mobile : intro centrée -->
             <template v-if="layout === 'mobile'">
-                <div class="flex h-full flex-col items-center justify-start px-4 pt-4 text-center">
+                <div class="flex h-full flex-col items-center justify-start px-4 pt-1 text-center">
                     <Vue3Lottie
                         :animation-data="swipeLottieData"
-                        :height="84"
+                        :width="120"
+                        :height="75"
                         :loop="true"
                         :auto-play="true"
+                        class="shrink-0"
                     />
                     <p class="mt-2 text-heading-t1 font-bold text-[var(--color-razzmatazz-950)]">Comment ça marche ?</p>
                     <p class="mt-2 text-body font-semibold leading-snug text-[var(--color-razzmatazz-900)]">

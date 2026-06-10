@@ -36,7 +36,7 @@
             },
             "rightOutcome": {
                 "status": "blocker",
-                "label": "Don de sang récent — attente 4 mois"
+                "label": "Attente de 4 mois pour un don du sang récent."
             },
             "dialogue": "Votre corps a besoin de temps pour refaire ses réserves.",
             "mascot": "/img/mascots/blutly_hero.webp"
@@ -52,7 +52,7 @@
             "tone": "green",
             "leftOutcome": {
                 "status": "blocker",
-                "label": "Poids insuffisant pour donner"
+                "label": "Poids insuffisant pour donner (min. 50kg)"
             },
             "rightOutcome": {
                 "status": "clear",
@@ -76,7 +76,7 @@
             },
             "rightOutcome": {
                 "status": "blocker",
-                "label": "Consommation de drogues — attente 12 mois"
+                "label": "Attente de 12 mois pour consommation de drogues."
             },
             "dialogue": "Cette question nous aide à garantir la sécurité des dons.",
             "mascot": "/img/mascots/blutly_hips.webp"
@@ -96,7 +96,7 @@
             },
             "rightOutcome": {
                 "status": "blocker",
-                "label": "Grossesse ou accouchement récent"
+                "label": "Délai d'un an après un accouchement est requis."
             },
             "dialogue": "Vous prenez déjà soin d'une petite vie, c'est une belle mission ! Un délai d'un an après l'accouchement est requis.",
             "mascot": "/img/mascots/blutly_pregnant.webp"
@@ -138,7 +138,7 @@
             },
             "rightOutcome": {
                 "status": "warning",
-                "label": "Soins récents à préciser"
+                "label": "Soins récents à préciser avec l'infirmier.e"
             },
             "dialogue": "Quelques soins ou maladies récentes peuvent nécessiter un délai.",
             "mascot": "/img/mascots/sanguy_doctor.webp"
@@ -159,7 +159,7 @@
             },
             "rightOutcome": {
                 "status": "warning",
-                "label": "Traitement à préciser"
+                "label": "Traitement à préciser avec l'infirmier.e"
             },
             "dialogue": "C'est bien que vous preniez soin de vous. Votre santé passe avant tout. Le don pourra attendre quelques semaines.",
             "mascot": "/img/mascots/blutly_thumbs_up.webp"
@@ -180,9 +180,9 @@
             },
             "rightOutcome": {
                 "status": "warning",
-                "label": "Piqûre de tique à signaler"
+                "label": "Piqûre de tique à signaler à l'infirmier.e"
             },
-            "dialogue": "Une piqûre de tique demande parfois une petite vérification, on regarde ça ensemble.",
+            "dialogue": "Une piqûre de tique demande parfois une petite vérification, nous regarderons ça ensemble.",
             "mascot": "/img/mascots/sanguy_hips.webp"
         },
         {
@@ -201,7 +201,7 @@
             },
             "rightOutcome": {
                 "status": "warning",
-                "label": "Plaie ou opération à préciser"
+                "label": "Plaie ou opération à préciser à l'infirmier.e"
             },
             "dialogue": "Je ne peux pas faire un don actuellement, mais regarde mon nouveau tatouage !",
             "mascot": "/img/mascots/sanguy_tattoo.webp"
@@ -222,7 +222,7 @@
             },
             "rightOutcome": {
                 "status": "warning",
-                "label": "Relations récentes à préciser"
+                "label": "Relations récentes à préciser à l'infirmier.e"
             },
             "dialogue": "Certaines situations rendent le don impossible pour des raisons de sécurité.",
             "mascot": "/img/mascots/blutly_love.webp"

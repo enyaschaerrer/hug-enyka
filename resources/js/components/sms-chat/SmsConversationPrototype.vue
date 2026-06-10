@@ -10,8 +10,11 @@ import type { Country } from '../../types/interactive-map';
 const props = withDefaults(defineProps<{
     /** Modules de vérification enregistrés par le swipe, dans l'ordre à jouer. */
     modules?: string[];
+    /** Lien OneDoc réel pour le bouton « Prendre RDV ». */
+    appointmentUrl?: string | null;
 }>(), {
     modules: () => [],
+    appointmentUrl: null,
 });
 
 type Reason = { title: string; detail: string; status: 'warning' | 'blocker' };
@@ -19,15 +22,14 @@ type Reason = { title: string; detail: string; status: 'warning' | 'blocker' };
 const emit = defineEmits<{
     /** Le chat conclut à une non-éligibilité (définitive ou délais) → écran « Pas éligible ». */
     ineligible: [reasons: Reason[]];
+    /** Le chat conclut à une éligibilité → écran rendez-vous affiché. */
+    completed: [];
+    /** L'utilisateur a cliqué sur le lien OneDoc. */
+    onedocClick: [];
 }>();
 
 const scenario = scenarioData as SmsScenario;
-const sanguyImages: Record<SanguyEmotion, string> = {
-    happy: '/img/mascots/sanguy_thumbs_up.webp',
-    angry: '/img/mascots/sanguy_hero.webp',
-    'alt-happy': '/img/mascots/sanguy_satisfied.webp',
-    'alt-angry': '/img/mascots/sanguy_above.webp',
-};
+const sanguyImage = '/img/mascots/sanguy_hips.webp';
 
 const countries = countriesJson as Country[];
 
@@ -86,7 +88,6 @@ function recordDelay(months: number | null, label: string, cause: string) {
 }
 
 const currentNode = computed(() => scenario.nodes[currentNodeId.value]);
-const currentSanguyImage = computed(() => sanguyImages[sanguyEmotion.value]);
 const activeBotMessageId = computed(() => {
     return [...messages.value].reverse().find((message) => message.speaker === 'bot')?.id;
 });
@@ -100,6 +101,11 @@ const currentAnswers = computed<SmsAnswer[]>(() => {
 
     return currentNode.value.answers;
 });
+
+// Aide affichée au tout premier choix : tant que l'utilisateur n'a jamais répondu.
+const showChatHint = computed(() =>
+    currentAnswers.value.length > 0 && !messages.value.some((message) => message.speaker === 'user'),
+);
 
 function createMessageId(prefix: string) {
     return `${prefix}-${Date.now()}-${messages.value.length}`;
@@ -203,6 +209,7 @@ async function showFinalVerdict() {
     }
 
     await pushBotNode(scenario.appointment, 'happy');
+    emit('completed');
 }
 
 async function answerQuestion(answer: SmsAnswer) {
@@ -237,6 +244,43 @@ async function answerQuestion(answer: SmsAnswer) {
 
 // ----- Module voyage : nombre de pays → sélecteur de pays → confirmation date -----
 
+// Préposition correcte devant un pays (« en France », « au Pérou », « aux États-Unis », « à Cuba »).
+// Les prépositions de pays sont irrégulières en français : règle par défaut + exceptions explicites.
+const COUNTRY_PREPOSITION_OVERRIDES: Record<string, string> = {
+    // Pluriel → « aux »
+    'Bahamas': 'aux', 'Comores': 'aux', 'Émirats arabes unis': 'aux', 'États-Unis': 'aux',
+    'Fidji': 'aux', 'Maldives': 'aux', 'Pays-Bas': 'aux', 'Philippines': 'aux',
+    'Samoa': 'aux', 'Tonga': 'aux', 'Îles Malouines': 'aux', 'Îles Salomon': 'aux',
+    // Îles / cité-États → « à »
+    'Antigua-et-Barbuda': 'à', 'Chypre': 'à', 'Cuba': 'à', 'Djibouti': 'à', 'Haïti': 'à',
+    'Madagascar': 'à', 'Malte': 'à', 'Maurice': 'à', 'Monaco': 'à', 'Oman': 'à',
+    'Porto Rico': 'à', 'Saint-Marin': 'à', 'Sao Tomé-et-Principe': 'à', 'Singapour': 'à',
+    'Taïwan': 'à', 'Trinité-et-Tobago': 'à',
+    // → « à la »
+    'Barbade': 'à la', 'Dominique': 'à la', 'Grenade': 'à la',
+    // Masculins que la règle classerait à tort en « en »
+    'Belize': 'au', 'Cambodge': 'au', 'Mexique': 'au', 'Mozambique': 'au',
+    'Suriname': 'au', 'Zimbabwe': 'au',
+    // Féminins multi-mots (« … du Nord/Sud ») que la règle classerait à tort en « au »
+    'Corée du Nord': 'en', 'Corée du Sud': 'en', 'Macédoine du Nord': 'en',
+};
+
+function countryPreposition(name: string): string {
+    const override = COUNTRY_PREPOSITION_OVERRIDES[name];
+    if (override) return override;
+
+    const first = name.trim()[0]?.toLowerCase() ?? '';
+    const startsWithVowel = 'aàâäeéèêëiîïoôöuùûü'.includes(first);
+    const endsWithE = name.trim().slice(-1).toLowerCase() === 'e';
+
+    return startsWithVowel || endsWithE ? 'en' : 'au';
+}
+
+// Renvoie « en France », « au Pérou », « aux États-Unis », « à Cuba »…
+function travelLocation(name: string): string {
+    return `${countryPreposition(name)} ${name}`;
+}
+
 const isTravelNode = computed(() => currentNode.value?.type === 'travel');
 const showTravelCount = computed(() => isTravelNode.value && travelStage.value === 'count' && !isTyping.value);
 const showCountryPicker = computed(() => isTravelNode.value && travelStage.value === 'pick' && !isTyping.value);
@@ -269,10 +313,10 @@ function onCountryInput() {
 // Texte demandé pour le pays courant (selon le nombre total de pays)
 function promptForCountry(index: number): string {
     if (travelTotal.value <= 1) {
-        return 'Dans quel pays es-tu allé·e ?';
+        return 'Dans quel pays êtes-vous allé·e ?';
     }
     return index === 0
-        ? `Quel est le 1ᵉʳ pays où tu es allé·e ? (1/${travelTotal.value})`
+        ? `Quel est le 1ᵉʳ pays où vous êtes allé·e ? (1/${travelTotal.value})`
         : `Et le pays suivant ? (${index + 1}/${travelTotal.value})`;
 }
 
@@ -341,7 +385,7 @@ function selectTravelCountry(country: Country) {
 
     window.setTimeout(async () => {
         if (!country.waitTime) {
-            await pushBotText(`Aucun délai requis pour un séjour en ${country.name} 👍`, 'happy');
+            await pushBotText(`Aucun délai requis pour un séjour ${travelLocation(country.name)} 👍`, 'happy');
             isTyping.value = false;
             await scrollToLastMessage();
             proceedAfterCountry();
@@ -350,7 +394,7 @@ function selectTravelCountry(country: Country) {
 
         travelWaitLabel.value = country.waitTime;
         await pushBotText(
-            `Pour un séjour en ${country.name}, le délai d'attente est de ${country.waitTime} après le retour. Ton retour date-t-il de moins de ${country.waitTime} ?`,
+            `Pour un séjour en ${country.name}, le délai d'attente est de ${country.waitTime} après le retour. Votre retour date-t-il de moins de ${country.waitTime} ?`,
             'alt-happy',
         );
         travelStage.value = 'confirm';
@@ -413,9 +457,9 @@ if (scenario.intro) {
                     ]"
                 >
                     <div v-if="message.speaker === 'bot' && message.id === activeBotMessageId" class="chat-image avatar active-sanguy">
-                        <div class="flex w-24 items-center justify-center md:w-28">
+                        <div class="flex w-16 items-center justify-center md:w-20">
                             <Transition name="sanguy-face" mode="out-in">
-                                <img class="w-full object-contain" :key="sanguyEmotion" :src="currentSanguyImage" alt="Sanguy" />
+                                <img class="w-full object-contain" :key="sanguyEmotion" :src="sanguyImage" alt="Sanguy" />
                             </Transition>
                         </div>
                     </div>
@@ -423,8 +467,8 @@ if (scenario.intro) {
                         v-if="message.speaker === 'user' && message.id === activeUserMessageId && isTyping"
                         class="chat-image avatar avatar-placeholder"
                     >
-                        <div class="w-10 rounded-full bg-razzmatazz-500 text-white">
-                            <span class="text-xs font-semibold">LB</span>
+                        <div class="w-10 rounded-full bg-razzmatazz-800 text-white">
+                            <span class="text-xs font-semibold">M</span>
                         </div>
                     </div>
 
@@ -439,18 +483,20 @@ if (scenario.intro) {
                         class="chat-bubble message-bubble max-w-[78vw] text-base font-medium leading-relaxed md:max-w-[620px]"
                         :class="
                             message.speaker === 'bot'
-                                ? message.nodeType === 'appointment'
-                                    ? 'bg-razzmatazz-950 text-white'
-                                    : 'bg-razzmatazz-800 text-white'
-                                : 'bg-razzmatazz-500 text-white'
+                                ? 'bg-razzmatazz-100 text-razzmatazz-950'
+                                : 'bg-razzmatazz-800 text-white'
                         "
                     >
                         <p>{{ message.text }}</p>
 
                         <a
                             v-if="message.cta"
-                            class="btn mt-4 border-razzmatazz-200 bg-white font-semibold text-razzmatazz-950 hover:border-white hover:bg-razzmatazz-100"
-                            :href="message.cta.href"
+                            class="btn mt-4 border-razzmatazz-800 bg-razzmatazz-800 font-semibold text-white hover:border-razzmatazz-900 hover:bg-razzmatazz-900"
+                            :href="(message.nodeType === 'appointment' && appointmentUrl) ? appointmentUrl : message.cta.href"
+                            target="_blank"
+                            rel="noopener"
+                            data-allow-exit
+                            @click="message.nodeType === 'appointment' && emit('onedocClick')"
                         >
                             <span>{{ message.cta.label }}</span>
                         </a>
@@ -461,25 +507,32 @@ if (scenario.intro) {
                     <div class="chat-header chat-label-start font-medium text-razzmatazz-950/70">
                         <span>Sanguy</span>
                     </div>
-                    <div class="chat-bubble bg-razzmatazz-800 text-white">
+                    <div class="chat-bubble bg-razzmatazz-50 text-razzmatazz-950">
                         <span class="loading loading-dots loading-sm"></span>
                     </div>
                 </div>
 
                 <div v-if="currentAnswers.length > 0" class="chat chat-end chat-active">
                     <div class="chat-image avatar avatar-placeholder">
-                        <div class="w-10 rounded-full bg-razzmatazz-500 text-white">
-                            <span class="text-xs font-semibold">LB</span>
+                        <div class="w-10 rounded-full bg-razzmatazz-800 text-white">
+                            <span class="text-xs font-semibold">M</span>
                         </div>
                     </div>
                     <div class="chat-header chat-label-end font-medium text-razzmatazz-950/70">
                         <span>Moi</span>
                     </div>
                     <div class="flex max-w-[78vw] flex-col items-end gap-2 md:max-w-[620px]">
+                        <div
+                            v-if="showChatHint"
+                            class="flex animate-pulse items-center gap-1.5 text-caption font-semibold text-razzmatazz-800"
+                        >
+                            <span class="material-symbols-outlined text-[18px]" aria-hidden="true">touch_app</span>
+                            <span>Touche une réponse pour répondre à Sanguy</span>
+                        </div>
                         <button
                             v-for="answer in currentAnswers"
                             :key="answer.id"
-                            class="answer-option w-fit max-w-full cursor-pointer rounded-2xl bg-razzmatazz-50 px-4 py-2 text-left text-base font-medium leading-relaxed text-razzmatazz-950 shadow-sm hover:bg-razzmatazz-100"
+                            class="answer-option w-fit max-w-full cursor-pointer rounded-2xl bg-razzmatazz-300 px-4 py-2 text-left text-base font-medium leading-relaxed text-razzmatazz-950 shadow-sm hover:bg-razzmatazz-400"
                             type="button"
                             @click="answerQuestion(answer)"
                         >
@@ -491,8 +544,8 @@ if (scenario.intro) {
                 <!-- Module voyage : nombre de pays -->
                 <div v-if="showTravelCount" class="chat chat-end chat-active">
                     <div class="chat-image avatar avatar-placeholder">
-                        <div class="w-10 rounded-full bg-razzmatazz-500 text-white">
-                            <span class="text-xs font-semibold">LB</span>
+                        <div class="w-10 rounded-full bg-razzmatazz-800 text-white">
+                            <span class="text-xs font-semibold">M</span>
                         </div>
                     </div>
                     <div class="chat-header chat-label-end font-medium text-razzmatazz-950/70">
@@ -502,7 +555,7 @@ if (scenario.intro) {
                         <button
                             v-for="option in travelCountOptions"
                             :key="option.value"
-                            class="answer-option w-fit max-w-full cursor-pointer rounded-2xl bg-razzmatazz-50 px-4 py-2 text-left text-base font-medium leading-relaxed text-razzmatazz-950 shadow-sm hover:bg-razzmatazz-100"
+                            class="answer-option w-fit max-w-full cursor-pointer rounded-2xl bg-razzmatazz-300 px-4 py-2 text-left text-base font-medium leading-relaxed text-razzmatazz-950 shadow-sm hover:bg-razzmatazz-400"
                             type="button"
                             @click="chooseCountryCount(option)"
                         >
@@ -514,8 +567,8 @@ if (scenario.intro) {
                 <!-- Module voyage : sélecteur de pays -->
                 <div v-if="showCountryPicker" class="chat chat-end chat-active">
                     <div class="chat-image avatar avatar-placeholder">
-                        <div class="w-10 rounded-full bg-razzmatazz-500 text-white">
-                            <span class="text-xs font-semibold">LB</span>
+                        <div class="w-10 rounded-full bg-razzmatazz-800 text-white">
+                            <span class="text-xs font-semibold">M</span>
                         </div>
                     </div>
                     <div class="chat-header chat-label-end font-medium text-razzmatazz-950/70">
@@ -527,7 +580,7 @@ if (scenario.intro) {
                                 v-model="countryQuery"
                                 type="text"
                                 placeholder="Rechercher un pays"
-                                class="w-full rounded-2xl border-2 border-razzmatazz-200 bg-razzmatazz-50 px-4 py-2 text-base font-medium text-razzmatazz-950 placeholder-red-300 shadow-sm outline-none focus:border-razzmatazz-400"
+                                class="w-full rounded-2xl border-2 border-razzmatazz-200 bg-razzmatazz-100 px-4 py-2 text-base font-medium text-razzmatazz-950 placeholder-razzmatazz-300 shadow-sm outline-none focus:border-razzmatazz-400"
                                 @input="onCountryInput"
                                 @focus="onCountryInput"
                             />
@@ -555,8 +608,8 @@ if (scenario.intro) {
                 <!-- Module voyage : confirmation de la date du retour -->
                 <div v-if="showTravelConfirm" class="chat chat-end chat-active">
                     <div class="chat-image avatar avatar-placeholder">
-                        <div class="w-10 rounded-full bg-razzmatazz-500 text-white">
-                            <span class="text-xs font-semibold">LB</span>
+                        <div class="w-10 rounded-full bg-razzmatazz-800 text-white">
+                            <span class="text-xs font-semibold">M</span>
                         </div>
                     </div>
                     <div class="chat-header chat-label-end font-medium text-razzmatazz-950/70">
@@ -564,14 +617,14 @@ if (scenario.intro) {
                     </div>
                     <div class="flex max-w-[78vw] flex-col items-end gap-2 md:max-w-[620px]">
                         <button
-                            class="answer-option w-fit max-w-full cursor-pointer rounded-2xl bg-razzmatazz-50 px-4 py-2 text-left text-base font-medium leading-relaxed text-razzmatazz-950 shadow-sm hover:bg-razzmatazz-100"
+                            class="answer-option w-fit max-w-full cursor-pointer rounded-2xl bg-razzmatazz-300 px-4 py-2 text-left text-base font-medium leading-relaxed text-razzmatazz-950 shadow-sm hover:bg-razzmatazz-400"
                             type="button"
                             @click="confirmTravel(true)"
                         >
                             <span class="block">Oui, moins de {{ travelWaitLabel }}</span>
                         </button>
                         <button
-                            class="answer-option w-fit max-w-full cursor-pointer rounded-2xl bg-razzmatazz-50 px-4 py-2 text-left text-base font-medium leading-relaxed text-razzmatazz-950 shadow-sm hover:bg-razzmatazz-100"
+                            class="answer-option w-fit max-w-full cursor-pointer rounded-2xl bg-razzmatazz-300 px-4 py-2 text-left text-base font-medium leading-relaxed text-razzmatazz-950 shadow-sm hover:bg-razzmatazz-400"
                             type="button"
                             @click="confirmTravel(false)"
                         >

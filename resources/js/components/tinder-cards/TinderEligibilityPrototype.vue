@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
+import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import { FlashCards } from 'vue3-flashcards';
 import tinderScenarioData from '../../data/tinder-scenario.json';
 import TinderActions from './TinderActions.vue';
@@ -102,6 +102,40 @@ const activeMascot = computed(() => {
     if (!item) return null;
     return { image: item.mascot, dialogue: item.dialogue };
 });
+
+// Mobile : effet machine à écrire sur la bulle de la mascotte active (relancé à chaque carte).
+const mobileTypedText = ref('');
+let mobileTypingTimeout: number | null = null;
+
+function startMobileTypewriter(fullText: string) {
+    if (mobileTypingTimeout !== null) {
+        window.clearTimeout(mobileTypingTimeout);
+        mobileTypingTimeout = null;
+    }
+
+    mobileTypedText.value = '';
+    let index = 0;
+
+    const tick = () => {
+        mobileTypedText.value = fullText.slice(0, index);
+        index += 1;
+        mobileTypingTimeout = index <= fullText.length ? window.setTimeout(tick, 22) : null;
+    };
+
+    tick();
+}
+
+watch(
+    () => activeItem.value?.id,
+    () => startMobileTypewriter(activeMascot.value?.dialogue ?? ''),
+    { immediate: true },
+);
+
+onBeforeUnmount(() => {
+    if (mobileTypingTimeout !== null) {
+        window.clearTimeout(mobileTypingTimeout);
+    }
+});
 const layoutMode = computed<'mobile' | 'tablet' | 'desktop'>(() => {
     const width = viewportWidth.value;
     const height = viewportHeight.value;
@@ -196,7 +230,7 @@ onBeforeUnmount(() => {
     <section
         v-if="showMatch"
         class="font-cooper flex w-full items-center justify-center px-4 py-4"
-        :class="props.contained ? 'min-h-0 flex-1' : 'min-h-[100svh] w-screen bg-rose-50'"
+        :class="props.contained ? 'min-h-0 flex-1' : 'min-h-[100svh] w-screen bg-[var(--color-razzmatazz-50)]'"
     >
         <div class="relative w-full max-w-[420px] rounded-[2rem] border-2 border-razzmatazz-900 bg-razzmatazz-200 px-6 py-10 text-center shadow-[0_24px_70px_rgba(109,0,46,0.14)]">
             <img
@@ -205,16 +239,16 @@ onBeforeUnmount(() => {
                 class="mx-auto h-44 w-auto object-contain drop-shadow-[0_12px_22px_rgba(109,0,46,0.18)]"
                 draggable="false"
             />
-            <h2 class="mt-4 text-heading-t1 font-bold text-razzmatazz-800">Tu as un match !</h2>
+            <h2 class="mt-4 text-heading-t1 font-bold text-razzmatazz-800">Vous avez un match !</h2>
             <p class="mt-3 text-body leading-snug text-razzmatazz-800">
-                Nous allons te poser quelques questions de plus dans le chat pour préciser ta situation.
+                Vous pouvez maintenant passer aux questions d'approfondissement sous forme d'un chat avec nos mascottes.
             </p>
             <button
                 type="button"
                 class="mt-6 inline-flex items-center gap-2 rounded-2xl bg-razzmatazz-800 px-8 py-3 text-base font-semibold text-white transition hover:bg-razzmatazz-600"
                 @click="continueToChat"
             >
-                <span>Aller au chat</span>
+                <span>Discuter avec les mascottes</span>
             </button>
         </div>
     </section>
@@ -222,7 +256,7 @@ onBeforeUnmount(() => {
     <section
         v-else-if="layoutMode === 'desktop'"
         class="font-cooper flex w-full items-center px-3 py-2 sm:px-4 sm:py-3"
-        :class="props.contained ? 'min-h-0 w-full bg-transparent pb-0' : 'min-h-[100svh] w-screen bg-rose-50 pb-12'"
+        :class="props.contained ? 'min-h-0 w-full bg-transparent pb-0' : 'min-h-[100svh] w-screen bg-[var(--color-razzmatazz-50)] pb-12'"
     >
         <div class="relative mx-auto w-full max-w-[680px]" :class="props.contained ? '' : '-mt-10 sm:-mt-12'">
             <div class="mb-[33px] flex items-center justify-center gap-2 px-6 sm:mb-[34px] sm:gap-3 sm:px-10">
@@ -230,7 +264,7 @@ onBeforeUnmount(() => {
                     v-for="(isCompleted, index) in progressSegments"
                     :key="index"
                     class="h-2 flex-1 rounded-full transition-colors duration-200 sm:h-2.5"
-                    :class="isCompleted ? 'bg-[#6d002e]' : 'bg-[#f4b5ca]'"
+                    :class="isCompleted ? 'bg-[var(--color-razzmatazz-950)]' : 'bg-[var(--color-razzmatazz-200)]'"
                 ></span>
             </div>
 
@@ -261,7 +295,7 @@ onBeforeUnmount(() => {
                         :style="{ opacity: Math.min(Math.abs(delta), 0.92) }"
                     >
                         <div
-                            class="-rotate-12 inline-flex items-center rounded-2xl border-4 border-[#ef4444] bg-white px-3 py-1.5 text-xl font-bold leading-none uppercase text-[#ef4444] shadow-lg sm:px-5 sm:py-2.5 sm:text-3xl"
+                            class="-rotate-12 inline-flex items-center rounded-2xl border-4 border-[var(--color-geraldine-500)] bg-white px-3 py-1.5 text-xl font-bold leading-none uppercase text-[var(--color-geraldine-500)] shadow-lg sm:px-5 sm:py-2.5 sm:text-3xl"
                         >
                             <span>NON</span>
                         </div>
@@ -274,7 +308,7 @@ onBeforeUnmount(() => {
                         :style="{ opacity: Math.min(Math.abs(delta), 0.92) }"
                     >
                         <div
-                            class="inline-flex rotate-12 items-center rounded-2xl border-4 border-[#22c55e] bg-white px-3 py-1.5 text-xl font-bold leading-none uppercase text-[#22c55e] shadow-lg sm:px-5 sm:py-2.5 sm:text-3xl"
+                            class="inline-flex rotate-12 items-center rounded-2xl border-4 border-[var(--color-vistablue-500)] bg-white px-3 py-1.5 text-xl font-bold leading-none uppercase text-[var(--color-vistablue-500)] shadow-lg sm:px-5 sm:py-2.5 sm:text-3xl"
                         >
                             <span>OUI</span>
                         </div>
@@ -313,7 +347,7 @@ onBeforeUnmount(() => {
     <section
         v-else-if="layoutMode === 'tablet'"
         class="font-cooper flex w-full items-center px-3 py-2"
-        :class="props.contained ? 'min-h-0 w-full bg-transparent pb-0' : 'min-h-[100svh] w-screen bg-rose-50 pb-12'"
+        :class="props.contained ? 'min-h-0 w-full bg-transparent pb-0' : 'min-h-[100svh] w-screen bg-[var(--color-razzmatazz-50)] pb-12'"
     >
         <div class="relative mx-auto w-full max-w-[600px]" :class="props.contained ? '' : '-mt-8'">
             <div class="mb-[20px] flex items-center justify-center gap-2 px-6">
@@ -321,7 +355,7 @@ onBeforeUnmount(() => {
                     v-for="(isCompleted, index) in progressSegments"
                     :key="index"
                     class="h-2 flex-1 rounded-full transition-colors duration-200"
-                    :class="isCompleted ? 'bg-[#6d002e]' : 'bg-[#f4b5ca]'"
+                    :class="isCompleted ? 'bg-[var(--color-razzmatazz-950)]' : 'bg-[var(--color-razzmatazz-200)]'"
                 ></span>
             </div>
 
@@ -352,7 +386,7 @@ onBeforeUnmount(() => {
                         class="pointer-events-none absolute inset-0 z-10 flex items-center justify-center rounded-[2rem] bg-white/25"
                         :style="{ opacity: Math.min(Math.abs(delta), 0.92) }"
                     >
-                        <div class="-rotate-12 inline-flex items-center rounded-2xl border-4 border-[#ef4444] bg-white px-3 py-1.5 text-xl font-bold leading-none uppercase text-[#ef4444] shadow-lg">
+                        <div class="-rotate-12 inline-flex items-center rounded-2xl border-4 border-[var(--color-geraldine-500)] bg-white px-3 py-1.5 text-xl font-bold leading-none uppercase text-[var(--color-geraldine-500)] shadow-lg">
                             <span>NON</span>
                         </div>
                     </div>
@@ -363,7 +397,7 @@ onBeforeUnmount(() => {
                         class="pointer-events-none absolute inset-0 z-10 flex items-center justify-center rounded-[2rem] bg-white/25"
                         :style="{ opacity: Math.min(Math.abs(delta), 0.92) }"
                     >
-                        <div class="inline-flex rotate-12 items-center rounded-2xl border-4 border-[#22c55e] bg-white px-3 py-1.5 text-xl font-bold leading-none uppercase text-[#22c55e] shadow-lg">
+                        <div class="inline-flex rotate-12 items-center rounded-2xl border-4 border-[var(--color-vistablue-500)] bg-white px-3 py-1.5 text-xl font-bold leading-none uppercase text-[var(--color-vistablue-500)] shadow-lg">
                             <span>OUI</span>
                         </div>
                     </div>
@@ -400,14 +434,14 @@ onBeforeUnmount(() => {
     <section
         v-else
         class="font-cooper flex w-full flex-col px-2 pt-4"
-        :class="props.contained ? 'min-h-0 w-full bg-transparent' : 'min-h-[100svh] w-screen bg-rose-50 pb-6'"
+        :class="props.contained ? 'min-h-0 w-full bg-transparent' : 'min-h-[100svh] w-screen bg-[var(--color-razzmatazz-50)] pb-6'"
     >
         <div class="mb-[22px] flex items-center justify-center gap-1.5 px-2">
             <span
                 v-for="(isCompleted, index) in progressSegments"
                 :key="index"
                 class="h-1.5 flex-1 rounded-full transition-colors duration-200"
-                :class="isCompleted ? 'bg-[#6d002e]' : 'bg-[#f4b5ca]'"
+                :class="isCompleted ? 'bg-[var(--color-razzmatazz-950)]' : 'bg-[var(--color-razzmatazz-200)]'"
             ></span>
         </div>
 
@@ -455,7 +489,7 @@ onBeforeUnmount(() => {
                     class="pointer-events-none absolute inset-0 z-10 flex items-center justify-center rounded-[2rem] bg-white/25"
                     :style="{ opacity: Math.min(Math.abs(delta), 0.92) }"
                 >
-                    <div class="-rotate-12 inline-flex items-center rounded-2xl border-4 border-[#ef4444] bg-white px-3 py-1.5 text-lg font-bold leading-none uppercase text-[#ef4444] shadow-lg">
+                    <div class="-rotate-12 inline-flex items-center rounded-2xl border-4 border-[var(--color-geraldine-500)] bg-white px-3 py-1.5 text-lg font-bold leading-none uppercase text-[var(--color-geraldine-500)] shadow-lg">
                         <span>NON</span>
                     </div>
                 </div>
@@ -466,7 +500,7 @@ onBeforeUnmount(() => {
                     class="pointer-events-none absolute inset-0 z-10 flex items-center justify-center rounded-[2rem] bg-white/25"
                     :style="{ opacity: Math.min(Math.abs(delta), 0.92) }"
                 >
-                    <div class="inline-flex rotate-12 items-center rounded-2xl border-4 border-[#22c55e] bg-white px-3 py-1.5 text-lg font-bold leading-none uppercase text-[#22c55e] shadow-lg">
+                    <div class="inline-flex rotate-12 items-center rounded-2xl border-4 border-[var(--color-vistablue-500)] bg-white px-3 py-1.5 text-lg font-bold leading-none uppercase text-[var(--color-vistablue-500)] shadow-lg">
                         <span>OUI</span>
                     </div>
                 </div>
@@ -486,15 +520,30 @@ onBeforeUnmount(() => {
             </FlashCards>
         </div>
 
-        <!-- Mascotte unique + bulle large à côté -->
-        <div v-if="activeMascot" class="mt-8 flex h-32 items-center justify-center gap-2 px-1">
-            <img :src="activeMascot.image" alt="Mascotte" class="h-20 w-auto shrink-0 object-contain" draggable="false" />
-            <div
-                v-if="activeMascot.dialogue"
-                class="mascot-bubble flex-1 rounded-2xl border border-razzmatazz-950 bg-white px-3 py-2 text-caption font-semibold leading-snug text-razzmatazz-950"
+        <!-- Mascotte unique + bulle large à côté (fondu croisé à chaque changement de carte) -->
+        <div class="relative mt-8 h-32">
+            <Transition
+                enter-active-class="transition-opacity duration-300 ease-out"
+                enter-from-class="opacity-0"
+                enter-to-class="opacity-100"
+                leave-active-class="transition-opacity duration-300 ease-in"
+                leave-from-class="opacity-100"
+                leave-to-class="opacity-0"
             >
-                {{ activeMascot.dialogue }}
-            </div>
+                <div
+                    v-if="activeMascot"
+                    :key="activeItem?.id"
+                    class="absolute inset-0 flex items-center justify-center gap-2 px-1"
+                >
+                    <img :src="activeMascot.image" alt="Mascotte" class="h-20 w-auto shrink-0 object-contain" draggable="false" />
+                    <div
+                        v-if="activeMascot.dialogue"
+                        class="mascot-bubble flex-1 rounded-2xl border border-razzmatazz-950 bg-white px-3 py-2 text-caption font-semibold leading-snug text-razzmatazz-950"
+                    >
+                        {{ mobileTypedText }}
+                    </div>
+                </div>
+            </Transition>
         </div>
     </section>
 </template>
@@ -513,8 +562,8 @@ onBeforeUnmount(() => {
     width: 12px;
     height: 12px;
     background: #ffffff;
-    border-left: 1px solid #2f1725;
-    border-bottom: 1px solid #2f1725;
+    border-left: 1px solid var(--color-razzmatazz-950);
+    border-bottom: 1px solid var(--color-razzmatazz-950);
     transform: translateY(-50%) rotate(45deg);
 }
 </style>

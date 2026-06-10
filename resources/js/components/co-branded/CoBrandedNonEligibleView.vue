@@ -11,7 +11,7 @@ const form = reactive({
     email: '',
 });
 
-const bubbleText = 'Vous n\'avez malheureusement pas un match pour le moment. Voici la raison. Cependant, nous vous envoyons volontiers un rappel par message pour repasser le test !';
+const bubbleText = 'Vous êtes malheureusement inéligible. Voici la raison. Cependant, nous vous envoyons volontiers un rappel par message pour repasser le test !';
 const typedText = ref('');
 
 function animateText(delay = 22) {

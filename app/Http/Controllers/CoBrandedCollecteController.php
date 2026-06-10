@@ -22,6 +22,12 @@ class CoBrandedCollecteController extends Controller
 
         $canAccess = $this->canAccessCollection($request, $collection);
 
+        // Marque le collaborateur comme « connecté » dès qu'il accède au site co-brandé.
+        $user = $request->user();
+        if ($canAccess && $user && $user->role->isOneOf([UserRole::User->value])) {
+            $collection->users()->updateExistingPivot($user->id, ['connected' => true]);
+        }
+
         return view('app', [
             'coBrandedCollecte' => [
                 'company' => [
@@ -44,6 +50,10 @@ class CoBrandedCollecteController extends Controller
                     'appointmentUrl' => $canAccess ? $collection->linkOneDoc : null,
                     'publicUrl' => route('public.collecte.cobranded', ['brand' => $brand, 'token' => $token]),
                     'eligibilityUrl' => route('public.collecte.cobranded.eligibility', ['brand' => $brand, 'token' => $token]),
+                ],
+                'tracking' => [
+                    'quizStepUrl' => route('public.collecte.cobranded.track.quiz-step', ['brand' => $brand, 'token' => $token]),
+                    'onedocUrl' => route('public.collecte.cobranded.track.onedoc', ['brand' => $brand, 'token' => $token]),
                 ],
                 'auth' => [
                     'canAccess' => $canAccess,
