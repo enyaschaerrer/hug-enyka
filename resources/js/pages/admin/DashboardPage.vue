@@ -373,11 +373,11 @@ onUnmounted(() => {
                                 <span class="min-w-0 flex-1 truncate text-sm font-semibold text-base-content/80">{{ company.name }}</span>
                                 <template v-if="card.format === 'percent'">
                                     <span class="shrink-0 text-xs text-base-content/50">{{ company.connected }}/{{ company.total }}</span>
-                                    <span class="w-11 shrink-0 text-right text-sm font-semibold">
+                                    <span class="w-11 shrink-0 text-right text-sm font-semibold" :class="card.isCobranded ? 'text-[var(--color-martinique-700)]' : ''">
                                         {{ company.rate !== null ? company.rate + '%' : '–' }}
                                     </span>
                                 </template>
-                                <span v-else class="shrink-0 text-sm font-semibold">{{ company.connected }}</span>
+                                <span v-else class="shrink-0 text-sm font-semibold" :class="card.isCobranded ? 'text-[var(--color-martinique-700)]' : ''">{{ company.connected }}</span>
                             </div>
                             </div>
                             <div
