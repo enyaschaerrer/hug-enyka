@@ -222,21 +222,19 @@ class KpiController extends Controller
                     'companies' => $participationByCompany,
                 ],
                 'conversionRate' => [
-                    'label' => 'Conversion connexion → inscription',
-                    'value' => $conversionRate,
-                    'available' => $connectedRows > 0,
-                    'note' => $connectedRows > 0
-                        ? $onedocClicks . ' clic(s) RDV OneDoc / ' . $connectedRows . ' connecté(s).'
-                        : 'Aucun collaborateur connecté pour le moment.',
+                    'label'     => 'Prise de rendez-vous OneDoc',
+                    'value'     => $this->globalRateFromCompanies($conversionByCompany),
+                    'available' => $connectedTotal > 0,
+                    'note'      => $connectedTotal > 0 ? $clickedTotal . ' clics / ' . $connectedTotal . ' connectés.' : 'Aucun connecté pour le moment.',
+                    'companies' => $conversionByCompany,
                 ],
                 'questionnaireAbandonRate' => [
-                    'label' => 'Taux d\'abandon questionnaire',
-                    'value' => $questionnaireAbandonRate,
-                    'available' => $connectedRows > 0,
-                    'note' => $connectedRows > 0
-                        ? $questionnaireAbandons . ' abandon(s) / ' . $connectedRows . ' connecté(s).'
-                        : 'Aucun collaborateur connecté pour le moment.',
-                    'tone' => 'warning',
+                    'label'        => 'Taux d\'abandon au questionnaire',
+                    'value'        => $abandonSteps['totalRate'],
+                    'available'    => $abandonSteps['total'] > 0,
+                    'note'         => $abandonSteps['total'] > 0 ? null : 'Aucun parcours enregistré.',
+                    'abandonSteps' => $abandonSteps['steps'],
+                    'companies'    => $abandonByCompany,
                 ],
             ],
         ]);
