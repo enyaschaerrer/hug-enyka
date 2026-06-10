@@ -20,6 +20,8 @@ type KpiValue = {
     predefined?: { source: string; count: number }[];
     freeText?: string[];
     isVisits?: boolean;
+    isHighlighted?: boolean;
+    isCobranded?: boolean;
     isSpacer?: boolean;
     companies?: ParticipationCompany[];
     abandonSteps?: AbandonStep[];
@@ -122,13 +124,13 @@ const engagementCards = computed(() => {
 
     return [
         { ...kpis.value.engagement.pageVisits, format: 'number', isVisits: true },
-        { ...kpis.value.engagement.labelledCompanies, format: 'number' },
-        { ...kpis.value.engagement.companySources, format: 'number' },
-        { isSpacer: true, label: '__spacer__', value: null, available: true },
-        { ...kpis.value.engagement.connectedUsers, format: 'number' },
-        { ...kpis.value.engagement.participationRate, format: 'percent' },
-        { ...kpis.value.engagement.conversionRate, format: 'percent' },
-        { ...kpis.value.engagement.questionnaireAbandonRate, format: 'percent' },
+        { ...kpis.value.engagement.labelledCompanies, format: 'number', isHighlighted: true },
+        { ...kpis.value.engagement.companySources, format: 'number', isHighlighted: true },
+        { isSpacer: true, label: '__spacer__', value: null, available: true, isCobranded: true },
+        { ...kpis.value.engagement.connectedUsers, format: 'number', isCobranded: true },
+        { ...kpis.value.engagement.participationRate, format: 'percent', isCobranded: true },
+        { ...kpis.value.engagement.conversionRate, format: 'percent', isCobranded: true },
+        { ...kpis.value.engagement.questionnaireAbandonRate, format: 'percent', isCobranded: true },
     ];
 });
 
@@ -185,9 +187,7 @@ onUnmounted(() => {
 <template>
     <AdminLayout>
         <section class="min-h-full rounded-sm bg-[var(--color-pampas-50)] p-1 pr-4 text-[#1f1f22]">
-            <h1 class="mb-6 text-3xl font-semibold">Tableau de bord</h1>
-
-            <div v-if="loading" class="text-sm text-base-content/50">Chargement...</div>
+<div v-if="loading" class="text-sm text-base-content/50">Chargement...</div>
             <div v-else-if="loadError" class="alert border-0 bg-red-600 text-white">
                 <span>{{ loadError }}</span>
             </div>
@@ -196,8 +196,13 @@ onUnmounted(() => {
                 <article
                     v-for="card in engagementCards"
                     :key="card.label"
-                    class="flex flex-col rounded-2xl border border-base-300 bg-white p-5 shadow-sm"
-                    :class="card.available ? '' : 'opacity-45 grayscale'"
+                    class="flex flex-col rounded-2xl border p-5 shadow-sm"
+                    :class="[
+                        card.available ? '' : 'opacity-45 grayscale',
+                        (card.isVisits || card.isHighlighted) ? 'border-2 border-[var(--color-razzmatazz-700)] bg-[var(--color-razzmatazz-50)]'
+                        : card.isCobranded ? 'border-2 border-[var(--color-martinique-700)] bg-[var(--color-martinique-50)]'
+                        : 'border-base-300 bg-white',
+                    ]"
                 >
                     <!-- Card filtre KPIs co-brandés -->
                     <template v-if="card.isSpacer">
@@ -235,14 +240,15 @@ onUnmounted(() => {
                                 <p v-if="searchedCompanies.length === 0" class="py-4 text-center text-xs text-base-content/40">Aucun résultat</p>
                             </div>
                             <div
-                                class="pointer-events-none absolute bottom-0 left-0 right-0 h-14 bg-gradient-to-t from-white to-transparent transition-opacity duration-300"
+                                class="pointer-events-none absolute bottom-0 left-0 right-0 h-14 transition-opacity duration-300"
+                                :style="{ background: `linear-gradient(to top, ${card.isCobranded ? 'var(--color-martinique-50)' : (card.isHighlighted || card.isVisits) ? 'var(--color-razzmatazz-50)' : 'white'}, transparent)` }"
                                 :class="listsAtBottom['__filter__'] ? 'opacity-0' : 'opacity-100'"
                             ></div>
                         </div>
                     </template>
 
                     <template v-else>
-                    <p class="text-lg text-base-content/65">{{ card.label }}</p>
+                    <p class="text-lg font-semibold text-[#000]">{{ card.label }}</p>
 
                     <!-- Card visites : période type GA -->
                     <template v-if="card.isVisits">
@@ -260,7 +266,7 @@ onUnmounted(() => {
                                 {{ p.label }}
                             </button>
                         </div>
-                        <p class="mt-2 text-4xl font-bold">
+                        <p class="mt-2 text-4xl font-bold text-[var(--color-razzmatazz-700)]">
                             {{ visitsLoading ? '…' : visitsCount !== null ? visitsCount.toLocaleString('fr-CH') : 'N/A' }}
                         </p>
                     </template>
@@ -296,7 +302,8 @@ onUnmounted(() => {
                             </div>
                             </div>
                             <div
-                                class="pointer-events-none absolute bottom-0 left-0 right-0 h-14 bg-gradient-to-t from-white to-transparent transition-opacity duration-300"
+                                class="pointer-events-none absolute bottom-0 left-0 right-0 h-14 transition-opacity duration-300"
+                                :style="{ background: `linear-gradient(to top, ${card.isCobranded ? 'var(--color-martinique-50)' : (card.isHighlighted || card.isVisits) ? 'var(--color-razzmatazz-50)' : 'white'}, transparent)` }"
                                 :class="listsAtBottom[card.label] ? 'opacity-0' : 'opacity-100'"
                             ></div>
                         </div>
@@ -305,6 +312,7 @@ onUnmounted(() => {
 
                     <!-- Card sources : liste scrollable -->
                     <template v-else-if="card.predefined !== undefined">
+                        <p class="mt-2 text-4xl font-bold" :class="card.isHighlighted ? 'text-[var(--color-razzmatazz-700)]' : ''">{{ displayValue(card.value, card.format) }}</p>
                         <div v-if="card.available" class="mt-3 max-h-40 overflow-y-auto pr-1">
                             <div
                                 v-for="item in card.predefined"
@@ -351,7 +359,7 @@ onUnmounted(() => {
 
                     <!-- Cards génériques -->
                     <template v-else>
-                        <p class="mt-2 text-4xl font-bold">{{ displayValue(card.value, card.format) }}</p>
+                        <p class="mt-2 text-4xl font-bold" :class="card.isHighlighted ? 'text-[var(--color-razzmatazz-700)]' : ''">{{ displayValue(card.value, card.format) }}</p>
                         <p class="mt-3 text-xs text-base-content/45">{{ card.note }}</p>
                     </template>
                     </template>
