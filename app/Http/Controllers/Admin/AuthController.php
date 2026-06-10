@@ -16,7 +16,7 @@ class AuthController extends Controller
     {
         if (! Auth::attempt($request->credentials())) {
             throw ValidationException::withMessages([
-                'email' => __('auth.failed'),
+                'email' => 'L adresse e-mail ou le mot de passe est incorrect.',
             ]);
         }
 

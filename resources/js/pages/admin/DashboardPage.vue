@@ -181,8 +181,8 @@ const engagementCards = computed(() => {
         { isSpacer: true, label: '__spacer__', value: null, available: true, isCobranded: true },
         { ...kpis.value.engagement.connectedUsers, format: 'number', isCobranded: true },
         { ...kpis.value.engagement.participationRate, format: 'percent', isCobranded: true },
-        { ...kpis.value.engagement.conversionRate, format: 'percent', isCobranded: true },
         { ...kpis.value.engagement.questionnaireAbandonRate, format: 'percent', isCobranded: true },
+        { ...kpis.value.engagement.conversionRate, format: 'percent', isCobranded: true },
     ];
 });
 
