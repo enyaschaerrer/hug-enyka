@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
+import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import { FlashCards } from 'vue3-flashcards';
 import tinderScenarioData from '../../data/tinder-scenario.json';
 import TinderActions from './TinderActions.vue';
@@ -101,6 +101,40 @@ const activeMascot = computed(() => {
     const item = activeItem.value;
     if (!item) return null;
     return { image: item.mascot, dialogue: item.dialogue };
+});
+
+// Mobile : effet machine à écrire sur la bulle de la mascotte active (relancé à chaque carte).
+const mobileTypedText = ref('');
+let mobileTypingTimeout: number | null = null;
+
+function startMobileTypewriter(fullText: string) {
+    if (mobileTypingTimeout !== null) {
+        window.clearTimeout(mobileTypingTimeout);
+        mobileTypingTimeout = null;
+    }
+
+    mobileTypedText.value = '';
+    let index = 0;
+
+    const tick = () => {
+        mobileTypedText.value = fullText.slice(0, index);
+        index += 1;
+        mobileTypingTimeout = index <= fullText.length ? window.setTimeout(tick, 22) : null;
+    };
+
+    tick();
+}
+
+watch(
+    () => activeItem.value?.id,
+    () => startMobileTypewriter(activeMascot.value?.dialogue ?? ''),
+    { immediate: true },
+);
+
+onBeforeUnmount(() => {
+    if (mobileTypingTimeout !== null) {
+        window.clearTimeout(mobileTypingTimeout);
+    }
 });
 const layoutMode = computed<'mobile' | 'tablet' | 'desktop'>(() => {
     const width = viewportWidth.value;
@@ -205,16 +239,16 @@ onBeforeUnmount(() => {
                 class="mx-auto h-44 w-auto object-contain drop-shadow-[0_12px_22px_rgba(109,0,46,0.18)]"
                 draggable="false"
             />
-            <h2 class="mt-4 text-heading-t1 font-bold text-razzmatazz-800">Tu as un match !</h2>
+            <h2 class="mt-4 text-heading-t1 font-bold text-razzmatazz-800">Vous avez un match !</h2>
             <p class="mt-3 text-body leading-snug text-razzmatazz-800">
-                Nous allons te poser quelques questions de plus dans le chat pour préciser ta situation.
+                Vous pouvez maintenant passer aux questions d'approfondissement sous forme d'un chat avec nos mascottes.
             </p>
             <button
                 type="button"
                 class="mt-6 inline-flex items-center gap-2 rounded-2xl bg-razzmatazz-800 px-8 py-3 text-base font-semibold text-white transition hover:bg-razzmatazz-600"
                 @click="continueToChat"
             >
-                <span>Aller au chat</span>
+                <span>Discuter avec les mascottes</span>
             </button>
         </div>
     </section>
@@ -486,15 +520,30 @@ onBeforeUnmount(() => {
             </FlashCards>
         </div>
 
-        <!-- Mascotte unique + bulle large à côté -->
-        <div v-if="activeMascot" class="mt-8 flex h-32 items-center justify-center gap-2 px-1">
-            <img :src="activeMascot.image" alt="Mascotte" class="h-20 w-auto shrink-0 object-contain" draggable="false" />
-            <div
-                v-if="activeMascot.dialogue"
-                class="mascot-bubble flex-1 rounded-2xl border border-razzmatazz-950 bg-white px-3 py-2 text-caption font-semibold leading-snug text-razzmatazz-950"
+        <!-- Mascotte unique + bulle large à côté (fondu croisé à chaque changement de carte) -->
+        <div class="relative mt-8 h-32">
+            <Transition
+                enter-active-class="transition-opacity duration-300 ease-out"
+                enter-from-class="opacity-0"
+                enter-to-class="opacity-100"
+                leave-active-class="transition-opacity duration-300 ease-in"
+                leave-from-class="opacity-100"
+                leave-to-class="opacity-0"
             >
-                {{ activeMascot.dialogue }}
-            </div>
+                <div
+                    v-if="activeMascot"
+                    :key="activeItem?.id"
+                    class="absolute inset-0 flex items-center justify-center gap-2 px-1"
+                >
+                    <img :src="activeMascot.image" alt="Mascotte" class="h-20 w-auto shrink-0 object-contain" draggable="false" />
+                    <div
+                        v-if="activeMascot.dialogue"
+                        class="mascot-bubble flex-1 rounded-2xl border border-razzmatazz-950 bg-white px-3 py-2 text-caption font-semibold leading-snug text-razzmatazz-950"
+                    >
+                        {{ mobileTypedText }}
+                    </div>
+                </div>
+            </Transition>
         </div>
     </section>
 </template>
