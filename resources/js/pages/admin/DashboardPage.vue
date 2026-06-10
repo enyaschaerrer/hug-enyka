@@ -276,7 +276,7 @@ onUnmounted(() => {
                                 v-model="companySearch"
                                 type="search"
                                 placeholder="Rechercher une entreprise…"
-                                class="search-no-clear w-full rounded-lg border border-[var(--color-martinique-100)] bg-base-100 py-2.5 pl-9 pr-8 text-sm font-medium text-[var(--color-martinique-700)] outline-none transition ease-in-out focus:border-[var(--color-martinique-700)]"
+                                class="search-no-clear w-full rounded-lg border border-[var(--color-martinique-100)] bg-base-100 py-2 pl-9 pr-8 text-sm font-medium text-[var(--color-martinique-700)] outline-none transition ease-in-out focus:border-[var(--color-martinique-700)]"
                                 @focus="searchFocused = true"
                                 @blur="searchFocused = false"
                             />
