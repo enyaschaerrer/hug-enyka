@@ -36,7 +36,6 @@ async function logout() {
             return;
         }
     } catch {
-        // Fall through to reload the page and let the server state decide.
     }
 
     window.location.reload();
@@ -46,7 +45,6 @@ async function logout() {
 <template>
     <header class="sticky top-0 z-40 bg-catskillwhite-800 px-3 py-2 font-cooper shadow-sm lg:px-12 lg:py-2.5">
         <div class="mx-auto flex max-w-6xl items-center justify-between gap-2 lg:gap-4">
-            <!-- Pill blanche cliquable : logo entreprise X logo HUG → retour à la première page -->
             <button
                 type="button"
                 class="flex items-center gap-2 rounded-full bg-white px-3 py-1.5 transition hover:bg-catskillwhite-100 lg:gap-3 lg:px-5"
@@ -70,10 +68,12 @@ async function logout() {
             <div class="flex items-center gap-2 lg:gap-6">
                 <button
                     type="button"
-                    class="rounded-full bg-razzmatazz-800 px-3 py-1.5 text-caption font-medium text-white transition hover:bg-razzmatazz-600 hidden lg:block lg:px-5 lg:py-2 lg:text-heading-t3"
+                    class="rounded-full bg-razzmatazz-800 px-3 py-1.5 text-caption font-medium text-white transition hover:bg-razzmatazz-600 border-1 border-white lg:px-5 lg:py-2 lg:text-heading-t3"
                     @click="$emit('goTest')"
-                >
-                    <span class="lg:hidden">Test</span>
+                >   
+                    <div class="lg:hidden">
+                        <span class="material-symbols-outlined" style="font-size: 24px;" aria-hidden="true">Quiz</span>
+                    </div>
                     <span class="hidden lg:inline">Test d'éligibilité</span>
                 </button>
 
