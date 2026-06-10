@@ -10,6 +10,7 @@ use App\Support\EmailDomainList;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
@@ -103,6 +104,12 @@ class CoBrandedAuthController extends Controller
                 'email' => 'Ce compte n’est pas autorisé pour cette collecte.',
             ]);
         }
+
+        DB::table('collections_users')
+            ->where('collection_id', $collection->id)
+            ->where('user_id', $user->id)
+            ->where('connected', false)
+            ->update(['connected' => true]);
 
         return response()->json([
             'message' => 'Connexion réussie.',
