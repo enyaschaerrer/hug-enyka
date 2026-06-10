@@ -305,7 +305,7 @@ onUnmounted(() => {
                                     @click="toggleCompany(company.name)"
                                 >
                                     <div
-                                        class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-xs font-medium text-white"
+                                        class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-medium text-white"
                                         :style="{ backgroundColor: company.primaryColor }"
                                     >{{ company.name.slice(0, 2).toUpperCase() }}</div>
                                     <span class="min-w-0 flex-1 truncate text-sm font-semibold text-base-content/80">{{ company.name }}</span>
@@ -365,7 +365,7 @@ onUnmounted(() => {
                                 @click="toggleCompany(company.name)"
                             >
                                 <div
-                                    class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-xs font-medium text-white"
+                                    class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-medium text-white"
                                     :style="{ backgroundColor: company.primaryColor }"
                                 >
                                     {{ company.name.slice(0, 2).toUpperCase() }}
