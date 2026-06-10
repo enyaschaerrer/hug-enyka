@@ -50,6 +50,7 @@ function onListScroll(event: Event, key: string) {
 
 const selectedCompanies = ref<Set<string>>(new Set());
 const companySearch = ref('');
+const searchFocused = ref(false);
 
 const allCompanies = computed((): ParticipationCompany[] => {
     if (!kpis.value) return [];
@@ -264,23 +265,37 @@ onUnmounted(() => {
                 >
                     <!-- Card filtre KPIs co-brandés -->
                     <template v-if="card.isSpacer">
-                        <div class="flex items-center justify-between">
-                            <p class="text-lg font-semibold text-base-content/80">KPIs co-brandés</p>
+                        <div class="relative mt-1">
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                class="absolute left-3 top-1/2 -translate-y-1/2 transition ease-in-out"
+                                :class="searchFocused ? 'text-[var(--color-martinique-700)]' : 'text-[var(--color-martinique-300)]'"
+                            ><path d="m21 21-4.34-4.34"/><circle cx="11" cy="11" r="8"/></svg>
+                            <input
+                                v-model="companySearch"
+                                type="search"
+                                placeholder="Rechercher une entreprise…"
+                                class="search-no-clear w-full rounded-lg border border-[var(--color-martinique-100)] bg-base-100 py-2.5 pl-9 pr-8 text-sm font-medium text-[var(--color-martinique-700)] outline-none transition ease-in-out focus:border-[var(--color-martinique-700)]"
+                                @focus="searchFocused = true"
+                                @blur="searchFocused = false"
+                            />
                             <button
-                                v-if="selectedCompanies.size > 0"
+                                v-if="companySearch"
                                 type="button"
-                                class="text-xs text-base-content/40 hover:text-base-content/70 transition"
-                                @click="selectedCompanies = new Set()"
-                            >Tout effacer</button>
+                                class="absolute right-2.5 top-1/2 -translate-y-1/2 text-[var(--color-martinique-700)] transition ease-in-out hover:opacity-70"
+                                @click="companySearch = ''"
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+                            </button>
                         </div>
-                        <input
-                            v-model="companySearch"
-                            type="search"
-                            placeholder="Rechercher une entreprise…"
-                            class="mt-3 w-full rounded-lg border border-base-200 bg-base-100 px-3 py-1.5 text-sm outline-none focus:border-base-300"
-                        />
+                        <button
+                            v-if="selectedCompanies.size > 0"
+                            type="button"
+                            class="mt-1.5 text-xs text-base-content/40 transition hover:text-base-content/70"
+                            @click="selectedCompanies = new Set()"
+                        >Tout effacer</button>
                         <div class="relative mt-2 -mb-5">
-                            <div class="max-h-48 overflow-y-auto pb-4 border-t border-base-200" @scroll="onListScroll($event, '__filter__')">
+                            <div class="max-h-48 overflow-y-auto pb-4" @scroll="onListScroll($event, '__filter__')">
                                 <div
                                     v-for="company in searchedCompanies"
                                     :key="company.name"
@@ -383,7 +398,7 @@ onUnmounted(() => {
                                     class="flex items-center justify-between gap-2 py-1.5 text-sm"
                                 >
                                     <span class="font-medium text-[#000]">{{ item.source }}</span>
-                                    <span class="shrink-0 font-medium text-[var(--color-razzmatazz-700)]">{{ item.count }}</span>
+                                    <span class="shrink-0 font-semibold text-[var(--color-razzmatazz-700)]">{{ item.count }}</span>
                                 </div>
                             </div>
                             <div
@@ -459,6 +474,10 @@ onUnmounted(() => {
 </template>
 
 <style scoped>
+.search-no-clear::-webkit-search-cancel-button {
+    display: none;
+}
+
 .kpi-fade-enter-active,
 .kpi-fade-leave-active {
     transition: opacity 0.2s ease;
