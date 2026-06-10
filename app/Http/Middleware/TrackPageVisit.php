@@ -13,6 +13,10 @@ class TrackPageVisit
     {
         $response = $next($request);
 
+        if ($request->cookie('hug_analytics_consent') !== '1') {
+            return $response;
+        }
+
         DB::table('page_visits')->insert([
             'ip_hash'    => hash('sha256', $request->ip()),
             'created_at' => now(),
