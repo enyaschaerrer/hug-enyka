@@ -195,7 +195,7 @@ function toDatetimeLocal(iso: string | null | undefined): string {
 }
 
 function formatDate(iso: string): string {
-    return new Date(iso).toLocaleString('fr-CH', {
+    return new Date(iso.slice(0, 16)).toLocaleString('fr-CH', {
         day: '2-digit', month: '2-digit', year: 'numeric',
         hour: '2-digit', minute: '2-digit',
     });
@@ -273,6 +273,7 @@ async function fetchCompany() {
     try {
         const res = await fetch(`/admin/api/companies/${companyId}`, {
             headers: { 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
+            cache: 'no-store',
         });
         if (res.ok) {
             const data = await res.json();
@@ -451,16 +452,18 @@ watch(loading, async (isLoading) => {
                                 v-if="editedCollection.is_active"
                                 :href="editedCollection.url"
                                 target="_blank"
-                                class="min-w-0 truncate text-sm text-martinique-950 underline-offset-2 hover:underline"
+                                class="link link-primary min-w-0 truncate text-sm font-medium"
                             >
                                 <span>{{ editedCollection.url }}</span>
                             </a>
-                            <span
+                            <a
                                 v-else
-                                class="min-w-0 truncate text-sm text-pampas-900/70"
+                                :href="editedCollection.url"
+                                target="_blank"
+                                class="link link-primary min-w-0 truncate text-sm font-medium"
                             >
                                 {{ editedCollection.url }}
-                            </span>
+                            </a>
                         </div>
                     </div>
                 </div>
