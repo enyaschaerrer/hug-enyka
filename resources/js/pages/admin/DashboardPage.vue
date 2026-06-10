@@ -300,7 +300,7 @@ onUnmounted(() => {
                             >Réinitialiser</button>
                         </div>
                         <div class="relative -mb-5">
-                            <div class="min-h-48 max-h-48 overflow-y-auto pb-4" @scroll="onListScroll($event, '__filter__')">
+                            <div class="min-h-48 max-h-48 no-scrollbar overflow-y-auto pb-4" @scroll="onListScroll($event, '__filter__')">
                                 <div
                                     v-for="company in searchedCompanies"
                                     :key="company.name"
@@ -384,7 +384,7 @@ onUnmounted(() => {
                             {{ computeFilteredValue(card) !== null ? (card.format === 'percent' ? computeFilteredValue(card) + '%' : displayValue(computeFilteredValue(card) as number, 'number')) : 'N/A' }}
                         </p>
                         <div v-if="card.available && card.companies.length > 0" class="relative mt-3 -mb-5">
-                            <div class="min-h-48 max-h-48 overflow-y-auto pr-1 pb-4 pt-2 border-t" :class="card.isCobranded ? 'border-[var(--color-martinique-100)]' : 'border-base-200'" @scroll="onListScroll($event, card.label)">
+                            <div class="min-h-48 max-h-48 no-scrollbar overflow-y-auto pr-1 pb-4 pt-2 border-t" :class="card.isCobranded ? 'border-[var(--color-martinique-100)]' : 'border-base-200'" @scroll="onListScroll($event, card.label)">
                             <div
                                 v-for="company in filterCompanies(card.companies)"
                                 :key="company.name"
@@ -424,7 +424,7 @@ onUnmounted(() => {
                     <!-- Card sources : liste scrollable -->
                     <template v-else-if="card.predefined !== undefined">
                         <div v-if="card.available" class="relative mt-3">
-                            <div class="h-40 overflow-y-auto border-t border-[var(--color-razzmatazz-100)] pr-1 pt-2" @scroll="onListScroll($event, card.label)">
+                            <div class="h-40 no-scrollbar overflow-y-auto border-t border-[var(--color-razzmatazz-100)] pr-1 pt-2" @scroll="onListScroll($event, card.label)">
                                 <div
                                     v-for="item in card.predefined"
                                     :key="item.source"
@@ -490,6 +490,9 @@ onUnmounted(() => {
 .search-no-clear::-webkit-search-cancel-button {
     display: none;
 }
+
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
 .kpi-fade-enter-active,
 .kpi-fade-leave-active {
