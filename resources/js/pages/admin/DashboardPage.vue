@@ -99,6 +99,22 @@ const availableVisitPeriods = VISIT_PERIODS.filter((p) => currentMonth >= p.minM
 const visitsPeriod = ref<VisitPeriod>('30d');
 const visitsCount = ref<number | null>(null);
 const visitsLoading = ref(false);
+const displayedCount = ref(0);
+let countAnimation: number | undefined;
+
+function animateCount(target: number) {
+    if (countAnimation) cancelAnimationFrame(countAnimation);
+    const from = displayedCount.value;
+    const duration = 700;
+    const startTime = performance.now();
+    function step(now: number) {
+        const progress = Math.min((now - startTime) / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        displayedCount.value = Math.round(from + (target - from) * eased);
+        if (progress < 1) countAnimation = requestAnimationFrame(step);
+    }
+    countAnimation = requestAnimationFrame(step);
+}
 
 async function fetchVisits() {
     visitsLoading.value = true;
@@ -168,7 +184,8 @@ async function fetchKpis() {
     }
 }
 
-watch(visitsPeriod, fetchVisits);
+watch(visitsPeriod, () => { displayedCount.value = 0; fetchVisits(); });
+watch(visitsCount, (val) => { if (val !== null) animateCount(val); });
 
 onMounted(() => {
     fetchKpis();
@@ -177,9 +194,8 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
-    if (refreshTimer) {
-        window.clearInterval(refreshTimer);
-    }
+    if (refreshTimer) window.clearInterval(refreshTimer);
+    if (countAnimation) cancelAnimationFrame(countAnimation);
 });
 </script>
 
@@ -269,7 +285,7 @@ onUnmounted(() => {
                             <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user-round shrink-0"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg>
                             <Transition name="kpi-fade" mode="out-in">
                                 <p :key="visitsPeriod" class="text-6xl font-bold">
-                                    {{ visitsLoading ? '…' : visitsCount !== null ? visitsCount.toLocaleString('fr-CH') : 'N/A' }}
+                                    {{ visitsLoading ? '…' : visitsCount !== null ? displayedCount.toLocaleString('fr-CH') : 'N/A' }}
                                 </p>
                             </Transition>
                         </div>
