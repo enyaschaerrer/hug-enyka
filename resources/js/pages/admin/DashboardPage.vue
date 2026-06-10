@@ -251,21 +251,21 @@ onUnmounted(() => {
 
                     <!-- Card visites : période type GA -->
                     <template v-if="card.isVisits">
-                        <div class="mt-4 flex gap-2">
+                        <div class="mt-4 flex gap-1.5">
                             <button
                                 v-for="p in availableVisitPeriods"
                                 :key="p.key"
                                 type="button"
-                                class="rounded-md px-4 py-1.5 text-sm font-medium transition"
+                                class="rounded-md border px-4 py-1.5 text-sm font-medium transition"
                                 :class="visitsPeriod === p.key
-                                    ? 'bg-[var(--color-razzmatazz-700)] text-white'
-                                    : 'bg-white text-[#000] hover:bg-base-100'"
+                                    ? 'border-[var(--color-razzmatazz-700)] bg-[var(--color-razzmatazz-700)] text-white'
+                                    : 'border-[var(--color-razzmatazz-100)] bg-white text-[#000] hover:text-[var(--color-razzmatazz-700)] ease-in-out'"
                                 @click="visitsPeriod = p.key"
                             >
                                 {{ p.label }}
                             </button>
                         </div>
-                        <div class="mt-10 flex items-center gap-2 text-[var(--color-razzmatazz-700)]">
+                        <div class="mt-9 flex items-center gap-2 text-[var(--color-razzmatazz-700)]">
                             <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user-round shrink-0"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg>
                             <Transition name="kpi-fade" mode="out-in">
                                 <p :key="visitsPeriod" class="text-6xl font-bold">
