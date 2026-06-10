@@ -142,7 +142,7 @@ class KpiController extends Controller
                         : 'Aucune en participation anonyme.',
                 ],
                 'companySources' => [
-                    'label' => 'Sources des entreprises',
+                    'label' => 'Sources de prise de contact',
                     'value' => $sourcesBreakdown->count(),
                     'available' => $sourcesBreakdown->isNotEmpty(),
                     'note' => $sourcesBreakdown->isEmpty() ? 'Aucune source renseignée pour le moment.' : null,

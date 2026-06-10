@@ -282,9 +282,9 @@ onUnmounted(() => {
                             </button>
                         </div>
                         <div class="mt-9 flex items-center gap-2 text-[var(--color-razzmatazz-700)]">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user-round shrink-0"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="54" height="54" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user-round shrink-0"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg>
                             <Transition name="kpi-fade" mode="out-in">
-                                <p :key="visitsPeriod" class="text-6xl font-bold">
+                                <p :key="visitsPeriod" class="text-[3.25rem] font-bold leading-none">
                                     {{ visitsLoading ? '…' : visitsCount !== null ? displayedCount.toLocaleString('fr-CH') : 'N/A' }}
                                 </p>
                             </Transition>
@@ -333,7 +333,7 @@ onUnmounted(() => {
                     <!-- Card sources : liste scrollable -->
                     <template v-else-if="card.predefined !== undefined">
                         <div v-if="card.available" class="relative mt-3">
-                            <div class="h-40 overflow-y-auto pr-1" @scroll="onListScroll($event, card.label)">
+                            <div class="h-40 overflow-y-auto border-t border-[var(--color-razzmatazz-100)] pr-1" @scroll="onListScroll($event, card.label)">
                                 <div
                                     v-for="item in card.predefined"
                                     :key="item.source"
