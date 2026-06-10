@@ -422,10 +422,8 @@ onUnmounted(() => {
                                 :key="step.label"
                                 class="flex items-center justify-between gap-2"
                             >
-                                <span class="text-sm text-base-content/70">{{ step.label }}</span>
-                                <span class="text-sm font-semibold">
-                                    {{ step.count }} <span class="font-normal text-base-content/45">({{ step.rate !== null ? step.rate + '%' : '–' }})</span>
-                                </span>
+                                <span class="text-sm text-base-content/70">{{ step.label }} : <span class="font-semibold text-[#000]">{{ step.rate !== null ? step.rate + '%' : '–' }}</span></span>
+                                <span class="text-sm font-semibold text-[var(--color-martinique-700)]">{{ step.count }}</span>
                             </div>
                         </div>
                         <p class="mt-3 text-xs text-base-content/45">{{ card.note }}</p>

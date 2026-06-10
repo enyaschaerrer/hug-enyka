@@ -184,7 +184,7 @@ class KpiController extends Controller
                     'label'        => 'Abandon questionnaire',
                     'value'        => $abandonSteps['totalRate'],
                     'available'    => $abandonSteps['total'] > 0,
-                    'note'         => $abandonSteps['total'] > 0 ? $abandonSteps['total'] . ' parcours au total.' : 'Aucun parcours enregistré.',
+                    'note'         => $abandonSteps['total'] > 0 ? null : 'Aucun parcours enregistré.',
                     'abandonSteps' => $abandonSteps['steps'],
                 ],
             ],
