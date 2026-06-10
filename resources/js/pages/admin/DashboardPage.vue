@@ -261,6 +261,7 @@ onUnmounted(() => {
                         (card.isVisits || card.isHighlighted) ? 'border-2 border-[var(--color-razzmatazz-700)] bg-[var(--color-razzmatazz-50)]'
                         : card.isCobranded ? 'border-2 border-[var(--color-martinique-700)] bg-[var(--color-martinique-50)]'
                         : 'border-base-300 bg-white',
+                        card.isCobranded && !card.isSpacer ? 'min-h-[315px]' : '',
                     ]"
                 >
                     <!-- Card filtre KPIs co-brandés -->
