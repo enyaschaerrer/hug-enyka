@@ -70,6 +70,7 @@ const engagementCards = computed(() => {
         { ...kpis.value.engagement.labelledCompanies, format: 'number' },
         { ...kpis.value.engagement.companySources, format: 'number' },
         { ...kpis.value.engagement.pageVisits, format: 'number', isVisits: true },
+        { ...kpis.value.engagement.connectedUsers, format: 'number' },
         { ...kpis.value.engagement.participationRate, format: 'percent' },
         { ...kpis.value.engagement.conversionRate, format: 'percent' },
         { ...kpis.value.engagement.questionnaireAbandonRate, format: 'percent' },

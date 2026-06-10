@@ -103,6 +103,12 @@ class KpiController extends Controller
                     'available' => true,
                     'note' => null,
                 ],
+                'connectedUsers' => [
+                    'label'     => 'Collaborateurs connectés',
+                    'value'     => DB::table('collections_users')->where('connected', 1)->distinct('user_id')->count('user_id'),
+                    'available' => true,
+                    'note'      => 'Ont accédé au site co-brandé au moins une fois.',
+                ],
                 'participationRate' => [
                     'label' => 'Taux de participation',
                     'value' => null,
