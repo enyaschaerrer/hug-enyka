@@ -130,7 +130,7 @@ async function logout() {
         </aside>
 
         <!-- Content -->
-        <main class="min-w-0 flex-1 overflow-y-auto bg-[var(--color-pampas-50)] p-8">
+        <main class="min-w-0 flex-1 overflow-y-auto bg-[var(--color-pampas-50)] px-8 pb-8 pt-[22px]">
             <slot />
         </main>
     </div>
