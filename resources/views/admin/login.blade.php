@@ -16,10 +16,10 @@
             };
         </script>
     </head>
-    <body class="font-cooper flex min-h-screen items-center justify-center bg-[#FAF8F2] px-4 text-razzmatazz-900">
+    <body class="font-cooper flex min-h-screen items-center justify-center bg-[#FAF8F2] px-4 text-razzmatazz-700">
         <div class="w-full max-w-sm">
             <div class="mb-8 text-center">
-                <p class="text-2xl font-semibold text-razzmatazz-900">Administration CTS</p>
+                <p class="text-2xl font-semibold text-razzmatazz-700">Administration CTS</p>
                 <p class="mt-2 text-sm text-[#2F2F36]/60">Connectez-vous pour accéder à votre espace</p>
             </div>
 
