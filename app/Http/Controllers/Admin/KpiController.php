@@ -35,7 +35,7 @@ class KpiController extends Controller
 
         $questionnaireRows = DB::table('collections_users')->count();
         $questionnaireAbandonments = DB::table('collections_users')
-            ->where('abandonment', true)
+            ->where('quiz_step', '!=', 'done')
             ->count();
 
         return response()->json([

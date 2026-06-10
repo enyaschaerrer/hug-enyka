@@ -66,7 +66,7 @@ function startQuestionnaire() {
             <div class="-mt-6 flex translate-y-1/2 justify-center gap-4 lg:gap-6">
                 <a
                     href="/"
-                    class="min-w-30 rounded-2xl bg-razzmatazz-800 text-[1rem] py-2 font-semibold text-white transition hover:bg-razzmatazz-400 lg:min-w-56 sm:px-16 lg:py-7 lg:min-w-44 lg:text-heading-t1"
+                    class="min-w-30 rounded-2xl bg-razzmatazz-800 text-heading-t3 py-2 font-semibold text-white transition hover:bg-razzmatazz-400 sm:min-w-40 sm:px-12 sm:py-4"
                 >
                     Pas encore
                 </a>
