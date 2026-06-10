@@ -111,7 +111,7 @@ function toggleMobile(idx: number) {
                                     alt=""
                                     class="-ml-27 h-34 mt-5 w-auto shrink-0 object-contain"
                                 />
-                                <p class="text-center text-body text-catskillwhite-800">{{ step.description }}</p>
+                                <p class="text-center text-[0.9rem] text-catskillwhite-800">{{ step.description }}</p>
                             </div>
 
                             <div class="mt-1 flex items-center gap-1">
