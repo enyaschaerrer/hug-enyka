@@ -384,7 +384,7 @@ onUnmounted(() => {
                             {{ computeFilteredValue(card) !== null ? (card.format === 'percent' ? computeFilteredValue(card) + '%' : displayValue(computeFilteredValue(card) as number, 'number')) : 'N/A' }}
                         </p>
                         <div v-if="card.available && card.companies.length > 0" class="relative mt-3 -mb-5">
-                            <div class="min-h-48 max-h-48 no-scrollbar overflow-y-auto pr-1 pb-4 pt-2 border-t" :class="card.isCobranded ? 'border-[var(--color-martinique-100)]' : 'border-base-200'" @scroll="onListScroll($event, card.label)">
+                            <div class="min-h-48 max-h-48 no-scrollbar overflow-y-auto pr-1 pb-2 pt-2 border-t" :class="card.isCobranded ? 'border-[var(--color-martinique-100)]' : 'border-base-200'" @scroll="onListScroll($event, card.label)">
                             <div
                                 v-for="company in filterCompanies(card.companies)"
                                 :key="company.name"
