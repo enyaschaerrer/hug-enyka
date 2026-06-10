@@ -10,9 +10,9 @@ Taux de participation (nb connectés co-brandé/ nb de collaborateurs), * et fil
 
 connectés = réussi a se connecter sur le site co-brandé avec le code au moins 1x - Done
 
-Conversion connexion → inscription (click lien OneDoc) - Phase 3.2
+Conversion connexion → inscription (click lien OneDoc) - 
 
-Taux d’abandon sur le questionnaire (swipe ou messagerie) - Phase 3.2
+Taux d’abandon sur le questionnaire (swipe ou messagerie) - 
 
 [Migration]
 
