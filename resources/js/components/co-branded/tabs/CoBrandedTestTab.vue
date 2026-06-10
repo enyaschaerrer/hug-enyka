@@ -57,22 +57,21 @@ function startQuestionnaire() {
             </p>
 
             <!-- Mascottes au-dessus, qui débordent légèrement sur les boutons -->
-            <div class="-mt-6 flex items-end justify-center gap-12 sm:-mt-16 sm:gap-28">
-                <img :src="'/img/mascots/sanguy_devastated.webp'" alt="" class="h-32 w-auto translate-y-3 sm:h-56 sm:translate-y-10" />
-                <img :src="'/img/mascots/blutly_hero.webp'" alt="" class="h-20 w-auto -translate-y-4 sm:h-36 sm:-translate-y-6" />
+            <div class="mt-4 flex items-end justify-center gap-12 sm:mt-4 sm:gap-28">
+                <img :src="'/img/mascots/blutly_sanguy_hey.webp'" alt="" class="h-12 w-auto sm:h-40" />
             </div>
 
             <!-- Boutons Non / Oui : très gros, translate-y-1/2 → dépassent à moitié en bas de la carte -->
-            <div class="-mt-6 flex translate-y-1/2 justify-center gap-4 lg:gap-6">
+            <div class="mt-2 flex translate-y-1/2 justify-center gap-4 lg:gap-6">
                 <a
                     href="/"
-                    class="min-w-30 rounded-2xl bg-razzmatazz-800 text-heading-t3 py-2 font-semibold text-white transition hover:bg-razzmatazz-400 sm:min-w-40 sm:px-12 sm:py-4"
+                    class="w-32 rounded-2xl bg-razzmatazz-800 py-3 text-center text-heading-t3 font-semibold text-white transition hover:bg-razzmatazz-400 sm:w-44 sm:py-4"
                 >
                     Pas encore
                 </a>
                 <button
                     type="button"
-                    class="min-w-28 rounded-2xl bg-razzmatazz-800 px-8 py-3 text-heading-t3 font-semibold text-white transition hover:bg-razzmatazz-900 sm:min-w-40 sm:px-12 sm:py-4"
+                    class="w-32 rounded-2xl bg-razzmatazz-800 py-3 text-center text-heading-t3 font-semibold text-white transition hover:bg-razzmatazz-900 sm:w-44 sm:py-4"
                     @click="startQuestionnaire"
                 >
                     Oui
