@@ -87,6 +87,7 @@ class KpiController extends Controller
 
         $quizStepCounts = DB::table('collections_users')
             ->select('quiz_step', DB::raw('count(*) as total'))
+            ->where('quiz_step', '!=', 'pending')
             ->groupBy('quiz_step')
             ->pluck('total', 'quiz_step');
 
@@ -102,7 +103,7 @@ class KpiController extends Controller
                 DB::raw("COUNT(DISTINCT CASE WHEN collections_users.quiz_step = 'quiz' THEN collections_users.user_id END) as quiz_count"),
                 DB::raw("COUNT(DISTINCT CASE WHEN collections_users.quiz_step = 'chat' THEN collections_users.user_id END) as chat_count"),
                 DB::raw("COUNT(DISTINCT CASE WHEN collections_users.quiz_step IN ('quiz', 'chat') THEN collections_users.user_id END) as abandon_count"),
-                DB::raw('COUNT(DISTINCT collections_users.user_id) as total_count'),
+                DB::raw("COUNT(DISTINCT CASE WHEN collections_users.quiz_step != 'pending' THEN collections_users.user_id END) as total_count"),
             )
             ->groupBy('companies.id', 'companies.name', 'companies.primaryColor')
             ->get()
