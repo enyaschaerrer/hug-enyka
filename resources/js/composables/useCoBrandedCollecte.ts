@@ -27,6 +27,10 @@ export type CoBrandedCollecte = {
         loginUrl: string;
         logoutUrl: string;
     };
+    tracking: {
+        quizStepUrl: string;
+        onedocUrl: string;
+    };
 };
 
 type AppState = {
@@ -66,10 +70,16 @@ export function useCoBrandedCollecte() {
         logoutUrl: '',
     };
 
+    const tracking = coBrandedCollecte?.tracking ?? {
+        quizStepUrl: '',
+        onedocUrl: '',
+    };
+
     return {
         csrfToken,
         company,
         collection,
         auth,
+        tracking,
     };
 }
