@@ -270,13 +270,14 @@ onUnmounted(() => {
                             <svg
                                 xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                                 class="absolute left-3 top-1/2 -translate-y-1/2 transition ease-in-out"
-                                :class="searchFocused ? 'text-[var(--color-martinique-700)]' : 'text-[var(--color-martinique-300)]'"
+                                :class="searchFocused || companySearch ? 'text-[var(--color-martinique-700)]' : 'text-[var(--color-martinique-300)]'"
                             ><path d="m21 21-4.34-4.34"/><circle cx="11" cy="11" r="8"/></svg>
                             <input
                                 v-model="companySearch"
                                 type="search"
                                 placeholder="Rechercher une entreprise…"
-                                class="search-no-clear w-full rounded-lg border border-[var(--color-martinique-100)] bg-base-100 py-2 pl-9 pr-8 text-sm font-medium text-[var(--color-martinique-700)] outline-none transition ease-in-out focus:border-[var(--color-martinique-700)]"
+                                class="search-no-clear w-full rounded-lg border bg-base-100 py-2 pl-9 pr-8 text-sm font-medium text-[var(--color-martinique-700)] outline-none transition ease-in-out"
+                                :class="searchFocused || companySearch ? 'border-[var(--color-martinique-700)]' : 'border-[var(--color-martinique-100)]'"
                                 @focus="searchFocused = true"
                                 @blur="searchFocused = false"
                             />
@@ -398,10 +399,15 @@ onUnmounted(() => {
                                 </div>
                                 <span class="min-w-0 flex-1 truncate text-sm font-semibold text-base-content/80">{{ company.name }}</span>
                                 <template v-if="card.format === 'percent'">
-                                    <span class="shrink-0 text-xs font-semibold text-[#000]">{{ company.connected }}/{{ company.total }}</span>
-                                    <span class="w-11 shrink-0 text-right text-sm font-semibold" :class="card.isCobranded ? 'text-[var(--color-martinique-700)]' : ''">
-                                        {{ company.rate !== null ? company.rate + '%' : '–' }}
-                                    </span>
+                                    <div class="flex shrink-0 items-center gap-1.5">
+                                        <span class="flex items-center gap-1 text-xs font-semibold text-[#000]">
+                                            {{ company.connected }}/{{ company.total }}
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="relative -top-px"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg>
+                                        </span>
+                                        <span class="w-11 text-right text-sm font-semibold" :class="card.isCobranded ? 'text-[var(--color-martinique-700)]' : ''">
+                                            {{ company.rate !== null ? company.rate + '%' : '–' }}
+                                        </span>
+                                    </div>
                                 </template>
                                 <span v-else class="shrink-0 text-sm font-semibold" :class="card.isCobranded ? 'text-[var(--color-martinique-700)]' : ''">{{ company.connected }}</span>
                             </div>
