@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\KpiController;
 use App\Http\Controllers\Admin\TropheeController;
 use App\Http\Controllers\CoBrandedAuthController;
 use App\Http\Controllers\CoBrandedCollecteController;
+use App\Http\Controllers\CoBrandedTrackingController;
 use App\Http\Controllers\Public\CompanyFormController;
 use App\Http\Controllers\PublicSiteController;
 use Illuminate\Support\Facades\Route;
@@ -23,6 +24,8 @@ Route::get('/collecte/{brand}/{token}/questionnaire', [CoBrandedCollecteControll
 Route::post('/collecte/{brand}/{token}/access-code', [CoBrandedAuthController::class, 'sendAccessCode'])->name('public.collecte.cobranded.access-code');
 Route::post('/collecte/{brand}/{token}/login', [CoBrandedAuthController::class, 'login'])->name('public.collecte.cobranded.login');
 Route::post('/collecte/{brand}/{token}/logout', [CoBrandedAuthController::class, 'logout'])->name('public.collecte.cobranded.logout');
+Route::post('/collecte/{brand}/{token}/track/quiz-step', [CoBrandedTrackingController::class, 'quizStep'])->name('public.collecte.cobranded.track.quiz-step');
+Route::post('/collecte/{brand}/{token}/track/onedoc', [CoBrandedTrackingController::class, 'onedocClick'])->name('public.collecte.cobranded.track.onedoc');
 Route::post('/prix/inscription', [CompanyFormController::class, 'storePrize']);
 
 // Admin SPA shell — login page is public

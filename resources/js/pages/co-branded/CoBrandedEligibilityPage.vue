@@ -9,9 +9,11 @@ import CoBrandedNonEligibleView from '../../components/co-branded/CoBrandedNonEl
 import SmsConversationPrototype from '../../components/sms-chat/SmsConversationPrototype.vue';
 import { useAdminRouter } from '../../composables/useAdminRouter';
 import { useCoBrandedCollecte } from '../../composables/useCoBrandedCollecte';
+import { useCoBrandedTracking } from '../../composables/useCoBrandedTracking';
 
 const { navigate, forceNavigate, setNavigationBlocker } = useAdminRouter();
 const { csrfToken, company, collection, auth } = useCoBrandedCollecte();
+const { trackQuizStep, trackOnedocClick } = useCoBrandedTracking();
 const qrModalOpen = ref(false);
 const isDesktop = ref(false);
 const exitModalOpen = ref(false);
@@ -22,6 +24,8 @@ function onIneligible(reasons: { title: string; detail: string; status: 'warning
     ineligibleReasons.value = reasons;
     showSms.value = false;
     showNonEligible.value = true;
+    // Parcours terminé (même non éligible) → plus considéré comme un abandon.
+    trackQuizStep('done');
 }
 const showSms = ref(false);
 const showConfetti = ref(false);
@@ -43,6 +47,7 @@ function onMatch(modules: string[]) {
     smsModules.value = modules;
     showConfetti.value = true;
     showSms.value = true;
+    trackQuizStep('chat');
     window.setTimeout(() => {
         showConfetti.value = false;
     }, 2600);
@@ -110,6 +115,11 @@ function interceptPageExit(event: MouseEvent) {
         return;
     }
 
+    // Liens explicitement autorisés (ex. « Prendre RDV » OneDoc) : pas de modale de sortie.
+    if (link.dataset.allowExit !== undefined) {
+        return;
+    }
+
     const href = link.getAttribute('href');
 
     if (!href || href.startsWith('#') || href.startsWith('javascript:')) {
@@ -151,6 +161,9 @@ onMounted(() => {
     if (!auth.canAccess) {
         return;
     }
+
+    // Entrée dans le questionnaire : marque le départ (l'abandon = rester bloqué ici).
+    trackQuizStep('quiz');
 
     desktopMediaQuery = window.matchMedia('(min-width: 640px)');
     phoneModalTimeout = window.setTimeout(() => syncPhoneModal(), 450);
@@ -252,7 +265,13 @@ onBeforeUnmount(() => {
                     class="flex flex-col flex-1 min-h-0 overflow-hidden bg-cover bg-center bg-no-repeat"
                     style="background-image: url('/img/cobranded-background/bg-cobranded.webp');"
                 >
-                    <SmsConversationPrototype :modules="smsModules" @ineligible="onIneligible" />
+                    <SmsConversationPrototype
+                        :modules="smsModules"
+                        :appointment-url="collection.appointmentUrl"
+                        @ineligible="onIneligible"
+                        @completed="trackQuizStep('done')"
+                        @onedoc-click="trackOnedocClick"
+                    />
                 </div>
             </Transition>
 

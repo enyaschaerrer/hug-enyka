@@ -10,8 +10,11 @@ import type { Country } from '../../types/interactive-map';
 const props = withDefaults(defineProps<{
     /** Modules de vérification enregistrés par le swipe, dans l'ordre à jouer. */
     modules?: string[];
+    /** Lien OneDoc réel pour le bouton « Prendre RDV ». */
+    appointmentUrl?: string | null;
 }>(), {
     modules: () => [],
+    appointmentUrl: null,
 });
 
 type Reason = { title: string; detail: string; status: 'warning' | 'blocker' };
@@ -19,6 +22,10 @@ type Reason = { title: string; detail: string; status: 'warning' | 'blocker' };
 const emit = defineEmits<{
     /** Le chat conclut à une non-éligibilité (définitive ou délais) → écran « Pas éligible ». */
     ineligible: [reasons: Reason[]];
+    /** Le chat conclut à une éligibilité → écran rendez-vous affiché. */
+    completed: [];
+    /** L'utilisateur a cliqué sur le lien OneDoc. */
+    onedocClick: [];
 }>();
 
 const scenario = scenarioData as SmsScenario;
@@ -203,6 +210,7 @@ async function showFinalVerdict() {
     }
 
     await pushBotNode(scenario.appointment, 'happy');
+    emit('completed');
 }
 
 async function answerQuestion(answer: SmsAnswer) {
@@ -487,7 +495,11 @@ if (scenario.intro) {
                         <a
                             v-if="message.cta"
                             class="btn mt-4 border-razzmatazz-200 bg-white font-semibold text-razzmatazz-950 hover:border-white hover:bg-razzmatazz-100"
-                            :href="message.cta.href"
+                            :href="(message.nodeType === 'appointment' && appointmentUrl) ? appointmentUrl : message.cta.href"
+                            target="_blank"
+                            rel="noopener"
+                            data-allow-exit
+                            @click="message.nodeType === 'appointment' && emit('onedocClick')"
                         >
                             <span>{{ message.cta.label }}</span>
                         </a>
