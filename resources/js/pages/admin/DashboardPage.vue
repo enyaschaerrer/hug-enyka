@@ -31,7 +31,9 @@ type KpiValue = {
 };
 
 type KpiPayload = {
-    engagement: Record<string, KpiValue & { format?: string }>;
+    engagement: Record<string, KpiValue & { format?: string }> & {
+        labelledCompanies: KpiValue & { publicCount?: number; anonymousCount?: number };
+    };
 };
 
 const loading = ref(true);
@@ -98,6 +100,35 @@ type VisitPeriod = typeof VISIT_PERIODS[number]['key'];
 
 const currentMonth = new Date().getMonth() + 1;
 const availableVisitPeriods = VISIT_PERIODS.filter((p) => currentMonth >= p.minMonth);
+
+const labelledTab = ref<'trophy' | 'anonymous'>('trophy');
+const displayedLabelledCount = ref(0);
+let labelledAnimation: number | undefined;
+
+function animateLabelledCount(target: number) {
+    if (labelledAnimation) cancelAnimationFrame(labelledAnimation);
+    const from = displayedLabelledCount.value;
+    const duration = 700;
+    const startTime = performance.now();
+    function step(now: number) {
+        const progress = Math.min((now - startTime) / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        displayedLabelledCount.value = Math.round(from + (target - from) * eased);
+        if (progress < 1) labelledAnimation = requestAnimationFrame(step);
+    }
+    labelledAnimation = requestAnimationFrame(step);
+}
+
+watch(labelledTab, () => {
+    displayedLabelledCount.value = 0;
+    setTimeout(() => {
+        if (!kpis.value) return;
+        const target = labelledTab.value === 'trophy'
+            ? (kpis.value.engagement.labelledCompanies.publicCount ?? 0)
+            : (kpis.value.engagement.labelledCompanies.anonymousCount ?? 0);
+        animateLabelledCount(target);
+    }, 200);
+});
 
 const visitsPeriod = ref<VisitPeriod>('30d');
 const visitsCount = ref<number | null>(null);
@@ -187,6 +218,14 @@ async function fetchKpis() {
     }
 }
 
+watch(kpis, (val) => {
+    if (!val) return;
+    const target = labelledTab.value === 'trophy'
+        ? (val.engagement.labelledCompanies.publicCount ?? 0)
+        : (val.engagement.labelledCompanies.anonymousCount ?? 0);
+    animateLabelledCount(target);
+});
+
 watch(visitsPeriod, () => { displayedCount.value = 0; fetchVisits(); });
 watch(visitsCount, (val) => { if (val !== null) animateCount(val); });
 
@@ -199,6 +238,7 @@ onMounted(() => {
 onUnmounted(() => {
     if (refreshTimer) window.clearInterval(refreshTimer);
     if (countAnimation) cancelAnimationFrame(countAnimation);
+    if (labelledAnimation) cancelAnimationFrame(labelledAnimation);
 });
 </script>
 
@@ -377,22 +417,32 @@ onUnmounted(() => {
 
                     <!-- Card entreprises labellisées -->
                     <template v-else-if="card.isLabelled">
-                        <div class="mt-auto flex items-center justify-around pb-2">
-                            <div class="flex flex-col items-start gap-2">
-                                <p class="text-5xl font-bold text-[var(--color-razzmatazz-700)]">{{ card.publicCount ?? 0 }}</p>
-                                <span class="inline-flex items-center gap-1.5 rounded-full border border-[var(--color-razzmatazz-200)] bg-white px-3 py-1.5 text-xs font-medium text-[var(--color-razzmatazz-700)]">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5"/></svg>
-                                    Participation au Prix du Cœur
-                                </span>
-                            </div>
-                            <div class="h-16 w-px bg-[var(--color-razzmatazz-100)]"></div>
-                            <div class="flex flex-col items-start gap-2">
-                                <p class="text-5xl font-bold text-[var(--color-razzmatazz-700)]">{{ card.anonymousCount ?? 0 }}</p>
-                                <span class="inline-flex items-center gap-1.5 rounded-full border border-[var(--color-razzmatazz-200)] bg-white px-3 py-1.5 text-xs font-medium text-[var(--color-razzmatazz-700)]">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.733 5.076A10.744 10.744 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"/><path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"/><path d="M2 2l20 20"/><path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"/></svg>
-                                    Participation anonyme
-                                </span>
-                            </div>
+                        <div class="mt-4 flex gap-1.5">
+                            <button
+                                type="button"
+                                class="rounded-md border px-4 py-1.5 text-sm font-medium transition ease-in-out"
+                                :class="labelledTab === 'trophy'
+                                    ? 'border-[var(--color-razzmatazz-700)] bg-[var(--color-razzmatazz-700)] text-white'
+                                    : 'border-[var(--color-razzmatazz-100)] bg-white text-[#000] hover:text-[var(--color-razzmatazz-700)]'"
+                                @click="labelledTab = 'trophy'"
+                            >Participation au Prix du Cœur</button>
+                            <button
+                                type="button"
+                                class="rounded-md border px-4 py-1.5 text-sm font-medium transition ease-in-out"
+                                :class="labelledTab === 'anonymous'
+                                    ? 'border-[var(--color-razzmatazz-700)] bg-[var(--color-razzmatazz-700)] text-white'
+                                    : 'border-[var(--color-razzmatazz-100)] bg-white text-[#000] hover:text-[var(--color-razzmatazz-700)]'"
+                                @click="labelledTab = 'anonymous'"
+                            >Participation anonyme</button>
+                        </div>
+                        <div class="mt-9 flex items-center gap-2 text-[var(--color-razzmatazz-700)]">
+                            <Transition name="kpi-fade" mode="out-in">
+                                <div :key="labelledTab" class="flex items-center gap-2">
+                                    <svg v-if="labelledTab === 'trophy'" xmlns="http://www.w3.org/2000/svg" width="54" height="54" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="shrink-0"><path d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5"/></svg>
+                                    <svg v-else xmlns="http://www.w3.org/2000/svg" width="54" height="54" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="shrink-0"><path d="M10.733 5.076A10.744 10.744 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"/><path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"/><path d="M2 2l20 20"/><path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"/></svg>
+                                    <p class="text-[3.25rem] font-bold leading-none">{{ displayedLabelledCount }}</p>
+                                </div>
+                            </Transition>
                         </div>
                     </template>
 
