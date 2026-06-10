@@ -10,6 +10,8 @@ type ParticipationCompany = {
     rate: number | null;
 };
 
+type AbandonStep = { label: string; count: number; rate: number | null };
+
 type KpiValue = {
     label: string;
     value: number | null;
@@ -18,7 +20,9 @@ type KpiValue = {
     predefined?: { source: string; count: number }[];
     freeText?: string[];
     isVisits?: boolean;
+    isSpacer?: boolean;
     companies?: ParticipationCompany[];
+    abandonSteps?: AbandonStep[];
 };
 
 type KpiPayload = {
@@ -29,6 +33,13 @@ const loading = ref(true);
 const loadError = ref<string | null>(null);
 const kpis = ref<KpiPayload | null>(null);
 let refreshTimer: number | undefined;
+
+const listsAtBottom = ref<Record<string, boolean>>({});
+
+function onListScroll(event: Event, key: string) {
+    const el = event.target as HTMLElement;
+    listsAtBottom.value[key] = el.scrollTop + el.clientHeight >= el.scrollHeight - 4;
+}
 
 const VISIT_PERIODS = [
     { key: '30d',  label: 'Mois en cours', minMonth: 1 },
@@ -67,9 +78,10 @@ const engagementCards = computed(() => {
     }
 
     return [
+        { ...kpis.value.engagement.pageVisits, format: 'number', isVisits: true },
         { ...kpis.value.engagement.labelledCompanies, format: 'number' },
         { ...kpis.value.engagement.companySources, format: 'number' },
-        { ...kpis.value.engagement.pageVisits, format: 'number', isVisits: true },
+        { isSpacer: true, label: '__spacer__', value: null, available: true },
         { ...kpis.value.engagement.connectedUsers, format: 'number' },
         { ...kpis.value.engagement.participationRate, format: 'percent' },
         { ...kpis.value.engagement.conversionRate, format: 'percent' },
@@ -144,6 +156,10 @@ onUnmounted(() => {
                     class="flex flex-col rounded-2xl border border-base-300 bg-white p-5 shadow-sm"
                     :class="card.available ? '' : 'opacity-45 grayscale'"
                 >
+                    <!-- Card vide spacer -->
+                    <template v-if="card.isSpacer" />
+
+                    <template v-else>
                     <p class="text-lg text-base-content/65">{{ card.label }}</p>
 
                     <!-- Card visites : période type GA -->
@@ -167,9 +183,13 @@ onUnmounted(() => {
                         </p>
                     </template>
 
-                    <!-- Card participation : liste scrollable par entreprise -->
+                    <!-- Card connectés / participation / conversion : liste scrollable par entreprise -->
                     <template v-else-if="card.companies !== undefined">
-                        <div v-if="card.available && card.companies.length > 0" class="mt-3 max-h-48 overflow-y-auto pr-1">
+                        <p class="mt-2 text-4xl font-bold">
+                            {{ card.value !== null ? (card.format === 'percent' ? card.value + '%' : displayValue(card.value, 'number')) : 'N/A' }}
+                        </p>
+                        <div v-if="card.available && card.companies.length > 0" class="relative mt-3 -mb-5">
+                            <div class="max-h-48 overflow-y-auto pr-1 pb-4 border-t border-base-200" @scroll="onListScroll($event, card.label)">
                             <div
                                 v-for="company in card.companies"
                                 :key="company.name"
@@ -182,13 +202,21 @@ onUnmounted(() => {
                                     {{ company.name.slice(0, 2).toUpperCase() }}
                                 </div>
                                 <span class="min-w-0 flex-1 truncate text-sm font-semibold text-base-content/80">{{ company.name }}</span>
-                                <span class="shrink-0 text-xs text-base-content/50">{{ company.connected }}/{{ company.total }}</span>
-                                <span class="w-11 shrink-0 text-right text-sm font-semibold">
-                                    {{ company.rate !== null ? company.rate + '%' : '–' }}
-                                </span>
+                                <template v-if="card.format === 'percent'">
+                                    <span class="shrink-0 text-xs text-base-content/50">{{ company.connected }}/{{ company.total }}</span>
+                                    <span class="w-11 shrink-0 text-right text-sm font-semibold">
+                                        {{ company.rate !== null ? company.rate + '%' : '–' }}
+                                    </span>
+                                </template>
+                                <span v-else class="shrink-0 text-sm font-semibold">{{ company.connected }}</span>
                             </div>
+                            </div>
+                            <div
+                                class="pointer-events-none absolute bottom-0 left-0 right-0 h-14 bg-gradient-to-t from-white to-transparent transition-opacity duration-300"
+                                :class="listsAtBottom[card.label] ? 'opacity-0' : 'opacity-100'"
+                            ></div>
                         </div>
-                        <p v-else class="mt-3 text-xs text-base-content/45">Aucune donnée de participation pour le moment.</p>
+                        <p v-if="card.note && (!card.available || card.companies.length === 0 || card.format !== 'percent')" class="mt-3 text-xs text-base-content/45">{{ card.note }}</p>
                     </template>
 
                     <!-- Card sources : liste scrollable -->
@@ -217,10 +245,31 @@ onUnmounted(() => {
                         <p v-else class="mt-3 text-xs text-base-content/45">{{ card.note }}</p>
                     </template>
 
+                    <!-- Card abandon questionnaire -->
+                    <template v-else-if="card.abandonSteps !== undefined">
+                        <p class="mt-2 text-4xl font-bold">
+                            {{ card.available ? (card.value !== null ? card.value + '%' : 'N/A') : 'N/A' }}
+                        </p>
+                        <div v-if="card.available" class="mt-3 space-y-2">
+                            <div
+                                v-for="step in card.abandonSteps"
+                                :key="step.label"
+                                class="flex items-center justify-between gap-2"
+                            >
+                                <span class="text-sm text-base-content/70">{{ step.label }}</span>
+                                <span class="text-sm font-semibold">
+                                    {{ step.count }} <span class="font-normal text-base-content/45">({{ step.rate !== null ? step.rate + '%' : '–' }})</span>
+                                </span>
+                            </div>
+                        </div>
+                        <p class="mt-3 text-xs text-base-content/45">{{ card.note }}</p>
+                    </template>
+
                     <!-- Cards génériques -->
                     <template v-else>
                         <p class="mt-2 text-4xl font-bold">{{ displayValue(card.value, card.format) }}</p>
                         <p class="mt-3 text-xs text-base-content/45">{{ card.note }}</p>
+                    </template>
                     </template>
                 </article>
             </div>
