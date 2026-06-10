@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
         $this->call(HomeDemoSeeder::class);
         $this->call(FormSeeder::class);
         $this->call(PageVisitSeeder::class);
+        $this->call(ParticipationSeeder::class);
 
         // User::factory(10)->create();
 

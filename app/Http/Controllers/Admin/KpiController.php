@@ -23,6 +23,34 @@ class KpiController extends Controller
             ->where('is_public', false)
             ->count();
 
+        $participationByCompany = DB::table('companies')
+            ->join('collections', 'collections.company_id', '=', 'companies.id')
+            ->leftJoin('collections_users', 'collections_users.collection_id', '=', 'collections.id')
+            ->select(
+                'companies.id',
+                'companies.name',
+                'companies.primaryColor',
+                'companies.employee_count',
+                DB::raw('COUNT(DISTINCT CASE WHEN collections_users.connected = 1 THEN collections_users.user_id END) as connected_count'),
+            )
+            ->groupBy('companies.id', 'companies.name', 'companies.logo', 'companies.employee_count')
+            ->get()
+            ->map(function ($c) {
+                $rate = $c->employee_count > 0
+                    ? (int) round(($c->connected_count / $c->employee_count) * 100)
+                    : null;
+
+                return [
+                    'name'         => $c->name,
+                    'primaryColor' => $c->primaryColor ?? '#888888',
+                    'connected'    => (int) $c->connected_count,
+                    'total'        => (int) $c->employee_count,
+                    'rate'         => $rate,
+                ];
+            })
+            ->sortByDesc('rate')
+            ->values();
+
         $predefinedOptions = [
             'Réseaux sociaux',
             'Recherche web / site HUG',
@@ -78,8 +106,9 @@ class KpiController extends Controller
                 'participationRate' => [
                     'label' => 'Taux de participation',
                     'value' => null,
-                    'available' => false,
-                    'note' => 'Migration non encore appliquée (colonne connected).',
+                    'available' => true,
+                    'note' => null,
+                    'companies' => $participationByCompany,
                 ],
                 'conversionRate' => [
                     'label' => 'Conversion connexion → inscription',

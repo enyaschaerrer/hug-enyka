@@ -2,6 +2,14 @@
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
 import AdminLayout from '../../components/layout/AdminLayout.vue';
 
+type ParticipationCompany = {
+    name: string;
+    primaryColor: string;
+    connected: number;
+    total: number;
+    rate: number | null;
+};
+
 type KpiValue = {
     label: string;
     value: number | null;
@@ -10,6 +18,7 @@ type KpiValue = {
     predefined?: { source: string; count: number }[];
     freeText?: string[];
     isVisits?: boolean;
+    companies?: ParticipationCompany[];
 };
 
 type KpiPayload = {
@@ -155,6 +164,30 @@ onUnmounted(() => {
                         <p class="mt-2 text-4xl font-bold">
                             {{ visitsLoading ? '…' : visitsCount !== null ? visitsCount.toLocaleString('fr-CH') : 'N/A' }}
                         </p>
+                    </template>
+
+                    <!-- Card participation : liste scrollable par entreprise -->
+                    <template v-else-if="card.companies !== undefined">
+                        <div v-if="card.available && card.companies.length > 0" class="mt-3 max-h-48 overflow-y-auto pr-1">
+                            <div
+                                v-for="company in card.companies"
+                                :key="company.name"
+                                class="flex items-center gap-3 py-2"
+                            >
+                                <div
+                                    class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-xs font-medium text-white"
+                                    :style="{ backgroundColor: company.primaryColor }"
+                                >
+                                    {{ company.name.slice(0, 2).toUpperCase() }}
+                                </div>
+                                <span class="min-w-0 flex-1 truncate text-sm font-semibold text-base-content/80">{{ company.name }}</span>
+                                <span class="shrink-0 text-xs text-base-content/50">{{ company.connected }}/{{ company.total }}</span>
+                                <span class="w-11 shrink-0 text-right text-sm font-semibold">
+                                    {{ company.rate !== null ? company.rate + '%' : '–' }}
+                                </span>
+                            </div>
+                        </div>
+                        <p v-else class="mt-3 text-xs text-base-content/45">Aucune donnée de participation pour le moment.</p>
                     </template>
 
                     <!-- Card sources : liste scrollable -->
