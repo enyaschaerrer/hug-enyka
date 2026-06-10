@@ -314,10 +314,10 @@ function onCountryInput() {
 // Texte demandé pour le pays courant (selon le nombre total de pays)
 function promptForCountry(index: number): string {
     if (travelTotal.value <= 1) {
-        return 'Dans quel pays es-tu allé·e ?';
+        return 'Dans quel pays êtes-vous allé·e ?';
     }
     return index === 0
-        ? `Quel est le 1ᵉʳ pays où tu es allé·e ? (1/${travelTotal.value})`
+        ? `Quel est le 1ᵉʳ pays où vous êtes allé·e ? (1/${travelTotal.value})`
         : `Et le pays suivant ? (${index + 1}/${travelTotal.value})`;
 }
 
@@ -395,7 +395,7 @@ function selectTravelCountry(country: Country) {
 
         travelWaitLabel.value = country.waitTime;
         await pushBotText(
-            `Pour un séjour ${travelLocation(country.name)}, le délai d'attente est de ${country.waitTime} après le retour. Ton retour date-t-il de moins de ${country.waitTime} ?`,
+            `Pour un séjour en ${country.name}, le délai d'attente est de ${country.waitTime} après le retour. Votre retour date-t-il de moins de ${country.waitTime} ?`,
             'alt-happy',
         );
         travelStage.value = 'confirm';

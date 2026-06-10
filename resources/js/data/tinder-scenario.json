@@ -182,7 +182,7 @@
                 "status": "warning",
                 "label": "Piqûre de tique à signaler à l'infirmier.e"
             },
-            "dialogue": "Une piqûre de tique demande parfois une petite vérification, on regarde ça ensemble.",
+            "dialogue": "Une piqûre de tique demande parfois une petite vérification, nous regarderons ça ensemble.",
             "mascot": "/img/mascots/sanguy_hips.webp"
         },
         {
