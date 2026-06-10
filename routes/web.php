@@ -40,6 +40,7 @@ Route::middleware(['auth', 'role:superadmin,admin'])->group(function () {
         Route::delete('/admin/accounts/{user}', [AccountController::class, 'destroy'])->name('admin.accounts.destroy');
     });
     Route::get('/admin/api/kpis', [KpiController::class, 'index'])->name('admin.kpis.index');
+    Route::get('/admin/api/kpis/page-visits', [KpiController::class, 'pageVisits'])->name('admin.kpis.page-visits');
     Route::get('/admin/api/trophee', [TropheeController::class, 'overview'])->name('admin.trophee.overview');
     Route::post('/admin/api/trophee/assign', [TropheeController::class, 'assign'])->name('admin.trophee.assign');
     Route::delete('/admin/api/trophee/assign', [TropheeController::class, 'remove'])->name('admin.trophee.remove');

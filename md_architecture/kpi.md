@@ -1,14 +1,14 @@
 [KPI]
 
-Nombre d’entreprises labellisées (et nb entreprises voulant pas être affichées) - Phase 3.0
+Nombre d’entreprises labellisées (et nb entreprises voulant pas être affichées) - Done
 
-Sources des entreprises sous forme de liste : classement / liste scrollable  - Phase 3.0
+Sources des entreprises sous forme de liste : classement / liste scrollable  - Done
 
-Nb de visites (site public) - Phase 3.1 -> filtre mois + années
+Nb de visites (site public) - Phase 3.1 -> filtre mois + années - Done
 
-Taux de participation (nb connectés co-brandé/ nb de collaborateurs), * et filtrer par entreprise - Phase 3.1
+Taux de participation (nb connectés co-brandé/ nb de collaborateurs), * et filtrer par entreprise - Done
 
-connectés = réussi a se connecter sur le site co-brandé avec le code au moins 1x - Phase 3.1
+connectés = réussi a se connecter sur le site co-brandé avec le code au moins 1x - Done
 
 Conversion connexion → inscription (click lien OneDoc) - Phase 3.2
 
@@ -16,78 +16,68 @@ Taux d’abandon sur le questionnaire (swipe ou messagerie) - Phase 3.2
 
 [Migration]
 
---
-- ajouter dans bdd (abandonné) si c’est dans swipe ou messagerie
-- ajouter dans bdd compteur de visites
-- ajouter a la bdd si ils ont cliqué sur le lien
---
+Migration : `2026_06_10_000000_update_collections_users_and_add_page_visits.php`
 
-Migrations nécessaires pour couvrir les KPIs de la phase 3.1.
+---
 
-## companies — ajout `labelled`
+## collections_users — ajout `connected`
 
 ```php
-$table->boolean('labelled')->default(false)->after('trophy');
+$table->boolean('connected')->default(false)->after('clicked_onedoc');
 ```
 
-`trophy` (existant) couvre les entreprises récompensées au trophée.
-`labelled` est un statut distinct : entreprise officiellement labelliée HUG, indépendamment d'un trophée.
-Sert au KPI "Nombre d'entreprises labellisées".
+Sert au KPI **Taux de participation** (Phase 3.1).
+- Mis à `true` la première fois qu'un collaborateur accède au site co-brandé avec son code.
+- Numérateur : `COUNT(connected = true)` sur les lignes liées à la collecte/entreprise.
+- Dénominateur : `companies.employee_count` (existant).
+- Filtre par entreprise : jointure `collections_users → collections → companies`.
+- Pas de filtre temporel par mois/année (non requis phase 3.1).
 
-`is_public` (existant) couvre le KPI "nb entreprises voulant pas être affichées" — aucune migration nécessaire.
-`source` (existant) couvre le KPI "Sources des entreprises" — aucune migration nécessaire.
-`employee_count` (existant) couvre le dénominateur du taux de participation — aucune migration nécessaire.
-
-## collections_users — ajout `first_connected_at` (Taux de participation)
+## collections_users — ajout `quiz_step`
 
 ```php
-$table->timestamp('first_connected_at')->nullable()->after('abandonment');
+$table->enum('quiz_step', ['quiz', 'chat', 'done'])->default('done')->after('user_id');
 ```
 
-Définit ce qu'est un "connecté" : collaborateur ayant accédé au site co-brandé avec son code au moins une fois.
-Rempli par le controller au moment où la session co-brandée est validée, si la colonne est encore NULL.
+Remplace la colonne `abandonment` (booléen, supprimée).
+Sert au KPI **Taux d'abandon sur le questionnaire** (Phase 3.2).
+- `quiz` : collaborateur ayant quitté au niveau du swipe (questionnaire de compatibilité).
+- `chat` : collaborateur ayant quitté au niveau de la messagerie SMS.
+- `done` : parcours complété.
+- Taux d'abandon global : `COUNT(quiz_step != 'done') / COUNT(*)`.
+- Taux par étape : filtrer sur `quiz` ou `chat` séparément.
 
-Sert au KPI "Taux de participation" :
-- Numérateur : `COUNT(first_connected_at IS NOT NULL)` sur les lignes `collections_users` liées à la collecte
-- Dénominateur : `companies.employee_count` (existant, aucune migration nécessaire)
-- Filtre par entreprise : jointure `collections_users → collections → companies` via `company_id`
+## collections_users — ajout `clicked_onedoc`
+
+```php
+$table->boolean('clicked_onedoc')->default(false)->after('quiz_step');
+```
+
+Sert au KPI **Conversion connexion → inscription** (Phase 3.2).
+- Mis à `true` quand le collaborateur clique sur le lien OneDoc de prise de rendez-vous.
+- Taux de conversion : `COUNT(clicked_onedoc = true) / COUNT(connected = true)`.
 
 ## page_visits — nouvelle table
 
 ```php
 Schema::create('page_visits', function (Blueprint $table) {
     $table->id();
-    $table->string('path', 255);
-    $table->string('ip_hash', 64); // SHA-256 anonymisé, jamais l'IP brute
-    $table->timestamp('created_at');
+    $table->string('ip_hash', 64);
+    $table->dateTime('created_at');
+    $table->dateTime('updated_at');
 });
 ```
 
-Pas de `updated_at` (enregistrement immuable).
-Sert au KPI "Nb de visites du site public".
-Le hash IP permet de déduire les visites uniques sans stocker de donnée personnelle directe.
-Seules les routes publiques (`/`, `/collecte`, `/trophee`, `/label`) sont trackées — pas les routes `/admin` ni `/collecte/{brand}/{token}`.
+Sert au KPI **Nb de visites du site public** (Phase 3.1).
+- Enregistre une ligne à chaque visite d'une page publique.
+- `ip_hash` : SHA-256 de l'IP, anonymisé, permet de déduire les visites uniques sans stocker de donnée personnelle directe.
+- Pas de colonne `path` : comptage global uniquement (par mois/année via `created_at`).
+- Seules les routes publiques sont trackées, pas `/admin` ni `/collecte/{brand}/{token}`.
 
----
+## companies — aucune migration nécessaire
 
-Migrations nécessaires pour couvrir les KPIs de la phase 3.2.
+- `is_public` (existant) : couvre le KPI "nb entreprises en participation anonyme".
+- `source` (existant) : couvre le KPI "Sources des entreprises".
+- `employee_count` (existant) : dénominateur du taux de participation.
+- Labellisées : `COUNT(companies ayant au moins une collection)` via `whereExists` — aucune colonne supplémentaire.
 
-## collections_users — ajout `onedoc_clicked_at`
-
-```php
-$table->timestamp('onedoc_clicked_at')->nullable()->after('first_connected_at');
-```
-
-Rempli au moment où l'utilisateur clique sur le lien OneDoc de prise de rendez-vous.
-Sert au KPI "Conversion connexion → inscription" : `COUNT(onedoc_clicked_at IS NOT NULL) / COUNT(first_connected_at IS NOT NULL)`.
-
-## collections_users — ajout `abandonment_step`
-
-```php
-$table->enum('abandonment_step', ['swipe', 'messagerie'])->nullable()->after('abandonment');
-```
-
-La colonne `abandonment` (existante, booléen) indique si un parcours a été abandonné.
-`abandonment_step` précise à quelle étape : swipe (questionnaire de compatibilité) ou messagerie (conversation SMS).
-Rempli par le front au moment où l'utilisateur quitte le parcours sans aller au bout.
-Sert au KPI "Taux d'abandon sur le questionnaire", déclinable par étape.
