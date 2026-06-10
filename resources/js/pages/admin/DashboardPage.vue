@@ -1,35 +1,28 @@
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, ref } from 'vue';
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
 import AdminLayout from '../../components/layout/AdminLayout.vue';
+
+type ParticipationCompany = {
+    name: string;
+    primaryColor: string;
+    connected: number;
+    total: number;
+    rate: number | null;
+};
 
 type KpiValue = {
     label: string;
     value: number | null;
     available: boolean;
-    note?: string;
-    tone?: 'success' | 'warning';
-};
-
-type FunnelStep = {
-    label: string;
-    value: number | null;
-    rate: number | null;
-    available: boolean;
-    note?: string;
+    note?: string | null;
+    predefined?: { source: string; count: number }[];
+    freeText?: string[];
+    isVisits?: boolean;
+    companies?: ParticipationCompany[];
 };
 
 type KpiPayload = {
-    live: {
-        activeVisitors: KpiValue;
-    };
-    summary: {
-        registeredUsers: KpiValue;
-        participationRate: KpiValue;
-        donationConversionRate: KpiValue;
-        labelledCompanies: KpiValue;
-    };
-    funnel: FunnelStep[];
-    engagement: Record<string, KpiValue>;
+    engagement: Record<string, KpiValue & { format?: string }>;
 };
 
 const loading = ref(true);
@@ -37,18 +30,36 @@ const loadError = ref<string | null>(null);
 const kpis = ref<KpiPayload | null>(null);
 let refreshTimer: number | undefined;
 
-const summaryCards = computed(() => {
-    if (!kpis.value) {
-        return [];
-    }
+const VISIT_PERIODS = [
+    { key: '30d',  label: 'Mois en cours', minMonth: 1 },
+    { key: '3m',   label: '3m',            minMonth: 4 },
+    { key: '6m',   label: '6m',            minMonth: 7 },
+    { key: 'year', label: 'Année en cours', minMonth: 1 },
+] as const;
+type VisitPeriod = typeof VISIT_PERIODS[number]['key'];
 
-    return [
-        { ...kpis.value.summary.registeredUsers, format: 'number' },
-        { ...kpis.value.summary.participationRate, format: 'percent' },
-        { ...kpis.value.summary.donationConversionRate, format: 'percent' },
-        { ...kpis.value.summary.labelledCompanies, format: 'number' },
-    ];
-});
+const currentMonth = new Date().getMonth() + 1;
+const availableVisitPeriods = VISIT_PERIODS.filter((p) => currentMonth >= p.minMonth);
+
+const visitsPeriod = ref<VisitPeriod>('30d');
+const visitsCount = ref<number | null>(null);
+const visitsLoading = ref(false);
+
+async function fetchVisits() {
+    visitsLoading.value = true;
+    try {
+        const res = await fetch(
+            `/admin/api/kpis/page-visits?period=${visitsPeriod.value}`,
+            { headers: { 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' } },
+        );
+        if (res.ok) {
+            const data = await res.json();
+            visitsCount.value = data.count;
+        }
+    } finally {
+        visitsLoading.value = false;
+    }
+}
 
 const engagementCards = computed(() => {
     if (!kpis.value) {
@@ -56,11 +67,13 @@ const engagementCards = computed(() => {
     }
 
     return [
+        { ...kpis.value.engagement.labelledCompanies, format: 'number' },
+        { ...kpis.value.engagement.companySources, format: 'number' },
+        { ...kpis.value.engagement.pageVisits, format: 'number', isVisits: true },
+        { ...kpis.value.engagement.connectedUsers, format: 'number' },
+        { ...kpis.value.engagement.participationRate, format: 'percent' },
+        { ...kpis.value.engagement.conversionRate, format: 'percent' },
         { ...kpis.value.engagement.questionnaireAbandonRate, format: 'percent' },
-        { ...kpis.value.engagement.recommendedCompanies, format: 'number' },
-        { ...kpis.value.engagement.qrScans, format: 'percent' },
-        { ...kpis.value.engagement.mailClicks, format: 'percent' },
-        { ...kpis.value.engagement.bannerUsage, format: 'percent' },
     ];
 });
 
@@ -72,21 +85,6 @@ function displayValue(value: number | null, format: string): string {
     return format === 'percent' ? `${value}%` : value.toLocaleString('fr-CH');
 }
 
-function barWidth(rate: number | null): string {
-    if (rate === null) {
-        return '100%';
-    }
-
-    return `${Math.max(6, Math.min(rate, 100))}%`;
-}
-
-function progressWidth(value: number | null): string {
-    if (value === null) {
-        return '0%';
-    }
-
-    return `${Math.max(4, Math.min(value, 100))}%`;
-}
 
 async function fetchKpis() {
     const showInitialLoader = !kpis.value;
@@ -114,8 +112,11 @@ async function fetchKpis() {
     }
 }
 
+watch(visitsPeriod, fetchVisits);
+
 onMounted(() => {
     fetchKpis();
+    fetchVisits();
     refreshTimer = window.setInterval(fetchKpis, 30000);
 });
 
@@ -129,68 +130,100 @@ onUnmounted(() => {
 <template>
     <AdminLayout>
         <section class="min-h-full rounded-sm bg-[var(--color-pampas-50)] p-1 pr-4 text-[#1f1f22]">
-            <div class="mb-6 flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
-                <div>
-                    <h1 class="text-3xl font-semibold">Tableau de bord</h1>
-                </div>
+            <h1 class="mb-6 text-3xl font-semibold">Tableau de bord</h1>
 
-                <article
-                    v-if="kpis?.live.activeVisitors"
-                    class="flex w-full items-center justify-between gap-4 border border-[var(--color-pampas-950)]/10 bg-white px-4 py-2.5 text-[var(--color-pampas-950)] shadow-sm sm:w-80"
-                >
-                    <p class="text-sm font-medium leading-tight text-[var(--color-pampas-950)]/65">
-                        Nombre d’utilisateurs connectés
-                    </p>
-                    <p class="text-2xl font-bold leading-none">
-                        {{ displayValue(kpis.live.activeVisitors.value, 'number') }}
-                    </p>
-                </article>
-            </div>
-
-            <div v-if="loading" class="text-sm text-base-content/50">Chargement des KPIs...</div>
+            <div v-if="loading" class="text-sm text-base-content/50">Chargement...</div>
             <div v-else-if="loadError" class="alert border-0 bg-red-600 text-white">
                 <span>{{ loadError }}</span>
             </div>
 
-            <template v-else-if="kpis">
-                <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-                    <article
-                        v-for="card in summaryCards"
-                        :key="card.label"
-                        class="border-2 bg-[var(--color-razzmatazz-50)] p-5"
-                        :class="card.available ? 'border-[var(--color-pampas-950)] text-[var(--color-pampas-950)]' : 'border-[#8b7f86] text-[#8b7f86] opacity-60 grayscale'"
-                    >
-                        <p class="text-xl font-medium">{{ card.label }}</p>
-                        <p class="mt-3 text-4xl font-bold leading-none">
-                            {{ displayValue(card.value, card.format) }}
-                        </p>
-                        <p class="mt-3 min-h-9 text-xs opacity-70">{{ card.note }}</p>
-                    </article>
-                </div>
+            <div v-else-if="kpis" class="grid w-full grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+                <article
+                    v-for="card in engagementCards"
+                    :key="card.label"
+                    class="flex flex-col rounded-2xl border border-base-300 bg-white p-5 shadow-sm"
+                    :class="card.available ? '' : 'opacity-45 grayscale'"
+                >
+                    <p class="text-lg text-base-content/65">{{ card.label }}</p>
 
-                <section class="mt-6 pb-2">
-                    <h2 class="text-sm font-semibold uppercase tracking-wide text-base-content/60">Engagement digital</h2>
-                    <div class="mt-4 grid gap-4 md:grid-cols-2 xl:grid-cols-5">
-                        <article
-                            v-for="card in engagementCards"
-                            :key="card.label"
-                            class="rounded-2xl border border-base-300 bg-white p-5 shadow-sm"
-                            :class="card.available ? '' : 'opacity-45 grayscale'"
-                        >
-                            <p class="min-h-11 text-lg text-base-content/65">{{ card.label }}</p>
-                            <p class="mt-2 text-4xl font-bold">{{ displayValue(card.value, card.format) }}</p>
-                            <div class="mt-4 h-2 rounded-full bg-base-200">
+                    <!-- Card visites : période type GA -->
+                    <template v-if="card.isVisits">
+                        <div class="mt-3 flex gap-1">
+                            <button
+                                v-for="p in availableVisitPeriods"
+                                :key="p.key"
+                                type="button"
+                                class="rounded-md px-2.5 py-1 text-xs font-medium transition"
+                                :class="visitsPeriod === p.key
+                                    ? 'bg-[var(--color-razzmatazz-700)] text-white'
+                                    : 'text-base-content/60 hover:bg-base-200'"
+                                @click="visitsPeriod = p.key"
+                            >
+                                {{ p.label }}
+                            </button>
+                        </div>
+                        <p class="mt-2 text-4xl font-bold">
+                            {{ visitsLoading ? '…' : visitsCount !== null ? visitsCount.toLocaleString('fr-CH') : 'N/A' }}
+                        </p>
+                    </template>
+
+                    <!-- Card participation : liste scrollable par entreprise -->
+                    <template v-else-if="card.companies !== undefined">
+                        <div v-if="card.available && card.companies.length > 0" class="mt-3 max-h-48 overflow-y-auto pr-1">
+                            <div
+                                v-for="company in card.companies"
+                                :key="company.name"
+                                class="flex items-center gap-3 py-2"
+                            >
                                 <div
-                                    class="h-full rounded-full"
-                                    :class="card.tone === 'warning' ? 'bg-orange-400' : 'bg-emerald-600'"
-                                    :style="{ width: progressWidth(card.value) }"
-                                ></div>
+                                    class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-xs font-medium text-white"
+                                    :style="{ backgroundColor: company.primaryColor }"
+                                >
+                                    {{ company.name.slice(0, 2).toUpperCase() }}
+                                </div>
+                                <span class="min-w-0 flex-1 truncate text-sm font-semibold text-base-content/80">{{ company.name }}</span>
+                                <span class="shrink-0 text-xs text-base-content/50">{{ company.connected }}/{{ company.total }}</span>
+                                <span class="w-11 shrink-0 text-right text-sm font-semibold">
+                                    {{ company.rate !== null ? company.rate + '%' : '–' }}
+                                </span>
                             </div>
-                            <p class="mt-3 text-xs text-base-content/45">{{ card.note }}</p>
-                        </article>
-                    </div>
-                </section>
-            </template>
+                        </div>
+                        <p v-else class="mt-3 text-xs text-base-content/45">Aucune donnée de participation pour le moment.</p>
+                    </template>
+
+                    <!-- Card sources : liste scrollable -->
+                    <template v-else-if="card.predefined !== undefined">
+                        <div v-if="card.available" class="mt-3 max-h-40 overflow-y-auto pr-1">
+                            <div
+                                v-for="item in card.predefined"
+                                :key="item.source"
+                                class="flex items-center justify-between gap-2 py-1 text-sm"
+                            >
+                                <span class="text-base-content/80">{{ item.source }}</span>
+                                <span class="shrink-0 font-semibold">{{ item.count }}</span>
+                            </div>
+                            <template v-if="card.freeText && card.freeText.length > 0">
+                                <hr v-if="card.predefined.length > 0" class="my-2 border-base-200" />
+                                <div
+                                    v-for="text in card.freeText"
+                                    :key="text"
+                                    class="flex items-center justify-between gap-2 py-1 text-sm"
+                                >
+                                    <span class="text-base-content/80">{{ text }}</span>
+                                    <span class="shrink-0 text-xs text-base-content/40">Autre</span>
+                                </div>
+                            </template>
+                        </div>
+                        <p v-else class="mt-3 text-xs text-base-content/45">{{ card.note }}</p>
+                    </template>
+
+                    <!-- Cards génériques -->
+                    <template v-else>
+                        <p class="mt-2 text-4xl font-bold">{{ displayValue(card.value, card.format) }}</p>
+                        <p class="mt-3 text-xs text-base-content/45">{{ card.note }}</p>
+                    </template>
+                </article>
+            </div>
         </section>
     </AdminLayout>
 </template>

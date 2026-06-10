@@ -95,10 +95,13 @@ const primaryTextStyle = {
 
         <button
             type="button"
-            class="rounded-2xl bg-razzmatazz-800 px-10 py-4 mt-5 mx-auto table text-heading-t3 text-center text-white transition hover:bg-razzmatazz-600 lg:hidden"
+            class="rounded-2xl bg-razzmatazz-800 px-8 py-4 mt-5 mx-auto table text-heading-t3 text-white transition hover:bg-razzmatazz-600 lg:hidden lg:px-10"
             @click="$emit('goToTest')"
         >
-            Tester votre éligibilité
+            <div class="flex items-center justify-center gap-1">
+                <span class="material-symbols-outlined" style="font-size: 24px;" aria-hidden="true">Quiz</span>
+                Tester votre éligibilité
+            </div>
         </button>
 
         <!-- 3 cards Date / Lieu / Deadline -->

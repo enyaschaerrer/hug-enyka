@@ -153,9 +153,9 @@ function getRankIcon(position: 'first' | 'second' | 'third'): string {
                     <ul class="flex flex-col justify-center gap-6">
                         <li
                             class="flex items-center gap-4"
-                            :class="selectedPrizeType !== 'prixJury' ? 'border-b border-[#E6C17B] pb-3' : ''"
+                            :class="selectedPrizeType !== 'prixJury' ? 'border-b border-podium-gold pb-3' : ''"
                         >
-                            <span class="flex h-10 w-10 items-center justify-center rounded-full border-2 border-[#E6C17B] text-[#E6C17B] shadow-md">
+                            <span class="flex h-10 w-10 items-center justify-center rounded-full border-2 border-podium-gold text-podium-gold shadow-md">
                                 <span class="material-symbols-outlined" style="font-size: 20px; font-variation-settings: 'FILL' 1;" aria-hidden="true">
                                     {{ getRankIcon('first') }}
                                 </span>
@@ -165,8 +165,8 @@ function getRankIcon(position: 'first' | 'second' | 'third'): string {
                                 <div class="text-caption text-martinique-950">{{ currentPodium.first.trophies }} prix remporté{{ currentPodium.first.trophies > 1 ? 's' : '' }} au total (toutes catégories confondues)</div>
                             </div>
                         </li>
-                        <li v-if="selectedPrizeType !== 'prixJury'" class="flex items-center gap-4 border-b border-[#C0C0C8] pb-3">
-                            <span class="flex h-10 w-10 items-center justify-center rounded-full border-2 border-[#C0C0C8] text-[#C0C0C8] shadow-md">
+                        <li v-if="selectedPrizeType !== 'prixJury'" class="flex items-center gap-4 border-b border-podium-silver pb-3">
+                            <span class="flex h-10 w-10 items-center justify-center rounded-full border-2 border-podium-silver text-podium-silver shadow-md">
                                 <span class="material-symbols-outlined" style="font-size: 20px; font-variation-settings: 'FILL' 1;" aria-hidden="true">
                                     {{ getRankIcon('second') }}
                                 </span>
@@ -176,8 +176,8 @@ function getRankIcon(position: 'first' | 'second' | 'third'): string {
                                 <div class="text-caption text-martinique-950">{{ currentPodium.second.trophies }} prix remporté{{ currentPodium.second.trophies > 1 ? 's' : '' }} au total (toutes catégories confondues)</div>
                             </div>
                         </li>
-                        <li v-if="selectedPrizeType !== 'prixJury'" class="flex items-center gap-4 border-b border-[#B0865D] pb-3">
-                            <span class="flex h-10 w-10 items-center justify-center rounded-full border-2 border-[#B0865D] text-[#B0865D] shadow-md">
+                        <li v-if="selectedPrizeType !== 'prixJury'" class="flex items-center gap-4 border-b border-podium-bronze pb-3">
+                            <span class="flex h-10 w-10 items-center justify-center rounded-full border-2 border-podium-bronze text-podium-bronze shadow-md">
                                 <span class="material-symbols-outlined" style="font-size: 20px; font-variation-settings: 'FILL' 1;" aria-hidden="true">
                                     {{ getRankIcon('third') }}
                                 </span>

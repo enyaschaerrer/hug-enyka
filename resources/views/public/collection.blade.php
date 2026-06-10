@@ -30,7 +30,7 @@
 
             <div class="mt-8 grid grid-cols-1 items-start gap-8 lg:grid-cols-2 lg:mt-16">
                 <img
-                    src="/img/mascots/sanguy_satisfied.webp"
+                    src="/img/mascots/sanguy_hips.webp"
                     alt=""
                     class="pointer-events-none -my-4 h-48  mx-auto w-auto object-contain lg:hidden"
                 />
@@ -50,7 +50,7 @@
                 {{-- Colonne droite : mascotte + Card 2 --}}
                 <div class="flex flex-col items-center gap-8">
                     <img
-                        src="/img/mascots/sanguy_satisfied.webp"
+                        src="/img/mascots/sanguy_hips.webp"
                         alt=""
                         class="pointer-events-none -my-4 h-48 w-auto object-contain hidden lg:block"
                     />
@@ -121,17 +121,6 @@
                 />
 
             </div>
-
-            <!-- {{-- CTA --}}
-            <div class="mt-16 flex justify-center">
-                <a
-                    href="#formulaire"
-                    class="rounded-full bg-martinique-700 px-10 py-4 text-body text-white transition hover:bg-martinique-800"
-                >
-                    Mettre en place une collecte
-                </a>
-            </div> -->
-
         </div>
     </section>
 

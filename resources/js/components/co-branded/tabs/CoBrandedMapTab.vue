@@ -1,45 +1,50 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue';
-import { geoNaturalEarth1, geoPath, type GeoPermissibleObjects } from 'd3-geo';
-import { feature } from 'topojson-client';
-import type { Topology } from 'topojson-specification';
-import worldData from 'world-atlas/countries-110m.json';
-import 'flag-icons/css/flag-icons.min.css';
-import countriesJson from '../../../data/country-donation-rules.json';
-import type { Country } from '../../../types/interactive-map';
+import { computed, ref } from "vue";
+import { geoNaturalEarth1, geoPath, type GeoPermissibleObjects } from "d3-geo";
+import { feature } from "topojson-client";
+import type { Topology } from "topojson-specification";
+import worldData from "world-atlas/countries-110m.json";
+import "flag-icons/css/flag-icons.min.css";
+import countriesJson from "../../../data/country-donation-rules.json";
+import type { Country } from "../../../types/interactive-map";
 
 const countries = countriesJson as Country[];
-const countryById = new Map(countries.map(c => [c.numericId, c]));
+const countryById = new Map(countries.map((c) => [c.numericId, c]));
 
 const VB_W = 960;
 const VB_H = 500;
-const projection = geoNaturalEarth1().scale(185).translate([VB_W / 2, VB_H / 2]);
+const projection = geoNaturalEarth1()
+    .scale(185)
+    .translate([VB_W / 2, VB_H / 2]);
 const pathGen = geoPath(projection);
 
 const topo = worldData as unknown as Topology;
-const allFeatures = (feature(topo, topo.objects.countries as any) as any)
-    .features.filter((f: any) => f.id !== undefined && Number(f.id) !== 10) as Array<{ id?: string | number }>;
+const allFeatures = (
+    feature(topo, topo.objects.countries as any) as any
+).features.filter(
+    (f: any) => f.id !== undefined && Number(f.id) !== 10,
+) as Array<{ id?: string | number }>;
 
-const mapFeatures = allFeatures.filter(f => getCountry(f.id) !== null);
-const unknownFeatures = allFeatures.filter(f => getCountry(f.id) === null);
+const mapFeatures = allFeatures.filter((f) => getCountry(f.id) !== null);
+const unknownFeatures = allFeatures.filter((f) => getCountry(f.id) === null);
 
 const svgRef = ref<SVGSVGElement | null>(null);
 
 const hoveredId = ref<number | null>(null);
 const tooltipPos = ref<{ x: number; y: number } | null>(null);
 const selected = ref<Country | null>(null);
-const searchQuery = ref('');
+const searchQuery = ref("");
 const suggestions = ref<Country[]>([]);
 const showSuggestions = ref(false);
 
 // Zoom / pan
-const INITIAL_SCALE = (window.innerWidth < 768 ? 1.5 : 1.2)
+const INITIAL_SCALE = window.innerWidth < 768 ? 1.5 : 1.2;
 // Décalages initiaux : pousse la carte vers le bas et vers la gauche pour que tous les pays rentrent
 const INITIAL_TY_OFFSET = 50;
 const INITIAL_TX_OFFSET = -40;
 const scale = ref(INITIAL_SCALE);
-const tx = ref(VB_W / 2 * (1 - INITIAL_SCALE) + INITIAL_TX_OFFSET);
-const ty = ref(VB_H / 2 * (1 - INITIAL_SCALE) + INITIAL_TY_OFFSET);
+const tx = ref((VB_W / 2) * (1 - INITIAL_SCALE) + INITIAL_TX_OFFSET);
+const ty = ref((VB_H / 2) * (1 - INITIAL_SCALE) + INITIAL_TY_OFFSET);
 const isPanning = ref(false);
 let panStartX = 0;
 let panStartY = 0;
@@ -51,32 +56,38 @@ let didPan = false;
 const MIN_SCALE = 1;
 const MAX_SCALE = 10;
 
-const transform = computed(() => `translate(${tx.value} ${ty.value}) scale(${scale.value})`);
+const transform = computed(
+    () => `translate(${tx.value} ${ty.value}) scale(${scale.value})`,
+);
 
 const waitTimeColor: Record<string, string> = {
-    none:       'var(--color-pictonblue-200)',
-    '28 jours': 'var(--color-vistablue-300)',
-    '4 mois':   'var(--color-catskillwhite-500)',
-    '6 mois':   'var(--color-razzmatazz-500)',
+    none: "var(--color-pictonblue-200)",
+    "28 jours": "var(--color-vistablue-300)",
+    "4 mois": "var(--color-catskillwhite-500)",
+    "6 mois": "var(--color-razzmatazz-500)",
 };
 const waitTimeColorHover: Record<string, string> = {
-    none:       'var(--color-pictonblue-300)',
-    '28 jours': 'var(--color-vistablue-400)',
-    '4 mois':   'var(--color-catskillwhite-700)',
-    '6 mois':   'var(--color-razzmatazz-800)',
+    none: "var(--color-pictonblue-300)",
+    "28 jours": "var(--color-vistablue-400)",
+    "4 mois": "var(--color-catskillwhite-700)",
+    "6 mois": "var(--color-razzmatazz-800)",
 };
 const legendItems = [
-    { label: 'Pas de délai', color: 'var(--color-pictonblue-200)' },
-    { label: '28 jours',     color: 'var(--color-vistablue-300)' },
-    { label: '4 mois',       color: 'var(--color-catskillwhite-500)' },
-    { label: '6 mois',       color: 'var(--color-razzmatazz-500)' },
+    { label: "Pas de délai", color: "var(--color-pictonblue-200)" },
+    { label: "28 jours", color: "var(--color-vistablue-300)" },
+    { label: "4 mois", color: "var(--color-catskillwhite-500)" },
+    { label: "6 mois", color: "var(--color-razzmatazz-500)" },
 ];
 
 const hoveredCountry = computed(() => {
     if (hoveredId.value === null) return null;
     return countryById.get(hoveredId.value) ?? null;
 });
-const hoveredWaitLabel = computed(() => hoveredCountry.value ? (hoveredCountry.value.waitTime ?? 'Aucun délai') : null);
+const hoveredWaitLabel = computed(() =>
+    hoveredCountry.value
+        ? (hoveredCountry.value.waitTime ?? "Aucun délai")
+        : null,
+);
 
 function getCountry(id?: string | number): Country | null {
     if (id === undefined || id === null) return null;
@@ -84,20 +95,24 @@ function getCountry(id?: string | number): Country | null {
 }
 function getFill(f: { id?: string | number }): string {
     const country = getCountry(f.id);
-    if (!country) return 'var(--color-catskillwhite-100)';
-    const key = country.waitTime ?? 'none';
+    if (!country) return "var(--color-catskillwhite-100)";
+    const key = country.waitTime ?? "none";
     const isHovered = hoveredId.value === country.numericId;
-    return (isHovered ? waitTimeColorHover : waitTimeColor)[key] ?? 'var(--color-catskillwhite-200)';
+    return (
+        (isHovered ? waitTimeColorHover : waitTimeColor)[key] ??
+        "var(--color-catskillwhite-200)"
+    );
 }
 function getStrokeWidth(f: { id?: string | number }): number {
     const country = getCountry(f.id);
     if (!country) return 0.6 / scale.value;
-    if (selected.value?.numericId === country.numericId) return 2.5 / scale.value;
+    if (selected.value?.numericId === country.numericId)
+        return 2.5 / scale.value;
     if (hoveredId.value === country.numericId) return 2 / scale.value;
     return 0.9 / scale.value;
 }
 function getPath(f: unknown): string {
-    return pathGen(f as GeoPermissibleObjects) ?? '';
+    return pathGen(f as GeoPermissibleObjects) ?? "";
 }
 
 function onMouseEnter(f: { id?: string | number }) {
@@ -113,7 +128,10 @@ function onMouseLeave() {
 
 // ----- Zoom / pan -----
 
-function screenToSvg(clientX: number, clientY: number): { x: number; y: number } {
+function screenToSvg(
+    clientX: number,
+    clientY: number,
+): { x: number; y: number } {
     const el = svgRef.value;
     if (!el) return { x: 0, y: 0 };
     const rect = el.getBoundingClientRect();
@@ -124,7 +142,10 @@ function screenToSvg(clientX: number, clientY: number): { x: number; y: number }
 }
 
 function zoomAt(factor: number, svgX: number, svgY: number) {
-    const newScale = Math.max(MIN_SCALE, Math.min(MAX_SCALE, scale.value * factor));
+    const newScale = Math.max(
+        MIN_SCALE,
+        Math.min(MAX_SCALE, scale.value * factor),
+    );
     const ratio = newScale / scale.value;
     if (ratio === 1) return;
     tx.value = svgX - (svgX - tx.value) * ratio;
@@ -169,7 +190,8 @@ function startPan(e: MouseEvent) {
 function onPan(e: MouseEvent) {
     if (!isPanning.value || !svgRef.value) return;
     // Au-delà de quelques pixels, on considère que c'est un glissement et non un clic
-    if (Math.hypot(e.clientX - panStartX, e.clientY - panStartY) > 4) didPan = true;
+    if (Math.hypot(e.clientX - panStartX, e.clientY - panStartY) > 4)
+        didPan = true;
     const rect = svgRef.value.getBoundingClientRect();
     const scaleX = VB_W / rect.width;
     const scaleY = VB_H / rect.height;
@@ -228,7 +250,10 @@ function onTouchMove(e: TouchEvent) {
         const newDist = touchDist(e.touches);
         if (touchInitDist === 0) return;
         const factor = newDist / touchInitDist;
-        const newScale = Math.max(MIN_SCALE, Math.min(MAX_SCALE, touchInitScale * factor));
+        const newScale = Math.max(
+            MIN_SCALE,
+            Math.min(MAX_SCALE, touchInitScale * factor),
+        );
         const ratio = newScale / touchInitScale;
         // Zoom centré sur le midpoint du début du pinch (en coords SVG)
         tx.value = touchInitSvgX - (touchInitSvgX - touchInitTx) * ratio;
@@ -252,7 +277,7 @@ function onTouchEnd() {
 // ----- Recherche -----
 
 function normalize(s: string): string {
-    return s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+    return s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
 }
 function onSearchInput() {
     const q = normalize(searchQuery.value);
@@ -261,13 +286,15 @@ function onSearchInput() {
         showSuggestions.value = false;
         return;
     }
-    suggestions.value = countries.filter(
-        c =>
-            normalize(c.name).includes(q) ||
-            normalize(c.iso2).includes(q) ||
-            normalize(c.iso3).includes(q) ||
-            c.aliases.some(a => normalize(a).includes(q)),
-    ).slice(0, 6);
+    suggestions.value = countries
+        .filter(
+            (c) =>
+                normalize(c.name).includes(q) ||
+                normalize(c.iso2).includes(q) ||
+                normalize(c.iso3).includes(q) ||
+                c.aliases.some((a) => normalize(a).includes(q)),
+        )
+        .slice(0, 6);
     showSuggestions.value = true;
 }
 function selectFromSearch(c: Country) {
@@ -291,9 +318,42 @@ function closePopup() {
 
 <template>
     <section class="mx-auto max-w-5xl px-5 py-5 lg:py-10">
+        <div class="relative w-full block lg:hidden">
+            <span
+                class="material-symbols-outlined pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-catskillwhite-700"
+                style="font-size: 20px"
+                aria-hidden="true"
+                >search</span
+            >
+            <input
+                v-model="searchQuery"
+                type="text"
+                placeholder="Rechercher un pays"
+                class="w-full rounded-full border-2 border-catskillwhite-800 bg-white py-2.5 pl-12 pr-4 text-body text-catskillwhite-900 placeholder-catskillwhite-600 outline-none focus:border-razzmatazz-700"
+                @input="onSearchInput"
+                @focus="onSearchInput"
+            />
+            <ul
+                v-if="showSuggestions && suggestions.length > 0"
+                class="absolute left-0 top-full z-20 mt-1 w-full overflow-hidden rounded-xl border border-catskillwhite-300 bg-white shadow-lg"
+            >
+                <li
+                    v-for="c in suggestions"
+                    :key="c.iso2"
+                    class="flex cursor-pointer items-center gap-2.5 px-4 py-2 text-body text-catskillwhite-900 hover:bg-catskillwhite-100"
+                    @mousedown.prevent="selectFromSearch(c)"
+                >
+                    <span
+                        :class="`fi fi-${c.iso2.toLowerCase()} shrink-0 rounded-sm`"
+                        style="width: 1.5em; height: 1.125em"
+                    ></span>
+                    <span>{{ c.name }}</span>
+                </li>
+            </ul>
+        </div>
         <!-- Disposition : carte à gauche, panneau (note / recherche / délais) à droite.
              Sur mobile : empilé, panneau au-dessus de la carte. -->
-        <div class="flex flex-col gap-6 lg:flex-row h-[600px] lg:h-[372px]">
+        <div class="flex flex-col gap-6 mt-5 lg:flex-row h-[600px] lg:h-[372px]">
             <!-- Carte (gauche) -->
             <div
                 class="relative flex-1 overflow-hidden rounded-2xl border-2 border-catskillwhite-300 bg-white"
@@ -302,7 +362,10 @@ function closePopup() {
                     ref="svgRef"
                     :viewBox="`0 0 ${VB_W} ${VB_H}`"
                     preserveAspectRatio="xMidYMid meet"
-                    :class="['block h-full w-full touch-none', isPanning ? 'cursor-grabbing' : 'cursor-grab']"
+                    :class="[
+                        'block h-full w-full touch-none',
+                        isPanning ? 'cursor-grabbing' : 'cursor-grab',
+                    ]"
                     @wheel="onWheel"
                     @mousedown="startPan"
                     @mousemove="onPan"
@@ -350,11 +413,27 @@ function closePopup() {
                             >
                                 <span
                                     :class="`fi fi-${hoveredCountry.iso2.toLowerCase()} shrink-0 rounded-sm`"
-                                    style="width: 26px; height: 19px;"
+                                    style="width: 26px; height: 19px"
                                 ></span>
                                 <div class="min-w-0">
-                                    <div class="truncate font-semibold" style="font-size: 16px; line-height: 1.2;">{{ hoveredCountry.name }}</div>
-                                    <div class="truncate text-catskillwhite-200" style="font-size: 15px; line-height: 1.2;">{{ hoveredWaitLabel }}</div>
+                                    <div
+                                        class="truncate font-semibold"
+                                        style="
+                                            font-size: 16px;
+                                            line-height: 1.2;
+                                        "
+                                    >
+                                        {{ hoveredCountry.name }}
+                                    </div>
+                                    <div
+                                        class="truncate text-catskillwhite-200"
+                                        style="
+                                            font-size: 15px;
+                                            line-height: 1.2;
+                                        "
+                                    >
+                                        {{ hoveredWaitLabel }}
+                                    </div>
                                 </div>
                             </div>
                         </foreignObject>
@@ -370,7 +449,12 @@ function closePopup() {
                         :disabled="scale >= MAX_SCALE"
                         @click="zoomIn"
                     >
-                        <span class="material-symbols-outlined" style="font-size: 20px;" aria-hidden="true">add</span>
+                        <span
+                            class="material-symbols-outlined"
+                            style="font-size: 20px"
+                            aria-hidden="true"
+                            >add</span
+                        >
                     </button>
                     <button
                         type="button"
@@ -379,7 +463,12 @@ function closePopup() {
                         :disabled="scale <= MIN_SCALE"
                         @click="zoomOut"
                     >
-                        <span class="material-symbols-outlined" style="font-size: 20px;" aria-hidden="true">remove</span>
+                        <span
+                            class="material-symbols-outlined"
+                            style="font-size: 20px"
+                            aria-hidden="true"
+                            >remove</span
+                        >
                     </button>
                 </div>
             </div>
@@ -387,12 +476,13 @@ function closePopup() {
             <!-- Panneau (droite) -->
             <div class="flex w-full shrink-0 flex-col gap-4 lg:w-72">
                 <!-- Recherche -->
-                <div class="relative w-full order-1">
+                <div class="relative w-full hidden lg:block">
                     <span
                         class="material-symbols-outlined pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-catskillwhite-700"
-                        style="font-size: 20px;"
+                        style="font-size: 20px"
                         aria-hidden="true"
-                    >search</span>
+                        >search</span
+                    >
                     <input
                         v-model="searchQuery"
                         type="text"
@@ -411,21 +501,34 @@ function closePopup() {
                             class="flex cursor-pointer items-center gap-2.5 px-4 py-2 text-body text-catskillwhite-900 hover:bg-catskillwhite-100"
                             @mousedown.prevent="selectFromSearch(c)"
                         >
-                            <span :class="`fi fi-${c.iso2.toLowerCase()} shrink-0 rounded-sm`" style="width: 1.5em; height: 1.125em;"></span>
+                            <span
+                                :class="`fi fi-${c.iso2.toLowerCase()} shrink-0 rounded-sm`"
+                                style="width: 1.5em; height: 1.125em"
+                            ></span>
                             <span>{{ c.name }}</span>
                         </li>
                     </ul>
                 </div>
 
                 <!-- Note « à vérifier » -->
-                <div class="order-4 rounded-xl border border-catskillwhite-300 bg-white/90 p-4 text-body text-catskillwhite-800">
-                    Les zones épidémiques (Zika, Dengue, Ebola selon période) peuvent entraîner une exclusion variable. À vérifier au cas par cas.
+                <div
+                    class="order-4 rounded-xl border border-catskillwhite-300 bg-white/90 p-4 text-body text-catskillwhite-800"
+                >
+                    Les zones épidémiques (Zika, Dengue, Ebola selon période)
+                    peuvent entraîner une exclusion variable. À vérifier au cas
+                    par cas.
                 </div>
 
                 <!-- Délais (légende) -->
-                <div class="order-3 rounded-xl border border-catskillwhite-300 bg-white/95 p-4 text-body shadow-sm">
-                    <p class="mb-2 font-medium text-catskillwhite-900">Délais</p>
-                    <div class="grid grid-cols-2 gap-2 lg:grid-cols-1 lg:space-y-1.5">
+                <div
+                    class="order-3 rounded-xl border border-catskillwhite-300 bg-white/95 p-4 text-body shadow-sm"
+                >
+                    <p class="mb-2 font-medium text-catskillwhite-900">
+                        Délais
+                    </p>
+                    <div
+                        class="grid grid-cols-2 gap-2 lg:grid-cols-1 lg:space-y-1.5"
+                    >
                         <div
                             v-for="item in legendItems"
                             :key="item.label"
@@ -435,7 +538,9 @@ function closePopup() {
                                 class="h-3 w-3 shrink-0 rounded border border-catskillwhite-800"
                                 :style="{ backgroundColor: item.color }"
                             ></div>
-                            <span class="text-catskillwhite-900">{{ item.label }}</span>
+                            <span class="text-catskillwhite-900">{{
+                                item.label
+                            }}</span>
                         </div>
                     </div>
                 </div>
@@ -448,27 +553,44 @@ function closePopup() {
             class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
             @click.self="closePopup"
         >
-            <div class="relative w-full max-w-md rounded-2xl border-2 border-montecarlo-700 bg-white p-6 shadow-xl">
+            <div
+                class="relative w-full max-w-md rounded-2xl border-2 border-montecarlo-700 bg-white p-6 shadow-xl"
+            >
                 <button
                     type="button"
                     class="absolute right-3 top-3 inline-flex h-8 w-8 items-center justify-center rounded-full text-catskillwhite-700 transition hover:bg-catskillwhite-100"
                     aria-label="Fermer"
                     @click="closePopup"
                 >
-                    <span class="material-symbols-outlined" style="font-size: 20px;">close</span>
+                    <span
+                        class="material-symbols-outlined"
+                        style="font-size: 20px"
+                        >close</span
+                    >
                 </button>
 
-                <h3 class="flex items-center gap-3 text-heading-t2 text-catskillwhite-900">
-                    <span :class="`fi fi-${selected.iso2.toLowerCase()} shrink-0 rounded-sm`" style="width: 1.6em; height: 1.2em;"></span>
+                <h3
+                    class="flex items-center gap-3 text-heading-t2 text-catskillwhite-900"
+                >
+                    <span
+                        :class="`fi fi-${selected.iso2.toLowerCase()} shrink-0 rounded-sm`"
+                        style="width: 1.6em; height: 1.2em"
+                    ></span>
                     <span>{{ selected.name }}</span>
                 </h3>
-                <p v-if="selected.waitTime" class="mt-3 text-body text-catskillwhite-800">
+                <p
+                    v-if="selected.waitTime"
+                    class="mt-3 text-body text-catskillwhite-800"
+                >
                     Délai d'attente : <strong>{{ selected.waitTime }}</strong>
                 </p>
                 <p v-else class="mt-3 text-body text-catskillwhite-800">
                     Aucun délai
                 </p>
-                <p v-if="selected.description" class="mt-3 text-caption text-catskillwhite-700">
+                <p
+                    v-if="selected.description"
+                    class="mt-3 text-caption text-catskillwhite-700"
+                >
                     {{ selected.description }}
                 </p>
             </div>
