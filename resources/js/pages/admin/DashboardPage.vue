@@ -88,8 +88,7 @@ function computeFilteredValue(card: KpiValue & { format?: string }): number | st
 
 const VISIT_PERIODS = [
     { key: '30d',  label: 'Mois en cours', minMonth: 1 },
-    { key: '3m',   label: '3m',            minMonth: 4 },
-    { key: '6m',   label: '6m',            minMonth: 7 },
+    { key: '3m',   label: '3 derniers mois', minMonth: 4 },
     { key: 'year', label: 'Année en cours', minMonth: 1 },
 ] as const;
 type VisitPeriod = typeof VISIT_PERIODS[number]['key'];
@@ -252,23 +251,28 @@ onUnmounted(() => {
 
                     <!-- Card visites : période type GA -->
                     <template v-if="card.isVisits">
-                        <div class="mt-3 flex gap-1">
+                        <div class="mt-4 flex gap-2">
                             <button
                                 v-for="p in availableVisitPeriods"
                                 :key="p.key"
                                 type="button"
-                                class="rounded-md px-2.5 py-1 text-xs font-medium transition"
+                                class="rounded-md px-4 py-1.5 text-sm font-medium transition"
                                 :class="visitsPeriod === p.key
                                     ? 'bg-[var(--color-razzmatazz-700)] text-white'
-                                    : 'text-base-content/60 hover:bg-base-200'"
+                                    : 'bg-white text-[#000] hover:bg-base-100'"
                                 @click="visitsPeriod = p.key"
                             >
                                 {{ p.label }}
                             </button>
                         </div>
-                        <p class="mt-2 text-4xl font-bold text-[var(--color-razzmatazz-700)]">
-                            {{ visitsLoading ? '…' : visitsCount !== null ? visitsCount.toLocaleString('fr-CH') : 'N/A' }}
-                        </p>
+                        <div class="mt-10 flex items-center gap-2 text-[var(--color-razzmatazz-700)]">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user-round shrink-0"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg>
+                            <Transition name="kpi-fade" mode="out-in">
+                                <p :key="visitsPeriod" class="text-6xl font-bold">
+                                    {{ visitsLoading ? '…' : visitsCount !== null ? visitsCount.toLocaleString('fr-CH') : 'N/A' }}
+                                </p>
+                            </Transition>
+                        </div>
                     </template>
 
                     <!-- Card connectés / participation / conversion : liste scrollable par entreprise -->
@@ -368,3 +372,14 @@ onUnmounted(() => {
         </section>
     </AdminLayout>
 </template>
+
+<style scoped>
+.kpi-fade-enter-active,
+.kpi-fade-leave-active {
+    transition: opacity 0.2s ease;
+}
+.kpi-fade-enter-from,
+.kpi-fade-leave-to {
+    opacity: 0;
+}
+</style>

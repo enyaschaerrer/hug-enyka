@@ -213,7 +213,7 @@ onUnmounted(() => {
                         <div class="w-1/5"><span>Entreprise</span></div>
                         <div class="w-1/5"><span>Email</span></div>
                         <div class="w-1/5"><span>Date</span></div>
-                        <div class="w-1/5 text-center"><span>Trophée</span></div>
+                        <div class="w-1/5 text-center"><span>Prix</span></div>
                         <div class="w-1/5 text-center"><span>Actions</span></div>
                     </div>
 
@@ -304,7 +304,7 @@ onUnmounted(() => {
                             <dd class="text-stone-900"><span>{{ formatFullAddress(selectedForm.address, selectedForm.npa, selectedForm.localite) }}</span></dd>
                         </div>
                         <div class="flex gap-4">
-                            <dt class="w-32 shrink-0 font-medium text-black"><span>Trophée</span></dt>
+                            <dt class="w-32 shrink-0 font-medium text-black"><span>Prix</span></dt>
                             <dd>
                                 <span
                                     class="rounded-full px-2 py-1 text-xs font-medium"
