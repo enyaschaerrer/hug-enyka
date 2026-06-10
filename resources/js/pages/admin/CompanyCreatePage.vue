@@ -299,6 +299,12 @@ async function submit() {
     submitting.value = true;
     errors.value = {};
 
+    if (!anonymousParticipation.value && !form.trophy) {
+        errors.value = { participation: ['Veuillez sélectionner Participation anonyme ou Participation au Prix du Cœur.'] };
+        submitting.value = false;
+        return;
+    }
+
     form.source = selectedSourceOption.value === 'Autre'
         ? sourceOther.value.trim()
         : selectedSourceOption.value;
@@ -639,15 +645,7 @@ async function submit() {
                 </section>
 
                 <section class="space-y-4">
-                    <label class="flex items-center gap-3">
-                        <input
-                            v-model="anonymousParticipation"
-                            type="checkbox"
-                            class="checkbox checked:[--input-color:var(--color-razzmatazz-700)] checked:[color:white]"
-                        />
-                        <span class="text-sm font-medium text-base-content/75">Participation anonyme</span>
-                    </label>
-
+                    <p v-if="firstError('participation')" class="text-xs text-red-600">{{ firstError('participation') }}</p>
                     <label
                         class="flex items-center gap-3"
                         :class="{ 'cursor-not-allowed opacity-45': !form.is_public }"
@@ -659,6 +657,15 @@ async function submit() {
                             :disabled="!form.is_public"
                         />
                         <span class="text-sm font-medium text-base-content/75">Participation au Prix du Cœur</span>
+                    </label>
+
+                    <label class="flex items-center gap-3">
+                        <input
+                            v-model="anonymousParticipation"
+                            type="checkbox"
+                            class="checkbox checked:[--input-color:var(--color-razzmatazz-700)] checked:[color:white]"
+                        />
+                        <span class="text-sm font-medium text-base-content/75">Participation anonyme</span>
                     </label>
                 </section>
 
