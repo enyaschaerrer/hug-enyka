@@ -344,7 +344,7 @@ onUnmounted(() => {
                                 v-for="p in availableVisitPeriods"
                                 :key="p.key"
                                 type="button"
-                                class="rounded-md border px-4 py-1.5 text-sm font-medium transition"
+                                class="rounded-md border px-2.5 py-1 text-sm font-medium transition"
                                 :class="visitsPeriod === p.key
                                     ? 'border-[var(--color-razzmatazz-700)] bg-[var(--color-razzmatazz-700)] text-white'
                                     : 'border-[var(--color-razzmatazz-100)] bg-white text-[#000] hover:text-[var(--color-razzmatazz-700)] ease-in-out'"
@@ -467,20 +467,20 @@ onUnmounted(() => {
                         <div class="mt-4 flex gap-1.5">
                             <button
                                 type="button"
-                                class="rounded-md border px-4 py-1.5 text-sm font-medium transition ease-in-out"
+                                class="rounded-md border px-2.5 py-1 text-sm font-medium transition ease-in-out"
                                 :class="labelledTab === 'trophy'
                                     ? 'border-[var(--color-razzmatazz-700)] bg-[var(--color-razzmatazz-700)] text-white'
                                     : 'border-[var(--color-razzmatazz-100)] bg-white text-[#000] hover:text-[var(--color-razzmatazz-700)]'"
                                 @click="labelledTab = 'trophy'"
-                            >Participation au Prix du Cœur</button>
+                            >Participe au Prix du Cœur</button>
                             <button
                                 type="button"
-                                class="rounded-md border px-4 py-1.5 text-sm font-medium transition ease-in-out"
+                                class="rounded-md border px-2.5 py-1 text-sm font-medium transition ease-in-out"
                                 :class="labelledTab === 'anonymous'
                                     ? 'border-[var(--color-razzmatazz-700)] bg-[var(--color-razzmatazz-700)] text-white'
                                     : 'border-[var(--color-razzmatazz-100)] bg-white text-[#000] hover:text-[var(--color-razzmatazz-700)]'"
                                 @click="labelledTab = 'anonymous'"
-                            >Participation anonyme</button>
+                            >Participe anonymement</button>
                         </div>
                         <div class="mt-9 flex items-center gap-2 text-[var(--color-razzmatazz-700)]">
                             <Transition name="kpi-fade" mode="out-in">
