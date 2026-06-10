@@ -10,8 +10,11 @@ import type { Country } from '../../types/interactive-map';
 const props = withDefaults(defineProps<{
     /** Modules de vérification enregistrés par le swipe, dans l'ordre à jouer. */
     modules?: string[];
+    /** Lien OneDoc réel pour le bouton « Prendre RDV ». */
+    appointmentUrl?: string | null;
 }>(), {
     modules: () => [],
+    appointmentUrl: null,
 });
 
 type Reason = { title: string; detail: string; status: 'warning' | 'blocker' };
@@ -19,6 +22,10 @@ type Reason = { title: string; detail: string; status: 'warning' | 'blocker' };
 const emit = defineEmits<{
     /** Le chat conclut à une non-éligibilité (définitive ou délais) → écran « Pas éligible ». */
     ineligible: [reasons: Reason[]];
+    /** Le chat conclut à une éligibilité → écran rendez-vous affiché. */
+    completed: [];
+    /** L'utilisateur a cliqué sur le lien OneDoc. */
+    onedocClick: [];
 }>();
 
 const scenario = scenarioData as SmsScenario;
@@ -203,6 +210,7 @@ async function showFinalVerdict() {
     }
 
     await pushBotNode(scenario.appointment, 'happy');
+    emit('completed');
 }
 
 async function answerQuestion(answer: SmsAnswer) {
@@ -236,6 +244,43 @@ async function answerQuestion(answer: SmsAnswer) {
 }
 
 // ----- Module voyage : nombre de pays → sélecteur de pays → confirmation date -----
+
+// Préposition correcte devant un pays (« en France », « au Pérou », « aux États-Unis », « à Cuba »).
+// Les prépositions de pays sont irrégulières en français : règle par défaut + exceptions explicites.
+const COUNTRY_PREPOSITION_OVERRIDES: Record<string, string> = {
+    // Pluriel → « aux »
+    'Bahamas': 'aux', 'Comores': 'aux', 'Émirats arabes unis': 'aux', 'États-Unis': 'aux',
+    'Fidji': 'aux', 'Maldives': 'aux', 'Pays-Bas': 'aux', 'Philippines': 'aux',
+    'Samoa': 'aux', 'Tonga': 'aux', 'Îles Malouines': 'aux', 'Îles Salomon': 'aux',
+    // Îles / cité-États → « à »
+    'Antigua-et-Barbuda': 'à', 'Chypre': 'à', 'Cuba': 'à', 'Djibouti': 'à', 'Haïti': 'à',
+    'Madagascar': 'à', 'Malte': 'à', 'Maurice': 'à', 'Monaco': 'à', 'Oman': 'à',
+    'Porto Rico': 'à', 'Saint-Marin': 'à', 'Sao Tomé-et-Principe': 'à', 'Singapour': 'à',
+    'Taïwan': 'à', 'Trinité-et-Tobago': 'à',
+    // → « à la »
+    'Barbade': 'à la', 'Dominique': 'à la', 'Grenade': 'à la',
+    // Masculins que la règle classerait à tort en « en »
+    'Belize': 'au', 'Cambodge': 'au', 'Mexique': 'au', 'Mozambique': 'au',
+    'Suriname': 'au', 'Zimbabwe': 'au',
+    // Féminins multi-mots (« … du Nord/Sud ») que la règle classerait à tort en « au »
+    'Corée du Nord': 'en', 'Corée du Sud': 'en', 'Macédoine du Nord': 'en',
+};
+
+function countryPreposition(name: string): string {
+    const override = COUNTRY_PREPOSITION_OVERRIDES[name];
+    if (override) return override;
+
+    const first = name.trim()[0]?.toLowerCase() ?? '';
+    const startsWithVowel = 'aàâäeéèêëiîïoôöuùûü'.includes(first);
+    const endsWithE = name.trim().slice(-1).toLowerCase() === 'e';
+
+    return startsWithVowel || endsWithE ? 'en' : 'au';
+}
+
+// Renvoie « en France », « au Pérou », « aux États-Unis », « à Cuba »…
+function travelLocation(name: string): string {
+    return `${countryPreposition(name)} ${name}`;
+}
 
 const isTravelNode = computed(() => currentNode.value?.type === 'travel');
 const showTravelCount = computed(() => isTravelNode.value && travelStage.value === 'count' && !isTyping.value);
@@ -341,7 +386,7 @@ function selectTravelCountry(country: Country) {
 
     window.setTimeout(async () => {
         if (!country.waitTime) {
-            await pushBotText(`Aucun délai requis pour un séjour en ${country.name} 👍`, 'happy');
+            await pushBotText(`Aucun délai requis pour un séjour ${travelLocation(country.name)} 👍`, 'happy');
             isTyping.value = false;
             await scrollToLastMessage();
             proceedAfterCountry();
@@ -424,7 +469,7 @@ if (scenario.intro) {
                         class="chat-image avatar avatar-placeholder"
                     >
                         <div class="w-10 rounded-full bg-razzmatazz-500 text-white">
-                            <span class="text-xs font-semibold">LB</span>
+                            <span class="text-xs font-semibold">M</span>
                         </div>
                     </div>
 
@@ -450,7 +495,11 @@ if (scenario.intro) {
                         <a
                             v-if="message.cta"
                             class="btn mt-4 border-razzmatazz-200 bg-white font-semibold text-razzmatazz-950 hover:border-white hover:bg-razzmatazz-100"
-                            :href="message.cta.href"
+                            :href="(message.nodeType === 'appointment' && appointmentUrl) ? appointmentUrl : message.cta.href"
+                            target="_blank"
+                            rel="noopener"
+                            data-allow-exit
+                            @click="message.nodeType === 'appointment' && emit('onedocClick')"
                         >
                             <span>{{ message.cta.label }}</span>
                         </a>
@@ -469,7 +518,7 @@ if (scenario.intro) {
                 <div v-if="currentAnswers.length > 0" class="chat chat-end chat-active">
                     <div class="chat-image avatar avatar-placeholder">
                         <div class="w-10 rounded-full bg-razzmatazz-500 text-white">
-                            <span class="text-xs font-semibold">LB</span>
+                            <span class="text-xs font-semibold">M</span>
                         </div>
                     </div>
                     <div class="chat-header chat-label-end font-medium text-razzmatazz-950/70">
@@ -492,7 +541,7 @@ if (scenario.intro) {
                 <div v-if="showTravelCount" class="chat chat-end chat-active">
                     <div class="chat-image avatar avatar-placeholder">
                         <div class="w-10 rounded-full bg-razzmatazz-500 text-white">
-                            <span class="text-xs font-semibold">LB</span>
+                            <span class="text-xs font-semibold">M</span>
                         </div>
                     </div>
                     <div class="chat-header chat-label-end font-medium text-razzmatazz-950/70">
@@ -515,7 +564,7 @@ if (scenario.intro) {
                 <div v-if="showCountryPicker" class="chat chat-end chat-active">
                     <div class="chat-image avatar avatar-placeholder">
                         <div class="w-10 rounded-full bg-razzmatazz-500 text-white">
-                            <span class="text-xs font-semibold">LB</span>
+                            <span class="text-xs font-semibold">M</span>
                         </div>
                     </div>
                     <div class="chat-header chat-label-end font-medium text-razzmatazz-950/70">
@@ -556,7 +605,7 @@ if (scenario.intro) {
                 <div v-if="showTravelConfirm" class="chat chat-end chat-active">
                     <div class="chat-image avatar avatar-placeholder">
                         <div class="w-10 rounded-full bg-razzmatazz-500 text-white">
-                            <span class="text-xs font-semibold">LB</span>
+                            <span class="text-xs font-semibold">M</span>
                         </div>
                     </div>
                     <div class="chat-header chat-label-end font-medium text-razzmatazz-950/70">
