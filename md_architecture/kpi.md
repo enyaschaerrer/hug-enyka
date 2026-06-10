@@ -1,6 +1,3 @@
-Taux global participation
-
-
 [KPI]
 
 Nombre d’entreprises labellisées (et nb entreprises voulant pas être affichées) - Done

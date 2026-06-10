@@ -15,6 +15,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'role' => EnsureUserHasRole::class,
         ]);
+        $middleware->encryptCookies(except: ['hug_analytics_consent']);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
