@@ -21,7 +21,10 @@ type KpiValue = {
     freeText?: string[];
     isVisits?: boolean;
     isHighlighted?: boolean;
+    isLabelled?: boolean;
     isCobranded?: boolean;
+    publicCount?: number;
+    anonymousCount?: number;
     isSpacer?: boolean;
     companies?: ParticipationCompany[];
     abandonSteps?: AbandonStep[];
@@ -139,7 +142,7 @@ const engagementCards = computed(() => {
 
     return [
         { ...kpis.value.engagement.pageVisits, format: 'number', isVisits: true },
-        { ...kpis.value.engagement.labelledCompanies, format: 'number', isHighlighted: true },
+        { ...kpis.value.engagement.labelledCompanies, format: 'number', isHighlighted: true, isLabelled: true },
         { ...kpis.value.engagement.companySources, format: 'number', isHighlighted: true },
         { isSpacer: true, label: '__spacer__', value: null, available: true, isCobranded: true },
         { ...kpis.value.engagement.connectedUsers, format: 'number', isCobranded: true },
@@ -263,7 +266,7 @@ onUnmounted(() => {
                     </template>
 
                     <template v-else>
-                    <p class="text-lg font-semibold text-[#000]">{{ card.label }}</p>
+                    <p class="text-lg font-semibold text-[#000]">{{ card.isLabelled ? `${card.label} (${card.value})` : card.label }}</p>
 
                     <!-- Card visites : période type GA -->
                     <template v-if="card.isVisits">
@@ -370,6 +373,27 @@ onUnmounted(() => {
                             </div>
                         </div>
                         <p class="mt-3 text-xs text-base-content/45">{{ card.note }}</p>
+                    </template>
+
+                    <!-- Card entreprises labellisées -->
+                    <template v-else-if="card.isLabelled">
+                        <div class="mt-auto flex items-center justify-around pb-2">
+                            <div class="flex flex-col items-start gap-2">
+                                <p class="text-5xl font-bold text-[var(--color-razzmatazz-700)]">{{ card.publicCount ?? 0 }}</p>
+                                <span class="inline-flex items-center gap-1.5 rounded-full border border-[var(--color-razzmatazz-200)] bg-white px-3 py-1.5 text-xs font-medium text-[var(--color-razzmatazz-700)]">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5"/></svg>
+                                    Participation au Prix du Cœur
+                                </span>
+                            </div>
+                            <div class="h-16 w-px bg-[var(--color-razzmatazz-100)]"></div>
+                            <div class="flex flex-col items-start gap-2">
+                                <p class="text-5xl font-bold text-[var(--color-razzmatazz-700)]">{{ card.anonymousCount ?? 0 }}</p>
+                                <span class="inline-flex items-center gap-1.5 rounded-full border border-[var(--color-razzmatazz-200)] bg-white px-3 py-1.5 text-xs font-medium text-[var(--color-razzmatazz-700)]">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.733 5.076A10.744 10.744 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"/><path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"/><path d="M2 2l20 20"/><path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"/></svg>
+                                    Participation anonyme
+                                </span>
+                            </div>
+                        </div>
                     </template>
 
                     <!-- Cards génériques -->

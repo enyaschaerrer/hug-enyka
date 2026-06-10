@@ -11,7 +11,8 @@ class KpiController extends Controller
 {
     public function index(): JsonResponse
     {
-        $labelledCompanies = DB::table('companies')
+        $publicLabelled = DB::table('companies')
+            ->where('is_public', true)
             ->whereExists(function ($query) {
                 $query->select(DB::raw(1))
                     ->from('collections')
@@ -22,6 +23,9 @@ class KpiController extends Controller
         $anonymousCompanies = DB::table('companies')
             ->where('is_public', false)
             ->count();
+
+        $labelledCompanies = $publicLabelled + $anonymousCompanies;
+
 
         $participationByCompany = DB::table('companies')
             ->join('collections', 'collections.company_id', '=', 'companies.id')
@@ -134,12 +138,12 @@ class KpiController extends Controller
         return response()->json([
             'engagement' => [
                 'labelledCompanies' => [
-                    'label' => 'Entreprises labellisées',
-                    'value' => $labelledCompanies,
-                    'available' => true,
-                    'note' => $anonymousCompanies > 0
-                        ? $anonymousCompanies . ' en participation anonyme.'
-                        : 'Aucune en participation anonyme.',
+                    'label'          => 'Entreprises labellisées',
+                    'value'          => $labelledCompanies,
+                    'available'      => true,
+                    'note'           => null,
+                    'publicCount'    => $publicLabelled,
+                    'anonymousCount' => $anonymousCompanies,
                 ],
                 'companySources' => [
                     'label' => 'Sources de prise de contact',
