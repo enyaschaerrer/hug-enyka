@@ -15,14 +15,14 @@
             "id": "q_voyage_start",
             "type": "travel",
             "speaker": "bot",
-            "text": "Tu as voyagé hors de Suisse. Dans combien de pays es-tu allé·e récemment ?"
+            "text": "Vous avez voyagé hors de Suisse. Dans combien de pays êtes-vous allé·e récemment ?"
         },
 
         "welcome": {
             "id": "welcome",
             "type": "question",
             "speaker": "bot",
-            "text": "Quelques questions rapides pour préciser ce que tu as indiqué juste avant. À la fin, je te dirai où tu en es pour ton don.",
+            "text": "Quelques questions rapides pour préciser ce que vous avez indiqué juste avant. À la fin, je vous dirai où vous en êtes pour votre don.",
             "answers": [
                 { "id": "start", "label": "C'est parti", "next": "__next__", "sanguyEmotion": "happy" }
             ]
@@ -32,7 +32,7 @@
             "id": "q6_start",
             "type": "question",
             "speaker": "bot",
-            "text": "Tu as indiqué des soins médicaux ou une maladie récente. C'était lequel des deux ?",
+            "text": "Vous avez indiqué des soins médicaux ou une maladie récente. C'était lequel des deux ?",
             "answers": [
                 { "id": "care", "label": "Des soins médicaux", "next": "q6_care", "sanguyEmotion": "happy" },
                 { "id": "sick", "label": "J'étais malade", "next": "q6_sick", "sanguyEmotion": "alt-happy" },
@@ -43,7 +43,7 @@
             "id": "q6_care",
             "type": "question",
             "speaker": "bot",
-            "text": "Quels soins médicaux as-tu reçus ?",
+            "text": "Quels soins médicaux avez-vous reçus ?",
             "answers": [
                 { "id": "dental", "label": "Soins dentaires", "next": "q6_dental", "sanguyEmotion": "happy" },
                 { "id": "gastro", "label": "Gastroscopie / coloscopie", "next": "__next__", "sanguyEmotion": "alt-angry", "outcome": { "severity": "delay", "label": "à confirmer" } },
@@ -54,7 +54,7 @@
             "id": "q6_dental",
             "type": "question",
             "speaker": "bot",
-            "text": "As-tu eu un traitement dentaire au cours des 2 dernières semaines, ou une extraction au cours de la dernière semaine ?",
+            "text": "Avez-vous eu un traitement dentaire au cours des 2 dernières semaines, ou une extraction au cours de la dernière semaine ?",
             "answers": [
                 { "id": "yes", "label": "Oui", "next": "__next__", "sanguyEmotion": "alt-angry", "outcome": { "severity": "delay", "label": "à confirmer" } },
                 { "id": "no", "label": "Non", "next": "__next__", "sanguyEmotion": "happy" }
@@ -64,7 +64,7 @@
             "id": "q6_sick",
             "type": "question",
             "speaker": "bot",
-            "text": "Au cours du mois dernier, as-tu eu la grippe, un rhume, de la toux ou de la fièvre ?",
+            "text": "Au cours du mois dernier, avez-vous eu la grippe, un rhume, de la toux ou de la fièvre ?",
             "answers": [
                 { "id": "yes", "label": "Oui", "next": "__next__", "sanguyEmotion": "alt-angry", "outcome": { "severity": "delay", "months": 0.5, "label": "2 semaines" } },
                 { "id": "no", "label": "Non", "next": "__next__", "sanguyEmotion": "happy" }
@@ -74,7 +74,7 @@
             "id": "q6_care_both",
             "type": "question",
             "speaker": "bot",
-            "text": "Ok, on regarde d'abord les soins médicaux. Lesquels as-tu reçus ?",
+            "text": "Ok, regardons d'abord les soins médicaux. Lesquels as-tu reçus ?",
             "answers": [
                 { "id": "dental", "label": "Soins dentaires", "next": "q6_dental_both", "sanguyEmotion": "happy" },
                 { "id": "gastro", "label": "Gastroscopie / coloscopie", "next": "q6_sick", "sanguyEmotion": "alt-angry", "outcome": { "severity": "delay", "label": "à confirmer" } },
@@ -85,7 +85,7 @@
             "id": "q6_dental_both",
             "type": "question",
             "speaker": "bot",
-            "text": "As-tu eu un traitement dentaire au cours des 2 dernières semaines, ou une extraction au cours de la dernière semaine ?",
+            "text": "Avez-vous eu un traitement dentaire au cours des 2 dernières semaines, ou une extraction au cours de la dernière semaine ?",
             "answers": [
                 { "id": "yes", "label": "Oui", "next": "q6_sick", "sanguyEmotion": "alt-angry", "outcome": { "severity": "delay", "label": "à confirmer" } },
                 { "id": "no", "label": "Non", "next": "q6_sick", "sanguyEmotion": "happy" }
@@ -96,7 +96,7 @@
             "id": "q7_start",
             "type": "question",
             "speaker": "bot",
-            "text": "Tu as indiqué des médicaments ou des vaccins. C'était lequel des deux ?",
+            "text": "Vous avez indiqué des médicaments ou des vaccins. C'était lequel des deux ?",
             "answers": [
                 { "id": "meds", "label": "Des médicaments", "next": "q7_med1", "sanguyEmotion": "happy" },
                 { "id": "vacc", "label": "Des vaccins", "next": "q7_vacc_only", "sanguyEmotion": "alt-happy" },
@@ -107,7 +107,7 @@
             "id": "q7_med1",
             "type": "question",
             "speaker": "bot",
-            "text": "Au cours des 2 dernières semaines, as-tu pris des antibiotiques ?",
+            "text": "Au cours des 2 dernières semaines, avez-vous pris des antibiotiques ?",
             "answers": [
                 { "id": "yes", "label": "Oui", "next": "__next__", "sanguyEmotion": "alt-angry", "outcome": { "severity": "delay", "months": 0.5, "label": "2 semaines" } },
                 { "id": "no", "label": "Non", "next": "q7_med2", "sanguyEmotion": "happy" }
@@ -117,7 +117,7 @@
             "id": "q7_med2",
             "type": "question",
             "speaker": "bot",
-            "text": "Au cours du mois dernier, as-tu pris des médicaments contre l'hyperplasie prostatique, la chute des cheveux, l'acné/eczéma, la dépression, la migraine ou les troubles bipolaires ?",
+            "text": "Au cours du mois dernier, avez-vous pris des médicaments contre l'hyperplasie prostatique, la chute des cheveux, l'acné/eczéma, la dépression, la migraine ou les troubles bipolaires ?",
             "answers": [
                 { "id": "yes", "label": "Oui", "next": "__next__", "sanguyEmotion": "alt-angry", "outcome": { "severity": "delay", "months": 1, "label": "1 mois" } },
                 { "id": "no", "label": "Non", "next": "q7_med3", "sanguyEmotion": "happy" }
@@ -127,7 +127,7 @@
             "id": "q7_med3",
             "type": "question",
             "speaker": "bot",
-            "text": "Au cours des 2 derniers mois, as-tu pris des médicaments contre l'endométriose ?",
+            "text": "Au cours des 2 derniers mois, avez-vous pris des médicaments contre l'endométriose ?",
             "answers": [
                 { "id": "yes", "label": "Oui", "next": "__next__", "sanguyEmotion": "alt-angry", "outcome": { "severity": "delay", "months": 2, "label": "2 mois" } },
                 { "id": "no", "label": "Non", "next": "q7_med4", "sanguyEmotion": "happy" }
@@ -137,7 +137,7 @@
             "id": "q7_med4",
             "type": "question",
             "speaker": "bot",
-            "text": "Au cours des 4 derniers mois, as-tu pris une thérapie antirétrovirale PEP/PrEP ou des médicaments fabriqués à partir de sang ?",
+            "text": "Au cours des 4 derniers mois, avez-vous pris une thérapie antirétrovirale PEP/PrEP ou des médicaments fabriqués à partir de sang ?",
             "answers": [
                 { "id": "yes", "label": "Oui", "next": "__next__", "sanguyEmotion": "alt-angry", "outcome": { "severity": "delay", "months": 4, "label": "4 mois" } },
                 { "id": "no", "label": "Non", "next": "q7_med5", "sanguyEmotion": "happy" }
@@ -147,7 +147,7 @@
             "id": "q7_med5",
             "type": "question",
             "speaker": "bot",
-            "text": "Au cours des 6 derniers mois, as-tu pris de l'Avodart®, du Duodart® ou reçu des cytostatiques ?",
+            "text": "Au cours des 6 derniers mois, avez-vous pris de l'Avodart®, du Duodart® ou reçu des cytostatiques ?",
             "answers": [
                 { "id": "yes", "label": "Oui", "next": "__next__", "sanguyEmotion": "alt-angry", "outcome": { "severity": "delay", "months": 6, "label": "6 mois" } },
                 { "id": "no", "label": "Non", "next": "__next__", "sanguyEmotion": "happy" }
@@ -157,7 +157,7 @@
             "id": "q7_vacc_only",
             "type": "question",
             "speaker": "bot",
-            "text": "Au cours des 2 dernières semaines, as-tu reçu un vaccin ?",
+            "text": "Au cours des 2 dernières semaines, avez-vous reçu un vaccin ?",
             "answers": [
                 { "id": "yes", "label": "Oui", "next": "__next__", "sanguyEmotion": "alt-happy" },
                 { "id": "no", "label": "Non", "next": "__next__", "sanguyEmotion": "happy" }
@@ -167,7 +167,7 @@
             "id": "q7_vacc_both",
             "type": "question",
             "speaker": "bot",
-            "text": "On regarde d'abord les vaccins. Au cours des 2 dernières semaines, as-tu reçu un vaccin ?",
+            "text": "Regardons d'abord les vaccins. Au cours des 2 dernières semaines, avez-vous reçu un vaccin ?",
             "answers": [
                 { "id": "yes", "label": "Oui", "next": "q7_med1", "sanguyEmotion": "alt-happy" },
                 { "id": "no", "label": "Non", "next": "q7_med1", "sanguyEmotion": "happy" }
@@ -178,7 +178,7 @@
             "id": "q8_start",
             "type": "question",
             "speaker": "bot",
-            "text": "Tu as signalé une piqûre de tique. As-tu eu des symptômes (fièvre, rougeur qui s'étend, fatigue, douleurs articulaires…) ?",
+            "text": "Vous avez signalé une piqûre de tique. Avez-vous eu des symptômes (fièvre, rougeur qui s'étend, fatigue, douleurs articulaires…) ?",
             "answers": [
                 { "id": "yes", "label": "Oui", "next": "__next__", "sanguyEmotion": "alt-angry", "outcome": { "severity": "delay", "months": 6, "label": "6 mois" } },
                 { "id": "no", "label": "Non", "next": "__next__", "sanguyEmotion": "happy" }
@@ -189,7 +189,7 @@
             "id": "q9_start",
             "type": "question",
             "speaker": "bot",
-            "text": "Tu as indiqué une plaie ouverte ou une opération. C'était lequel des deux ?",
+            "text": "Vous avez indiqué une plaie ouverte ou une opération. C'était lequel des deux ?",
             "answers": [
                 { "id": "wound", "label": "Une plaie ouverte", "next": "q9_wound", "sanguyEmotion": "happy" },
                 { "id": "op", "label": "Une opération", "next": "q9_op", "sanguyEmotion": "alt-happy" },
@@ -215,7 +215,7 @@
             "id": "q9_op",
             "type": "question",
             "speaker": "bot",
-            "text": "As-tu reçu une transfusion sanguine, ou subi une autre intervention ?",
+            "text": "Avez-vous reçu une transfusion sanguine, ou subi une autre intervention ?",
             "answers": [
                 { "id": "transfusion", "label": "Une transfusion sanguine", "next": "__next__", "sanguyEmotion": "alt-angry", "outcome": { "severity": "delay", "months": 4, "label": "4 mois" } },
                 { "id": "other", "label": "Une autre intervention", "next": "__next__", "sanguyEmotion": "alt-happy" }
@@ -225,7 +225,7 @@
             "id": "q9_wound_both",
             "type": "question",
             "speaker": "bot",
-            "text": "On regarde d'abord la plaie ouverte. Quelle en est la cause ?",
+            "text": "Vous regardez d'abord la plaie ouverte. Quelle en est la cause ?",
             "answers": [
                 { "id": "piercing", "label": "Piercing", "next": "q9_op", "sanguyEmotion": "alt-angry", "outcome": { "severity": "delay", "months": 4, "label": "4 mois" } },
                 { "id": "tattoo", "label": "Tatouage", "next": "q9_op", "sanguyEmotion": "alt-angry", "outcome": { "severity": "delay", "months": 4, "label": "4 mois" } },
@@ -241,7 +241,7 @@
             "id": "q10_start",
             "type": "question",
             "speaker": "bot",
-            "text": "Tu as signalé des relations sexuelles récentes. Au cours des 4 derniers mois, c'était avec un nouveau partenaire, ou avec plus de deux personnes ?",
+            "text": "Vous avez signalé des relations sexuelles récentes. Au cours des 4 derniers mois, c'était avec un nouveau partenaire, ou avec plus de deux personnes ?",
             "answers": [
                 { "id": "new", "label": "Un nouveau partenaire", "next": "__next__", "sanguyEmotion": "alt-angry", "outcome": { "severity": "delay", "months": 4, "label": "4 mois" } },
                 { "id": "multiple", "label": "Plus de deux personnes", "next": "__next__", "sanguyEmotion": "alt-angry", "outcome": { "severity": "delay", "months": 12, "label": "12 mois" } },
@@ -254,7 +254,7 @@
             "id": "q11_start",
             "type": "question",
             "speaker": "bot",
-            "text": "Tu as signalé une infection sexuellement transmissible. Laquelle ?",
+            "text": "Vous avez signalé une infection sexuellement transmissible. Laquelle ?",
             "answers": [
                 { "id": "hiv", "label": "VIH / Sida", "next": "__next__", "sanguyEmotion": "angry", "outcome": { "severity": "permanent" } },
                 { "id": "hepatitis", "label": "Hépatite B ou C", "next": "__next__", "sanguyEmotion": "angry", "outcome": { "severity": "permanent" } },
@@ -267,7 +267,7 @@
             "id": "q11_other_ist",
             "type": "question",
             "speaker": "bot",
-            "text": "Ton infection est-elle guérie et ton traitement terminé depuis au moins 4 mois ?",
+            "text": "Votre infection est-elle guérie et votre traitement terminé depuis au moins 4 mois ?",
             "answers": [
                 { "id": "yes", "label": "Oui", "next": "__next__", "sanguyEmotion": "happy" },
                 { "id": "no", "label": "Non", "next": "__next__", "sanguyEmotion": "alt-angry", "outcome": { "severity": "delay", "months": 4, "label": "4 mois" } }
@@ -277,7 +277,7 @@
             "id": "q11_hpv",
             "type": "question",
             "speaker": "bot",
-            "text": "Ton infection est-elle guérie et ton traitement terminé depuis au moins 2 semaines ?",
+            "text": "Votre infection est-elle guérie et votre traitement terminé depuis au moins 2 semaines ?",
             "answers": [
                 { "id": "yes", "label": "Oui", "next": "__next__", "sanguyEmotion": "happy" },
                 { "id": "no", "label": "Non", "next": "__next__", "sanguyEmotion": "alt-angry", "outcome": { "severity": "delay", "months": 2, "label": "2 mois" } }
@@ -288,7 +288,7 @@
             "id": "appointment",
             "type": "appointment",
             "speaker": "bot",
-            "text": "Bonne nouvelle : rien ne s'oppose à ton don pour le moment ! 🎉 Le plus simple est de choisir un créneau qui te convient.",
+            "text": "Bonne nouvelle : rien ne s'oppose à votre don pour le moment ! 🎉 Le plus simple est de choisir un créneau qui vous convient.",
             "cta": {
                 "label": "Prendre RDV",
                 "href": "#"
