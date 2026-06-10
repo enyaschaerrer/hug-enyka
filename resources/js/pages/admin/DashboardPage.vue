@@ -376,14 +376,14 @@ onUnmounted(() => {
                     <!-- Card sources : liste scrollable -->
                     <template v-else-if="card.predefined !== undefined">
                         <div v-if="card.available" class="relative mt-3">
-                            <div class="h-40 overflow-y-auto border-t border-[var(--color-razzmatazz-100)] pr-1" @scroll="onListScroll($event, card.label)">
+                            <div class="h-40 overflow-y-auto border-t border-[var(--color-razzmatazz-100)] pr-1 pt-2" @scroll="onListScroll($event, card.label)">
                                 <div
                                     v-for="item in card.predefined"
                                     :key="item.source"
                                     class="flex items-center justify-between gap-2 py-1.5 text-sm"
                                 >
-                                    <span class="font-semibold text-[#000]">{{ item.source }}</span>
-                                    <span class="shrink-0 font-semibold text-[var(--color-razzmatazz-700)]">{{ item.count }}</span>
+                                    <span class="font-medium text-[#000]">{{ item.source }}</span>
+                                    <span class="shrink-0 font-medium text-[var(--color-razzmatazz-700)]">{{ item.count }}</span>
                                 </div>
                             </div>
                             <div
