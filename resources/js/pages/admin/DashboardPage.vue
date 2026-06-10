@@ -7,6 +7,8 @@ type KpiValue = {
     value: number | null;
     available: boolean;
     note?: string;
+    predefined?: { source: string; count: number }[];
+    freeText?: string[];
 };
 
 type KpiPayload = {
@@ -94,12 +96,42 @@ onUnmounted(() => {
                 <article
                     v-for="card in engagementCards"
                     :key="card.label"
-                    class="rounded-2xl border border-base-300 bg-white p-5 shadow-sm"
+                    class="flex flex-col rounded-2xl border border-base-300 bg-white p-5 shadow-sm"
                     :class="card.available ? '' : 'opacity-45 grayscale'"
                 >
-                    <p class="min-h-11 text-lg text-base-content/65">{{ card.label }}</p>
-                    <p class="mt-2 text-4xl font-bold">{{ displayValue(card.value, card.format) }}</p>
-                    <p class="mt-3 text-xs text-base-content/45">{{ card.note }}</p>
+                    <p class="text-lg text-base-content/65">{{ card.label }}</p>
+
+                    <!-- Card sources : liste scrollable -->
+                    <template v-if="card.predefined !== undefined">
+                        <div v-if="card.available" class="mt-3 max-h-40 overflow-y-auto pr-1">
+                            <div
+                                v-for="item in card.predefined"
+                                :key="item.source"
+                                class="flex items-center justify-between gap-2 py-1 text-sm"
+                            >
+                                <span class="text-base-content/80">{{ item.source }}</span>
+                                <span class="shrink-0 font-semibold">{{ item.count }}</span>
+                            </div>
+                            <template v-if="card.freeText && card.freeText.length > 0">
+                                <hr v-if="card.predefined.length > 0" class="my-2 border-base-200" />
+                                <div
+                                    v-for="text in card.freeText"
+                                    :key="text"
+                                    class="flex items-center justify-between gap-2 py-1 text-sm"
+                                >
+                                    <span class="text-base-content/80">{{ text }}</span>
+                                    <span class="shrink-0 text-xs text-base-content/40">Autre</span>
+                                </div>
+                            </template>
+                        </div>
+                        <p v-else class="mt-3 text-xs text-base-content/45">{{ card.note }}</p>
+                    </template>
+
+                    <!-- Cards génériques -->
+                    <template v-else>
+                        <p class="mt-2 text-4xl font-bold">{{ displayValue(card.value, card.format) }}</p>
+                        <p class="mt-3 text-xs text-base-content/45">{{ card.note }}</p>
+                    </template>
                 </article>
             </div>
         </section>

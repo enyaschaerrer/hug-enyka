@@ -22,6 +22,16 @@ class KpiController extends Controller
             ->where('is_public', false)
             ->count();
 
+        $predefinedOptions = [
+            'Réseaux sociaux',
+            'Recherche web / site HUG',
+            'Recommandation d\'une entreprise',
+            'Recommandation d\'un collaborateur',
+            'Contact direct des HUG / CTS',
+            'Événement / présentation',
+            'Bouche à oreille',
+        ];
+
         $sourcesBreakdown = DB::table('companies')
             ->whereNotNull('source')
             ->where('source', '!=', '')
@@ -30,9 +40,15 @@ class KpiController extends Controller
             ->orderByDesc('total')
             ->pluck('total', 'source');
 
-        $sourcesList = $sourcesBreakdown->map(fn ($count, $source) => $source . ' (' . $count . ')')
-            ->values()
-            ->join(', ');
+        $predefinedSources = $sourcesBreakdown
+            ->filter(fn ($count, $source) => in_array($source, $predefinedOptions))
+            ->map(fn ($count, $source) => ['source' => $source, 'count' => $count])
+            ->values();
+
+        $freeTextSources = $sourcesBreakdown
+            ->filter(fn ($count, $source) => ! in_array($source, $predefinedOptions))
+            ->keys()
+            ->values();
 
         return response()->json([
             'engagement' => [
@@ -48,9 +64,9 @@ class KpiController extends Controller
                     'label' => 'Sources des entreprises',
                     'value' => $sourcesBreakdown->count(),
                     'available' => $sourcesBreakdown->isNotEmpty(),
-                    'note' => $sourcesBreakdown->isEmpty()
-                        ? 'Aucune source renseignée pour le moment.'
-                        : $sourcesList,
+                    'note' => $sourcesBreakdown->isEmpty() ? 'Aucune source renseignée pour le moment.' : null,
+                    'predefined' => $predefinedSources,
+                    'freeText' => $freeTextSources,
                 ],
                 'pageVisits' => [
                     'label' => 'Visites du site public',
