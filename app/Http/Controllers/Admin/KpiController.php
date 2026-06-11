@@ -37,7 +37,7 @@ class KpiController extends Controller
                 'companies.employee_count',
                 DB::raw('COUNT(DISTINCT CASE WHEN collections_users.connected = 1 THEN collections_users.user_id END) as connected_count'),
             )
-            ->groupBy('companies.id', 'companies.name', 'companies.logo', 'companies.employee_count')
+            ->groupBy('companies.id', 'companies.name', 'companies.primaryColor', 'companies.employee_count')
             ->get()
             ->map(function ($c) {
                 $rate = $c->employee_count > 0
