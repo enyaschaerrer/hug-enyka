@@ -14,7 +14,7 @@ const props = withDefaults(defineProps<{
 type Reason = { title: string; detail: string; status: 'warning' | 'blocker' };
 
 const emit = defineEmits<{
-    ineligible: [reasons: Reason[]];
+    ineligible: [reasons: Reason[], reminderMonths: number | null];
     match: [modules: string[]];
 }>();
 
@@ -36,10 +36,12 @@ type Card = Record<string, unknown> & {
     leftOutcome: {
         status: TriageStatus;
         label: string;
+        months?: number;
     };
     rightOutcome: {
         status: TriageStatus;
         label: string;
+        months?: number;
     };
 };
 
@@ -188,7 +190,19 @@ function handleSwipe(item: Card, direction: SwipeDirection) {
                 detail: answers.value.find((a) => a.cardId === card.id)?.label ?? '',
                 status: 'blocker' as const,
             }));
-        emit('ineligible', reasons);
+
+        // Délai le plus long parmi les blocages ayant un `months` (âge/IST sans months → pas de rappel).
+        const blockingMonths = answers.value
+            .filter((answer) => answer.status === 'blocker')
+            .map((answer) => {
+                const card = tinderScenario.cards.find((c) => c.id === answer.cardId);
+                const outcome = answer.direction === 'left' ? card?.leftOutcome : card?.rightOutcome;
+                return outcome?.months ?? null;
+            })
+            .filter((months): months is number => months !== null && months > 0);
+        const reminderMonths = blockingMonths.length ? Math.max(...blockingMonths) : null;
+
+        emit('ineligible', reasons, reminderMonths);
         return;
     }
 

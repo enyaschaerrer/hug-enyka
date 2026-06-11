@@ -15,6 +15,9 @@ return [
 
     'name' => env('APP_NAME', 'Laravel'),
 
+    // Jeton secret pour déclencher les tâches planifiées via une URL (cron Infomaniak par URL).
+    'cron_token' => env('CRON_TOKEN'),
+
     /*
     |--------------------------------------------------------------------------
     | Application Environment

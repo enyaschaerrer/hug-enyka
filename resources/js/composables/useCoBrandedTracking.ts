@@ -36,8 +36,34 @@ export function useCoBrandedTracking() {
         post(tracking.onedocUrl);
     }
 
+    /**
+     * Demande de rappel par email (inéligibilité à délai). Renvoie une promesse
+     * pour que l'appelant puisse afficher un succès / une erreur.
+     */
+    async function submitReminder(email: string, months: number): Promise<boolean> {
+        if (!tracking.reminderUrl) return false;
+
+        try {
+            const res = await fetch(tracking.reminderUrl, {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken,
+                    'X-Requested-With': 'XMLHttpRequest',
+                },
+                body: JSON.stringify({ email, months }),
+            });
+
+            return res.ok;
+        } catch {
+            return false;
+        }
+    }
+
     return {
         trackQuizStep,
         trackOnedocClick,
+        submitReminder,
     };
 }

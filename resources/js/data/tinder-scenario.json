@@ -36,6 +36,7 @@
             },
             "rightOutcome": {
                 "status": "blocker",
+                "months": 4,
                 "label": "Attente de 4 mois pour un don du sang récent."
             },
             "dialogue": "Votre corps a besoin de temps pour refaire ses réserves.",
@@ -76,7 +77,8 @@
             },
             "rightOutcome": {
                 "status": "blocker",
-                "label": "Attente de 12 mois pour consommation de drogues."
+                "months": 12,
+                "label": "Attente de 12 mois pour un don du sang récent."
             },
             "dialogue": "Cette question nous aide à garantir la sécurité des dons.",
             "mascot": "/img/mascots/blutly_hips.webp"
@@ -96,7 +98,8 @@
             },
             "rightOutcome": {
                 "status": "blocker",
-                "label": "Délai d'un an après un accouchement est requis."
+                "months": 12,
+                "label": "Attente de 12 mois pour un don du sang récent."
             },
             "dialogue": "Vous prenez déjà soin d'une petite vie, c'est une belle mission ! Un délai d'un an après l'accouchement est requis.",
             "mascot": "/img/mascots/blutly_pregnant.webp"

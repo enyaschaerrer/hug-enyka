@@ -54,6 +54,7 @@ class CoBrandedCollecteController extends Controller
                 'tracking' => [
                     'quizStepUrl' => route('public.collecte.cobranded.track.quiz-step', ['brand' => $brand, 'token' => $token]),
                     'onedocUrl' => route('public.collecte.cobranded.track.onedoc', ['brand' => $brand, 'token' => $token]),
+                    'reminderUrl' => route('public.collecte.cobranded.reminder', ['brand' => $brand, 'token' => $token]),
                 ],
                 'auth' => [
                     'canAccess' => $canAccess,

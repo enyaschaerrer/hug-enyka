@@ -43,6 +43,30 @@ class CoBrandedTrackingController extends Controller
     }
 
     /**
+     * Enregistre une demande de rappel : calcule la date (now + délai le plus long en mois)
+     * et stocke l'email. L'envoi se fera plus tard via la commande planifiée reminders:send.
+     */
+    public function reminder(Request $request, string $brand, string $token): JsonResponse
+    {
+        $validated = $request->validate([
+            'email'  => ['required', 'email', 'max:255'],
+            'months' => ['required', 'numeric', 'min:0.1', 'max:60'],
+        ]);
+
+        [$collection, $user] = $this->resolveCollectionUser($request, $brand, $token);
+
+        // months peut être fractionnaire (0.5 = 2 semaines) → on convertit en jours.
+        $reminderAt = now()->addDays((int) round($validated['months'] * 30.4));
+
+        $collection->users()->updateExistingPivot($user->id, [
+            'reminder_at'    => $reminderAt,
+            'reminder_email' => $validated['email'],
+        ]);
+
+        return response()->json(['ok' => true, 'reminderAt' => $reminderAt->toDateString()]);
+    }
+
+    /**
      * Résout la collection (brand + token) et l'utilisateur connecté, en s'assurant
      * qu'il participe bien à cette collecte. Renvoie [Collection, User].
      *

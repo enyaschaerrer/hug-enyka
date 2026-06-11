@@ -1,15 +1,35 @@
 <script setup lang="ts">
 import { computed, onMounted, reactive, ref } from 'vue';
+import { useCoBrandedTracking } from '../../composables/useCoBrandedTracking';
 
 const props = defineProps<{
     reasons?: { title: string; detail: string; status?: 'warning' | 'blocker' }[];
+    /** Délai le plus long en mois ; null = pas de rappel possible (âge / IST permanente). */
+    reminderMonths?: number | null;
 }>();
+
+const { submitReminder } = useCoBrandedTracking();
 
 const form = reactive({
     nom: '',
     prenom: '',
     email: '',
 });
+
+const reminderState = ref<'idle' | 'sending' | 'sent' | 'error'>('idle');
+
+// Le formulaire de rappel n'a de sens que s'il existe un délai chiffré.
+const canRemind = computed(() => typeof props.reminderMonths === 'number' && props.reminderMonths > 0);
+
+async function onReminderSubmit() {
+    if (!canRemind.value || !form.email) {
+        return;
+    }
+
+    reminderState.value = 'sending';
+    const ok = await submitReminder(form.email, props.reminderMonths as number);
+    reminderState.value = ok ? 'sent' : 'error';
+}
 
 const bubbleText = 'Vous êtes malheureusement inéligible. Voici la raison. Cependant, nous vous envoyons volontiers un rappel par message pour repasser le test !';
 const typedText = ref('');
@@ -68,9 +88,17 @@ const displayReasons = computed(() => props.reasons ?? []);
                         </div>
                     </div>
 
-                    <!-- Formulaire rappel -->
+                    <!-- Formulaire rappel — uniquement si un délai chiffré existe (pas pour âge / IST) -->
+                    <template v-if="canRemind">
                     <h2 class="mb-4 text-xl font-bold text-[#2f1725]">Vous aimeriez un rappel ?</h2>
-                    <form class="rounded-2xl bg-razzmatazz-800 px-6 py-6 space-y-4 shadow-[0_8px_40px_rgba(109,0,46,0.10)]" @submit.prevent>
+
+                    <div v-if="reminderState === 'sent'" class="rounded-2xl bg-razzmatazz-800 px-6 py-6 text-center shadow-[0_8px_40px_rgba(109,0,46,0.10)]">
+                        <p class="text-body font-semibold text-razzmatazz-50">
+                            C'est noté&nbsp;! On t'enverra un rappel par email dès que tu pourras retenter le don. 🩸
+                        </p>
+                    </div>
+
+                    <form v-else class="rounded-2xl bg-razzmatazz-800 px-6 py-6 space-y-4 shadow-[0_8px_40px_rgba(109,0,46,0.10)]" @submit.prevent="onReminderSubmit">
                         <label class="flex flex-col gap-1.5">
                             <span class="text-sm font-semibold text-razzmatazz-50">Nom</span>
                             <input
@@ -98,15 +126,20 @@ const displayReasons = computed(() => props.reasons ?? []);
                                 placeholder="ton@email.com"
                             />
                         </label>
+                        <p v-if="reminderState === 'error'" class="text-center text-sm font-semibold text-razzmatazz-50">
+                            Une erreur est survenue. Réessaie.
+                        </p>
                         <div class="flex justify-center pt-1">
                             <button
                                 type="submit"
-                                class="rounded-xl bg-razzmatazz-950 px-8 py-2.5 text-body font-medium text-razzmatazz-50 transition hover:bg-razzmatazz-400 hover:text-white"
+                                :disabled="reminderState === 'sending' || !form.email"
+                                class="rounded-xl bg-razzmatazz-950 px-8 py-2.5 text-body font-medium text-razzmatazz-50 transition hover:bg-razzmatazz-400 hover:text-white disabled:opacity-60 disabled:hover:bg-razzmatazz-950 disabled:hover:text-razzmatazz-50"
                             >
-                                S'inscrire pour un rappel
+                                {{ reminderState === 'sending' ? 'Envoi…' : "S'inscrire pour un rappel" }}
                             </button>
                         </div>
                     </form>
+                    </template>
                 </div>
 
             </div>

@@ -11,6 +11,8 @@ use App\Http\Controllers\CoBrandedCollecteController;
 use App\Http\Controllers\CoBrandedTrackingController;
 use App\Http\Controllers\Public\CompanyFormController;
 use App\Http\Controllers\PublicSiteController;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(\App\Http\Middleware\TrackPageVisit::class)->group(function () {
@@ -28,7 +30,19 @@ Route::post('/collecte/{brand}/{token}/login', [CoBrandedAuthController::class, 
 Route::post('/collecte/{brand}/{token}/logout', [CoBrandedAuthController::class, 'logout'])->name('public.collecte.cobranded.logout');
 Route::post('/collecte/{brand}/{token}/track/quiz-step', [CoBrandedTrackingController::class, 'quizStep'])->name('public.collecte.cobranded.track.quiz-step');
 Route::post('/collecte/{brand}/{token}/track/onedoc', [CoBrandedTrackingController::class, 'onedocClick'])->name('public.collecte.cobranded.track.onedoc');
+Route::post('/collecte/{brand}/{token}/reminder', [CoBrandedTrackingController::class, 'reminder'])->name('public.collecte.cobranded.reminder');
 Route::post('/prix/inscription', [CompanyFormController::class, 'storePrize']);
+
+// Cron par URL (Infomaniak) : déclenche l'envoi des rappels. Protégé par un token secret.
+Route::get('/cron/reminders', function (Request $request) {
+    $expected = (string) config('app.cron_token');
+
+    abort_if($expected === '' || ! hash_equals($expected, (string) $request->query('token')), 403);
+
+    Artisan::call('reminders:send');
+
+    return response(trim(Artisan::output()) ?: 'OK', 200)->header('Content-Type', 'text/plain');
+})->name('cron.reminders');
 
 // Admin SPA shell — login page is public
 Route::get('/admin/login', fn () => view('admin.login'))->name('login');
