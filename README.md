@@ -30,10 +30,10 @@ Ce projet a été réalisé dans le cadre d’un mandat confié par les HUG à d
 
 ### Prérequis
 
-- PHP 8.4 ou supérieur
+- PHP 8.3 ou supérieur
 - Composer
 - Node.js et npm
-- MAMP avec MySQL démarré ou Docker
+- Un serveur local type MAMP ou équivalent, avec MySQL démarré
 
 ### Récupérer le projet
 
