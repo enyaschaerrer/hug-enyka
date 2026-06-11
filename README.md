@@ -1,32 +1,44 @@
-# hug-enyka
-Projet d'intégration 2026, Ingénierie des Médias - problématique de la collecte du don du sang en entreprise, pour les HUG
+# Enyka — Plateforme HUG de collecte de sang en entreprise
+Enyka est une plateforme web conçue pour promouvoir et faciliter la collecte de sang en entreprise pour les HUG.
+Le projet est scindé en trois espaces : un site public de présentation, un site co-brandé propre à chaque entreprise partenaire, utilisé pour communiquer la collecte en interne et rediriger les collaborateurs vers la prise de rendez-vous, et un espace `/admin` permettant au CTS de gérer les campagnes, les entreprises et de suivre les indicateurs de performance.
 
-## Technologies utilisees
+Ce projet a été réalisé dans le cadre d’un mandat confié par les HUG à des étudiants de la HEIG-VD.
 
-- PHP 8.4.17
-- Laravel 13.9.0
-- MySQL 8.0.40
-- Node.js 22.20.0
-- npm 11.10.0
-- Vite 8.0.13
-- Vue.js 3.5.34
-- Tailwind CSS 4.3.0
-- daisyUI 5.5.20
-- GSAP 3.15.0
+## Stack technique
+
+### Stack globale
+
+- Backend : PHP, Laravel, MySQL
+- Frontend : Vue 3, TypeScript, Vite
+- UI : Tailwind CSS, daisyUI
+
+### Dépendances Composer utilisées
+
+- `laravel/framework` : framework principal backend
+
+### Dépendances Node utilisées
+
+- `d3-geo` : rendu des cartes
+- `topojson-client` : lecture des données cartographiques
+- `world-atlas` : données monde pour les cartes
+- `flag-icons` : affichage des drapeaux
+- `qr-code-styling` : génération du QR code co-brandé
+- `vue3-flashcards` : interactions de type swipe
+- `vue3-lottie` : animations Lottie
 
 ## Installation locale
 
 ### Prérequis
 
-- PHP 8.4 ou supérieur
+- PHP 8.3 ou supérieur
 - Composer
 - Node.js et npm
-- MAMP avec MySQL démarré ou Docker
+- Un serveur local type MAMP ou équivalent, avec MySQL démarré
 
 ### Récupérer le projet
 
 ```bash
-git clone <https://github.com/enyaschaerrer/hug-enyka>
+git clone https://github.com/enyaschaerrer/hug-enyka
 cd hug-enyka
 ```
 
@@ -44,7 +56,9 @@ cp .env.example .env
 php artisan key:generate
 ```
 
-La configuration MySQL locale attendue est celle de MAMP :
+Configurer ensuite les variables de base de données dans le fichier `.env` selon votre environnement local.
+
+Exemple de configuration MySQL locale avec MAMP :
 
 #### Mac
 
@@ -76,7 +90,7 @@ Dans phpMyAdmin, créer une base de données nommée :
 hug_enyka_local
 ```
 
-L'interclassement et l'encodage () peuvent rester sur la valeur par defaut proposee par MySQL/MAMP.
+L’interclassement et l’encodage peuvent rester sur les valeurs par défaut proposées par phpMyAdmin.
 
 ### Initialiser la base de données
 
@@ -93,11 +107,18 @@ Mot de passe: password
 Role: superadmin
 ```
 
-### Lancer le projet
+Vous avez également la possibilité d’utiliser un snapshot de la base déjà peuplée :
 
-Activer le serveur local avec MAMP, puis ouvrir l'URL locale du projet.
+```bash
+php artisan migrate:fresh
+php artisan db:seed --class=Database\\Seeders\\EnykaLocalSeeder
+```
 
-Si le projet n'est pas servi par MAMP, utiliser le serveur Laravel integré :
+### Lancer le projet en local
+
+Si le projet est déjà servi via votre environnement local habituel, ouvrez simplement son URL locale dans le navigateur.
+
+Sinon, lancer le serveur Laravel :
 
 ```bash
 php artisan serve
@@ -109,15 +130,11 @@ Dans ce cas, le site est accessible sur l'URL affichée par Laravel, généralem
 http://127.0.0.1:8000
 ```
 
-### Développement frontend
-
-Si vous modifiez les fichiers CSS, JavaScript ou Vue, lancer Vite dans un autre terminal :
+Puis, dans un autre terminal, lancer Vite pour compiler les assets frontend :
 
 ```bash
 npm run dev
 ```
-
-Sinon, cette commande n'est pas nécessaire pour simplement ouvrir le projet en local.
 
 
 ## Déploiement (production)
@@ -224,7 +241,7 @@ exit
 ```
 
 
-## Structure actuelle
+## Structure du projet
 
 ```text
 app/
@@ -232,56 +249,67 @@ app/
     UserRole.php                 Roles utilisateur actuels.
   Http/
     Controllers/
-      Admin/                     Controllers du back-office.
-      PublicSiteController.php   Point d'entree des pages publiques.
+      Admin/                     Controllers du back-office et des endpoints JSON admin.
+      Public/                    Controllers des formulaires publics.
+      CoBranded*.php             Controllers des pages, accès et tracking co-brandés.
+      PublicSiteController.php   Point d'entrée des pages publiques.
     Middleware/
-      EnsureUserHasRole.php      Protection des routes par role.
+      EnsureUserHasRole.php      Protection des routes par rôle.
+      TrackPageVisit.php         Tracking des visites publiques avec consentement.
     Requests/
       Admin/                     Validation des formulaires admin.
+  Mail/                          Mailables Laravel.
   Models/
-    User.php                     Modele utilisateur Laravel.
+    Company.php                  Modèle entreprise.
+    Collection.php               Modèle collecte.
+    Form.php                     Modèle formulaire public.
+    User.php                     Modèle utilisateur Laravel.
+  Support/                       Helpers métier, notamment sur les domaines email.
 
 bootstrap/
-  app.php                        Configuration Laravel, dont alias middleware.
+  app.php                        Configuration Laravel, middleware et bootstrap global.
 
 database/
   factories/                     Factories de test.
-  migrations/                    Schema de base de donnees.
-  seeders/                       Donnees de test, dont superadmin.
+  migrations/                    Schéma de base de données.
+  seeders/                       Seeders de démo, de KPI et snapshot local.
 
 md_architecture/
-  auth-admin-cobranding.md       Decisions d'architecture auth/admin/co-branding.
+  *.md                           Documentation d'architecture et décisions projet.
 
 resources/
   css/
-    app.css                      CSS global Tailwind/DaisyUI.
+    app.css                      CSS global Tailwind / daisyUI.
   js/
-    App.vue                      Selectionne la page Vue selon l'URL.
-    app.ts                       Point d'entree Vue.
+    App.vue                      Shell SPA pour l'admin et les pages co-brandées.
+    app.ts                       Point d'entrée frontend global.
     components/
-      tinder-cards/              Prototype swipe actuel.
+      admin/                     Composants du back-office.
+      co-branded/                Composants de l'expérience co-brandée.
+      interactive-map/           Carte monde interactive.
+      modals/                    Modales globales, dont consentement cookies.
+      public/                    Îlots Vue des pages publiques.
+      sms-chat/                  Prototype de conversation SMS.
+      tinder-cards/              Prototype swipe / questionnaire.
+    composables/                 Logique réutilisable Vue.
+    data/                        Données statiques JSON du frontend.
     pages/
-      public/                    Pages publiques: home, collecte, trophee, label, contact.
-      admin/                     Pages admin: login, dashboard.
+      admin/                     Pages SPA du back-office.
+      co-branded/                Pages SPA des campagnes co-brandées.
+    services/                    Services frontend (tracking, cookies, etc.).
+    types/                       Types TypeScript.
+    utils/                       Utilitaires frontend.
   views/
-    app.blade.php                Vue Blade qui monte l'application Vue.
+    app.blade.php                Vue Blade qui monte la SPA admin / co-brandée.
+    layouts/                     Layouts Blade publics.
+    partials/                    Partiels Blade du site public.
+    public/                      Pages publiques Blade.
+    emails/                      Templates d'e-mails.
 
 routes/
-  web.php                        Routes publiques et admin.
+  web.php                        Routes publiques, co-brandées et admin.
 
 tests/
   Feature/                       Tests fonctionnels Laravel.
   Unit/                          Tests unitaires.
-```
-
-Routes utiles actuellement :
-
-```text
-/              Accueil public.
-/collecte      Page publique Collecte.
-/trophee       Page publique Trophee.
-/label         Page publique Label.
-/contact       Page publique Contact.
-/admin/login   Connexion admin.
-/admin         Dashboard admin protege.
 ```
