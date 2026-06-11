@@ -1,18 +1,30 @@
-# hug-enyka
-Projet d'intégration 2026, Ingénierie des Médias - problématique de la collecte du don du sang en entreprise, pour les HUG
+# Enyka — Plateforme HUG de collecte de sang en entreprise
+Enyka est une plateforme web conçue pour promouvoir et faciliter la collecte de sang en entreprise pour les HUG.
+Le projet est scindé en trois espaces : un site public de présentation, un site co-brandé propre à chaque entreprise partenaire, utilisé pour communiquer la collecte en interne et rediriger les collaborateurs vers la prise de rendez-vous, et un espace `/admin` permettant au CTS de gérer les campagnes, les entreprises et de suivre les indicateurs de performance.
 
-## Technologies utilisees
+Ce projet a été réalisé dans le cadre d’un mandat confié par les HUG à des étudiants de la HEIG-VD.
 
-- PHP 8.4.17
-- Laravel 13.9.0
-- MySQL 8.0.40
-- Node.js 22.20.0
-- npm 11.10.0
-- Vite 8.0.13
-- Vue.js 3.5.34
-- Tailwind CSS 4.3.0
-- daisyUI 5.5.20
-- GSAP 3.15.0
+## Stack technique
+
+### Stack globale
+
+- Backend : PHP, Laravel, MySQL
+- Frontend : Vue 3, TypeScript, Vite
+- UI : Tailwind CSS, daisyUI
+
+### Dépendances Composer utilisées
+
+- `laravel/framework` : framework principal backend
+
+### Dépendances Node utilisées
+
+- `d3-geo` : rendu des cartes
+- `topojson-client` : lecture des données cartographiques
+- `world-atlas` : données monde pour les cartes
+- `flag-icons` : affichage des drapeaux
+- `qr-code-styling` : génération du QR code co-brandé
+- `vue3-flashcards` : interactions de type swipe
+- `vue3-lottie` : animations Lottie
 
 ## Installation locale
 
