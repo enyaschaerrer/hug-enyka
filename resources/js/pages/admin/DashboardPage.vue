@@ -18,6 +18,7 @@ type KpiValue = {
     label: string;
     value: number | null;
     available: boolean;
+    description?: string | null;
     note?: string | null;
     predefined?: { source: string; count: number }[];
     freeText?: string[];
@@ -139,6 +140,17 @@ const visitsLoading = ref(false);
 const displayedCount = ref(0);
 let countAnimation: number | undefined;
 
+const KPI_DESCRIPTIONS = {
+    pageVisits: 'Nombre total de visites enregistrées sur le site public.',
+    labelledCompanies: 'Entreprises participantes aux collectes de sang.',
+    companySources: 'Canaux d’acquisition des entreprises participantes.',
+    connectedUsers: 'Collaborateurs ayant réussi à se connecter au site co-brandé.',
+    participationRate: 'Part des collaborateurs connectés par rapport à l’effectif total.',
+    questionnaireAbandonRate: 'Part des collaborateurs qui quittent le parcours avant la fin.',
+    conversionRate: 'Part des collaborateurs ayant accédé au lien OneDoc.',
+    cobrandedFilter: 'Filtrer les résultats par une ou plusieurs entreprises.',
+} as const;
+
 function animateCount(target: number) {
     if (countAnimation) cancelAnimationFrame(countAnimation);
     const from = displayedCount.value;
@@ -175,14 +187,14 @@ const engagementCards = computed(() => {
     }
 
     return [
-        { ...kpis.value.engagement.pageVisits, format: 'number', isVisits: true },
-        { ...kpis.value.engagement.labelledCompanies, format: 'number', isHighlighted: true, isLabelled: true },
-        { ...kpis.value.engagement.companySources, format: 'number', isHighlighted: true },
-        { isSpacer: true, label: '__spacer__', value: null, available: true, isCobranded: true },
-        { ...kpis.value.engagement.connectedUsers, format: 'number', isCobranded: true },
-        { ...kpis.value.engagement.participationRate, format: 'percent', isCobranded: true },
-        { ...kpis.value.engagement.questionnaireAbandonRate, format: 'percent', isCobranded: true },
-        { ...kpis.value.engagement.conversionRate, format: 'percent', isCobranded: true },
+        { ...kpis.value.engagement.pageVisits, format: 'number', isVisits: true, description: KPI_DESCRIPTIONS.pageVisits },
+        { ...kpis.value.engagement.labelledCompanies, format: 'number', isHighlighted: true, isLabelled: true, description: KPI_DESCRIPTIONS.labelledCompanies },
+        { ...kpis.value.engagement.companySources, format: 'number', isHighlighted: true, description: KPI_DESCRIPTIONS.companySources },
+        { isSpacer: true, label: '__spacer__', value: null, available: true, isCobranded: true, description: KPI_DESCRIPTIONS.cobrandedFilter },
+        { ...kpis.value.engagement.connectedUsers, format: 'number', isCobranded: true, description: KPI_DESCRIPTIONS.connectedUsers },
+        { ...kpis.value.engagement.participationRate, format: 'percent', isCobranded: true, description: KPI_DESCRIPTIONS.participationRate },
+        { ...kpis.value.engagement.questionnaireAbandonRate, format: 'percent', isCobranded: true, description: KPI_DESCRIPTIONS.questionnaireAbandonRate },
+        { ...kpis.value.engagement.conversionRate, format: 'percent', isCobranded: true, description: KPI_DESCRIPTIONS.conversionRate },
     ];
 });
 
@@ -269,6 +281,7 @@ onUnmounted(() => {
                     <!-- Card filtre KPIs co-brandés -->
                     <template v-if="card.isSpacer">
                         <p class="text-lg font-semibold text-[#000]">Site co-brandé</p>
+                        <p class="mt-1 text-xs text-base-content/55">{{ card.description }}</p>
                         <div class="relative mt-1.5">
                             <svg
                                 xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -336,6 +349,7 @@ onUnmounted(() => {
 
                     <template v-else>
                     <p class="text-lg font-semibold text-[#000]">{{ card.isLabelled ? `${card.label} (${card.value})` : card.label }}</p>
+                    <p class="mt-1 text-xs text-base-content/55">{{ card.description }}</p>
 
                     <!-- Card visites : période type GA -->
                     <template v-if="card.isVisits">

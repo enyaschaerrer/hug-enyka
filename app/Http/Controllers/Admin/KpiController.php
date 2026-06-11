@@ -208,7 +208,7 @@ class KpiController extends Controller
                     'note' => null,
                 ],
                 'connectedUsers' => [
-                    'label'     => 'Collaborateurs s\'étant connectés',
+                    'label'     => 'Collaborateurs s\'étant inscrits',
                     'value'     => $connectedTotal,
                     'available' => true,
                     'note'      => null,
