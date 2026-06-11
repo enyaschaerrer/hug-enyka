@@ -38,7 +38,7 @@ Ce projet a été réalisé dans le cadre d’un mandat confié par les HUG à d
 ### Récupérer le projet
 
 ```bash
-git clone <https://github.com/enyaschaerrer/hug-enyka>
+git clone https://github.com/enyaschaerrer/hug-enyka
 cd hug-enyka
 ```
 
@@ -56,7 +56,9 @@ cp .env.example .env
 php artisan key:generate
 ```
 
-La configuration MySQL locale attendue est celle de MAMP :
+Configurer ensuite les variables de base de données dans le fichier `.env` selon votre environnement local.
+
+Exemple de configuration MySQL locale avec MAMP :
 
 #### Mac
 
@@ -88,7 +90,7 @@ Dans phpMyAdmin, créer une base de données nommée :
 hug_enyka_local
 ```
 
-L'interclassement et l'encodage () peuvent rester sur la valeur par defaut proposee par MySQL/MAMP.
+L’interclassement et l’encodage peuvent rester sur les valeurs par défaut proposées par phpMyAdmin.
 
 ### Initialiser la base de données
 
@@ -105,11 +107,18 @@ Mot de passe: password
 Role: superadmin
 ```
 
-### Lancer le projet
+Vous avez également la possibilité d’utiliser un snapshot de la base déjà peuplée :
 
-Activer le serveur local avec MAMP, puis ouvrir l'URL locale du projet.
+```bash
+php artisan migrate:fresh
+php artisan db:seed --class=Database\\Seeders\\EnykaLocalSeeder
+```
 
-Si le projet n'est pas servi par MAMP, utiliser le serveur Laravel integré :
+### Lancer le projet en local
+
+Si le projet est déjà servi via votre environnement local habituel, ouvrez simplement son URL locale dans le navigateur.
+
+Sinon, lancer le serveur Laravel :
 
 ```bash
 php artisan serve
@@ -121,15 +130,11 @@ Dans ce cas, le site est accessible sur l'URL affichée par Laravel, généralem
 http://127.0.0.1:8000
 ```
 
-### Développement frontend
-
-Si vous modifiez les fichiers CSS, JavaScript ou Vue, lancer Vite dans un autre terminal :
+Puis, dans un autre terminal, lancer Vite pour compiler les assets frontend :
 
 ```bash
 npm run dev
 ```
-
-Sinon, cette commande n'est pas nécessaire pour simplement ouvrir le projet en local.
 
 
 ## Déploiement (production)
