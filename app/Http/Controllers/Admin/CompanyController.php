@@ -131,9 +131,10 @@ class CompanyController extends Controller
         $filename = Str::slug($slug ?: pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME) ?: 'company-logo')
             . '-' . now()->format('YmdHis') . '.' . $extension;
 
-        $file->move(public_path('img/companies'), $filename);
+        // Stocké hors du code, dans storage/app/public/companies (servi via le symlink public/storage).
+        $file->storeAs('companies', $filename, 'public');
 
-        return '/img/companies/' . $filename;
+        return '/storage/companies/' . $filename;
     }
 
     /**

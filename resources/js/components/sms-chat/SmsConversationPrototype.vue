@@ -527,7 +527,7 @@ if (scenario.intro) {
                             class="flex animate-pulse items-center gap-1.5 text-caption font-semibold text-razzmatazz-800"
                         >
                             <span class="material-symbols-outlined text-[18px]" aria-hidden="true">touch_app</span>
-                            <span>Touche une réponse pour répondre à Sanguy</span>
+                            <span>Clique sur le message "C'est parti" pour répondre à Sanguy</span>
                         </div>
                         <button
                             v-for="answer in currentAnswers"
