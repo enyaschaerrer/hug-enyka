@@ -19,9 +19,14 @@ const isDesktop = ref(false);
 const exitModalOpen = ref(false);
 const showNonEligible = ref(false);
 const ineligibleReasons = ref<{ title: string; detail: string; status: 'warning' | 'blocker' }[]>([]);
+const reminderMonthsValue = ref<number | null>(null);
 
-function onIneligible(reasons: { title: string; detail: string; status: 'warning' | 'blocker' }[]) {
+function onIneligible(
+    reasons: { title: string; detail: string; status: 'warning' | 'blocker' }[],
+    reminderMonths: number | null = null,
+) {
     ineligibleReasons.value = reasons;
+    reminderMonthsValue.value = reminderMonths;
     showSms.value = false;
     showNonEligible.value = true;
     // Parcours terminé (même non éligible) → plus considéré comme un abandon.
@@ -276,7 +281,7 @@ onBeforeUnmount(() => {
             </Transition>
 
             <!-- Non éligible -->
-            <CoBrandedNonEligibleView v-if="showNonEligible" :reasons="ineligibleReasons" class="flex-1" />
+            <CoBrandedNonEligibleView v-if="showNonEligible" :reasons="ineligibleReasons" :reminder-months="reminderMonthsValue" class="flex-1" />
 
             <Transition
                 enter-active-class="transition duration-200 ease-out"

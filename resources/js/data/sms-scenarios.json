@@ -46,7 +46,7 @@
             "text": "Quels soins médicaux avez-vous reçus ?",
             "answers": [
                 { "id": "dental", "label": "Soins dentaires", "next": "q6_dental", "sanguyEmotion": "happy" },
-                { "id": "gastro", "label": "Gastroscopie / coloscopie", "next": "__next__", "sanguyEmotion": "alt-angry", "outcome": { "severity": "delay", "label": "à confirmer" } },
+                { "id": "gastro", "label": "Gastroscopie / coloscopie", "next": "__next__", "sanguyEmotion": "alt-angry", "outcome": { "severity": "delay", "months": 4, "label": "4 mois" } },
                 { "id": "other", "label": "Un autre soin", "next": "__next__", "sanguyEmotion": "alt-happy" }
             ]
         },
@@ -56,7 +56,7 @@
             "speaker": "bot",
             "text": "Avez-vous eu un traitement dentaire au cours des 2 dernières semaines, ou une extraction au cours de la dernière semaine ?",
             "answers": [
-                { "id": "yes", "label": "Oui", "next": "__next__", "sanguyEmotion": "alt-angry", "outcome": { "severity": "delay", "label": "à confirmer" } },
+                { "id": "yes", "label": "Oui", "next": "__next__", "sanguyEmotion": "alt-angry", "outcome": { "severity": "delay", "months": 0.5, "label": "2 semaines" } },
                 { "id": "no", "label": "Non", "next": "__next__", "sanguyEmotion": "happy" }
             ]
         },
@@ -77,7 +77,7 @@
             "text": "Ok, regardons d'abord les soins médicaux. Lesquels as-tu reçus ?",
             "answers": [
                 { "id": "dental", "label": "Soins dentaires", "next": "q6_dental_both", "sanguyEmotion": "happy" },
-                { "id": "gastro", "label": "Gastroscopie / coloscopie", "next": "q6_sick", "sanguyEmotion": "alt-angry", "outcome": { "severity": "delay", "label": "à confirmer" } },
+                { "id": "gastro", "label": "Gastroscopie / coloscopie", "next": "q6_sick", "sanguyEmotion": "alt-angry", "outcome": { "severity": "delay", "months": 4, "label": "4 mois"  } },
                 { "id": "other", "label": "Un autre soin", "next": "q6_sick", "sanguyEmotion": "alt-happy" }
             ]
         },
@@ -87,7 +87,7 @@
             "speaker": "bot",
             "text": "Avez-vous eu un traitement dentaire au cours des 2 dernières semaines, ou une extraction au cours de la dernière semaine ?",
             "answers": [
-                { "id": "yes", "label": "Oui", "next": "q6_sick", "sanguyEmotion": "alt-angry", "outcome": { "severity": "delay", "label": "à confirmer" } },
+                { "id": "yes", "label": "Oui", "next": "q6_sick", "sanguyEmotion": "alt-angry", "outcome": { "severity": "delay", "months": 0.5, "label": "2 semaines"  } },
                 { "id": "no", "label": "Non", "next": "q6_sick", "sanguyEmotion": "happy" }
             ]
         },
@@ -180,7 +180,7 @@
             "speaker": "bot",
             "text": "Vous avez signalé une piqûre de tique. Avez-vous eu des symptômes (fièvre, rougeur qui s'étend, fatigue, douleurs articulaires…) ?",
             "answers": [
-                { "id": "yes", "label": "Oui", "next": "__next__", "sanguyEmotion": "alt-angry", "outcome": { "severity": "delay", "months": 6, "label": "6 mois" } },
+                { "id": "yes", "label": "Oui", "next": "__next__", "sanguyEmotion": "alt-angry", "outcome": { "severity": "delay", "months": 1, "label": "1 mois" } },
                 { "id": "no", "label": "Non", "next": "__next__", "sanguyEmotion": "happy" }
             ]
         },

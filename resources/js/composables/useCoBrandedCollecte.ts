@@ -30,6 +30,7 @@ export type CoBrandedCollecte = {
     tracking: {
         quizStepUrl: string;
         onedocUrl: string;
+        reminderUrl: string;
     };
 };
 
@@ -73,6 +74,7 @@ export function useCoBrandedCollecte() {
     const tracking = coBrandedCollecte?.tracking ?? {
         quizStepUrl: '',
         onedocUrl: '',
+        reminderUrl: '',
     };
 
     return {

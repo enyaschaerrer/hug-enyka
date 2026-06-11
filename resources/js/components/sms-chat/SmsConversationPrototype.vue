@@ -20,8 +20,9 @@ const props = withDefaults(defineProps<{
 type Reason = { title: string; detail: string; status: 'warning' | 'blocker' };
 
 const emit = defineEmits<{
-    /** Le chat conclut à une non-éligibilité (définitive ou délais) → écran « Pas éligible ». */
-    ineligible: [reasons: Reason[]];
+    /** Le chat conclut à une non-éligibilité (définitive ou délais) → écran « Pas éligible ».
+     *  reminderMonths = délai le plus long en mois (null si IST permanente → pas de rappel). */
+    ineligible: [reasons: Reason[], reminderMonths: number | null];
     /** Le chat conclut à une éligibilité → écran rendez-vous affiché. */
     completed: [];
     /** L'utilisateur a cliqué sur le lien OneDoc. */
@@ -192,7 +193,12 @@ async function advanceToNextModule(nextEmotion?: SanguyEmotion) {
 async function showFinalVerdict() {
     currentNodeId.value = '';
 
-    if (hasPermanent.value || collectedDelays.value.length > 0) {
+    // Délais réellement chiffrés (les « à confirmer » n'ont pas de months → ignorés ici).
+    const concreteDelays = collectedDelays.value.filter((delay) => delay.months !== null && delay.months > 0);
+
+    // Inéligible si : IST permanente, OU au moins un délai chiffré.
+    // (Que des « à confirmer » → éligible : l'infirmier·e tranche sur place.)
+    if (hasPermanent.value || concreteDelays.length > 0) {
         const reasons: Reason[] = [];
         if (hasPermanent.value) {
             reasons.push({ title: 'Infection sexuellement transmissible', detail: 'Don non possible', status: 'blocker' });
@@ -204,7 +210,13 @@ async function showFinalVerdict() {
                 status: 'warning',
             });
         }
-        emit('ineligible', reasons);
+
+        // Pas de rappel si IST permanente ; sinon date = délai chiffré le plus long.
+        const reminderMonths = hasPermanent.value
+            ? null
+            : Math.max(...concreteDelays.map((delay) => delay.months as number));
+
+        emit('ineligible', reasons, reminderMonths);
         return;
     }
 
