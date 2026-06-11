@@ -248,56 +248,67 @@ app/
     UserRole.php                 Roles utilisateur actuels.
   Http/
     Controllers/
-      Admin/                     Controllers du back-office.
-      PublicSiteController.php   Point d'entree des pages publiques.
+      Admin/                     Controllers du back-office et des endpoints JSON admin.
+      Public/                    Controllers des formulaires publics.
+      CoBranded*.php             Controllers des pages, accès et tracking co-brandés.
+      PublicSiteController.php   Point d'entrée des pages publiques.
     Middleware/
-      EnsureUserHasRole.php      Protection des routes par role.
+      EnsureUserHasRole.php      Protection des routes par rôle.
+      TrackPageVisit.php         Tracking des visites publiques avec consentement.
     Requests/
       Admin/                     Validation des formulaires admin.
+  Mail/                          Mailables Laravel.
   Models/
-    User.php                     Modele utilisateur Laravel.
+    Company.php                  Modèle entreprise.
+    Collection.php               Modèle collecte.
+    Form.php                     Modèle formulaire public.
+    User.php                     Modèle utilisateur Laravel.
+  Support/                       Helpers métier, notamment sur les domaines email.
 
 bootstrap/
-  app.php                        Configuration Laravel, dont alias middleware.
+  app.php                        Configuration Laravel, middleware et bootstrap global.
 
 database/
   factories/                     Factories de test.
-  migrations/                    Schema de base de donnees.
-  seeders/                       Donnees de test, dont superadmin.
+  migrations/                    Schéma de base de données.
+  seeders/                       Seeders de démo, de KPI et snapshot local.
 
 md_architecture/
-  auth-admin-cobranding.md       Decisions d'architecture auth/admin/co-branding.
+  *.md                           Documentation d'architecture et décisions projet.
 
 resources/
   css/
-    app.css                      CSS global Tailwind/DaisyUI.
+    app.css                      CSS global Tailwind / daisyUI.
   js/
-    App.vue                      Selectionne la page Vue selon l'URL.
-    app.ts                       Point d'entree Vue.
+    App.vue                      Shell SPA pour l'admin et les pages co-brandées.
+    app.ts                       Point d'entrée frontend global.
     components/
-      tinder-cards/              Prototype swipe actuel.
+      admin/                     Composants du back-office.
+      co-branded/                Composants de l'expérience co-brandée.
+      interactive-map/           Carte monde interactive.
+      modals/                    Modales globales, dont consentement cookies.
+      public/                    Îlots Vue des pages publiques.
+      sms-chat/                  Prototype de conversation SMS.
+      tinder-cards/              Prototype swipe / questionnaire.
+    composables/                 Logique réutilisable Vue.
+    data/                        Données statiques JSON du frontend.
     pages/
-      public/                    Pages publiques: home, collecte, trophee, label, contact.
-      admin/                     Pages admin: login, dashboard.
+      admin/                     Pages SPA du back-office.
+      co-branded/                Pages SPA des campagnes co-brandées.
+    services/                    Services frontend (tracking, cookies, etc.).
+    types/                       Types TypeScript.
+    utils/                       Utilitaires frontend.
   views/
-    app.blade.php                Vue Blade qui monte l'application Vue.
+    app.blade.php                Vue Blade qui monte la SPA admin / co-brandée.
+    layouts/                     Layouts Blade publics.
+    partials/                    Partiels Blade du site public.
+    public/                      Pages publiques Blade.
+    emails/                      Templates d'e-mails.
 
 routes/
-  web.php                        Routes publiques et admin.
+  web.php                        Routes publiques, co-brandées et admin.
 
 tests/
   Feature/                       Tests fonctionnels Laravel.
   Unit/                          Tests unitaires.
-```
-
-Routes utiles actuellement :
-
-```text
-/              Accueil public.
-/collecte      Page publique Collecte.
-/trophee       Page publique Trophee.
-/label         Page publique Label.
-/contact       Page publique Contact.
-/admin/login   Connexion admin.
-/admin         Dashboard admin protege.
 ```
