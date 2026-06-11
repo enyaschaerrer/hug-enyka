@@ -240,7 +240,7 @@ exit
 ```
 
 
-## Structure actuelle
+## Structure du projet
 
 ```text
 app/
